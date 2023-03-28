@@ -13,8 +13,13 @@ internal struct Protecto_PassApp: App {
 
     var body: some Scene {
         WindowGroup {
-            WelcomeView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if true {
+                WelcomeView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            } else {
+                Home()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            }
         }
     }
 }

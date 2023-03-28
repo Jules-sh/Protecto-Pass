@@ -26,6 +26,7 @@
 		8412E06A29D35AF400D2017A /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06929D35AF400D2017A /* Database.swift */; };
 		8412E06C29D35AF800D2017A /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06B29D35AF800D2017A /* Entry.swift */; };
 		8412E06E29D35AFC00D2017A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06D29D35AFC00D2017A /* Folder.swift */; };
+		8412E07029D35B3E00D2017A /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06F29D35B3E00D2017A /* Home.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		8412E06929D35AF400D2017A /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		8412E06B29D35AF800D2017A /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		8412E06D29D35AFC00D2017A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		8412E06F29D35B3E00D2017A /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 		8412E06829D35ADC00D2017A /* Unlocked State */ = {
 			isa = PBXGroup;
 			children = (
+				8412E06F29D35B3E00D2017A /* Home.swift */,
 			);
 			path = "Unlocked State";
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				8412E02829D3453400D2017A /* Persistence.swift in Sources */,
 				8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */,
 				8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */,
+				8412E07029D35B3E00D2017A /* Home.swift in Sources */,
 				8412E06A29D35AF400D2017A /* Database.swift in Sources */,
 				8412E06429D35A5F00D2017A /* Decrypter.swift in Sources */,
 				8412E06629D35A8E00D2017A /* FileManager.swift in Sources */,

@@ -45,6 +45,9 @@ internal struct UnlockDBView: View {
             TextField("Enter your Password...", text: $password)
                 .textFieldStyle(.roundedBorder)
                 .padding(5)
+            NavigationLink("Test") {
+                Home()
+            }
         }
         .padding(25)
         .navigationTitle("Unlock \(db.name!)")

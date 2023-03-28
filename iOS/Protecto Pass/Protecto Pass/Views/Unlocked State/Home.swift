@@ -11,6 +11,10 @@ import SwiftUI
 /// the Folders and represents the unlocked
 /// Database
 internal struct Home: View {
+    
+    /// The Database that has been unlocked
+    internal let db : Database
+    
     var body: some View {
         NavigationView {
             Text("Hello")
@@ -21,6 +25,6 @@ internal struct Home: View {
 /// The Preview for this File
 internal struct Home_Previews: PreviewProvider {
     static var previews: some View {
-        Home()
+        Home(db: Database.previewDB)
     }
 }

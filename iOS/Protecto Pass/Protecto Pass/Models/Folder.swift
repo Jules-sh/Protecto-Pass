@@ -7,6 +7,5 @@
 
 import Foundation
 
-internal struct Folder {
-    
-}
+/// The Folder Object that is used when the App is running
+internal struct Folder {}

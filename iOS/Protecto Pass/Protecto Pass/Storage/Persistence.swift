@@ -16,7 +16,7 @@ struct PersistenceController {
         for i in 0..<10 {
             let db : CD_Database = CD_Database(context: viewContext)
             db.name = "Database \(i)"
-            db.information = "This is the Database Number \(i)"
+            db.dbDescription = "This is the Database Number \(i)"
         }
         do {
             try viewContext.save()

@@ -35,7 +35,7 @@ internal struct WelcomeView: View {
                 List(databases) {
                     database in
                     NavigationLink(database.name!) {
-                        
+                        UnlockDBView(db: database)
                     }
                 }
             }

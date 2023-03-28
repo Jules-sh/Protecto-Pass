@@ -23,7 +23,7 @@ public class CD_Database: NSManagedObject {
     internal static var previewDB : CD_Database {
         let db : CD_Database = CD_Database(context: PersistenceController.preview.container.viewContext)
         db.name = "Preview Database"
-        db.information = "This is the Preview Database"
+        db.dbDescription = "This is the Preview Database"
         return db
     }
 }

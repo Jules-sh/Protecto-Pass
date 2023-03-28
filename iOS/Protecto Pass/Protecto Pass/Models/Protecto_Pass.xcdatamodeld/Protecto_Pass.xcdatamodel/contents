@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="CD_Database" representedClassName="CD_Database" syncable="YES" codeGenerationType="category">
-        <attribute name="information" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="dbDescription" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <attribute name="name" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="database" inverseEntity="CD_Folder"/>
     </entity>
     <entity name="CD_Entry" representedClassName="CD_Entry" syncable="YES" codeGenerationType="category">
         <attribute name="notes" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
@@ -10,8 +11,12 @@
         <attribute name="title" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="url" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="username" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="entries" inverseEntity="CD_Folder"/>
     </entity>
     <entity name="CD_Folder" representedClassName="CD_Folder" syncable="YES" codeGenerationType="category">
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Database" inverseName="folders" inverseEntity="CD_Database"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="folder" inverseEntity="CD_Entry"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="folders" inverseEntity="CD_Folder"/>
     </entity>
 </model>

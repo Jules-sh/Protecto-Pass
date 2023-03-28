@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E01E29D3453300D2017A /* Protecto_PassApp.swift */; };
-		8412E02129D3453300D2017A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02029D3453300D2017A /* ContentView.swift */; };
+		8412E02129D3453300D2017A /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02029D3453300D2017A /* WelcomeView.swift */; };
 		8412E02329D3453400D2017A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8412E02229D3453400D2017A /* Assets.xcassets */; };
 		8412E02629D3453400D2017A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8412E02529D3453400D2017A /* Preview Assets.xcassets */; };
 		8412E02829D3453400D2017A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02729D3453400D2017A /* Persistence.swift */; };
@@ -38,7 +38,7 @@
 /* Begin PBXFileReference section */
 		8412E01B29D3453300D2017A /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8412E01E29D3453300D2017A /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
-		8412E02029D3453300D2017A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8412E02029D3453300D2017A /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		8412E02229D3453400D2017A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8412E02529D3453400D2017A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8412E02729D3453400D2017A /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		8412E04E29D346A400D2017A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8412E02029D3453300D2017A /* ContentView.swift */,
+				8412E02029D3453300D2017A /* WelcomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -299,7 +299,7 @@
 			files = (
 				8412E02B29D3453400D2017A /* Protecto_Pass.xcdatamodeld in Sources */,
 				8412E02829D3453400D2017A /* Persistence.swift in Sources */,
-				8412E02129D3453300D2017A /* ContentView.swift in Sources */,
+				8412E02129D3453300D2017A /* WelcomeView.swift in Sources */,
 				8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

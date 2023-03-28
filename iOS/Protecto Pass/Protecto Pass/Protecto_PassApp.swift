@@ -12,7 +12,7 @@ import SwiftUI
 internal struct Protecto_PassApp: App {
     
     /// The Unlock Helper to help with the unlocking Process of a Database
-    @ObservedObject internal var unlockHelper : UnlockHelper = UnlockHelper()
+    @StateObject internal var unlockHelper : UnlockHelper = UnlockHelper()
     
     /// The Persistence Controller to interact with the Core Data Manager and perfom fetch Request
     private let persistenceController : PersistenceController = PersistenceController.shared
@@ -24,10 +24,12 @@ internal struct Protecto_PassApp: App {
                 // Show Home if a Database is unlocked
                 Home(db: unlockHelper.unlockedDatabase)
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .environmentObject(unlockHelper)
             } else {
                 // Show Welcome View if no Database is unlocked
                 WelcomeView()
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .environmentObject(unlockHelper)
             }
         }
     }

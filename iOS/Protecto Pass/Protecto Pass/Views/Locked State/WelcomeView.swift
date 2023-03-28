@@ -15,6 +15,9 @@ internal struct WelcomeView: View {
     /// its Objects
     @Environment(\.managedObjectContext) private var viewContext
     
+    /// The Unlock Helper to manage the unlocking Process
+    @EnvironmentObject private var unlockHelper : UnlockHelper
+    
     /// The Fetch Request to fetch all the Databases from the Core Data
     /// Manager
     @FetchRequest(fetchRequest: dbFetchRequest) private var databases : FetchedResults<CD_Database>
@@ -36,6 +39,7 @@ internal struct WelcomeView: View {
                     database in
                     NavigationLink(database.name!) {
                         UnlockDBView(db: database)
+                            .environmentObject(unlockHelper)
                     }
                 }
             }
@@ -47,8 +51,12 @@ internal struct WelcomeView: View {
 
 /// The Preview for this File
 internal struct WelcomeView_Previews: PreviewProvider {
+    
+    @StateObject private static var uH : UnlockHelper = UnlockHelper()
+    
     static var previews: some View {
         WelcomeView()
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+            .environmentObject(uH)
     }
 }

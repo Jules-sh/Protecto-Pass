@@ -14,9 +14,15 @@ internal struct UnlockDBView: View {
     /// The Database the User wants to unlock at the Moment
     internal let db : CD_Database
     
+    /// The Helper helping with the unlocking Process
+    @EnvironmentObject private var unlockHelper : UnlockHelper
+    
     /// The Password the User entered.
     /// This will be used to try to unlock the Databse
     @State private var password : String = ""
+    
+    /// Whether the Message stating that the unlock Process Failed is shown or not
+    @State private var unlockErrorPresented : Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -45,9 +51,19 @@ internal struct UnlockDBView: View {
             TextField("Enter your Password...", text: $password)
                 .textFieldStyle(.roundedBorder)
                 .padding(5)
+                .onSubmit {
+                    tryUnlock()
+                }
         }
         .padding(25)
         .navigationTitle("Unlock \(db.name!)")
+        .alert("Unlock Failed", isPresented: $unlockErrorPresented) {
+        } message: {
+            // TODO: View Builder? Multiple Lines with VStack?
+            Text(
+                "Unlocking the Database failed.\nIt's likely that the Password is incorrect.\n\nIf this Error keeps occuring, the Database may be corrupt."
+            )
+        }
     }
     
     /// The Count of all Entries in this Database
@@ -67,6 +83,24 @@ internal struct UnlockDBView: View {
         }
         count += folder.entries!.count
         return count
+    }
+    
+    /// Tries to unlock the Database and reacts on the
+    /// result of the attempt
+    private func tryUnlock() -> Void {
+        let result : (Bool, Database?) = tryDecrypt()
+        if  result.0 {
+            unlockHelper.unlockedDatabase = result.1!
+            unlockHelper.unlockState = .unlocked
+        } else {
+            unlockErrorPresented.toggle()
+        }
+    }
+    
+    /// Tries to decrypt the Database and returns whether it
+    /// has been successful or not.
+    private func tryDecrypt() -> (Bool, Database?) {
+        return (true, Database.previewDB)
     }
 }
 

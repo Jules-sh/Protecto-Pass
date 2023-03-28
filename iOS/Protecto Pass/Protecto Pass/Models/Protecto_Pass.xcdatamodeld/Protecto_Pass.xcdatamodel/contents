@@ -2,6 +2,8 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="CD_Database" representedClassName="CD_Database" syncable="YES" codeGenerationType="category">
         <attribute name="dbDescription" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="header" attributeType="String" defaultValueString="Protecto Pass is a great App" allowsCloudEncryption="YES"/>
+        <attribute name="key" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="name" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="database" inverseEntity="CD_Folder"/>
     </entity>

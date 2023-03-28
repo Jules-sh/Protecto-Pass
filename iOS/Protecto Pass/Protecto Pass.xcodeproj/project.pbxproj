@@ -22,6 +22,7 @@
 		8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */; };
 		8412E06229D35A5B00D2017A /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06129D35A5B00D2017A /* Encrypter.swift */; };
 		8412E06429D35A5F00D2017A /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06329D35A5F00D2017A /* Decrypter.swift */; };
+		8412E06629D35A8E00D2017A /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06529D35A8E00D2017A /* FileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		8412E06129D35A5B00D2017A /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
 		8412E06329D35A5F00D2017A /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		8412E06529D35A8E00D2017A /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,8 +113,8 @@
 		8412E01D29D3453300D2017A /* Protecto Pass */ = {
 			isa = PBXGroup;
 			children = (
-				8412E06029D35A4E00D2017A /* Cryptography */,
 				8412E01E29D3453300D2017A /* Protecto_PassApp.swift */,
+				8412E06029D35A4E00D2017A /* Cryptography */,
 				8412E05029D346AE00D2017A /* Storage */,
 				8412E04F29D346A800D2017A /* Models */,
 				8412E04E29D346A400D2017A /* Views */,
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				8412E02729D3453400D2017A /* Persistence.swift */,
+				8412E06529D35A8E00D2017A /* FileManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */,
 				8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */,
 				8412E06429D35A5F00D2017A /* Decrypter.swift in Sources */,
+				8412E06629D35A8E00D2017A /* FileManager.swift in Sources */,
 				8412E02129D3453300D2017A /* WelcomeView.swift in Sources */,
 				8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */,
 				8412E05329D3495800D2017A /* UnlockDBView.swift in Sources */,

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="true" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CD_Database" representedClassName="CD_Database" syncable="YES" codeGenerationType="category">
+        <attribute name="information" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="name" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
     </entity>
-    <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-    </elements>
+    <entity name="CD_Entry" representedClassName="CD_Entry" syncable="YES" codeGenerationType="category">
+        <attribute name="notes" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="password" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="title" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="url" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="username" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+    </entity>
+    <entity name="CD_Folder" representedClassName="CD_Folder" syncable="YES" codeGenerationType="category">
+        <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+    </entity>
 </model>

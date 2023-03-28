@@ -16,6 +16,10 @@
 		8412E03629D3453400D2017A /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E03529D3453400D2017A /* Protecto_PassTests.swift */; };
 		8412E04029D3453400D2017A /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */; };
 		8412E04229D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */; };
+		8412E05329D3495800D2017A /* UnlockDBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05229D3495800D2017A /* UnlockDBView.swift */; };
+		8412E05A29D349A800D2017A /* CD_Database+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05429D349A800D2017A /* CD_Database+CoreDataClass.swift */; };
+		8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05629D349A800D2017A /* CD_Entry+CoreDataClass.swift */; };
+		8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		8412E03B29D3453400D2017A /* Protecto PassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
 		8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8412E05229D3495800D2017A /* UnlockDBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockDBView.swift; sourceTree = "<group>"; };
+		8412E05429D349A800D2017A /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		8412E05629D349A800D2017A /* CD_Entry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Entry+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				8412E02029D3453300D2017A /* WelcomeView.swift */,
+				8412E05229D3495800D2017A /* UnlockDBView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -163,6 +172,9 @@
 		8412E05129D346BF00D2017A /* Generated */ = {
 			isa = PBXGroup;
 			children = (
+				8412E05429D349A800D2017A /* CD_Database+CoreDataClass.swift */,
+				8412E05629D349A800D2017A /* CD_Entry+CoreDataClass.swift */,
+				8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -298,9 +310,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8412E02B29D3453400D2017A /* Protecto_Pass.xcdatamodeld in Sources */,
+				8412E05A29D349A800D2017A /* CD_Database+CoreDataClass.swift in Sources */,
 				8412E02829D3453400D2017A /* Persistence.swift in Sources */,
+				8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */,
+				8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */,
 				8412E02129D3453300D2017A /* WelcomeView.swift in Sources */,
 				8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */,
+				8412E05329D3495800D2017A /* UnlockDBView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

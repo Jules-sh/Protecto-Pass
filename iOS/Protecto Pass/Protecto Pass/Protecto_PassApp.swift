@@ -8,12 +8,12 @@
 import SwiftUI
 
 @main
-struct Protecto_PassApp: App {
-    let persistenceController = PersistenceController.shared
+internal struct Protecto_PassApp: App {
+    private let persistenceController : PersistenceController = PersistenceController.shared
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WelcomeView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E01E29D3453300D2017A /* Protecto_PassApp.swift */; };
+		8412E02129D3453300D2017A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02029D3453300D2017A /* ContentView.swift */; };
+		8412E02329D3453400D2017A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8412E02229D3453400D2017A /* Assets.xcassets */; };
+		8412E02629D3453400D2017A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8412E02529D3453400D2017A /* Preview Assets.xcassets */; };
+		8412E02829D3453400D2017A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02729D3453400D2017A /* Persistence.swift */; };
+		8412E02B29D3453400D2017A /* Protecto_Pass.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */; };
+		8412E03629D3453400D2017A /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E03529D3453400D2017A /* Protecto_PassTests.swift */; };
+		8412E04029D3453400D2017A /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */; };
+		8412E04229D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8412E03229D3453400D2017A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8412E01329D3453300D2017A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8412E01A29D3453300D2017A;
+			remoteInfo = "Protecto Pass";
+		};
+		8412E03C29D3453400D2017A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8412E01329D3453300D2017A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8412E01A29D3453300D2017A;
+			remoteInfo = "Protecto Pass";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		8412E01B29D3453300D2017A /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8412E01E29D3453300D2017A /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
+		8412E02029D3453300D2017A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8412E02229D3453400D2017A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8412E02529D3453400D2017A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8412E02729D3453400D2017A /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		8412E02A29D3453400D2017A /* Protecto_Pass.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Protecto_Pass.xcdatamodel; sourceTree = "<group>"; };
+		8412E02C29D3453400D2017A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8412E03129D3453400D2017A /* Protecto PassTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8412E03529D3453400D2017A /* Protecto_PassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassTests.swift; sourceTree = "<group>"; };
+		8412E03B29D3453400D2017A /* Protecto PassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
+		8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8412E01829D3453300D2017A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8412E02E29D3453400D2017A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8412E03829D3453400D2017A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8412E01229D3453300D2017A = {
+			isa = PBXGroup;
+			children = (
+				8412E01D29D3453300D2017A /* Protecto Pass */,
+				8412E03429D3453400D2017A /* Protecto PassTests */,
+				8412E03E29D3453400D2017A /* Protecto PassUITests */,
+				8412E01C29D3453300D2017A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8412E01C29D3453300D2017A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8412E01B29D3453300D2017A /* Protecto Pass.app */,
+				8412E03129D3453400D2017A /* Protecto PassTests.xctest */,
+				8412E03B29D3453400D2017A /* Protecto PassUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8412E01D29D3453300D2017A /* Protecto Pass */ = {
+			isa = PBXGroup;
+			children = (
+				8412E01E29D3453300D2017A /* Protecto_PassApp.swift */,
+				8412E02029D3453300D2017A /* ContentView.swift */,
+				8412E02229D3453400D2017A /* Assets.xcassets */,
+				8412E02729D3453400D2017A /* Persistence.swift */,
+				8412E02C29D3453400D2017A /* Info.plist */,
+				8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */,
+				8412E02429D3453400D2017A /* Preview Content */,
+			);
+			path = "Protecto Pass";
+			sourceTree = "<group>";
+		};
+		8412E02429D3453400D2017A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				8412E02529D3453400D2017A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		8412E03429D3453400D2017A /* Protecto PassTests */ = {
+			isa = PBXGroup;
+			children = (
+				8412E03529D3453400D2017A /* Protecto_PassTests.swift */,
+			);
+			path = "Protecto PassTests";
+			sourceTree = "<group>";
+		};
+		8412E03E29D3453400D2017A /* Protecto PassUITests */ = {
+			isa = PBXGroup;
+			children = (
+				8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */,
+				8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */,
+			);
+			path = "Protecto PassUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8412E01A29D3453300D2017A /* Protecto Pass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8412E04529D3453400D2017A /* Build configuration list for PBXNativeTarget "Protecto Pass" */;
+			buildPhases = (
+				8412E01729D3453300D2017A /* Sources */,
+				8412E01829D3453300D2017A /* Frameworks */,
+				8412E01929D3453300D2017A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Protecto Pass";
+			productName = "Protecto Pass";
+			productReference = 8412E01B29D3453300D2017A /* Protecto Pass.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8412E03029D3453400D2017A /* Protecto PassTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8412E04829D3453400D2017A /* Build configuration list for PBXNativeTarget "Protecto PassTests" */;
+			buildPhases = (
+				8412E02D29D3453400D2017A /* Sources */,
+				8412E02E29D3453400D2017A /* Frameworks */,
+				8412E02F29D3453400D2017A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8412E03329D3453400D2017A /* PBXTargetDependency */,
+			);
+			name = "Protecto PassTests";
+			productName = "Protecto PassTests";
+			productReference = 8412E03129D3453400D2017A /* Protecto PassTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8412E03A29D3453400D2017A /* Protecto PassUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8412E04B29D3453400D2017A /* Build configuration list for PBXNativeTarget "Protecto PassUITests" */;
+			buildPhases = (
+				8412E03729D3453400D2017A /* Sources */,
+				8412E03829D3453400D2017A /* Frameworks */,
+				8412E03929D3453400D2017A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8412E03D29D3453400D2017A /* PBXTargetDependency */,
+			);
+			name = "Protecto PassUITests";
+			productName = "Protecto PassUITests";
+			productReference = 8412E03B29D3453400D2017A /* Protecto PassUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8412E01329D3453300D2017A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1420;
+				LastUpgradeCheck = 1420;
+				TargetAttributes = {
+					8412E01A29D3453300D2017A = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					8412E03029D3453400D2017A = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 8412E01A29D3453300D2017A;
+					};
+					8412E03A29D3453400D2017A = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 8412E01A29D3453300D2017A;
+					};
+				};
+			};
+			buildConfigurationList = 8412E01629D3453300D2017A /* Build configuration list for PBXProject "Protecto Pass" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8412E01229D3453300D2017A;
+			productRefGroup = 8412E01C29D3453300D2017A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8412E01A29D3453300D2017A /* Protecto Pass */,
+				8412E03029D3453400D2017A /* Protecto PassTests */,
+				8412E03A29D3453400D2017A /* Protecto PassUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8412E01929D3453300D2017A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8412E02629D3453400D2017A /* Preview Assets.xcassets in Resources */,
+				8412E02329D3453400D2017A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8412E02F29D3453400D2017A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8412E03929D3453400D2017A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8412E01729D3453300D2017A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8412E02B29D3453400D2017A /* Protecto_Pass.xcdatamodeld in Sources */,
+				8412E02829D3453400D2017A /* Persistence.swift in Sources */,
+				8412E02129D3453300D2017A /* ContentView.swift in Sources */,
+				8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8412E02D29D3453400D2017A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8412E03629D3453400D2017A /* Protecto_PassTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8412E03729D3453400D2017A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8412E04029D3453400D2017A /* Protecto_PassUITests.swift in Sources */,
+				8412E04229D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8412E03329D3453400D2017A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8412E01A29D3453300D2017A /* Protecto Pass */;
+			targetProxy = 8412E03229D3453400D2017A /* PBXContainerItemProxy */;
+		};
+		8412E03D29D3453400D2017A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8412E01A29D3453300D2017A /* Protecto Pass */;
+			targetProxy = 8412E03C29D3453400D2017A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8412E04329D3453400D2017A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8412E04429D3453400D2017A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8412E04629D3453400D2017A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Protecto Pass/Preview Content\"";
+				DEVELOPMENT_TEAM = Q87UDX5898;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.jules.Protecto-Pass";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8412E04729D3453400D2017A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Protecto Pass/Preview Content\"";
+				DEVELOPMENT_TEAM = Q87UDX5898;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.jules.Protecto-Pass";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8412E04929D3453400D2017A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q87UDX5898;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.jules.Protecto-PassTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Protecto Pass.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Protecto Pass";
+			};
+			name = Debug;
+		};
+		8412E04A29D3453400D2017A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q87UDX5898;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.jules.Protecto-PassTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Protecto Pass.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Protecto Pass";
+			};
+			name = Release;
+		};
+		8412E04C29D3453400D2017A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q87UDX5898;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.jules.Protecto-PassUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Protecto Pass";
+			};
+			name = Debug;
+		};
+		8412E04D29D3453400D2017A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q87UDX5898;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.jules.Protecto-PassUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Protecto Pass";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8412E01629D3453300D2017A /* Build configuration list for PBXProject "Protecto Pass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8412E04329D3453400D2017A /* Debug */,
+				8412E04429D3453400D2017A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8412E04529D3453400D2017A /* Build configuration list for PBXNativeTarget "Protecto Pass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8412E04629D3453400D2017A /* Debug */,
+				8412E04729D3453400D2017A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8412E04829D3453400D2017A /* Build configuration list for PBXNativeTarget "Protecto PassTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8412E04929D3453400D2017A /* Debug */,
+				8412E04A29D3453400D2017A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8412E04B29D3453400D2017A /* Build configuration list for PBXNativeTarget "Protecto PassUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8412E04C29D3453400D2017A /* Debug */,
+				8412E04D29D3453400D2017A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8412E02A29D3453400D2017A /* Protecto_Pass.xcdatamodel */,
+			);
+			currentVersion = 8412E02A29D3453400D2017A /* Protecto_Pass.xcdatamodel */;
+			path = Protecto_Pass.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 8412E01329D3453300D2017A /* Project object */;
+}

@@ -30,6 +30,7 @@ internal struct CD_DB_Header {
     /// Parses a String and returns a Header
     internal static func parseString(string : String) -> CD_DB_Header {
         let data : [Substring] = string.split(separator: ";")
+        // TODO: data[0] or where("encryption:")?
         return CD_DB_Header(encryption: Encryption(rawValue: String(data[0]))!)
     }
     

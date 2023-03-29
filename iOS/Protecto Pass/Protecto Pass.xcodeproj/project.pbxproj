@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E01E29D3453300D2017A /* Protecto_PassApp.swift */; };
-		8412E02129D3453300D2017A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02029D3453300D2017A /* ContentView.swift */; };
+		8412E02129D3453300D2017A /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02029D3453300D2017A /* WelcomeView.swift */; };
 		8412E02329D3453400D2017A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8412E02229D3453400D2017A /* Assets.xcassets */; };
 		8412E02629D3453400D2017A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8412E02529D3453400D2017A /* Preview Assets.xcassets */; };
 		8412E02829D3453400D2017A /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E02729D3453400D2017A /* Persistence.swift */; };
@@ -16,6 +16,19 @@
 		8412E03629D3453400D2017A /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E03529D3453400D2017A /* Protecto_PassTests.swift */; };
 		8412E04029D3453400D2017A /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */; };
 		8412E04229D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */; };
+		8412E05329D3495800D2017A /* UnlockDBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05229D3495800D2017A /* UnlockDBView.swift */; };
+		8412E05A29D349A800D2017A /* CD_Database+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05429D349A800D2017A /* CD_Database+CoreDataClass.swift */; };
+		8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05629D349A800D2017A /* CD_Entry+CoreDataClass.swift */; };
+		8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */; };
+		8412E06229D35A5B00D2017A /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06129D35A5B00D2017A /* Encrypter.swift */; };
+		8412E06429D35A5F00D2017A /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06329D35A5F00D2017A /* Decrypter.swift */; };
+		8412E06629D35A8E00D2017A /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06529D35A8E00D2017A /* FileManager.swift */; };
+		8412E06A29D35AF400D2017A /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06929D35AF400D2017A /* Database.swift */; };
+		8412E06C29D35AF800D2017A /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06B29D35AF800D2017A /* Entry.swift */; };
+		8412E06E29D35AFC00D2017A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06D29D35AFC00D2017A /* Folder.swift */; };
+		8412E07029D35B3E00D2017A /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06F29D35B3E00D2017A /* Home.swift */; };
+		84D9D54A29D35D7100AD9405 /* UnlockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9D54929D35D7100AD9405 /* UnlockHelper.swift */; };
+		84D9D54C29D37DD100AD9405 /* DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9D54B29D37DD100AD9405 /* DB_Header.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +51,7 @@
 /* Begin PBXFileReference section */
 		8412E01B29D3453300D2017A /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8412E01E29D3453300D2017A /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
-		8412E02029D3453300D2017A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8412E02029D3453300D2017A /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		8412E02229D3453400D2017A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8412E02529D3453400D2017A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8412E02729D3453400D2017A /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -49,6 +62,19 @@
 		8412E03B29D3453400D2017A /* Protecto PassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8412E03F29D3453400D2017A /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
 		8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8412E05229D3495800D2017A /* UnlockDBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockDBView.swift; sourceTree = "<group>"; };
+		8412E05429D349A800D2017A /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		8412E05629D349A800D2017A /* CD_Entry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Entry+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		8412E06129D35A5B00D2017A /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
+		8412E06329D35A5F00D2017A /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		8412E06529D35A8E00D2017A /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		8412E06929D35AF400D2017A /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		8412E06B29D35AF800D2017A /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		8412E06D29D35AFC00D2017A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		8412E06F29D35B3E00D2017A /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		84D9D54929D35D7100AD9405 /* UnlockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockHelper.swift; sourceTree = "<group>"; };
+		84D9D54B29D37DD100AD9405 /* DB_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Header.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,11 +126,12 @@
 			isa = PBXGroup;
 			children = (
 				8412E01E29D3453300D2017A /* Protecto_PassApp.swift */,
-				8412E02029D3453300D2017A /* ContentView.swift */,
-				8412E02229D3453400D2017A /* Assets.xcassets */,
-				8412E02729D3453400D2017A /* Persistence.swift */,
+				84D9D54829D35D6600AD9405 /* Helpers */,
+				8412E06029D35A4E00D2017A /* Cryptography */,
+				8412E05029D346AE00D2017A /* Storage */,
+				8412E04F29D346A800D2017A /* Models */,
+				8412E04E29D346A400D2017A /* Views */,
 				8412E02C29D3453400D2017A /* Info.plist */,
-				8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */,
 				8412E02429D3453400D2017A /* Preview Content */,
 			);
 			path = "Protecto Pass";
@@ -133,6 +160,90 @@
 				8412E04129D3453400D2017A /* Protecto_PassUITestsLaunchTests.swift */,
 			);
 			path = "Protecto PassUITests";
+			sourceTree = "<group>";
+		};
+		8412E04E29D346A400D2017A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8412E06729D35AC900D2017A /* Locked State */,
+				8412E06829D35ADC00D2017A /* Unlocked State */,
+				8412E02229D3453400D2017A /* Assets.xcassets */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8412E04F29D346A800D2017A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84AE51FF29D4AB17006DADCF /* Database */,
+				8412E05129D346BF00D2017A /* Generated */,
+				8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8412E05029D346AE00D2017A /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				8412E02729D3453400D2017A /* Persistence.swift */,
+				8412E06529D35A8E00D2017A /* FileManager.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		8412E05129D346BF00D2017A /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				8412E05429D349A800D2017A /* CD_Database+CoreDataClass.swift */,
+				8412E05629D349A800D2017A /* CD_Entry+CoreDataClass.swift */,
+				8412E05829D349A800D2017A /* CD_Folder+CoreDataClass.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		8412E06029D35A4E00D2017A /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				8412E06129D35A5B00D2017A /* Encrypter.swift */,
+				8412E06329D35A5F00D2017A /* Decrypter.swift */,
+			);
+			path = Cryptography;
+			sourceTree = "<group>";
+		};
+		8412E06729D35AC900D2017A /* Locked State */ = {
+			isa = PBXGroup;
+			children = (
+				8412E05229D3495800D2017A /* UnlockDBView.swift */,
+				8412E02029D3453300D2017A /* WelcomeView.swift */,
+			);
+			path = "Locked State";
+			sourceTree = "<group>";
+		};
+		8412E06829D35ADC00D2017A /* Unlocked State */ = {
+			isa = PBXGroup;
+			children = (
+				8412E06F29D35B3E00D2017A /* Home.swift */,
+			);
+			path = "Unlocked State";
+			sourceTree = "<group>";
+		};
+		84AE51FF29D4AB17006DADCF /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				8412E06929D35AF400D2017A /* Database.swift */,
+				8412E06B29D35AF800D2017A /* Entry.swift */,
+				8412E06D29D35AFC00D2017A /* Folder.swift */,
+				84D9D54B29D37DD100AD9405 /* DB_Header.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		84D9D54829D35D6600AD9405 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				84D9D54929D35D7100AD9405 /* UnlockHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,10 +376,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8412E06229D35A5B00D2017A /* Encrypter.swift in Sources */,
 				8412E02B29D3453400D2017A /* Protecto_Pass.xcdatamodeld in Sources */,
+				8412E06C29D35AF800D2017A /* Entry.swift in Sources */,
+				84D9D54C29D37DD100AD9405 /* DB_Header.swift in Sources */,
+				8412E05A29D349A800D2017A /* CD_Database+CoreDataClass.swift in Sources */,
 				8412E02829D3453400D2017A /* Persistence.swift in Sources */,
-				8412E02129D3453300D2017A /* ContentView.swift in Sources */,
+				8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */,
+				8412E05E29D349A800D2017A /* CD_Folder+CoreDataClass.swift in Sources */,
+				8412E07029D35B3E00D2017A /* Home.swift in Sources */,
+				8412E06A29D35AF400D2017A /* Database.swift in Sources */,
+				84D9D54A29D35D7100AD9405 /* UnlockHelper.swift in Sources */,
+				8412E06429D35A5F00D2017A /* Decrypter.swift in Sources */,
+				8412E06629D35A8E00D2017A /* FileManager.swift in Sources */,
+				8412E02129D3453300D2017A /* WelcomeView.swift in Sources */,
 				8412E01F29D3453300D2017A /* Protecto_PassApp.swift in Sources */,
+				8412E05329D3495800D2017A /* UnlockDBView.swift in Sources */,
+				8412E06E29D35AFC00D2017A /* Folder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +554,8 @@
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Protecto Pass";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -459,6 +585,8 @@
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Protecto Pass";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

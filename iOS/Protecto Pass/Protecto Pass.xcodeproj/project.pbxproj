@@ -175,11 +175,8 @@
 		8412E04F29D346A800D2017A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				84AE51FF29D4AB17006DADCF /* Database */,
 				8412E05129D346BF00D2017A /* Generated */,
-				8412E06929D35AF400D2017A /* Database.swift */,
-				8412E06B29D35AF800D2017A /* Entry.swift */,
-				8412E06D29D35AFC00D2017A /* Folder.swift */,
-				84D9D54B29D37DD100AD9405 /* DB_Header.swift */,
 				8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */,
 			);
 			path = Models;
@@ -228,6 +225,17 @@
 				8412E06F29D35B3E00D2017A /* Home.swift */,
 			);
 			path = "Unlocked State";
+			sourceTree = "<group>";
+		};
+		84AE51FF29D4AB17006DADCF /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				8412E06929D35AF400D2017A /* Database.swift */,
+				8412E06B29D35AF800D2017A /* Entry.swift */,
+				8412E06D29D35AFC00D2017A /* Folder.swift */,
+				84D9D54B29D37DD100AD9405 /* DB_Header.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		84D9D54829D35D6600AD9405 /* Helpers */ = {

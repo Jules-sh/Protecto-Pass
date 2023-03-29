@@ -28,7 +28,7 @@
 		8412E06E29D35AFC00D2017A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06D29D35AFC00D2017A /* Folder.swift */; };
 		8412E07029D35B3E00D2017A /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8412E06F29D35B3E00D2017A /* Home.swift */; };
 		84D9D54A29D35D7100AD9405 /* UnlockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9D54929D35D7100AD9405 /* UnlockHelper.swift */; };
-		84D9D54C29D37DD100AD9405 /* CD_DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9D54B29D37DD100AD9405 /* CD_DB_Header.swift */; };
+		84D9D54C29D37DD100AD9405 /* DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D9D54B29D37DD100AD9405 /* DB_Header.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +74,7 @@
 		8412E06D29D35AFC00D2017A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		8412E06F29D35B3E00D2017A /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		84D9D54929D35D7100AD9405 /* UnlockHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockHelper.swift; sourceTree = "<group>"; };
-		84D9D54B29D37DD100AD9405 /* CD_DB_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CD_DB_Header.swift; sourceTree = "<group>"; };
+		84D9D54B29D37DD100AD9405 /* DB_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Header.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,7 +179,7 @@
 				8412E06929D35AF400D2017A /* Database.swift */,
 				8412E06B29D35AF800D2017A /* Entry.swift */,
 				8412E06D29D35AFC00D2017A /* Folder.swift */,
-				84D9D54B29D37DD100AD9405 /* CD_DB_Header.swift */,
+				84D9D54B29D37DD100AD9405 /* DB_Header.swift */,
 				8412E02929D3453400D2017A /* Protecto_Pass.xcdatamodeld */,
 			);
 			path = Models;
@@ -371,7 +371,7 @@
 				8412E06229D35A5B00D2017A /* Encrypter.swift in Sources */,
 				8412E02B29D3453400D2017A /* Protecto_Pass.xcdatamodeld in Sources */,
 				8412E06C29D35AF800D2017A /* Entry.swift in Sources */,
-				84D9D54C29D37DD100AD9405 /* CD_DB_Header.swift in Sources */,
+				84D9D54C29D37DD100AD9405 /* DB_Header.swift in Sources */,
 				8412E05A29D349A800D2017A /* CD_Database+CoreDataClass.swift in Sources */,
 				8412E02829D3453400D2017A /* Persistence.swift in Sources */,
 				8412E05C29D349A800D2017A /* CD_Entry+CoreDataClass.swift in Sources */,

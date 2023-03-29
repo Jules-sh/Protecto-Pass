@@ -9,7 +9,7 @@ import Foundation
 
 /// The Helper to manage the unlock Process of the Database
 /// the User choses to unlock
-internal class UnlockHelper : ObservableObject {
+internal final class UnlockHelper : ObservableObject {
     
     internal enum UnlockState {
         case locked
@@ -17,9 +17,9 @@ internal class UnlockHelper : ObservableObject {
     }
     
     /// The Database that has been unlocked
-    @Published internal var unlockedDatabase : Database
+    @Published internal final var unlockedDatabase : Database
     
-    @Published internal var unlockState : UnlockState = .locked
+    @Published internal final var unlockState : UnlockState = .locked
     
     internal init() {
         // TODO: work on the standard Database

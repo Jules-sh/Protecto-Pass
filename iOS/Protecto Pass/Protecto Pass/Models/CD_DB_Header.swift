@@ -19,6 +19,13 @@ internal struct CD_DB_Header {
         case AES256
     }
     
+    /// The Enum to declare how the Database is stored.
+    internal enum StorageType : String, RawRepresentable {
+        case File
+        case CoreData
+        case Keychain
+    }
+    
     /// The Check String to check if the Decryption of the Database has been successful
     internal let checkString : String = "Protecto Pass is a great App"
     

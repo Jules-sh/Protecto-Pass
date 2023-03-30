@@ -7,6 +7,49 @@
 
 import Foundation
 
+/// The Struct representing an Entry
+/// while this App is running
 internal struct Entry {
     
+    /// The Title of this Entry describing
+    /// what it stores
+    internal let title : String
+    
+    /// The Username or login name
+    /// to this Entry
+    internal let username : String
+    
+    /// The Password of this Entry being stored here.
+    /// This is in the already decrypted state
+    internal let password : String
+    
+    /// The URL / Link to a website if
+    /// this Entry is connected to a
+    /// web platform
+    internal let url : URL?
+    
+    /// Notes to this Entry storing whatever
+    /// the User wants to write down here
+    internal let notes : String
+}
+
+/// The Encrypted Entry storing all the
+/// Data of an Entry secure and encrypted
+internal struct EncryptedEntry {
+    
+    /// The Title encrypted and stores as bytes
+    internal let title : Data
+    
+    /// The Username encrypted and stores as bytes
+    internal let username : Data
+    
+    /// The Password encrypted, safe and securely stores
+    /// as bytes
+    internal let password : Data
+    
+    /// The URL stores as Bytes
+    internal let url : Data
+    
+    /// The Notes encrypted and stored as bytes
+    internal let notes : Data
 }

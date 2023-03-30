@@ -16,9 +16,9 @@ internal struct DB_Header {
     /// The Enum to choose which
     /// encryption was used to encrypt
     /// the database and correspondingly
-    /// has to be used to encrypt it
+    /// has to be used to decrypt it
     internal enum Encryption : String, RawRepresentable {
-        /// Using AES 256 Bit for the Encryption
+        /// Using AES 256 Bit for the Encryption and Decryption
         case AES256
     }
     

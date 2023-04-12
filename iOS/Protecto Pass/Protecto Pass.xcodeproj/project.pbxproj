@@ -99,8 +99,8 @@
 		842EAC6929D832670014C8F8 /* Protecto Pass */ = {
 			isa = PBXGroup;
 			children = (
+				84C4749C29E446F400543BA0 /* Views */,
 				842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */,
-				842EAC6C29D832670014C8F8 /* ContentView.swift */,
 				842EAC6E29D832680014C8F8 /* Assets.xcassets */,
 				842EAC7329D832680014C8F8 /* Persistence.swift */,
 				842EAC7829D832680014C8F8 /* Info.plist */,
@@ -133,6 +133,14 @@
 				842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */,
 			);
 			path = "Protecto PassUITests";
+			sourceTree = "<group>";
+		};
+		84C4749C29E446F400543BA0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				842EAC6C29D832670014C8F8 /* ContentView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

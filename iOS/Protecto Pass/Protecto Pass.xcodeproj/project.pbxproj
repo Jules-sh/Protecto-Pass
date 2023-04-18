@@ -8,10 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */; };
-		842EAC6D29D832670014C8F8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* ContentView.swift */; };
+		842EAC6D29D832670014C8F8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* Home.swift */; };
 		842EAC6F29D832680014C8F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 842EAC6E29D832680014C8F8 /* Assets.xcassets */; };
 		842EAC7229D832680014C8F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 842EAC7129D832680014C8F8 /* Preview Assets.xcassets */; };
-		842EAC7729D832680014C8F8 /* Protecto_Pass.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC7529D832680014C8F8 /* Protecto_Pass.xcdatamodeld */; };
 		842EAC8229D832680014C8F8 /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8129D832680014C8F8 /* Protecto_PassTests.swift */; };
 		842EAC8C29D832680014C8F8 /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */; };
 		842EAC8E29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */; };
@@ -26,6 +25,7 @@
 		84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206F29EEA0F1000D7600 /* Storage.swift */; };
 		84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207029EEA0F1000D7600 /* Persistence.swift */; };
 		84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207129EEA0F1000D7600 /* FileManager.swift */; };
+		84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4209A29EEA22A000D7600 /* UnlockDB.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,10 +48,9 @@
 /* Begin PBXFileReference section */
 		842EAC6729D832670014C8F8 /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
-		842EAC6C29D832670014C8F8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		842EAC6C29D832670014C8F8 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		842EAC6E29D832680014C8F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		842EAC7129D832680014C8F8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		842EAC7629D832680014C8F8 /* Protecto_Pass.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Protecto_Pass.xcdatamodel; sourceTree = "<group>"; };
 		842EAC7829D832680014C8F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		842EAC7D29D832680014C8F8 /* Protecto PassTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC8129D832680014C8F8 /* Protecto_PassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassTests.swift; sourceTree = "<group>"; };
@@ -69,6 +68,7 @@
 		84F4206F29EEA0F1000D7600 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		84F4207029EEA0F1000D7600 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		84F4207129EEA0F1000D7600 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		84F4209A29EEA22A000D7600 /* UnlockDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockDB.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +124,6 @@
 				84C4749C29E446F400543BA0 /* Views */,
 				842EAC6E29D832680014C8F8 /* Assets.xcassets */,
 				842EAC7829D832680014C8F8 /* Info.plist */,
-				842EAC7529D832680014C8F8 /* Protecto_Pass.xcdatamodeld */,
 				842EAC7029D832680014C8F8 /* Preview Content */,
 			);
 			path = "Protecto Pass";
@@ -158,7 +157,8 @@
 		84C4749C29E446F400543BA0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				842EAC6C29D832670014C8F8 /* ContentView.swift */,
+				842EAC6C29D832670014C8F8 /* Home.swift */,
+				84F4209A29EEA22A000D7600 /* UnlockDB.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -347,7 +347,6 @@
 				84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */,
 				84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */,
 				84F4207829EEA0F2000D7600 /* Database.swift in Sources */,
-				842EAC7729D832680014C8F8 /* Protecto_Pass.xcdatamodeld in Sources */,
 				84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */,
 				84F4207329EEA0F2000D7600 /* CD_Entry+CoreDataClass.swift in Sources */,
 				84F4207929EEA0F2000D7600 /* Protecto_Pass.xcdatamodeld in Sources */,
@@ -355,9 +354,10 @@
 				84F4207529EEA0F2000D7600 /* Folder.swift in Sources */,
 				84F4207229EEA0F2000D7600 /* CD_Database+CoreDataClass.swift in Sources */,
 				84F4207629EEA0F2000D7600 /* Entry.swift in Sources */,
-				842EAC6D29D832670014C8F8 /* ContentView.swift in Sources */,
+				842EAC6D29D832670014C8F8 /* Home.swift in Sources */,
 				842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */,
 				84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */,
+				84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,16 +688,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		842EAC7529D832680014C8F8 /* Protecto_Pass.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				842EAC7629D832680014C8F8 /* Protecto_Pass.xcdatamodel */,
-			);
-			currentVersion = 842EAC7629D832680014C8F8 /* Protecto_Pass.xcdatamodel */;
-			path = Protecto_Pass.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (

@@ -13,25 +13,31 @@ internal struct UnlockDB: View {
     /// The Encrypted Database the User wants to unlock
     internal let db : CD_Database
     
+    /// The Password to unlock the Database
     @State private var password : String = ""
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Information")
-                .font(.title)
             Section {
+                Section {
+                    Text("Contains \(db.folders!.count) Folders")
+                    Text("Contains \(entryCountInDB()) Entries")
+                } header: {
+                    Text("Content")
+                        .font(.headline)
+                }
+                Divider()
+                Section {
+                } header: {
+                    Text("Encryption")
+                        .font(.headline)
+                }
+                Divider()
             } header: {
-                Text("Content")
-                    .font(.headline)
+                Text("Information")
+                    .font(.title)
             }
-            Divider()
-            Section {
-            } header: {
-                Text("Encryption")
-                    .font(.headline)
-            }
-            Divider()
-            TextField("Enter your Password", text: $password)
+            TextField("Enter your Password...", text: $password)
                 .textCase(.none)
                 .textContentType(.password)
                 .textInputAutocapitalization(.none)
@@ -41,6 +47,17 @@ internal struct UnlockDB: View {
         .navigationTitle("Unlock \(db.name!)")
         .navigationBarTitleDisplayMode(.automatic)
         .padding(20)
+    }
+    
+    /// Returns the Count of Entries in the complete Database
+    private func entryCountInDB() -> Int {
+        for folder in db.folders {
+            
+        }
+    }
+    
+    private func entryCountInFolder(_ folder : CD_Folder) -> Int {
+        
     }
 }
 

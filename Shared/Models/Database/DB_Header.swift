@@ -54,8 +54,15 @@ internal struct DB_Header {
     
     /// Parses a String and returns a Header
     internal static func parseString(string : String) -> DB_Header {
-        let data : [Substring] = string.split(separator: ";")
+        var data : [Substring] = string.replacingOccurrences(of: " ", with: "").split(separator: ";")
         // TODO: data[0] or where("encryption:")?
+        for s in data {
+            var split : [Substring] = s.split(separator: ":")
+            for i in 0..<split.count where i % 2 != 0 {
+                split.remove(at: i)
+            }
+            data = split
+        }
         return DB_Header(encryption: Encryption(rawValue: String(data[0]))!)
     }
     

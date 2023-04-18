@@ -13,7 +13,8 @@ internal struct UnlockDB: View {
     /// The Encrypted Database the User wants to unlock
     internal let db : CD_Database
     
-    /// The Password to unlock the Database
+    /// The Password entered by the User with which
+    /// the App tries to unlock the Database
     @State private var password : String = ""
     
     var body: some View {
@@ -28,6 +29,7 @@ internal struct UnlockDB: View {
                 }
                 Divider()
                 Section {
+                    Text("Encrypted with \(encryptionType)")
                 } header: {
                     Text("Encryption")
                         .font(.headline)
@@ -36,6 +38,9 @@ internal struct UnlockDB: View {
             } header: {
                 Text("Information")
                     .font(.title)
+                Divider()
+            } footer: {
+                Text(db.dbDescription!)
             }
             TextField("Enter your Password...", text: $password)
                 .textCase(.none)
@@ -56,6 +61,13 @@ internal struct UnlockDB: View {
     
     private func entryCountInFolder(_ folder : CD_Folder) -> Int {
      return 0
+    }
+    
+    /// The Encryption that is used to encrypt and decrypt this
+    /// Database
+    private var encryptionType : String {
+        let header : DB_Header = DB_Header.parseString(string: db.header!)
+        return header.encryption.rawValue
     }
 }
 

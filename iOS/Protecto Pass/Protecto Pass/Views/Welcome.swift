@@ -34,24 +34,14 @@ internal struct Welcome: View {
     /// The Fetch Request executor for the Databases request
     @FetchRequest(fetchRequest: dbFetchRequest) private var databases : FetchedResults<CD_Database>
     
-    /// The current selected DB in the Big Frame
-    @State private var currentDB : CD_Database? = nil
-    
     var body: some View {
         NavigationStack {
-            ZStack {
-                bigLabel()
-            }
-            ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.flexible()), GridItem(.flexible())]) {
-                    ForEach(databases) {
-                        db in
-                        Button {
-                            currentDB = db
-                        } label: {
-                            label(for: db)
-                        }
-                    }
+            List(databases) {
+                db in
+                NavigationLink {
+                    UnlockDB(db: db)
+                } label: {
+                    label(for: db)
                 }
             }
             .navigationTitle("Welcome")
@@ -59,15 +49,16 @@ internal struct Welcome: View {
         }
     }
     
-    @ViewBuilder
-    private func bigLabel() -> some View {
-        Text(currentDB!.name!)
-    }
-    
     /// Returns and builds the Label for the specified Database
     @ViewBuilder
     private func label(for db : CD_Database) -> some View {
-        Text(db.name!)
+        VStack(alignment: .leading) {
+            Text(db.name!)
+                .font(.headline)
+            Text(db.dbDescription!)
+                .font(.subheadline)
+                .lineLimit(2)
+        }
     }
 }
 

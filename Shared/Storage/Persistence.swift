@@ -22,6 +22,8 @@ internal struct PersistenceController {
             let db : CD_Database = CD_Database(context: viewContext)
             db.name = "Database \(i)"
             db.dbDescription = "This is the Database Number \(i)"
+            let header : DB_Header = DB_Header()
+            db.header = header.parseHeader()
         }
         do {
             try viewContext.save()

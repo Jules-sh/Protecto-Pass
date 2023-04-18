@@ -21,17 +21,18 @@ internal struct UnlockDB: View {
         VStack(alignment: .leading) {
             Section {
                 Section {
-                    Text("Contains \(db.folders!.count) Folders")
-                    Text("Contains \(entryCountInDB()) Entries")
+                    Text("Encrypted with \(header.encryption.rawValue)")
+                    Text("Stored in \(header.storageType.rawValue)")
                 } header: {
-                    Text("Content")
+                    Text("General")
                         .font(.headline)
                 }
                 Divider()
                 Section {
-                    Text("Encrypted with \(encryptionType)")
+                    Text("Contains \(folderCountInDB()) Folders")
+                    Text("Contains \(entryCountInDB()) Entries")
                 } header: {
-                    Text("Encryption")
+                    Text("Content")
                         .font(.headline)
                 }
                 Divider()
@@ -54,20 +55,63 @@ internal struct UnlockDB: View {
         .padding(20)
     }
     
+    // TODO: maybe remove guard statements, if arrays can't be nil (check)
+    // TODO: guard statements only here because i though the fix a bug (wasn't the problem)
+    
+    /// Returns the count of folders in the complete Database
+    private func folderCountInDB() -> Int {
+        var count : Int = 0
+        guard db.folders != nil else {
+            return 0
+        }
+        count += db.folders!.count
+        for folder in db.folders! {
+            count += folderCountInFolder(folder as! CD_Folder)
+        }
+        return count
+    }
+    
+    /// Returns the Count of Folders in the specified Folder
+    private func folderCountInFolder(_ folder : CD_Folder) -> Int {
+        var count : Int = 0
+        count += folder.folders?.count ?? 0
+        guard folder.folders != nil else {
+            return count
+        }
+        for innerFolder in folder.folders! {
+            count += folderCountInFolder(innerFolder as! CD_Folder)
+        }
+        return count
+    }
+    
     /// Returns the Count of Entries in the complete Database
     private func entryCountInDB() -> Int {
-        return 0
+        var count : Int = 0
+        guard db.folders != nil else {
+            return 0
+        }
+        for folder in db.folders! {
+            count += entryCountInFolder(folder as! CD_Folder)
+        }
+        return count
     }
     
+    /// Returns the Number of Entries in the specified Folder
     private func entryCountInFolder(_ folder : CD_Folder) -> Int {
-     return 0
+        var count : Int = 0
+        count += folder.entries?.count ?? 0
+        guard folder.folders != nil else {
+            return count
+        }
+        for innerFolder in folder.folders! {
+            count += entryCountInFolder(innerFolder as! CD_Folder)
+        }
+        return count
     }
     
-    /// The Encryption that is used to encrypt and decrypt this
-    /// Database
-    private var encryptionType : String {
-        let header : DB_Header = DB_Header.parseString(string: db.header!)
-        return header.encryption.rawValue
+    /// The Header of this Database as a DB Header Object
+    private var header : DB_Header {
+        return DB_Header.parseString(string: db.header!)
     }
 }
 

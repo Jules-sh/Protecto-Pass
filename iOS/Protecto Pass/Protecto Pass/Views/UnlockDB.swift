@@ -51,13 +51,11 @@ internal struct UnlockDB: View {
     
     /// Returns the Count of Entries in the complete Database
     private func entryCountInDB() -> Int {
-        for folder in db.folders {
-            
-        }
+        return 0
     }
     
     private func entryCountInFolder(_ folder : CD_Folder) -> Int {
-        
+     return 0
     }
 }
 

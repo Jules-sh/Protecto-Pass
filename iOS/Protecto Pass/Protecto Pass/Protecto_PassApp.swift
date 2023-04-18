@@ -13,7 +13,7 @@ struct Protecto_PassApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Home()
+            Welcome()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

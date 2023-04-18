@@ -20,6 +20,9 @@ internal struct DB_Header {
     internal enum Encryption : String, RawRepresentable {
         /// Using AES 256 Bit for the Encryption and Decryption
         case AES256
+        
+        /// Using ChaCha20-Poly1305 for the Encryption and Decryption
+        case ChaChaPoly
     }
     
     /// The Enum to declare how the Database is stored.
@@ -32,6 +35,9 @@ internal struct DB_Header {
         
         /// Storing this Database only local in the Keychain.
         case Keychain
+        
+        /// Storing this Database in a sealed Box via ChaCha Poly Algorithm
+        case SealedBox
     }
     
     /// The Check String to check if the Decryption of the Database has been successful

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */; };
-		842EAC6D29D832670014C8F8 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* Home.swift */; };
+		842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* Welcome.swift */; };
 		842EAC6F29D832680014C8F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 842EAC6E29D832680014C8F8 /* Assets.xcassets */; };
 		842EAC7229D832680014C8F8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 842EAC7129D832680014C8F8 /* Preview Assets.xcassets */; };
 		842EAC8229D832680014C8F8 /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8129D832680014C8F8 /* Protecto_PassTests.swift */; };
@@ -48,7 +48,7 @@
 /* Begin PBXFileReference section */
 		842EAC6729D832670014C8F8 /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
-		842EAC6C29D832670014C8F8 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		842EAC6C29D832670014C8F8 /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
 		842EAC6E29D832680014C8F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		842EAC7129D832680014C8F8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		842EAC7829D832680014C8F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 		84C4749C29E446F400543BA0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				842EAC6C29D832670014C8F8 /* Home.swift */,
+				842EAC6C29D832670014C8F8 /* Welcome.swift */,
 				84F4209A29EEA22A000D7600 /* UnlockDB.swift */,
 			);
 			path = Views;
@@ -354,7 +354,7 @@
 				84F4207529EEA0F2000D7600 /* Folder.swift in Sources */,
 				84F4207229EEA0F2000D7600 /* CD_Database+CoreDataClass.swift in Sources */,
 				84F4207629EEA0F2000D7600 /* Entry.swift in Sources */,
-				842EAC6D29D832670014C8F8 /* Home.swift in Sources */,
+				842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */,
 				842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */,
 				84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */,
 				84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */,

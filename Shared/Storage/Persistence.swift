@@ -7,15 +7,21 @@
 
 import CoreData
 
-struct PersistenceController {
-    static let shared = PersistenceController()
-
-    static var preview: PersistenceController = {
+/// The Persistence Controller to connect the App
+/// to the Core Data Manager
+internal struct PersistenceController {
+    
+    /// The Persistence Controller to use everywhere in this App
+    internal static let shared : PersistenceController = PersistenceController()
+    
+    /// The Preview Persistence Controller to only use in Previews
+    internal static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+        for i in 0..<10 {
+            let db : CD_Database = CD_Database(context: viewContext)
+            db.name = "Database \(i)"
+            db.dbDescription = "This is the Database Number \(i)"
         }
         do {
             try viewContext.save()
@@ -27,10 +33,11 @@ struct PersistenceController {
         }
         return result
     }()
-
-    let container: NSPersistentCloudKitContainer
-
-    init(inMemory: Bool = false) {
+    
+    /// The Container actually containing all the Stores, the ViewContext and other relevant things
+    internal let container: NSPersistentCloudKitContainer
+    
+    internal init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "Protecto_Pass")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
@@ -39,7 +46,7 @@ struct PersistenceController {
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-
+                
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -51,6 +58,19 @@ struct PersistenceController {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        // NSPersistentStoreFileProtectionKey is not available
+        // in macOS, so this is only compiled and added, if the OS
+        // is not macOS
+#if !os(macOS)
+        // Core Data Encryption Idea from: https://cocoacasts.com/is-core-data-encrypted
+        container.persistentStoreDescriptions.first!.setOption(
+            FileProtectionType.complete as NSObject,
+            forKey: NSPersistentStoreFileProtectionKey
+        )
+#endif
+        // Automatically merge Changes.
         container.viewContext.automaticallyMergesChangesFromParent = true
+        // Idea for this merge policy: https://www.reddit.com/r/iOSProgramming/comments/egki07/which_merge_policy_should_i_use_for_cloudkitcore/
+        container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
     }
 }

@@ -36,29 +36,53 @@ internal struct Welcome: View {
     
     var body: some View {
         NavigationStack {
-            List(databases) {
-                db in
-                NavigationLink {
-                    UnlockDB(db: db)
-                } label: {
-                    label(for: db)
+            ScrollView(.horizontal) {
+                LazyHGrid(rows: [GridItem(.flexible())], spacing: 25) {
+                    ForEach(databases) {
+                        db in
+                        container(for: db)
+                    }
+                    .padding(15)
+                    NavigationLink {
+                        AddDB()
+                    } label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(50)
+                            .frame(width: 240, height: 240)
+                            .background(Color.gray)
+                            .cornerRadius(15)
+                            .foregroundColor(.white)
+                    }
                 }
+                .padding(.trailing, 15)
             }
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.automatic)
         }
     }
     
-    /// Returns and builds the Label for the specified Database
+    /// Returns the Container for the Database
     @ViewBuilder
-    private func label(for db : CD_Database) -> some View {
-        VStack(alignment: .leading) {
-            Text(db.name!)
-                .font(.headline)
-            Text(db.dbDescription!)
-                .font(.subheadline)
-                .lineLimit(2)
+    private func container(for db : CD_Database) -> some View {
+        NavigationLink {
+            UnlockDB(db: db)
+        } label: {
+            VStack {
+                Text(db.name!)
+                    .font(.headline)
+                Text(db.dbDescription!)
+                    .font(.subheadline)
+                    .lineLimit(2)
+            }
         }
+        .foregroundColor(.white)
+        .padding(.horizontal, 75)
+        .padding(.vertical, 100)
+        .background(Color.gray)
+        .cornerRadius(15)
+        
     }
 }
 

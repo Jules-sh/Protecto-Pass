@@ -55,8 +55,7 @@ internal struct UnlockDB: View {
         .padding(20)
     }
     
-    // TODO: maybe remove guard statements, if arrays can't be nil (check)
-    // TODO: guard statements only here because i though the fix a bug (wasn't the problem)
+    // TODO: maybe remove guard statements, if arrays can't be nil. statements only here because i though the fix a bug (wasn't the problem)
     
     /// Returns the count of folders in the complete Database
     private func folderCountInDB() -> Int {

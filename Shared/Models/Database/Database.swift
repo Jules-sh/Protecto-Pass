@@ -102,7 +102,7 @@ internal final class EncryptedDatabase : GeneralDatabase {
     /// The Preview Database to use in Previews or Tests
     internal static let previewDB : EncryptedDatabase = EncryptedDatabase(
         name: "Preview Database",
-        dbDescription: "This is a Preview Database used in Tests and Previews",
+        dbDescription: "This is an encrypted Preview Database used in Tests and Previews",
         folders: []
     )
 }

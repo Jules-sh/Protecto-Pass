@@ -13,6 +13,14 @@ internal struct UnlockDB: View {
     /// The Encrypted Database the User wants to unlock
     internal let db : EncryptedDatabase
     
+    /// The unlocked Database
+    private var unlockedDB : Database
+    
+    internal init(db : EncryptedDatabase) {
+        self.db = db
+        unlockedDB = Database.previewDB
+    }
+    
     /// The Password entered by the User with which
     /// the App tries to unlock the Database
     @State private var password : String = ""
@@ -20,6 +28,9 @@ internal struct UnlockDB: View {
     /// When an error occurs while trying to unlock the Database,
     /// toggle this to show the error message
     @State private var errDecryptingPresented : Bool = false
+    
+    /// If the unlock of the database has been successful, this is set to true
+    @State private var unlockSuccess : Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -57,8 +68,12 @@ internal struct UnlockDB: View {
         .navigationTitle("Unlock \(db.name)")
         .navigationBarTitleDisplayMode(.automatic)
         .padding(20)
+        .navigationDestination(isPresented: $unlockSuccess) {
+            Home(db: unlockedDB)
+        }
         .alert("Error Unlock Database", isPresented: $errDecryptingPresented) {
-            
+        } message: {
+            Text("An Error occured while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
         }
     }
     
@@ -103,10 +118,10 @@ internal struct UnlockDB: View {
     }
     
     /// Try to unlock the Database with the provided password
-    private func tryUnlocking() -> Void {
+    private mutating func tryUnlocking() -> Void {
         do {
-            let decrypted : Database = try db.decrypt()
-            
+            unlockedDB = try db.decrypt()
+            unlockSuccess.toggle()
         } catch {
             errDecryptingPresented.toggle()
         }

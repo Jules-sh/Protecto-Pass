@@ -12,7 +12,7 @@ internal struct Home: View {
     internal let db : Database
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             
         }
     }

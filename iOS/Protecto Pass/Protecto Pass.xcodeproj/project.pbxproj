@@ -27,6 +27,8 @@
 		84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207029EEA0F1000D7600 /* Persistence.swift */; };
 		84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207129EEA0F1000D7600 /* FileManager.swift */; };
 		84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4209A29EEA22A000D7600 /* UnlockDB.swift */; };
+		84F8850C2A07F7A000B35956 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850B2A07F7A000B35956 /* Encoder.swift */; };
+		84F8850E2A07F7AC00B35956 /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850D2A07F7AC00B35956 /* Decoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,8 @@
 		84F4207029EEA0F1000D7600 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		84F4207129EEA0F1000D7600 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		84F4209A29EEA22A000D7600 /* UnlockDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockDB.swift; sourceTree = "<group>"; };
+		84F8850B2A07F7A000B35956 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
+		84F8850D2A07F7AC00B35956 /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +173,7 @@
 		84F4206129EEA0F1000D7600 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				84F8850A2A07F79500B35956 /* Cryptography */,
 				84F4206229EEA0F1000D7600 /* Models */,
 				84F4206E29EEA0F1000D7600 /* Storage */,
 			);
@@ -215,6 +220,15 @@
 				84F4207129EEA0F1000D7600 /* FileManager.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		84F8850A2A07F79500B35956 /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				84F8850B2A07F7A000B35956 /* Encoder.swift */,
+				84F8850D2A07F7AC00B35956 /* Decoder.swift */,
+			);
+			path = Cryptography;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -347,6 +361,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84F8850E2A07F7AC00B35956 /* Decoder.swift in Sources */,
 				84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */,
 				84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */,
 				84F4207829EEA0F2000D7600 /* Database.swift in Sources */,
@@ -355,6 +370,7 @@
 				848480B429EFF09D008EA77C /* AddDB.swift in Sources */,
 				84F4207929EEA0F2000D7600 /* Protecto_Pass.xcdatamodeld in Sources */,
 				84F4207429EEA0F2000D7600 /* CD_Folder+CoreDataClass.swift in Sources */,
+				84F8850C2A07F7A000B35956 /* Encoder.swift in Sources */,
 				84F4207529EEA0F2000D7600 /* Folder.swift in Sources */,
 				84F4207229EEA0F2000D7600 /* CD_Database+CoreDataClass.swift in Sources */,
 				84F4207629EEA0F2000D7600 /* Entry.swift in Sources */,

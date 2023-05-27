@@ -29,7 +29,7 @@ internal class GeneralDatabase {
 }
 
 /// The Database Object that is used when the App is running
-internal class Database : GeneralDatabase {
+internal final class Database : GeneralDatabase {
     
     /// All the Folders in this Database
     internal let folders : [Folder]
@@ -65,7 +65,7 @@ internal class Database : GeneralDatabase {
 }
 
 /// The object storing an encrypted Database
-internal class EncryptedDatabase : GeneralDatabase {
+internal final class EncryptedDatabase : GeneralDatabase {
     
     /// The Encrypted Folders being stored in this Encrypted Database
     internal let folders : [EncryptedFolder]

@@ -34,40 +34,55 @@ internal struct Welcome: View {
     /// The Fetch Request executor for the Databases request
     @FetchRequest(fetchRequest: dbFetchRequest) private var databases : FetchedResults<CD_Database>
     
-    /// The current selected DB in the Big Frame
-    @State private var currentDB : CD_Database? = nil
-    
     var body: some View {
         NavigationStack {
-            ZStack {
-                bigLabel()
-            }
             ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.flexible()), GridItem(.flexible())]) {
+                LazyHGrid(rows: [GridItem(.flexible())], spacing: 25) {
                     ForEach(databases) {
                         db in
-                        Button {
-                            currentDB = db
-                        } label: {
-                            label(for: db)
-                        }
+                        container(for: db)
+                    }
+                    .padding(15)
+                    NavigationLink {
+                        AddDB()
+                    } label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(50)
+                            .frame(width: 240, height: 240)
+                            .background(Color.gray)
+                            .cornerRadius(15)
+                            .foregroundColor(.white)
                     }
                 }
+                .padding(.trailing, 15)
             }
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.automatic)
         }
     }
     
+    /// Returns the Container for the Database
     @ViewBuilder
-    private func bigLabel() -> some View {
-        Text(currentDB!.name!)
-    }
-    
-    /// Returns and builds the Label for the specified Database
-    @ViewBuilder
-    private func label(for db : CD_Database) -> some View {
-        Text(db.name!)
+    private func container(for db : CD_Database) -> some View {
+        NavigationLink {
+//            UnlockDB(db: db)
+        } label: {
+            VStack {
+                Text(db.name!)
+                    .font(.headline)
+                Text(db.dbDescription!)
+                    .font(.subheadline)
+                    .lineLimit(2)
+            }
+        }
+        .foregroundColor(.white)
+        .padding(.horizontal, 75)
+        .padding(.vertical, 100)
+        .background(Color.gray)
+        .cornerRadius(15)
+        
     }
 }
 

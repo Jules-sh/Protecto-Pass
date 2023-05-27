@@ -14,6 +14,10 @@
 		842EAC8229D832680014C8F8 /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8129D832680014C8F8 /* Protecto_PassTests.swift */; };
 		842EAC8C29D832680014C8F8 /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */; };
 		842EAC8E29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */; };
+		848480B429EFF09D008EA77C /* AddDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848480B329EFF09D008EA77C /* AddDB.swift */; };
+		84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B352A21E18500CE7945 /* DB_Converter.swift */; };
+		84922B392A21F11300CE7945 /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B382A21F11300CE7945 /* SetUpView.swift */; };
+		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
 		84F4207229EEA0F2000D7600 /* CD_Database+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206429EEA0F1000D7600 /* CD_Database+CoreDataClass.swift */; };
 		84F4207329EEA0F2000D7600 /* CD_Entry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206529EEA0F1000D7600 /* CD_Entry+CoreDataClass.swift */; };
 		84F4207429EEA0F2000D7600 /* CD_Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206629EEA0F1000D7600 /* CD_Folder+CoreDataClass.swift */; };
@@ -26,6 +30,8 @@
 		84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207029EEA0F1000D7600 /* Persistence.swift */; };
 		84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207129EEA0F1000D7600 /* FileManager.swift */; };
 		84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4209A29EEA22A000D7600 /* UnlockDB.swift */; };
+		84F8850C2A07F7A000B35956 /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850B2A07F7A000B35956 /* Encrypter.swift */; };
+		84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850D2A07F7AC00B35956 /* Decrypter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +63,10 @@
 		842EAC8729D832680014C8F8 /* Protecto PassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
 		842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		848480B329EFF09D008EA77C /* AddDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB.swift; sourceTree = "<group>"; };
+		84922B352A21E18500CE7945 /* DB_Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Converter.swift; sourceTree = "<group>"; };
+		84922B382A21F11300CE7945 /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
+		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		84F4206429EEA0F1000D7600 /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84F4206529EEA0F1000D7600 /* CD_Entry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Entry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84F4206629EEA0F1000D7600 /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -69,6 +79,8 @@
 		84F4207029EEA0F1000D7600 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		84F4207129EEA0F1000D7600 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 		84F4209A29EEA22A000D7600 /* UnlockDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockDB.swift; sourceTree = "<group>"; };
+		84F8850B2A07F7A000B35956 /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
+		84F8850D2A07F7AC00B35956 /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,11 +166,30 @@
 			path = "Protecto PassUITests";
 			sourceTree = "<group>";
 		};
-		84C4749C29E446F400543BA0 /* Views */ = {
+		84922B342A21E16F00CE7945 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				84922B352A21E18500CE7945 /* DB_Converter.swift */,
+			);
+			path = Mapping;
+			sourceTree = "<group>";
+		};
+		84922B372A21F0FE00CE7945 /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
 				842EAC6C29D832670014C8F8 /* Welcome.swift */,
+				84922B382A21F11300CE7945 /* SetUpView.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		84C4749C29E446F400543BA0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				84922B372A21F0FE00CE7945 /* Welcome */,
 				84F4209A29EEA22A000D7600 /* UnlockDB.swift */,
+				848480B329EFF09D008EA77C /* AddDB.swift */,
+				84922B3A2A21F15600CE7945 /* Home.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -166,6 +197,8 @@
 		84F4206129EEA0F1000D7600 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				84922B342A21E16F00CE7945 /* Mapping */,
+				84F8850A2A07F79500B35956 /* Cryptography */,
 				84F4206229EEA0F1000D7600 /* Models */,
 				84F4206E29EEA0F1000D7600 /* Storage */,
 			);
@@ -212,6 +245,15 @@
 				84F4207129EEA0F1000D7600 /* FileManager.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		84F8850A2A07F79500B35956 /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				84F8850B2A07F7A000B35956 /* Encrypter.swift */,
+				84F8850D2A07F7AC00B35956 /* Decrypter.swift */,
+			);
+			path = Cryptography;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,13 +386,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */,
 				84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */,
+				84922B3B2A21F15600CE7945 /* Home.swift in Sources */,
 				84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */,
 				84F4207829EEA0F2000D7600 /* Database.swift in Sources */,
 				84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */,
 				84F4207329EEA0F2000D7600 /* CD_Entry+CoreDataClass.swift in Sources */,
+				84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */,
+				848480B429EFF09D008EA77C /* AddDB.swift in Sources */,
+				84922B392A21F11300CE7945 /* SetUpView.swift in Sources */,
 				84F4207929EEA0F2000D7600 /* Protecto_Pass.xcdatamodeld in Sources */,
 				84F4207429EEA0F2000D7600 /* CD_Folder+CoreDataClass.swift in Sources */,
+				84F8850C2A07F7A000B35956 /* Encrypter.swift in Sources */,
 				84F4207529EEA0F2000D7600 /* Folder.swift in Sources */,
 				84F4207229EEA0F2000D7600 /* CD_Database+CoreDataClass.swift in Sources */,
 				84F4207629EEA0F2000D7600 /* Entry.swift in Sources */,

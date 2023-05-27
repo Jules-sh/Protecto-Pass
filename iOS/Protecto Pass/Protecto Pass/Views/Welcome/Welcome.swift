@@ -67,7 +67,7 @@ internal struct Welcome: View {
     @ViewBuilder
     private func container(for db : CD_Database) -> some View {
         NavigationLink {
-            UnlockDB(db: db)
+//            UnlockDB(db: db)
         } label: {
             VStack {
                 Text(db.name!)

@@ -26,6 +26,12 @@ internal class GeneralDatabase {
         self.dbDescription = dbDescription
         self.header = header
     }
+    
+    fileprivate init(from coreData : CD_Database) {
+        name = coreData.name!
+        dbDescription = coreData.dbDescription!
+        header = DB_Header.parseString(string: coreData.header!)
+    }
 }
 
 /// The Database Object that is used when the App is running
@@ -78,4 +84,25 @@ internal final class EncryptedDatabase : GeneralDatabase {
         self.folders = folders
         super.init(name: name, dbDescription: dbDescription, header: DB_Header())
     }
+    
+    internal override init(from coreData : CD_Database) {
+        var localfolders : [EncryptedFolder] = []
+        for folder in coreData.folders! {
+            localfolders.append(EncryptedFolder(from: folder as! CD_Folder))
+        }
+        self.folders = localfolders
+        super.init(from: coreData)
+    }
+    
+    internal func decrypt() throws -> Database {
+        // TODO: implement
+        throw DecryptionError.errUnlocking
+    }
+    
+    /// The Preview Database to use in Previews or Tests
+    internal static let previewDB : EncryptedDatabase = EncryptedDatabase(
+        name: "Preview Database",
+        dbDescription: "This is a Preview Database used in Tests and Previews",
+        folders: []
+    )
 }

@@ -14,4 +14,34 @@ internal enum DecryptionError : Error {
 }
 
 internal struct Decrypter {
+    
+    private static let aes256 : Decrypter = Decrypter(encryption: .AES256)
+    
+    private static let chaChaPoly : Decrypter = Decrypter(encryption: .ChaChaPoly)
+    
+    internal static func getInstance(for db : EncryptedDatabase) -> Decrypter {
+        if db.header.encryption == .AES256 {
+            return aes256
+        } else if db.header.encryption == .ChaChaPoly {
+            return chaChaPoly
+        } else {
+            return Decrypter(encryption: .unknown)
+        }
+    }
+    
+    private init(encryption : DB_Header.Encryption) {
+        
+    }
+    
+    internal func decrypt(db : EncryptedDatabase) throws -> Database {
+        
+    }
+    
+    private func decryptAES(db : EncryptedDatabase) throws -> Database {
+        
+    }
+    
+    private func decryptChaChaPoly(db : EncryptedDatabase) throws -> Database {
+        
+    }
 }

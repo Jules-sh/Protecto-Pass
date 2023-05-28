@@ -18,6 +18,9 @@ internal struct DB_Header {
     /// the database and correspondingly
     /// has to be used to decrypt it
     internal enum Encryption : String, RawRepresentable {
+        /// The Encryption Type is unknonw, mainly due to an error.
+        case unknown
+        
         /// Using AES 256 Bit for the Encryption and Decryption
         case AES256
         

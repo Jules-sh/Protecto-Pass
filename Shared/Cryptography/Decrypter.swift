@@ -22,6 +22,21 @@ internal struct Decrypter {
     /// Decrypter specified for ChaChaPoly Encryption
     private static let chaChaPoly : Decrypter = Decrypter(encryption: .ChaChaPoly)
     
+    /// Returns the correct Decrypter for the passed database
+    internal static func getInstance(for db : EncryptedDatabase) -> Decrypter {
+        var decrypter : Decrypter
+        if db.header.encryption == .AES256 {
+            decrypter = aes256
+        } else if db.header.encryption == .ChaChaPoly {
+            decrypter = chaChaPoly
+        } else {
+            decrypter = Decrypter(encryption: .unknown)
+        }
+        decrypter.db = db
+        return decrypter
+    }
+    
+    /// The Encryption that is used for this Decrypter
     private let encryption : DB_Header.Encryption
     
     /// The Database that should be decrypted.
@@ -29,23 +44,18 @@ internal struct Decrypter {
     /// and is used by the private methods
     private var db : EncryptedDatabase?
     
-    /// Returns the correct Decrypter for the passed database
-    internal static func getInstance(for db : EncryptedDatabase) -> Decrypter {
-        self.db = db
-        if db.header.encryption == .AES256 {
-            return aes256
-        } else if db.header.encryption == .ChaChaPoly {
-            return chaChaPoly
-        } else {
-            return Decrypter(encryption: .unknown)
-        }
-    }
-    
+    /// Private init, to prevent creating this Object.
+    /// Only use getInstance with the database you want to decrypt
     private init(encryption : DB_Header.Encryption) {
         self.encryption = encryption
     }
     
-    internal mutating func decrypt() throws -> Database {
+    /// Decrypts the Database this Encrypter is configured for,
+    /// using the getInstance method and passing your Database.
+    /// Returns the encrypted Database if it could be encrypted, otherwise
+    /// throws an error.
+    /// See Error for more details
+    internal func decrypt() throws -> Database {
         if encryption == .AES256 {
             return try decryptAES()
         } else if encryption == .ChaChaPoly {
@@ -55,10 +65,14 @@ internal struct Decrypter {
         }
     }
     
+    /// Decrypts AES encrypted Databases
+    /// /// Throws an Error if something went wrong
     private func decryptAES() throws -> Database {
         
     }
     
+    /// Decrypts ChaChaPoly Encrypted Databases
+    /// Throws an Error if something went wrong
     private func decryptChaChaPoly() throws -> Database {
         
     }

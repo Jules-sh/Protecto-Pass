@@ -36,6 +36,16 @@ internal struct EncryptedFolder {
     /// Encrypted Entries
     internal let entries : [EncryptedEntry]
     
+    internal init(
+        name : Data,
+        folders : [EncryptedFolder],
+        entries : [EncryptedEntry]
+    ) {
+        self.name = name
+        self.folders = folders
+        self.entries = entries
+    }
+    
     internal init(from coreData : CD_Folder) {
         name = coreData.name!
         var folders : [EncryptedFolder] = []

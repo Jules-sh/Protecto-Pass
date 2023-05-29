@@ -53,6 +53,20 @@ internal struct EncryptedEntry {
     /// The Notes encrypted and stored as bytes
     internal let notes : Data
     
+    internal init(
+        title : Data,
+        username : Data,
+        password : Data,
+        url : Data,
+        notes : Data
+    ) {
+        self.title = title
+        self.username = username
+        self.password = password
+        self.url = url
+        self.notes = notes
+    }
+    
     internal init(from coreData : CD_Entry) {
         title = coreData.title!
         username = coreData.username!

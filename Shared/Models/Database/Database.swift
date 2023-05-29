@@ -42,7 +42,7 @@ internal final class Database : GeneralDatabase {
     
     internal init(
         name : String,
-        dbDescription : String = "",
+        dbDescription : String,
         folders : [Folder],
         header : DB_Header
     ) {
@@ -54,7 +54,7 @@ internal final class Database : GeneralDatabase {
         name: String,
         dbDescription: String,
         folders : [Folder],
-        encryption : DB_Header.Encryption,
+        encryption : Cryptography.Encryption,
         storageType : DB_Header.StorageType
     ) {
         self.folders = folders
@@ -78,7 +78,7 @@ internal final class EncryptedDatabase : GeneralDatabase {
     
     internal init(
         name : String,
-        dbDescription : String = "",
+        dbDescription : String,
         folders: [EncryptedFolder]
     ) {
         self.folders = folders

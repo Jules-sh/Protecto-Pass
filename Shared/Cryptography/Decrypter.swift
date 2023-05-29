@@ -7,6 +7,7 @@
 //  Renamed by Julian Schumacher to Decrypter.swift on 27.05.23.
 //
 
+import CryptoKit
 import Foundation
 
 internal enum DecryptionError : Error {
@@ -37,7 +38,7 @@ internal struct Decrypter {
     }
     
     /// The Encryption that is used for this Decrypter
-    private let encryption : DB_Header.Encryption
+    private let encryption : Cryptography.Encryption
     
     /// The Database that should be decrypted.
     /// This is passed with the decrypt Method,
@@ -46,7 +47,7 @@ internal struct Decrypter {
     
     /// Private init, to prevent creating this Object.
     /// Only use getInstance with the database you want to decrypt
-    private init(encryption : DB_Header.Encryption) {
+    private init(encryption : Cryptography.Encryption) {
         self.encryption = encryption
     }
     
@@ -61,7 +62,7 @@ internal struct Decrypter {
         } else if encryption == .ChaChaPoly {
             return try decryptChaChaPoly()
         } else {
-            throw DecryptionError.unknownEncryption
+            throw CryptoStatus.unknownEncryption
         }
     }
     

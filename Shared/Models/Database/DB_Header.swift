@@ -13,21 +13,6 @@ import Foundation
 /// important information about the Database
 internal struct DB_Header {
     
-    /// The Enum to choose which
-    /// encryption was used to encrypt
-    /// the database and correspondingly
-    /// has to be used to decrypt it
-    internal enum Encryption : String, RawRepresentable {
-        /// The Encryption Type is unknonw, mainly due to an error.
-        case unknown
-        
-        /// Using AES 256 Bit for the Encryption and Decryption
-        case AES256
-        
-        /// Using ChaCha20-Poly1305 for the Encryption and Decryption
-        case ChaChaPoly
-    }
-    
     /// The Enum to declare how the Database is stored.
     internal enum StorageType : String, RawRepresentable {
         /// Storing this Database in an local encrypted binary File
@@ -38,9 +23,6 @@ internal struct DB_Header {
         
         /// Storing this Database only local in the Keychain.
         case Keychain
-        
-        /// Storing this Database in a sealed Box via ChaCha Poly Algorithm
-        case SealedBox
     }
     
     /// The Check String to check if the Decryption of the Database has been successful
@@ -49,7 +31,7 @@ internal struct DB_Header {
     ///The Enum telling the App
     ///which Encryption was used to encrypt
     ///the Database
-    internal var encryption : Encryption = .AES256
+    internal var encryption : Cryptography.Encryption = .AES256
     
     /// The Enum telling the App how the Database
     /// is stored.
@@ -64,7 +46,7 @@ internal struct DB_Header {
             result.append(split[1])
         }
         return DB_Header(
-            encryption: Encryption(rawValue: String(result[0]))!,
+            encryption: Cryptography.Encryption(rawValue: String(result[0]))!,
             storageType: StorageType(rawValue: String(result[1]))!
         )
     }

@@ -49,6 +49,11 @@ internal struct Encrypter {
         self.encryption = encryption
     }
     
+    /// Encrypts the Database this Encrypter is configured for,
+    /// using the getInstance method and passing your Database.
+    /// Returns the encrypted Database if it could be encrypted, otherwise
+    /// throws an error.
+    /// See Error for more details
     internal mutating func encrypt(using password : String) throws -> EncryptedDatabase {
         key = SymmetricKey(data: password.data(using: .utf8)!)
         if encryption == .AES256 {
@@ -140,7 +145,8 @@ internal struct Encrypter {
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
-            folders: encryptedFolders
+            folders: encryptedFolders,
+            header: db!.header
         )
         return encryptedDatabase
     }

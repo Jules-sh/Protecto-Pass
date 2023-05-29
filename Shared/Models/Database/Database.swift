@@ -50,15 +50,22 @@ internal final class Database : GeneralDatabase {
         super.init(name: name, dbDescription: dbDescription, header: header)
     }
     
-    internal init(
+    internal convenience init(
         name: String,
         dbDescription: String,
         folders : [Folder],
         encryption : Cryptography.Encryption,
         storageType : DB_Header.StorageType
     ) {
-        self.folders = folders
-        super.init(name: name, dbDescription: dbDescription, header: DB_Header(encryption: encryption, storageType: storageType))
+        self.init(
+            name: name,
+            dbDescription: dbDescription,
+            folders: folders,
+            header: DB_Header(
+                encryption: encryption,
+                storageType: storageType
+            )
+        )
     }
     
     /// The Preview Database to use in Previews or Tests
@@ -79,10 +86,29 @@ internal final class EncryptedDatabase : GeneralDatabase {
     internal init(
         name : String,
         dbDescription : String,
-        folders: [EncryptedFolder]
+        folders: [EncryptedFolder],
+        header : DB_Header
     ) {
         self.folders = folders
-        super.init(name: name, dbDescription: dbDescription, header: DB_Header())
+        super.init(name: name, dbDescription: dbDescription, header: header)
+    }
+    
+    internal convenience init(
+        name : String,
+        dbDescription : String,
+        folders: [EncryptedFolder],
+        encryption : Cryptography.Encryption,
+        storageType : DB_Header.StorageType
+    ) {
+        self.init(
+            name: name,
+            dbDescription: dbDescription,
+            folders: folders,
+            header: DB_Header(
+                encryption: encryption,
+                storageType: storageType
+            )
+        )
     }
     
     internal override init(from coreData : CD_Database) {
@@ -103,6 +129,7 @@ internal final class EncryptedDatabase : GeneralDatabase {
     internal static let previewDB : EncryptedDatabase = EncryptedDatabase(
         name: "Preview Database",
         dbDescription: "This is an encrypted Preview Database used in Tests and Previews",
-        folders: []
+        folders: [],
+        header: DB_Header()
     )
 }

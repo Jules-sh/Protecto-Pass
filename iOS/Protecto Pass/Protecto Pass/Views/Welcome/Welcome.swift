@@ -19,20 +19,8 @@ internal struct Welcome: View {
     /// The Context to manage the Core Data Objects
     @Environment(\.managedObjectContext) private var viewContext
     
-    /// The actual Fetch Request for the Database Fetch Request
-    private static var dbFetchRequest : NSFetchRequest<CD_Database> {
-        let request : NSFetchRequest<CD_Database> = CD_Database.fetchRequest()
-        request.sortDescriptors = [
-            NSSortDescriptor(
-                keyPath: \CD_Database.name,
-                ascending: true
-            )
-        ]
-        return request
-    }
-    
-    /// The Fetch Request executor for the Databases request
-    @FetchRequest(fetchRequest: dbFetchRequest) private var databases : FetchedResults<CD_Database>
+    /// All the Databases of the App.
+    internal let databases : [EncryptedDatabase]
     
     var body: some View {
         NavigationStack {
@@ -65,14 +53,14 @@ internal struct Welcome: View {
     
     /// Returns the Container for the Database
     @ViewBuilder
-    private func container(for db : CD_Database) -> some View {
+    private func container(for db : EncryptedDatabase) -> some View {
         NavigationLink {
-//            UnlockDB(db: db)
+            UnlockDB(db: db)
         } label: {
             VStack {
-                Text(db.name!)
+                Text(db.name)
                     .font(.headline)
-                Text(db.dbDescription!)
+                Text(db.dbDescription)
                     .font(.subheadline)
                     .lineLimit(2)
             }
@@ -89,7 +77,7 @@ internal struct Welcome: View {
 /// Preview Provider for the Home View
 internal struct Welcome_Previews: PreviewProvider {
     static var previews: some View {
-        Welcome()
+        Welcome(databases: [])
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

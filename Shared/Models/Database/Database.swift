@@ -10,7 +10,7 @@ import Foundation
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase {
+internal class GeneralDatabase : Identifiable {
     
     /// The Name of the Database
     internal let name : String

@@ -24,8 +24,15 @@ internal struct SetUpView: View {
     @State private var databases : [EncryptedDatabase] = []
     
     var body: some View {
-        NavigationStack {
-            Group {
+        build()
+    }
+    
+    @ViewBuilder
+    private func build() -> some View {
+        if isReady {
+            Welcome(databases: databases)
+        } else {
+            VStack {
                 ProgressView()
                     .padding(10)
                 Text("Loading...")
@@ -35,18 +42,14 @@ internal struct SetUpView: View {
                     .padding(.horizontal, 50)
                     .padding(.vertical, 0.5)
             }
-            .navigationDestination(isPresented: $isReady) {
-                Welcome(databases: databases)
+            .onAppear {
+                load()
+            }
+            .alert("Error", isPresented: $errInitPresented) {
+            } message: {
+                Text("An Error occured while loading. Please force close and restart the Application")
             }
         }
-        .onAppear {
-            load()
-        }
-        .alert("Error", isPresented: $errInitPresented) {
-        } message: {
-            Text("An Error occured while loading. Please force close and restart the Application")
-        }
-        
     }
     
     private func load() -> Void {

@@ -14,12 +14,14 @@ import Foundation
 internal struct DB_Header {
     
     /// The Enum to declare how the Database is stored.
-    internal enum StorageType : String, RawRepresentable {
-        /// Storing this Database in an local encrypted binary File
-        case File
+    internal enum StorageType : String, RawRepresentable, CaseIterable, Identifiable {
+        var id : Self { self }
         
         /// Storing this Database as an encrypted Core Data Instance
         case CoreData
+        
+        /// Storing this Database in an local encrypted binary File
+        case File
         
         /// Storing this Database only local in the Keychain.
         case Keychain

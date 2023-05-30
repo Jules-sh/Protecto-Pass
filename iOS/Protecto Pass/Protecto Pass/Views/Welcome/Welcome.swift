@@ -16,6 +16,10 @@ import CoreData
 /// he opens the App
 internal struct Welcome: View {
     
+    /// If set to true, a sheet appears providing the possibility to add a new
+    /// Database
+    @State private var addPresented : Bool = false
+    
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
     
@@ -30,16 +34,25 @@ internal struct Welcome: View {
                         ForEach(databases) {
                             db in
                             container(for: db, width: metrics.size.width - 30)
+                                
                         }
                         .padding(15)
                     }
                 }
-            }
-            .toolbar {
-                NavigationLink {
+                // Sheet has to be outside, didn't work inside of ForEach
+                .sheet(isPresented: $addPresented) {
                     AddDB()
-                } label: {
-                    Image(systemName: "plus")
+                }
+            }
+            .toolbarRole(.navigationStack)
+            .toolbar(.automatic, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        addPresented.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
             }
             .navigationTitle("Welcome")

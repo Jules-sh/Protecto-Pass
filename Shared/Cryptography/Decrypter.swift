@@ -49,6 +49,9 @@ internal struct Decrypter {
     /// decrypt the Database
     private var key : SymmetricKey?
     
+    /// The Password the user entered.
+    private var password : String?
+    
     /// Private init, to prevent creating this Object.
     /// Only use getInstance with the database you want to decrypt
     private init(encryption : Cryptography.Encryption) {
@@ -62,6 +65,7 @@ internal struct Decrypter {
     /// See Error for more details
     internal mutating func decrypt(using password : String) throws -> Database {
         key = SymmetricKey(data: password.data(using: .utf8)!)
+        self.password = password
         if encryption == .AES256 {
             return try decryptAES()
         } else if encryption == .ChaChaPoly {
@@ -81,8 +85,9 @@ internal struct Decrypter {
         let decryptedDatabase : Database = Database(
             name: db!.name,
             dbDescription: db!.dbDescription,
+            header: db!.header,
             folders: decryptedFolders,
-            header: db!.header
+            password: password!
         )
         return decryptedDatabase
     }
@@ -149,8 +154,9 @@ internal struct Decrypter {
         let decryptedDatabase : Database = Database(
             name: db!.name,
             dbDescription: db!.dbDescription,
+            header: db!.header,
             folders: decryptedFolders,
-            header: db!.header
+            password: password!
         )
         return decryptedDatabase
     }

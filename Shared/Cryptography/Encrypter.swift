@@ -75,8 +75,8 @@ internal struct Encrypter {
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
-            folders: encryptedFolders,
-            header: db!.header
+            header: db!.header,
+            folders: encryptedFolders
         )
         return encryptedDatabase
     }
@@ -146,8 +146,8 @@ internal struct Encrypter {
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
-            folders: encryptedFolders,
-            header: db!.header
+            header: db!.header,
+            folders: encryptedFolders
         )
         return encryptedDatabase
     }

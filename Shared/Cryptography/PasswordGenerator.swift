@@ -10,19 +10,6 @@ import Foundation
 /// Struct to generate random and secure Passwords
 internal struct PasswordGenerator {
     
-    /// All the upper case letters in the english alpahbet
-    private let upperCaseLetters : String =  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
-    /// All the lower case letters in the english alpahbet
-    private let lowerCaseLetter : String = "abcdefghijklmnopqrstuvwxyz"
-    
-    /// All the digits in the english alpahbet
-    private let digits : String = "0123456789"
-    
-    /// All the symbols this Apps support to include in the password
-    /// generation process
-    private let symbols : String = "^°!\"§$%&/()=?`´\\*+#'-_.:,;<>"
-    
     /// Enum containing the different parts of characters
     /// a password can contain.
     ///
@@ -66,16 +53,28 @@ internal struct PasswordGenerator {
         return pg.generatePassword()
     }
     
+    /// All the upper case letters in the english alpahbet
+    private let upperCaseLetters : String =  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    /// All the lower case letters in the english alpahbet
+    private let lowerCaseLetter : String = "abcdefghijklmnopqrstuvwxyz"
+    
+    /// All the digits in the english alpahbet
+    private let digits : String = "0123456789"
+    
+    /// All the symbols this Apps support to include in the password
+    /// generation process
+    private let symbols : String = "^°!\"§$%&/()=?`´\\*+#'-_.:,;<>"
+    
     /// The length of the password
     private let length : Int
     
     /// All the characters in the passwords content
     private let characters : Set<PasswordContent>
     
-    /// Generates a random and secure password with
-    /// the specified length and content characters of the
-    /// previously specified generator
-    internal func generatePassword() -> String {
+    /// Returns a String containing all the elements the User specified for this
+    /// Password Generator
+    private func getContent() -> String {
         var content : String = ""
         for c in characters {
             switch c {
@@ -89,8 +88,15 @@ internal struct PasswordGenerator {
                 content.append(symbols)
             }
         }
+        return content
+    }
+    
+    /// Generates a random and secure password with
+    /// the specified length and content characters of the
+    /// previously specified generator
+    internal func generatePassword() -> String {
         // Discussion: https://stackoverflow.com/questions/26845307/generate-random-alphanumeric-string-in-swift
         // Solution: https://stackoverflow.com/a/26845710
-        return String((0..<length).map { _ in content.randomElement()! })
+        return String((0..<length).map { _ in getContent().randomElement()! })
     }
 }

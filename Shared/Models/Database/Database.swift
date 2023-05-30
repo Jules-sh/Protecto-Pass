@@ -40,31 +40,40 @@ internal final class Database : GeneralDatabase {
     /// All the Folders in this Database
     internal let folders : [Folder]
     
+    /// The Password to decrypt this Database with
+    internal let password : String
+    
     internal init(
         name : String,
         dbDescription : String,
+        header : DB_Header,
         folders : [Folder],
-        header : DB_Header
+        password : String
     ) {
         self.folders = folders
+        self.password = password
         super.init(name: name, dbDescription: dbDescription, header: header)
     }
     
     internal convenience init(
         name: String,
         dbDescription: String,
-        folders : [Folder],
         encryption : Cryptography.Encryption,
-        storageType : DB_Header.StorageType
+        storageType : DB_Header.StorageType,
+        salt : String,
+        folders : [Folder],
+        password : String
     ) {
         self.init(
             name: name,
             dbDescription: dbDescription,
-            folders: folders,
             header: DB_Header(
                 encryption: encryption,
-                storageType: storageType
-            )
+                storageType: storageType,
+                salt: salt
+            ),
+            folders: folders,
+            password: password
         )
     }
     
@@ -72,8 +81,13 @@ internal final class Database : GeneralDatabase {
     internal static let previewDB : Database = Database(
         name: "Preview Database",
         dbDescription: "This is a Preview Database used in Tests and Previews",
+        header: DB_Header(
+            encryption: .AES256,
+            storageType: .CoreData,
+            salt: "salt"
+        ),
         folders: [],
-        header: DB_Header()
+        password: "Password"
     )
 }
 
@@ -86,8 +100,8 @@ internal final class EncryptedDatabase : GeneralDatabase {
     internal init(
         name : String,
         dbDescription : String,
-        folders: [EncryptedFolder],
-        header : DB_Header
+        header : DB_Header,
+        folders: [EncryptedFolder]
     ) {
         self.folders = folders
         super.init(name: name, dbDescription: dbDescription, header: header)
@@ -96,18 +110,21 @@ internal final class EncryptedDatabase : GeneralDatabase {
     internal convenience init(
         name : String,
         dbDescription : String,
-        folders: [EncryptedFolder],
         encryption : Cryptography.Encryption,
-        storageType : DB_Header.StorageType
+        storageType : DB_Header.StorageType,
+        salt : String,
+        folders: [EncryptedFolder],
+        password : String
     ) {
         self.init(
             name: name,
             dbDescription: dbDescription,
-            folders: folders,
             header: DB_Header(
                 encryption: encryption,
-                storageType: storageType
-            )
+                storageType: storageType,
+                salt: salt
+            ),
+            folders: folders
         )
     }
     
@@ -120,16 +137,20 @@ internal final class EncryptedDatabase : GeneralDatabase {
         super.init(from: coreData)
     }
     
-    internal func decrypt() throws -> Database {
-        // TODO: implement
-        throw DecryptionError.errUnlocking
+    internal func decrypt(using password : String) throws -> Database {
+        var decrypter : Decrypter = Decrypter.getInstance(for: self)
+        return try decrypter.decrypt(using: password)
     }
     
     /// The Preview Database to use in Previews or Tests
     internal static let previewDB : EncryptedDatabase = EncryptedDatabase(
         name: "Preview Database",
         dbDescription: "This is an encrypted Preview Database used in Tests and Previews",
-        folders: [],
-        header: DB_Header()
+        header: DB_Header(
+            encryption: .AES256,
+            storageType: .CoreData,
+            salt: "salt"
+        ),
+        folders: []
     )
 }

@@ -16,35 +16,31 @@ import CoreData
 /// he opens the App
 internal struct Welcome: View {
     
-    /// The Context to manage the Core Data Objects
-    @Environment(\.managedObjectContext) private var viewContext
-    
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
     
     var body: some View {
         NavigationStack {
-            ScrollView(.horizontal) {
-                LazyHGrid(rows: [GridItem(.flexible())], spacing: 25) {
-                    ForEach(databases) {
-                        db in
-                        container(for: db)
-                    }
-                    .padding(15)
-                    NavigationLink {
-                        AddDB()
-                    } label: {
-                        Image(systemName: "plus")
-                            .resizable()
-                            .scaledToFit()
-                            .padding(50)
-                            .frame(width: 240, height: 240)
-                            .background(Color.gray)
-                            .cornerRadius(15)
-                            .foregroundColor(.white)
+            // Geometry Reader use with Scroll View: https://stackoverflow.com/questions/58226768/how-to-make-the-row-fill-the-screen-width-with-some-padding-using-swiftui
+            // Used answer: https://stackoverflow.com/a/58230599
+            GeometryReader {
+                metrics in
+                ScrollView(.horizontal) {
+                    LazyHGrid(rows: [GridItem(.flexible())], spacing: 10) {
+                        ForEach(databases) {
+                            db in
+                            container(for: db, width: metrics.size.width - 30)
+                        }
+                        .padding(15)
                     }
                 }
-                .padding(.trailing, 15)
+            }
+            .toolbar {
+                NavigationLink {
+                    AddDB()
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.automatic)
@@ -53,7 +49,7 @@ internal struct Welcome: View {
     
     /// Returns the Container for the Database
     @ViewBuilder
-    private func container(for db : EncryptedDatabase) -> some View {
+    private func container(for db : EncryptedDatabase, width : CGFloat) -> some View {
         NavigationLink {
             UnlockDB(db: db)
         } label: {
@@ -62,22 +58,32 @@ internal struct Welcome: View {
                     .font(.headline)
                 Text(db.dbDescription)
                     .font(.subheadline)
-                    .lineLimit(2)
+                    .lineLimit(2, reservesSpace: true)
             }
+            // - 150 because horiztonal padding is 75
+            .frame(width: width - 150)
         }
         .foregroundColor(.white)
         .padding(.horizontal, 75)
         .padding(.vertical, 100)
         .background(Color.gray)
         .cornerRadius(15)
-        
     }
 }
 
 /// Preview Provider for the Home View
 internal struct Welcome_Previews: PreviewProvider {
     static var previews: some View {
-        Welcome(databases: [])
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        Welcome(
+            databases: [
+                EncryptedDatabase.previewDB,
+                EncryptedDatabase(
+                    name: "test",
+                    dbDescription: "description",
+                    header: DB_Header(salt: "salt"),
+                    folders: []
+                )
+            ]
+        )
     }
 }

@@ -95,29 +95,26 @@ internal struct AddDB_Password: View {
         } else {
             isLengthMet = false
         }
-        
-        // Upper Case
         do {
+            // Upper Case
             if password.contains(try Regex("[A-Z]+")) {
                 containsUpperCaseLetter = true
             } else {
                 containsUpperCaseLetter = false
             }
-            
             // Lower Case
             if password.contains(try Regex("[a-z]+")) {
                 containsLowerCaseLetter = true
             } else {
                 containsLowerCaseLetter = false
             }
-            
             // Number
             if password.contains(try Regex("[0-9]+")) {
                 containsNumber = true
             } else {
                 containsNumber = false
             }
-            
+            // Symbols
             if password.contains("?") {
                 containsSymbol = true
             } else {

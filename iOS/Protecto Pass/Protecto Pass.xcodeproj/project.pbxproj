@@ -73,6 +73,8 @@
 		84E4C5112A249E87005D793F /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 		84E4C5162A263FB8005D793F /* AddDB_Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Password.swift; sourceTree = "<group>"; };
+		84E4C5182A264D56005D793F /* Protecto Pass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Protecto Pass.entitlements"; sourceTree = "<group>"; };
+		84E4C5192A264DED005D793F /* Protecto-Pass-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Protecto-Pass-Info.plist"; sourceTree = SOURCE_ROOT; };
 		84F4206429EEA0F1000D7600 /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84F4206529EEA0F1000D7600 /* CD_Entry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Entry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84F4206629EEA0F1000D7600 /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -137,6 +139,8 @@
 		842EAC6929D832670014C8F8 /* Protecto Pass */ = {
 			isa = PBXGroup;
 			children = (
+				84E4C5192A264DED005D793F /* Protecto-Pass-Info.plist */,
+				84E4C5182A264D56005D793F /* Protecto Pass.entitlements */,
 				842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */,
 				84F4206129EEA0F1000D7600 /* Shared */,
 				84C4749C29E446F400543BA0 /* Views */,
@@ -581,12 +585,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Protecto Pass/Protecto Pass.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Protecto Pass/Preview Content\"";
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Protecto-Pass-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Protecto Pass";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -612,12 +618,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Protecto Pass/Protecto Pass.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Protecto Pass/Preview Content\"";
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Protecto-Pass-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Protecto Pass";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

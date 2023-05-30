@@ -24,7 +24,11 @@ public class CD_Database: NSManagedObject {
         let db : CD_Database = CD_Database(context: PersistenceController.preview.container.viewContext)
         db.name = "Preview Database"
         db.dbDescription = "This is the Preview Database"
-        let header : DB_Header = DB_Header(encryption: .AES256, storageType: .CoreData)
+        let header : DB_Header = DB_Header(
+            encryption: .AES256,
+            storageType: .CoreData,
+            salt: "Salt"
+        )
         db.header = header.parseHeader()
         return db
     }

@@ -120,7 +120,7 @@ internal struct UnlockDB: View {
     /// Try to unlock the Database with the provided password
     private mutating func tryUnlocking() -> Void {
         do {
-            unlockedDB = try db.decrypt()
+            unlockedDB = try db.decrypt(using: password)
             unlockSuccess.toggle()
         } catch {
             errDecryptingPresented.toggle()

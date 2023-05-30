@@ -20,6 +20,6 @@ internal struct Storage {
     
     internal static func loadDatabase() -> EncryptedDatabase {
         // TODO: change
-        return EncryptedDatabase(name: "Test", folders: [])
+        return EncryptedDatabase(name: "Test", dbDescription: "Description", header: DB_Header(salt: "Salt"), folders: [])
     }
 }

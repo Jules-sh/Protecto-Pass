@@ -88,20 +88,122 @@ internal struct Decrypter {
     }
     
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
+        var decryptedFolders : [Folder] = []
+        for folder in folder.folders {
+            decryptedFolders.append(try decryptAES(folder: folder))
+        }
+        var decryptedEntries : [Entry] = []
+        for entry in folder.entries {
+            decryptedEntries.append(try decryptAES(entry: entry))
+        }
+        let decryptedName : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: folder.name),
+            using: key!
+        )
+        let decryptedFolder : Folder = Folder(
+            name: String(data: decryptedName, encoding: .utf8)!,
+            folders: decryptedFolders,
+            entries: decryptedEntries
+        )
+        return decryptedFolder
     }
     
     private func decryptAES(entry : EncryptedEntry) throws -> Entry {
+        let decryptedTitle : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.title),
+            using: key!
+        )
+        let decryptedUsername : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.username),
+            using: key!
+        )
+        let decryptedPassword = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.password),
+            using: key!
+        )
+        let decryptedURL = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.url),
+            using: key!
+        )
+        let decryptedNotes : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.notes),
+            using: key!
+        )
+        let decryptedEntry : Entry = Entry(
+            title: String(data: decryptedTitle, encoding: .utf8)!,
+            username: String(data: decryptedUsername, encoding: .utf8)!,
+            password: String(data: decryptedPassword, encoding: .utf8)!,
+            url: URL(string: String(data: decryptedURL, encoding: .utf8)!)!,
+            notes: String(data: decryptedNotes, encoding: .utf8)!
+        )
+        return decryptedEntry
     }
     
     /// Decrypts ChaChaPoly Encrypted Databases
     /// Throws an Error if something went wrong
     private func decryptChaChaPoly() throws -> Database {
-        
+        var decryptedFolders : [Folder] = []
+        for folder in db!.folders {
+            decryptedFolders.append(try decryptChaChaPoly(folder: folder))
+        }
+        let decryptedDatabase : Database = Database(
+            name: db!.name,
+            dbDescription: db!.dbDescription,
+            folders: decryptedFolders,
+            header: db!.header
+        )
+        return decryptedDatabase
     }
     
     private func decryptChaChaPoly(folder : EncryptedFolder) throws -> Folder {
+        var decryptedFolders : [Folder] = []
+        for folder in folder.folders {
+            decryptedFolders.append(try decryptChaChaPoly(folder: folder))
+        }
+        var decryptedEntries : [Entry] = []
+        for entry in folder.entries {
+            decryptedEntries.append(try decryptChaChaPoly(entry: entry))
+        }
+        let decryptedName : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: folder.name),
+            using: key!
+        )
+        let decryptedFolder : Folder = Folder(
+            name: String(data: decryptedName, encoding: .utf8)!,
+            folders: decryptedFolders,
+            entries: decryptedEntries
+        )
+        return decryptedFolder
     }
     
     private func decryptChaChaPoly(entry : EncryptedEntry) throws -> Entry {
+        let decryptedTitle : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: entry.title),
+            using: key!
+        )
+        let decryptedUsername : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: entry.username),
+            using: key!
+        )
+        let decryptedPassword = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: entry.password),
+            using: key!
+        )
+        let decryptedURL = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: entry.url),
+            using: key!
+        )
+        let decryptedNotes : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: entry.notes),
+            using: key!
+        )
+        let decryptedEntry : Entry = Entry(
+            title: String(data: decryptedTitle, encoding: .utf8)!,
+            username: String(data: decryptedUsername, encoding: .utf8)!,
+            password: String(data: decryptedPassword, encoding: .utf8)!,
+            url: URL(string: String(data: decryptedURL, encoding: .utf8)!)!,
+            notes: String(data: decryptedNotes, encoding: .utf8)!
+        )
+        return decryptedEntry
     }
 }

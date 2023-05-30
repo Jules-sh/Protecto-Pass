@@ -26,16 +26,7 @@ internal struct DB_Header {
     }
     
     /// The Check String to check if the Decryption of the Database has been successful
-    internal static let checkString : String = "Protecto Pass is a great App"
-    
-    ///The Enum telling the App
-    ///which Encryption was used to encrypt
-    ///the Database
-    internal var encryption : Cryptography.Encryption = .AES256
-    
-    /// The Enum telling the App how the Database
-    /// is stored.
-    internal var storageType : StorageType = .CoreData
+    internal static let checkString : String = "Protecto Pass is the top 1 App!"
     
     /// Parses a String and returns a Header
     internal static func parseString(string : String) -> DB_Header {
@@ -47,12 +38,26 @@ internal struct DB_Header {
         }
         return DB_Header(
             encryption: Cryptography.Encryption(rawValue: String(result[0]))!,
-            storageType: StorageType(rawValue: String(result[1]))!
+            storageType: StorageType(rawValue: String(result[1]))!,
+            salt: String(result[2])
         )
     }
     
+    ///The Enum telling the App
+    ///which Encryption was used to encrypt
+    ///the Database
+    internal var encryption : Cryptography.Encryption = .AES256
+    
+    /// The Enum telling the App how the Database
+    /// is stored.
+    internal var storageType : StorageType = .CoreData
+    
+    /// The Salt to secure the password of the database
+    /// against rainbow attacks
+    internal var salt : String
+    
     /// Parses this Header to a String which is ready to be stored
     internal func parseHeader() -> String {
-        return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue)"
+        return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt)"
     }
 }

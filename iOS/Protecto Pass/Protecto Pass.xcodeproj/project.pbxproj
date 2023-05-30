@@ -20,6 +20,7 @@
 		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
 		84E4C5122A249E87005D793F /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5112A249E87005D793F /* Cryptography.swift */; };
 		84E4C5142A25CEA2005D793F /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */; };
+		84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5162A263FB8005D793F /* AddDB_Password.swift */; };
 		84F4207229EEA0F2000D7600 /* CD_Database+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206429EEA0F1000D7600 /* CD_Database+CoreDataClass.swift */; };
 		84F4207329EEA0F2000D7600 /* CD_Entry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206529EEA0F1000D7600 /* CD_Entry+CoreDataClass.swift */; };
 		84F4207429EEA0F2000D7600 /* CD_Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206629EEA0F1000D7600 /* CD_Folder+CoreDataClass.swift */; };
@@ -71,6 +72,7 @@
 		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		84E4C5112A249E87005D793F /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
+		84E4C5162A263FB8005D793F /* AddDB_Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Password.swift; sourceTree = "<group>"; };
 		84F4206429EEA0F1000D7600 /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84F4206529EEA0F1000D7600 /* CD_Entry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Entry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		84F4206629EEA0F1000D7600 /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -190,12 +192,21 @@
 		84C4749C29E446F400543BA0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				84E4C5152A263F7F005D793F /* AddDB */,
 				84922B372A21F0FE00CE7945 /* Welcome */,
 				84F4209A29EEA22A000D7600 /* UnlockDB.swift */,
-				848480B329EFF09D008EA77C /* AddDB.swift */,
 				84922B3A2A21F15600CE7945 /* Home.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		84E4C5152A263F7F005D793F /* AddDB */ = {
+			isa = PBXGroup;
+			children = (
+				848480B329EFF09D008EA77C /* AddDB.swift */,
+				84E4C5162A263FB8005D793F /* AddDB_Password.swift */,
+			);
+			path = AddDB;
 			sourceTree = "<group>";
 		};
 		84F4206129EEA0F1000D7600 /* Shared */ = {
@@ -413,6 +424,7 @@
 				842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */,
 				842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */,
 				84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */,
+				84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */,
 				84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

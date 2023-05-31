@@ -13,40 +13,44 @@ internal struct AddDB: View {
     /// Dismiss Action to dismiss this View
     @Environment(\.dismiss) private var dismiss
     
+    /// The Wrapper to this process
+    @StateObject private var creationWrapper : DB_CreationWrapper = DB_CreationWrapper()
+    
     /// The Databases Name
     @State private var name : String = ""
     
     /// The Databases Description
     @State private var description : String = ""
     
-    /// The Encryption Algorithm to encrypt the Database
-    @State private var encryption : Cryptography.Encryption = .AES256
+    /// When set to true, navigate to the next screen
+    @State private var next : Bool = false
     
-    /// The Type of Storage used to store this Database
-    @State private var storage : DB_Header.StorageType = .CoreData
+    /// When set to true presents and alert that a name is required
+    @State private var errEmptyName : Bool = false
     
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    TextField("Name", text: $name)
-                    TextField("Description", text: $description)
-                }
-                Section {
-                    Picker("Encryption", selection: $encryption) {
-                        ForEach(Cryptography.Encryption.allCases) {
-                            e in
-                            Text(e.rawValue)
-                        }
+            Image(systemName: "plus.rectangle.on.rectangle")
+                .renderingMode(.original)
+                .symbolRenderingMode(.hierarchical)
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 100)
+            VStack {
+                TextField("Name", text: $name)
+                    .padding(.top, 50)
+                    .textInputAutocapitalization(.words)
+                    .alert("Empty Name", isPresented: $errEmptyName) {
+                        
+                    } message: {
+                        Text("A Name for the Database is required.\nPlease enter one")
                     }
-                    Picker("Storage", selection: $storage) {
-                        ForEach(DB_Header.StorageType.allCases) {
-                            s in
-                            Text(s.rawValue)
-                        }
-                    }
-                }
+                TextField("Description", text: $description)
             }
+            .textInputAutocapitalization(.sentences)
+            .textCase(.none)
+            .textFieldStyle(.roundedBorder)
+            .padding(.horizontal, 25)
             .navigationTitle("Add Database")
             .navigationBarTitleDisplayMode(.automatic)
             .toolbarRole(.navigationStack)
@@ -58,13 +62,26 @@ internal struct AddDB: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        // TODO: add Action Code
-                        dismiss()
+                    Button("Next") {
+                        done()
                     }
                 }
             }
+            .navigationDestination(isPresented: $next) {
+                AddDB_Password()
+                    .environmentObject(creationWrapper)
+            }
         }
+    }
+    
+    private func done() -> Void {
+        guard !name.isEmpty else {
+            errEmptyName.toggle()
+            return
+        }
+        creationWrapper.name = name
+        creationWrapper.description = description
+        next.toggle()
     }
 }
 

@@ -10,6 +10,12 @@ import SwiftUI
 /// View in the Database creation process to enter a password
 internal struct AddDB_Password: View {
     
+    /// The creation wrapper created to begin of this process
+    @EnvironmentObject private var creationWrapper : DB_CreationWrapper
+    
+    /// Whether the passwords are equival or not
+    @State private var passwordStatus : Bool = false
+    
     /// The Password chosen to create the Database
     @State private var password : String = ""
     
@@ -32,6 +38,13 @@ internal struct AddDB_Password: View {
     /// went wrong
     @State private var errChecking : Bool = false
     
+    /// Set to true if everything checks out and the
+    /// creation process is ready for the next step.
+    @State private var next : Bool = false
+    
+    /// When set to true, presents an alert, stating that not all requirements are met.
+    @State private var errRequirements : Bool = false
+    
     var body: some View {
         VStack {
             Image(systemName: "lock.open")
@@ -41,12 +54,21 @@ internal struct AddDB_Password: View {
                 .scaledToFit()
                 .padding(.horizontal, 100)
             TextField("Password", text: $password)
-                .textFieldStyle(.roundedBorder)
-                .padding(.horizontal, 25)
                 .padding(.top, 50)
                 .onChange(of: password) {
                     _ in
                     checkRequirements()
+                }
+                .padding(.top, 10)
+                .textCase(.none)
+                .textContentType(.newPassword)
+                .textInputAutocapitalization(.never)
+                .padding(.horizontal, 25)
+                .textFieldStyle(.roundedBorder)
+                .alert("Missing requirements", isPresented: $errRequirements) {
+                    Button("Ok") {}
+                } message: {
+                    Text("Not all requirements are met.\nPlease meet all the requirements and then try again")
                 }
             HStack {
                 VStack(alignment: .leading) {
@@ -67,7 +89,36 @@ internal struct AddDB_Password: View {
                 Spacer()
             }
         }
+        .navigationDestination(isPresented: $next) {
+            AddDB_PasswordVerification()
+                .environmentObject(creationWrapper)
+        }
         .navigationTitle("Password")
+        .navigationBarTitleDisplayMode(.automatic)
+        .toolbarRole(.navigationStack)
+        .toolbar(.automatic, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Next") {
+                    done()
+                }
+            }
+        }
+    }
+    
+    /// Function executed when the Done Button is pressed
+    private func done() -> Void {
+        guard allChecked else {
+            errRequirements.toggle()
+            return
+        }
+        creationWrapper.password = password
+        next.toggle()
+    }
+    
+    /// Whether all requirements are met or not
+    private var allChecked : Bool {
+        containsUpperCaseLetter && containsLowerCaseLetter && containsNumber && containsSymbol && password.count >= 8
     }
     
     @ViewBuilder
@@ -124,8 +175,121 @@ internal struct AddDB_Password: View {
     }
 }
 
+/// View to verify the previosly entered password
+internal struct AddDB_PasswordVerification : View {
+    
+    /// The Creation Wrapper for this process
+    @EnvironmentObject private var creationWrapper : DB_CreationWrapper
+    
+    /// The verification passsword
+    @State private var verifyPassword : String = ""
+    
+    /// When set to true, presents an alert stating that the passwords are different
+    @State private var errDifferent : Bool = false
+    
+    /// Set to true when the passwords are equal and the user can
+    /// enter the next screen
+    @State private var next : Bool = false
+    
+    /// Set to true if both passwords are equal
+    @State private var equal : Bool = false
+    
+    var body: some View {
+        VStack {
+            Image(systemName: "lock")
+                .renderingMode(.original)
+                .symbolRenderingMode(.hierarchical)
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 100)
+            TextField("Verify Password", text: $verifyPassword)
+                .padding(.top, 50)
+                .onChange(of: verifyPassword) {
+                    _ in
+                    checkEqual()
+                }
+                .padding(.top, 10)
+                .textCase(.none)
+                .textContentType(.newPassword)
+                .textInputAutocapitalization(.never)
+                .padding(.horizontal, 25)
+                .textFieldStyle(.roundedBorder)
+                .alert("Different Passwords", isPresented: $errDifferent) {
+                    Button("Ok") {}
+                } message: {
+                    Text("The Passwords are not equal.\nPlease try again.")
+                }
+            HStack {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Image(systemName: equal ? "checkmark.circle" : "x.circle")
+                            .renderingMode(.template)
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundColor(equal ? .green : .red)
+                        Text(equal ? "The Passwords are equal" : "The Passwords are not equal")
+                    }
+                }
+                .padding(.horizontal, 25)
+                .padding(.vertical, 10)
+                Spacer()
+            }
+        }
+        .navigationDestination(isPresented: $next) {
+            AddDB_Overview()
+                .environmentObject(creationWrapper)
+        }
+        .navigationTitle("Verify Password")
+        .navigationBarTitleDisplayMode(.automatic)
+        .toolbarRole(.navigationStack)
+        .toolbar(.automatic, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Next") {
+                    done()
+                }
+            }
+        }
+    }
+    
+    /// Function executed when the next button is pressed
+    private func done() -> Void {
+        guard equal else {
+            errDifferent.toggle()
+            return
+        }
+        next.toggle()
+    }
+    
+    /// Function to check if both Passwords are equal
+    private func checkEqual() -> Void {
+        if creationWrapper.password == verifyPassword {
+            equal = true
+        } else {
+            equal = false
+        }
+    }
+}
+
+/// The Preview for the initial Password creation Screen
 internal struct AddDB_Password_Previews: PreviewProvider {
+    
+    /// The Wrapper for this preview
+    @StateObject private static var creationWrapperPreview : DB_CreationWrapper = DB_CreationWrapper()
+    
     static var previews: some View {
         AddDB_Password()
+            .environmentObject(creationWrapperPreview)
+    }
+}
+
+/// The Preview for the Password Verification Screen
+internal struct AddDB_PasswordVerification_Previews: PreviewProvider {
+    
+    /// The Wrapper for this preview
+    @StateObject private static var creationWrapperPreview : DB_CreationWrapper = DB_CreationWrapper()
+    
+    static var previews: some View {
+        AddDB_PasswordVerification()
+            .environmentObject(creationWrapperPreview)
     }
 }

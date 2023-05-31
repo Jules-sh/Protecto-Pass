@@ -10,9 +10,6 @@ import SwiftUI
 /// View in the Database creation process to enter a password
 internal struct AddDB_Password: View {
     
-    /// The current name of the lock symbols image
-    @State private var lockName : String = "lock.open"
-    
     /// The Password chosen to create the Database
     @State private var password : String = ""
     
@@ -37,7 +34,9 @@ internal struct AddDB_Password: View {
     
     var body: some View {
         VStack {
-            Image(systemName: lockName)
+            Image(systemName: "lock.open")
+                .renderingMode(.original)
+                .symbolRenderingMode(.hierarchical)
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal, 100)
@@ -88,7 +87,6 @@ internal struct AddDB_Password: View {
     /// depending on their state
     private func checkRequirements() -> Void {
         // TODO: maybe change regex
-        // TODO: + hinter regex needed?
         // Length
         if password.count >= 8 {
             isLengthMet = true
@@ -97,25 +95,25 @@ internal struct AddDB_Password: View {
         }
         do {
             // Upper Case
-            if password.contains(try Regex("[A-Z]+")) {
+            if password.contains(try Regex("[A-Z]")) {
                 containsUpperCaseLetter = true
             } else {
                 containsUpperCaseLetter = false
             }
             // Lower Case
-            if password.contains(try Regex("[a-z]+")) {
+            if password.contains(try Regex("[a-z]")) {
                 containsLowerCaseLetter = true
             } else {
                 containsLowerCaseLetter = false
             }
             // Number
-            if password.contains(try Regex("[0-9]+")) {
+            if password.contains(try Regex("[0-9]")) {
                 containsNumber = true
             } else {
                 containsNumber = false
             }
             // Symbols
-            if password.contains("?") {
+            if password.contains(try Regex("[^A-Za-z0-9\\w\\s]")) {
                 containsSymbol = true
             } else {
                 containsSymbol = false

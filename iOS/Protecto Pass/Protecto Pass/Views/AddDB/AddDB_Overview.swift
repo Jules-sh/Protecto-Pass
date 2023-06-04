@@ -14,6 +14,10 @@ import SwiftUI
 /// configuration options
 internal struct AddDB_Overview: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
+    @Environment(\.managedObjectContext) private var viewContext
+    
     /// The Creation wrapper for this process
     @EnvironmentObject private var creationWrapper : DB_CreationWrapper
     
@@ -45,7 +49,11 @@ internal struct AddDB_Overview: View {
                 ListTile(
                     name: "Password",
                     data: passwordShown ? creationWrapper.password : fakePassword,
-                    onTap: { passwordShown.toggle() },
+                    onTap: {
+                        withAnimation {
+                            passwordShown.toggle()
+                        }
+                    },
                     // Not really needed, still entered to tell the System whats going on
                     textContentType: passwordShown ? .newPassword : .password
                 )
@@ -98,7 +106,20 @@ internal struct AddDB_Overview: View {
     
     /// Function executed when the User pressed the Done Button
     private func done() -> Void {
-        
+        creationWrapper.encryption = encryption
+        creationWrapper.storageType = storage
+        let db : Database = Database(
+            name: creationWrapper.name,
+            dbDescription: creationWrapper.description,
+            encryption: encryption,
+            storageType: storage,
+            salt: PasswordGenerator.generateSalt(),
+            folders: [],
+            password: creationWrapper.password
+        )
+//        let cdDB : CD_Database = DB_Converter.toCD(db, context: viewContext)
+        // TODO: only goes back one view, but i want to dismiss the whole view
+        dismiss()
     }
 }
 

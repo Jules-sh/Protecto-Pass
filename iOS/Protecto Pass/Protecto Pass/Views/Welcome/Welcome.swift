@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  Welcome.swift
 //  Protecto Pass
 //
 //  Created by Julian Schumacher as ContentView.swift on 01.04.23.
@@ -9,8 +9,8 @@
 //  Renamed by Julian Schumacher to Welcome.swift on 18.04.23.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 /// The View that is shown to the User as soon as
 /// he opens the App
@@ -34,7 +34,7 @@ internal struct Welcome: View {
                         ForEach(databases) {
                             db in
                             container(for: db, width: metrics.size.width - 30)
-                                
+                            
                         }
                         .padding(15)
                     }

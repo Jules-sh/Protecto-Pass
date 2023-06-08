@@ -30,6 +30,16 @@ internal struct AddDB_Overview: View {
     /// Whether the password is shown or not
     @State private var passwordShown : Bool = false
     
+    /// When set to true, opens the Home View
+    @State private var openDB : Bool = false
+    
+    /// The Database created when clicking done
+    @State private var database : Database?
+    
+    /// When set to true, displays an alert with an Error Message, because
+    /// something went wrong when saving the Database
+    @State private var errSavingPresented : Bool = false
+    
     var body: some View {
         List {
 //            Section {
@@ -78,8 +88,16 @@ internal struct AddDB_Overview: View {
             } header: {
                 Text("Further Configuration")
             } footer: {
-                Text("These data can be altered to futhermore configure your database.")
+                Text("These data can be altered to furthermore configure your database.")
             }
+        }
+        .navigationDestination(isPresented: $openDB) {
+            Home(db: database!)
+        }
+        .alert("Error Saving", isPresented: $errSavingPresented) {
+            
+        } message: {
+            Text("An error occurred while saving the Database, please try again.")
         }
         .navigationTitle("Overview")
         .navigationBarTitleDisplayMode(.automatic)
@@ -108,7 +126,7 @@ internal struct AddDB_Overview: View {
     private func done() -> Void {
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
-        let db : Database = Database(
+        database = Database(
             name: creationWrapper.name,
             dbDescription: creationWrapper.description,
             encryption: encryption,
@@ -117,9 +135,14 @@ internal struct AddDB_Overview: View {
             folders: [],
             password: creationWrapper.password
         )
-//        let cdDB : CD_Database = DB_Converter.toCD(db, context: viewContext)
-        // TODO: only goes back one view, but i want to dismiss the whole view
-        dismiss()
+        do {
+            try Storage.storeDatabase(database!.encrypt())
+            openDB.toggle()
+            // TODO: only goes back one view, but i want to dismiss the whole view
+            dismiss()
+        } catch {
+            errSavingPresented.toggle()
+        }
     }
 }
 

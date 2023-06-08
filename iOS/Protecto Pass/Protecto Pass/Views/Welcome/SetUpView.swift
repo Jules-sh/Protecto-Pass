@@ -62,8 +62,10 @@ internal struct SetUpView: View {
     }
 }
 
+/// The Preview for this View
 internal struct SetUpView_Previews: PreviewProvider {
     static var previews: some View {
         SetUpView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

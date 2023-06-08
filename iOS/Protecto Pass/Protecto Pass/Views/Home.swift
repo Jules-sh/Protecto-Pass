@@ -7,9 +7,12 @@
 
 import SwiftUI
 
+/// The Home View, containing the unlocked
+/// Database
 internal struct Home: View {
     
-    internal let db : Database
+    /// The Database that the User has just unlocked
+    @StateObject internal var db : Database
     
     var body: some View {
         NavigationStack {
@@ -18,6 +21,7 @@ internal struct Home: View {
     }
 }
 
+/// The Preview for the Home View
 internal struct Home_Previews: PreviewProvider {
     static var previews: some View {
         Home(db: Database.previewDB)

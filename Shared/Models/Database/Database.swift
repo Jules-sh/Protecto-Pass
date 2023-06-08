@@ -10,35 +10,62 @@ import Foundation
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase : Identifiable {
+internal class GeneralDatabase<F> : Identifiable {
     
     /// The Name of the Database
     internal let name : String
     
-    /// The Description of this Databse
+    /// The Description of this Database
     internal let dbDescription : String
     
     /// The Header for this Database
     internal let header : DB_Header
     
-    fileprivate init(name : String, dbDescription : String, header : DB_Header) {
+    /// All the Folders in this Database
+    internal let folders : [F]
+    
+    internal convenience init(
+        name : String,
+        dbDescription : String,
+        encryption : Cryptography.Encryption,
+        storageType : DB_Header.StorageType,
+        salt : String,
+        folders: [F]
+    ){
+        self.init(
+            name: name,
+            dbDescription: dbDescription,
+            header: DB_Header(
+                encryption: encryption,
+                storageType: storageType,
+                salt: salt
+            ),
+            folders: folders
+        )
+    }
+    
+    internal init(name : String, dbDescription : String, header : DB_Header, folders : [F]) {
         self.name = name
         self.dbDescription = dbDescription
         self.header = header
+        self.folders = folders
     }
     
-    fileprivate init(from coreData : CD_Database) {
+    internal init(from coreData : CD_Database) {
+        assert(F.self is EncryptedFolder.Type)
         name = coreData.name!
         dbDescription = coreData.dbDescription!
         header = DB_Header.parseString(string: coreData.header!)
+        var localFolders : [EncryptedFolder] = []
+        for folder in coreData.folders! {
+            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
+        }
+        folders = localFolders as! [F]
     }
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase {
-    
-    /// All the Folders in this Database
-    internal let folders : [Folder]
+internal final class Database : GeneralDatabase<Folder>, ObservableObject {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -50,9 +77,8 @@ internal final class Database : GeneralDatabase {
         folders : [Folder],
         password : String
     ) {
-        self.folders = folders
         self.password = password
-        super.init(name: name, dbDescription: dbDescription, header: header)
+        super.init(name: name, dbDescription: dbDescription, header: header, folders: folders)
     }
     
     internal convenience init(
@@ -77,6 +103,14 @@ internal final class Database : GeneralDatabase {
         )
     }
     
+    /// Attempts to encrypt the Database using the provided Password.
+    /// If successful, returns the encrypted Database.
+    /// Otherwise an error is thrown
+    internal func encrypt() throws -> EncryptedDatabase {
+        var encrypter : Encrypter = Encrypter.getInstance(for: self)
+        return try encrypter.encrypt(using: password)
+    }
+    
     /// The Preview Database to use in Previews or Tests
     internal static let previewDB : Database = Database(
         name: "Preview Database",
@@ -92,51 +126,11 @@ internal final class Database : GeneralDatabase {
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder> {
     
-    /// The Encrypted Folders being stored in this Encrypted Database
-    internal let folders : [EncryptedFolder]
-    
-    internal init(
-        name : String,
-        dbDescription : String,
-        header : DB_Header,
-        folders: [EncryptedFolder]
-    ) {
-        self.folders = folders
-        super.init(name: name, dbDescription: dbDescription, header: header)
-    }
-    
-    internal convenience init(
-        name : String,
-        dbDescription : String,
-        encryption : Cryptography.Encryption,
-        storageType : DB_Header.StorageType,
-        salt : String,
-        folders: [EncryptedFolder],
-        password : String
-    ) {
-        self.init(
-            name: name,
-            dbDescription: dbDescription,
-            header: DB_Header(
-                encryption: encryption,
-                storageType: storageType,
-                salt: salt
-            ),
-            folders: folders
-        )
-    }
-    
-    internal override init(from coreData : CD_Database) {
-        var localfolders : [EncryptedFolder] = []
-        for folder in coreData.folders! {
-            localfolders.append(EncryptedFolder(from: folder as! CD_Folder))
-        }
-        self.folders = localfolders
-        super.init(from: coreData)
-    }
-    
+    /// Attempts to decrypt the encrypted Database using the provided Password.
+    /// If successful, returns the decrypted Database.
+    /// Otherwise an error is thrown
     internal func decrypt(using password : String) throws -> Database {
         var decrypter : Decrypter = Decrypter.getInstance(for: self)
         return try decrypter.decrypt(using: password)

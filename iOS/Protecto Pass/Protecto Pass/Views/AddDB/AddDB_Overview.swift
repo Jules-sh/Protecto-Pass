@@ -42,13 +42,6 @@ internal struct AddDB_Overview: View {
     
     var body: some View {
         List {
-//            Section {
-//                Image(systemName: "gearshape.2")
-//                    .renderingMode(.original)
-//                    .symbolRenderingMode(.hierarchical)
-//                    .resizable()
-//                    .scaledToFit()
-//            }
             Section {
                 ListTile(name: "Name", data: creationWrapper.name)
                 ListTile(name: "Description", data: creationWrapper.description.isEmpty ? "No Description provided" : creationWrapper.description)

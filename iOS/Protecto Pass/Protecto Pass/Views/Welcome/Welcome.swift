@@ -16,9 +16,8 @@ import SwiftUI
 /// he opens the App
 internal struct Welcome: View {
     
-    /// If set to true, a sheet appears providing the possibility to add a new
-    /// Database
-    @State private var addPresented : Bool = false
+    /// The Object to control the navigation of and with the AddDB Sheet
+    @StateObject private var navigationSheet : AddDB_Navigation = AddDB_Navigation()
     
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
@@ -40,8 +39,9 @@ internal struct Welcome: View {
                     }
                 }
                 // Sheet has to be outside, didn't work inside of ForEach
-                .sheet(isPresented: $addPresented) {
+                .sheet(isPresented: $navigationSheet.navigationSheetShown) {
                     AddDB()
+                        .environmentObject(navigationSheet)
                 }
             }
             .toolbarRole(.navigationStack)
@@ -49,7 +49,7 @@ internal struct Welcome: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        addPresented.toggle()
+                        navigationSheet.navigationSheetShown.toggle()
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -73,7 +73,7 @@ internal struct Welcome: View {
                     .font(.subheadline)
                     .lineLimit(2, reservesSpace: true)
             }
-            // - 150 because horiztonal padding is 75
+            // - 150 because horizontal padding is 75
             .frame(width: width - 150)
         }
         .foregroundColor(.white)

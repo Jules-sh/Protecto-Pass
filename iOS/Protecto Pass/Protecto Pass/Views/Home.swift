@@ -16,7 +16,27 @@ internal struct Home: View {
     
     var body: some View {
         NavigationStack {
-            
+            List {
+                Section("Entries") {
+                    
+                }
+                Section("Folder") {
+                    
+                }
+            }
+            .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.automatic)
+            .toolbarRole(.navigationStack)
+            .toolbar(.automatic, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
         }
     }
 }

@@ -14,12 +14,14 @@ import SwiftUI
 /// configuration options
 internal struct AddDB_Overview: View {
     
-    @Environment(\.dismiss) private var dismiss
-    
+    /// The View Context to interact with the CoreData System
     @Environment(\.managedObjectContext) private var viewContext
     
     /// The Creation wrapper for this process
     @EnvironmentObject private var creationWrapper : DB_CreationWrapper
+    
+    /// The Controller for the Navigation
+    @EnvironmentObject private var navigationController : AddDB_Navigation
     
     /// The Encryption Algorithm to encrypt the Database
     @State private var encryption : Cryptography.Encryption = .AES256
@@ -42,11 +44,9 @@ internal struct AddDB_Overview: View {
     
     var body: some View {
         List {
-            Section {
+            Section("General Data") {
                 ListTile(name: "Name", data: creationWrapper.name)
                 ListTile(name: "Description", data: creationWrapper.description.isEmpty ? "No Description provided" : creationWrapper.description)
-            } header: {
-                Text("General Data")
             }
             Section {
                 ListTile(
@@ -58,7 +58,7 @@ internal struct AddDB_Overview: View {
                         }
                     },
                     // Not really needed, still entered to tell the System whats going on
-                    textContentType: passwordShown ? .newPassword : .password
+                    textContentType: .password
                 )
             } header: {
                 Text("Password")
@@ -130,9 +130,8 @@ internal struct AddDB_Overview: View {
         )
         do {
             try Storage.storeDatabase(database!.encrypt())
+            navigationController.navigationSheetShown.toggle()
             openDB.toggle()
-            // TODO: only goes back one view, but i want to dismiss the whole view
-            dismiss()
         } catch {
             errSavingPresented.toggle()
         }

@@ -57,6 +57,9 @@ internal struct Welcome: View {
             }
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.automatic)
+            .navigationDestination(isPresented: $navigationSheet.openDatabaseToHome) {
+                Home(db: navigationSheet.db!)
+            }
         }
     }
     

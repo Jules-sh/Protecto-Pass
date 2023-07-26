@@ -32,12 +32,6 @@ internal struct AddDB_Overview: View {
     /// Whether the password is shown or not
     @State private var passwordShown : Bool = false
     
-    /// When set to true, opens the Home View
-    @State private var openDB : Bool = false
-    
-    /// The Database created when clicking done
-    @State private var database : Database?
-    
     /// When set to true, displays an alert with an Error Message, because
     /// something went wrong when saving the Database
     @State private var errSavingPresented : Bool = false
@@ -84,9 +78,6 @@ internal struct AddDB_Overview: View {
                 Text("These data can be altered to furthermore configure your database.")
             }
         }
-        .navigationDestination(isPresented: $openDB) {
-            Home(db: database!)
-        }
         .alert("Error Saving", isPresented: $errSavingPresented) {
             
         } message: {
@@ -119,7 +110,7 @@ internal struct AddDB_Overview: View {
     private func done() -> Void {
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
-        database = Database(
+        navigationController.db = Database(
             name: creationWrapper.name,
             dbDescription: creationWrapper.description,
             encryption: encryption,
@@ -129,9 +120,9 @@ internal struct AddDB_Overview: View {
             password: creationWrapper.password
         )
         do {
-            try Storage.storeDatabase(database!.encrypt())
+            try Storage.storeDatabase(navigationController.db!.encrypt())
             navigationController.navigationSheetShown.toggle()
-            openDB.toggle()
+            navigationController.openDatabaseToHome.toggle()
         } catch {
             errSavingPresented.toggle()
         }

@@ -73,7 +73,7 @@ internal struct UnlockDB: View {
         }
         .alert("Error Unlock Database", isPresented: $errDecryptingPresented) {
         } message: {
-            Text("An Error occured while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
+            Text("An Error occurred while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
         }
     }
     

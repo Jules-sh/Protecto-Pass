@@ -28,7 +28,7 @@ private protocol Converter {
     /// Converts the specified encrypted Object to a core Data Object
     static func toCD(_ encrypted : Encrypted, context : NSManagedObjectContext) -> CoreData
     
-    /// Converts all the specified encrypted objects to core Objects
+    /// Converts all the specified encrypted objects to core age Objects
     static func toCD(_ encrypted : [Encrypted], context : NSManagedObjectContext) -> [CoreData]
 }
 
@@ -36,6 +36,10 @@ private protocol Converter {
 /// Encrypted Databases and back.
 /// Works with Arrays.
 internal struct DB_Converter : Converter {
+    
+    internal static func fromCD(_ coreData: CD_Database) -> EncryptedDatabase {
+        return EncryptedDatabase(from: coreData)
+    }
 
     internal static func fromCD(_ coreData : [CD_Database]) -> [EncryptedDatabase] {
         var result : [EncryptedDatabase] = []
@@ -43,18 +47,6 @@ internal struct DB_Converter : Converter {
             result.append(fromCD(cdDatabase))
         }
         return result
-    }
-    
-    internal static func toCD(_ dbs : [EncryptedDatabase], context : NSManagedObjectContext) -> [CD_Database] {
-        var result : [CD_Database] = []
-        for db in dbs {
-            result.append(toCD(db, context: context))
-        }
-        return result
-    }
-    
-    internal static func fromCD(_ coreData: CD_Database) -> EncryptedDatabase {
-        return EncryptedDatabase(from: coreData)
     }
     
     internal static func toCD(_ encrypted: EncryptedDatabase, context: NSManagedObjectContext) -> CD_Database {
@@ -66,6 +58,14 @@ internal struct DB_Converter : Converter {
             cdDB.addToFolders(FolderConverter.toCD(folder, context: context))
         }
         return cdDB
+    }
+    
+    internal static func toCD(_ dbs : [EncryptedDatabase], context : NSManagedObjectContext) -> [CD_Database] {
+        var result : [CD_Database] = []
+        for db in dbs {
+            result.append(toCD(db, context: context))
+        }
+        return result
     }
 }
 

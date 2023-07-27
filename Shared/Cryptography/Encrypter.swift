@@ -27,14 +27,14 @@ internal struct Encrypter {
         } else if db.header.encryption == .ChaChaPoly {
             encrypter = chaChaPoly
         } else {
-            encrypter = Encrypter(encryption: .unknown)
+            encrypter = Encrypter(encryption: nil)
         }
         encrypter.db = db
         return encrypter
     }
     
     /// The Encryption that is used for this Encrypter
-    private let encryption : Cryptography.Encryption
+    private let encryption : Cryptography.Encryption?
     
     /// The Database that should be encrypted.
     /// This is passed with the encrypt Method,
@@ -45,7 +45,7 @@ internal struct Encrypter {
     /// encrypt the Database
     private var key : SymmetricKey?
     
-    private init(encryption : Cryptography.Encryption) {
+    private init(encryption : Cryptography.Encryption?) {
         self.encryption = encryption
     }
     

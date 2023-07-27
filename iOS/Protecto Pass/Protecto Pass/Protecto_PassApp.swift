@@ -8,12 +8,15 @@
 import SwiftUI
 
 @main
-struct Protecto_PassApp: App {
-    let persistenceController = PersistenceController.shared
-
+internal struct Protecto_PassApp: App {
+    
+    /// The Persistence Controller used in this App to store Data
+    private let persistenceController : PersistenceController = PersistenceController.shared
+    
+    
     var body: some Scene {
         WindowGroup {
-            Welcome()
+            SetUpView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

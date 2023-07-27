@@ -73,7 +73,7 @@ internal struct UnlockDB: View {
         }
         .alert("Error Unlock Database", isPresented: $errDecryptingPresented) {
         } message: {
-            Text("An Error occured while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
+            Text("An Error occurred while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
         }
     }
     
@@ -120,7 +120,7 @@ internal struct UnlockDB: View {
     /// Try to unlock the Database with the provided password
     private mutating func tryUnlocking() -> Void {
         do {
-            unlockedDB = try db.decrypt()
+            unlockedDB = try db.decrypt(using: password)
             unlockSuccess.toggle()
         } catch {
             errDecryptingPresented.toggle()

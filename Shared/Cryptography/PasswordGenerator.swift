@@ -64,7 +64,7 @@ internal struct PasswordGenerator {
     
     /// All the symbols this Apps support to include in the password
     /// generation process
-    private let symbols : String = "^°!\"§$%&/()=?`´\\*+#'-_.:,;<>"
+    private let symbols : String = "^°!\"§$%&/()=?`´\\*+#'-_.:,;<>“[]|{}¿'„€@~"
     
     /// The length of the password
     private let length : Int

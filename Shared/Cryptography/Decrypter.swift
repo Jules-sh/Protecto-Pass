@@ -31,14 +31,14 @@ internal struct Decrypter {
         } else if db.header.encryption == .ChaChaPoly {
             decrypter = chaChaPoly
         } else {
-            decrypter = Decrypter(encryption: .unknown)
+            decrypter = Decrypter(encryption: nil)
         }
         decrypter.db = db
         return decrypter
     }
     
     /// The Encryption that is used for this Decrypter
-    private let encryption : Cryptography.Encryption
+    private let encryption : Cryptography.Encryption?
     
     /// The Database that should be decrypted.
     /// This is passed with the decrypt Method,
@@ -54,7 +54,7 @@ internal struct Decrypter {
     
     /// Private init, to prevent creating this Object.
     /// Only use getInstance with the database you want to decrypt
-    private init(encryption : Cryptography.Encryption) {
+    private init(encryption : Cryptography.Encryption?) {
         self.encryption = encryption
     }
     

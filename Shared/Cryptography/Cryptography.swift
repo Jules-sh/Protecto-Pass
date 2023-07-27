@@ -17,9 +17,8 @@ internal struct Cryptography {
     
     /// An Enum representing the
     /// supported encryptions of this App
-    internal enum Encryption : String, RawRepresentable {
-        /// The Encryption Type is unknonw, mainly due to an error.
-        case unknown
+    internal enum Encryption : String, RawRepresentable, CaseIterable, Identifiable {
+        var id: Self { self }
         
         /// Using AES 256 Bit for the Encryption and Decryption
         case AES256

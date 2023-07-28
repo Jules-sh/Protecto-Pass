@@ -50,6 +50,10 @@ internal struct Decrypter {
     private var key : SymmetricKey?
     
     /// The Password the user entered.
+    private var userPassword : String?
+    
+    /// The Password created by adding the salt of
+    /// the Database to the userPassword
     private var password : String?
     
     /// Private init, to prevent creating this Object.
@@ -64,8 +68,7 @@ internal struct Decrypter {
     /// throws an error.
     /// See Error for more details
     internal mutating func decrypt(using password : String) throws -> Database {
-        key = SymmetricKey(data: password.data(using: .utf8)!)
-        self.password = password
+        self.password = password + db!.header.salt
         if encryption == .AES256 {
             return try decryptAES()
         } else if encryption == .ChaChaPoly {
@@ -77,7 +80,8 @@ internal struct Decrypter {
     
     /// Decrypts AES encrypted Databases
     /// /// Throws an Error if something went wrong
-    private func decryptAES() throws -> Database {
+    private mutating func decryptAES() throws -> Database {
+        key = try decryptAESKey()
         var decryptedFolders : [Folder] = []
         for folder in db!.folders {
             decryptedFolders.append(try decryptAES(folder: folder))
@@ -92,10 +96,21 @@ internal struct Decrypter {
             header: db!.header,
             folders: decryptedFolders,
             entries: decryptedEntries,
-            password: password!
+            key: key!,
+            password: userPassword!
         )
         return decryptedDatabase
     }
+    
+    /// Decrypts the key to use to decrypt the rest of the database using AES
+    private func decryptAESKey() throws -> SymmetricKey {
+        let data : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: db!.key),
+            using: SymmetricKey(data: password!.data(using: .utf8)!)
+        )
+        return SymmetricKey(data: data)
+    }
+    
     
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
         var decryptedFolders : [Folder] = []
@@ -151,7 +166,8 @@ internal struct Decrypter {
     
     /// Decrypts ChaChaPoly Encrypted Databases
     /// Throws an Error if something went wrong
-    private func decryptChaChaPoly() throws -> Database {
+    private mutating func decryptChaChaPoly() throws -> Database {
+        key = try decryptChaChaPolyKey()
         var decryptedFolders : [Folder] = []
         for folder in db!.folders {
             decryptedFolders.append(try decryptChaChaPoly(folder: folder))
@@ -166,9 +182,19 @@ internal struct Decrypter {
             header: db!.header,
             folders: decryptedFolders,
             entries: decryptedEntries,
-            password: password!
+            key: key!,
+            password: userPassword!
         )
         return decryptedDatabase
+    }
+    
+    /// Decrypts the key to use to decrypt the rest of the database using ChaChaPoly
+    private func decryptChaChaPolyKey() throws -> SymmetricKey {
+        let data : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: db!.key),
+            using: SymmetricKey(data: password!.data(using: .utf8)!)
+        )
+        return SymmetricKey(data: data)
     }
     
     private func decryptChaChaPoly(folder : EncryptedFolder) throws -> Folder {

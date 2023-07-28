@@ -7,6 +7,7 @@
 //  Renamed by Julian Schumacher to AddDB_Overview.swift on 31.05.23.
 //
 
+import CryptoKit
 import SwiftUI
 
 /// The Overview Screen of the creation process
@@ -107,17 +108,23 @@ internal struct AddDB_Overview: View {
     }
     
     /// Function executed when the User pressed the Done Button
+    /// This Methods creates a Database and generates all the data
+    /// that isn't entered by the User
     private func done() -> Void {
+        // TODO: these two lines as well as the data in the creation Wrapper may be pointless
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
         navigationController.db = Database(
             name: creationWrapper.name,
             dbDescription: creationWrapper.description,
-            encryption: encryption,
-            storageType: storage,
-            salt: PasswordGenerator.generateSalt(),
+            header: DB_Header(
+                encryption: encryption,
+                storageType: storage,
+                salt: PasswordGenerator.generateSalt()
+            ),
             folders: [],
             entries: [],
+            key: SymmetricKey(size: .bits256),
             password: creationWrapper.password
         )
         do {

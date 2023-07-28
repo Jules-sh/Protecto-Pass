@@ -23,6 +23,6 @@ internal final class DB_CreationWrapper : ObservableObject {
     /// The Encryption Algorithm being used to encrypt the Database
     internal final var encryption : Cryptography.Encryption = .AES256
     
-    /// The way the Databse should be stored
+    /// The way the Database should be stored
     internal final var storageType : DB_Header.StorageType = .CoreData
 }

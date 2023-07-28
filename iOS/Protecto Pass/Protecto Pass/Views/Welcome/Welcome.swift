@@ -93,13 +93,6 @@ internal struct Welcome_Previews: PreviewProvider {
         Welcome(
             databases: [
                 EncryptedDatabase.previewDB,
-                EncryptedDatabase(
-                    name: "test",
-                    dbDescription: "description",
-                    header: DB_Header(salt: "salt"),
-                    folders: [],
-                    entries: []
-                )
             ]
         )
     }

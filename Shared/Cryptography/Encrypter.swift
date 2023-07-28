@@ -45,6 +45,11 @@ internal struct Encrypter {
     /// encrypt the Database
     private var key : SymmetricKey?
     
+    /// The Password used to create the Key.
+    /// This is the password chosen and entered by the User
+    /// combined with the Salt of this Database
+    internal var password : String?
+    
     private init(encryption : Cryptography.Encryption?) {
         self.encryption = encryption
     }
@@ -55,7 +60,8 @@ internal struct Encrypter {
     /// throws an error.
     /// See Error for more details
     internal mutating func encrypt(using password : String) throws -> EncryptedDatabase {
-        key = SymmetricKey(data: password.data(using: .utf8)!)
+        self.password = password + db!.header.salt
+        key = db!.key
         if encryption == .AES256 {
             return try encryptAES()
         } else if encryption == .ChaChaPoly {
@@ -76,14 +82,26 @@ internal struct Encrypter {
         for entry in db!.entries {
             encryptedEntries.append(try encryptAES(entry: entry))
         }
+        let encryptedKey : Data = try encryptAESKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
             header: db!.header,
             folders: encryptedFolders,
-            entries: encryptedEntries
+            entries: encryptedEntries,
+            key: encryptedKey
         )
         return encryptedDatabase
+    }
+    
+    /// Encrypts the key using AES and returns it as encrypted Data
+    private func encryptAESKey() throws -> Data {
+        return try AES.GCM.seal(
+            key!.withUnsafeBytes {
+                return Data(Array($0))
+            },
+            using: SymmetricKey(data: password!.data(using: .utf8)!)
+        ).combined!
     }
     
     /// Encrypts the passed Folder with AES and returns
@@ -152,15 +170,28 @@ internal struct Encrypter {
         for entry in db!.entries {
             encryptedEntries.append(try encryptChaChaPoly(entry: entry))
         }
+        let encryptedKey : Data = try encryptChaChaPolyKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
             header: db!.header,
             folders: encryptedFolders,
-            entries: encryptedEntries
+            entries: encryptedEntries,
+            key: encryptedKey
         )
         return encryptedDatabase
     }
+    
+    /// Encrypts the key using ChaChaPoly and returns it as encrypted Data
+    private func encryptChaChaPolyKey() throws -> Data {
+        return try ChaChaPoly.seal(
+            key!.withUnsafeBytes {
+                return Data(Array($0))
+            },
+            using: SymmetricKey(data: password!.data(using: .utf8)!)
+        ).combined
+    }
+    
     
     /// Encryptes the passed Folder with ChaChaPoly and returns
     /// an encrypted Folder

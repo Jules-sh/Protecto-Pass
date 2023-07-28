@@ -5,12 +5,13 @@
 //  Created by Julian Schumacher on 28.03.23.
 //
 
+import CryptoKit
 import Foundation
 
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<F, E> : Identifiable {
+internal class GeneralDatabase<F, E, K> : Identifiable {
     
     /// The Name of the Database
     internal let name : String
@@ -27,38 +28,26 @@ internal class GeneralDatabase<F, E> : Identifiable {
     /// All the entries in the "root" directory
     internal let entries : [E]
     
-    internal convenience init(
-        name : String,
-        dbDescription : String,
-        encryption : Cryptography.Encryption,
-        storageType : DB_Header.StorageType,
-        salt : String,
-        folders: [F],
-        entries : [E]
-    ){
-        self.init(
-            name: name,
-            dbDescription: dbDescription,
-            header: DB_Header(
-                encryption: encryption,
-                storageType: storageType,
-                salt: salt
-            ),
-            folders: folders,
-            entries: entries
-        )
-    }
+    /// The Key that should be used to
+    /// encrypt and decrypt this Database
+    internal let key : K
     
-    internal init(name : String, dbDescription : String, header : DB_Header, folders : [F], entries : [E]) {
+    internal init(name : String, dbDescription : String, header : DB_Header, folders : [F], entries : [E], key : K) {
         self.name = name
         self.dbDescription = dbDescription
         self.header = header
         self.folders = folders
         self.entries = entries
+        self.key = key
     }
     
     internal init(from coreData : CD_Database) {
+        // All of these conditions have to be matched, otherwise this
+        // init constructor is called to create something else than an
+        // encrypted Database
         assert(F.self is EncryptedFolder.Type)
+        assert(E.self is EncryptedEntry.Type)
+        assert(K.self is Data.Type)
         name = coreData.name!
         dbDescription = coreData.dbDescription!
         header = DB_Header.parseString(string: coreData.header!)
@@ -72,11 +61,12 @@ internal class GeneralDatabase<F, E> : Identifiable {
             localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
         }
         entries = localEntries as! [E]
+        key = coreData.key! as! K
     }
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry>, ObservableObject {
+internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, ObservableObject {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -87,34 +77,11 @@ internal final class Database : GeneralDatabase<Folder, Entry>, ObservableObject
         header : DB_Header,
         folders : [Folder],
         entries : [Entry],
+        key : SymmetricKey,
         password : String
     ) {
         self.password = password
-        super.init(name: name, dbDescription: dbDescription, header: header, folders: folders, entries: entries)
-    }
-    
-    internal convenience init(
-        name: String,
-        dbDescription: String,
-        encryption : Cryptography.Encryption,
-        storageType : DB_Header.StorageType,
-        salt : String,
-        folders : [Folder],
-        entries : [Entry],
-        password : String
-    ) {
-        self.init(
-            name: name,
-            dbDescription: dbDescription,
-            header: DB_Header(
-                encryption: encryption,
-                storageType: storageType,
-                salt: salt
-            ),
-            folders: folders,
-            entries: entries,
-            password: password
-        )
+        super.init(name: name, dbDescription: dbDescription, header: header, folders: folders, entries: entries, key: key)
     }
     
     /// Attempts to encrypt the Database using the provided Password.
@@ -136,12 +103,13 @@ internal final class Database : GeneralDatabase<Folder, Entry>, ObservableObject
         ),
         folders: [],
         entries: [],
+        key: SymmetricKey(size: .bits256),
         password: "Password"
     )
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry> {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Data> {
     
     /// Attempts to decrypt the encrypted Database using the provided Password.
     /// If successful, returns the decrypted Database.
@@ -161,6 +129,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             salt: "salt"
         ),
         folders: [],
-        entries: []
+        entries: [],
+        key: Data()
     )
 }

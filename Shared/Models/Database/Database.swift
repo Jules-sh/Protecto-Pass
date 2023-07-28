@@ -10,7 +10,7 @@ import Foundation
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<F> : Identifiable {
+internal class GeneralDatabase<F, E> : Identifiable {
     
     /// The Name of the Database
     internal let name : String
@@ -24,13 +24,17 @@ internal class GeneralDatabase<F> : Identifiable {
     /// All the Folders in this Database
     internal let folders : [F]
     
+    /// All the entries in the "root" directory
+    internal let entries : [E]
+    
     internal convenience init(
         name : String,
         dbDescription : String,
         encryption : Cryptography.Encryption,
         storageType : DB_Header.StorageType,
         salt : String,
-        folders: [F]
+        folders: [F],
+        entries : [E]
     ){
         self.init(
             name: name,
@@ -40,15 +44,17 @@ internal class GeneralDatabase<F> : Identifiable {
                 storageType: storageType,
                 salt: salt
             ),
-            folders: folders
+            folders: folders,
+            entries: entries
         )
     }
     
-    internal init(name : String, dbDescription : String, header : DB_Header, folders : [F]) {
+    internal init(name : String, dbDescription : String, header : DB_Header, folders : [F], entries : [E]) {
         self.name = name
         self.dbDescription = dbDescription
         self.header = header
         self.folders = folders
+        self.entries = entries
     }
     
     internal init(from coreData : CD_Database) {
@@ -61,11 +67,16 @@ internal class GeneralDatabase<F> : Identifiable {
             localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
         }
         folders = localFolders as! [F]
+        var localEntries : [EncryptedEntry] = []
+        for entry in coreData.entries! {
+            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
+        }
+        entries = localEntries as! [E]
     }
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder>, ObservableObject {
+internal final class Database : GeneralDatabase<Folder, Entry>, ObservableObject {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -75,10 +86,11 @@ internal final class Database : GeneralDatabase<Folder>, ObservableObject {
         dbDescription : String,
         header : DB_Header,
         folders : [Folder],
+        entries : [Entry],
         password : String
     ) {
         self.password = password
-        super.init(name: name, dbDescription: dbDescription, header: header, folders: folders)
+        super.init(name: name, dbDescription: dbDescription, header: header, folders: folders, entries: entries)
     }
     
     internal convenience init(
@@ -88,6 +100,7 @@ internal final class Database : GeneralDatabase<Folder>, ObservableObject {
         storageType : DB_Header.StorageType,
         salt : String,
         folders : [Folder],
+        entries : [Entry],
         password : String
     ) {
         self.init(
@@ -99,6 +112,7 @@ internal final class Database : GeneralDatabase<Folder>, ObservableObject {
                 salt: salt
             ),
             folders: folders,
+            entries: entries,
             password: password
         )
     }
@@ -121,12 +135,13 @@ internal final class Database : GeneralDatabase<Folder>, ObservableObject {
             salt: "salt"
         ),
         folders: [],
+        entries: [],
         password: "Password"
     )
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder> {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry> {
     
     /// Attempts to decrypt the encrypted Database using the provided Password.
     /// If successful, returns the decrypted Database.
@@ -145,6 +160,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder> {
             storageType: .CoreData,
             salt: "salt"
         ),
-        folders: []
+        folders: [],
+        entries: []
     )
 }

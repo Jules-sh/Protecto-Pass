@@ -117,6 +117,7 @@ internal struct AddDB_Overview: View {
             storageType: storage,
             salt: PasswordGenerator.generateSalt(),
             folders: [],
+            entries: [],
             password: creationWrapper.password
         )
         do {

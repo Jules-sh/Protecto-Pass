@@ -82,11 +82,16 @@ internal struct Decrypter {
         for folder in db!.folders {
             decryptedFolders.append(try decryptAES(folder: folder))
         }
+        var decryptedEntries : [Entry] = []
+        for entry in db!.entries {
+            decryptedEntries.append(try decryptAES(entry: entry))
+        }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             dbDescription: db!.dbDescription,
             header: db!.header,
             folders: decryptedFolders,
+            entries: decryptedEntries,
             password: password!
         )
         return decryptedDatabase
@@ -151,11 +156,16 @@ internal struct Decrypter {
         for folder in db!.folders {
             decryptedFolders.append(try decryptChaChaPoly(folder: folder))
         }
+        var decryptedEntries : [Entry] = []
+        for entry in db!.entries {
+            decryptedEntries.append(try decryptChaChaPoly(entry: entry))
+        }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             dbDescription: db!.dbDescription,
             header: db!.header,
             folders: decryptedFolders,
+            entries: decryptedEntries,
             password: password!
         )
         return decryptedDatabase

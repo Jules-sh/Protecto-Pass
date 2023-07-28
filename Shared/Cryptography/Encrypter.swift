@@ -72,16 +72,21 @@ internal struct Encrypter {
         for folder in db!.folders {
             encryptedFolders.append(try encryptAES(folder: folder))
         }
+        var encryptedEntries : [EncryptedEntry] = []
+        for entry in db!.entries {
+            encryptedEntries.append(try encryptAES(entry: entry))
+        }
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
             header: db!.header,
-            folders: encryptedFolders
+            folders: encryptedFolders,
+            entries: encryptedEntries
         )
         return encryptedDatabase
     }
     
-    /// Encryptes the passed Folder with AES and returns
+    /// Encrypts the passed Folder with AES and returns
     /// an encrypted Folder
     private func encryptAES(folder : Folder) throws -> EncryptedFolder {
         var encryptedFolders : [EncryptedFolder] = []
@@ -143,11 +148,16 @@ internal struct Encrypter {
         for folder in db!.folders {
             encryptedFolders.append(try encryptChaChaPoly(folder: folder))
         }
+        var encryptedEntries : [EncryptedEntry] = []
+        for entry in db!.entries {
+            encryptedEntries.append(try encryptChaChaPoly(entry: entry))
+        }
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             dbDescription: db!.dbDescription,
             header: db!.header,
-            folders: encryptedFolders
+            folders: encryptedFolders,
+            entries: encryptedEntries
         )
         return encryptedDatabase
     }

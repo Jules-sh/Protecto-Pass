@@ -97,7 +97,8 @@ internal struct Welcome_Previews: PreviewProvider {
                     name: "test",
                     dbDescription: "description",
                     header: DB_Header(salt: "salt"),
-                    folders: []
+                    folders: [],
+                    entries: []
                 )
             ]
         )

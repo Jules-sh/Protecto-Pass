@@ -8,7 +8,9 @@
 import Foundation
 
 /// The Folder Object that is used when the App is running
-internal struct Folder {
+internal struct Folder : Identifiable {
+    
+    internal let id: UUID = UUID()
     
     /// The name of the Folder, you could also say the title
     internal let name : String

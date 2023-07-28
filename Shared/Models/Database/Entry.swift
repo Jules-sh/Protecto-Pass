@@ -9,7 +9,9 @@ import Foundation
 
 /// The Struct representing an Entry
 /// while this App is running
-internal struct Entry {
+internal struct Entry : Identifiable {
+    
+    internal let id: UUID = UUID()
     
     /// The Title of this Entry describing
     /// what it stores

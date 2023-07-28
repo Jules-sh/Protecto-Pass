@@ -18,10 +18,20 @@ internal struct Home: View {
         NavigationStack {
             List {
                 Section("Entries") {
-                    
+                    ForEach(db.entries) {
+                        entry in
+                        NavigationLink(entry.title) {
+                            EntryDetails(entry: entry)
+                        }
+                    }
                 }
                 Section("Folder") {
-                    
+                    ForEach(db.folders) {
+                        folder in
+                        NavigationLink(folder.name) {
+                            FolderDetails(folder: folder)
+                        }
+                    }
                 }
             }
             .navigationTitle("Home")

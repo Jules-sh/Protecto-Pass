@@ -27,7 +27,7 @@ internal struct Folder : Identifiable {
 internal struct EncryptedFolder {
     
     /// The name of this Folder encrypted
-    /// and securlely stores as bytes
+    /// and securely stores as bytes
     internal let name : Data
     
     /// The Folders inside this Folders, each encrypted

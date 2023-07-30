@@ -30,7 +30,7 @@ internal struct SetUpView: View {
     @ViewBuilder
     private func build() -> some View {
         if isReady {
-            Welcome(databases: databases)
+            HomeSelector(databases: databases)
         } else {
             VStack {
                 ProgressView()
@@ -47,7 +47,7 @@ internal struct SetUpView: View {
             }
             .alert("Error", isPresented: $errInitPresented) {
             } message: {
-                Text("An Error occured while loading. Please force close and restart the Application")
+                Text("An Error occurred while loading. Please force close and restart the Application")
             }
         }
     }

@@ -17,7 +17,7 @@ import SwiftUI
 internal struct Welcome: View {
     
     /// The Object to control the navigation of and with the AddDB Sheet
-    @StateObject private var navigationSheet : AddDB_Navigation = AddDB_Navigation()
+    @EnvironmentObject private var navigationSheet : AddDB_Navigation
     
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
@@ -95,5 +95,6 @@ internal struct Welcome_Previews: PreviewProvider {
                 EncryptedDatabase.previewDB,
             ]
         )
+        .environmentObject(AddDB_Navigation())
     }
 }

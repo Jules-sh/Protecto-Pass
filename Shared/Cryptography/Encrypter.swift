@@ -96,11 +96,15 @@ internal struct Encrypter {
     
     /// Encrypts the key using AES and returns it as encrypted Data
     private func encryptAESKey() throws -> Data {
+        let hashedPassword : SHA256Digest = SHA256.hash(data: password!.utf8.map { UInt8($0) })
+        let hashedPasswordBytes : Data = hashedPassword.withUnsafeBytes {
+            return Data(Array($0))
+        }
         return try AES.GCM.seal(
             key!.withUnsafeBytes {
                 return Data(Array($0))
             },
-            using: SymmetricKey(data: password!.data(using: .utf8)!)
+            using: SymmetricKey(data: hashedPasswordBytes)
         ).combined!
     }
     

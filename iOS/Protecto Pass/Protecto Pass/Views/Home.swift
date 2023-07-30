@@ -14,6 +14,9 @@ internal struct Home: View {
     /// The Database that the User has just unlocked
     @StateObject internal var db : Database
     
+    /// Whether the Popover on the action button is presented or not
+    @State private var addPopoverPresented : Bool = false
+    
     var body: some View {
         NavigationStack {
             List {
@@ -40,8 +43,17 @@ internal struct Home: View {
             .toolbar(.automatic, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        
+                    Menu {
+                        NavigationLink {
+                            AddEntry()
+                        } label: {
+                            Label("Add Entry", systemImage: "doc")
+                        }
+                        NavigationLink {
+                            AddFolder()
+                        } label: {
+                            Label("Add Folder", systemImage: "folder")
+                        }
                     } label: {
                         Image(systemName: "plus")
                     }

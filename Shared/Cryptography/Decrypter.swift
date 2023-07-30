@@ -106,10 +106,12 @@ internal struct Decrypter {
     private func decryptAESKey() throws -> SymmetricKey {
         let data : Data = try AES.GCM.open(
             AES.GCM.SealedBox(combined: db!.key),
-            using: SymmetricKey(data: password!.data(using: .utf8)!)
+            using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         )
         return SymmetricKey(data: data)
     }
+    
+    
     
     
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
@@ -192,7 +194,7 @@ internal struct Decrypter {
     private func decryptChaChaPolyKey() throws -> SymmetricKey {
         let data : Data = try ChaChaPoly.open(
             ChaChaPoly.SealedBox(combined: db!.key),
-            using: SymmetricKey(data: password!.data(using: .utf8)!)
+            using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         )
         return SymmetricKey(data: data)
     }

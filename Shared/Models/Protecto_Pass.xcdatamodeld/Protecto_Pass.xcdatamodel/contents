@@ -18,6 +18,7 @@
         <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="entries" inverseEntity="CD_Folder"/>
     </entity>
     <entity name="CD_Folder" representedClassName="CD_Folder" syncable="YES" codeGenerationType="category">
+        <attribute name="folderDescription" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Database" inverseName="folders" inverseEntity="CD_Database"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="folder" inverseEntity="CD_Entry"/>

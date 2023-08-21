@@ -28,11 +28,6 @@ internal struct Cryptography {
         case ChaChaPoly
     }
     
-    /// Converts the passed String to Data (Bytes)
-    internal static func stringToData(_ string : String) -> Data {
-        return Data(string.utf8.map { UInt8($0) })
-    }
-    
     /// Converts the specified String to Bytes, but before hashes it using SHA-256
     internal static func sha256HashBytes(_ string : String) -> Data {
         let hashed : SHA256Digest = SHA256.hash(data: string.utf8.map { UInt8($0) })

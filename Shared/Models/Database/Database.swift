@@ -28,14 +28,14 @@ internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identi
         header : DB_Header,
         key : K
     ) {
+        self.header = header
+        self.key = key
         super.init(
             name: name,
             description: description,
             folders: folders,
             entries: entries
         )
-        self.header = header
-        self.key = key
     }
 }
 
@@ -120,8 +120,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
         }
         self.init(
-            name: coreData.name!,
-            description: coreData.dbDescription!,
+            name: String(data: coreData.name!, encoding: .utf8)!,
+            description: String(data: coreData.objectDescription!, encoding: .utf8)!,
             folders: localFolders,
             entries: localEntries,
             header: DB_Header.parseString(string: coreData.header!),

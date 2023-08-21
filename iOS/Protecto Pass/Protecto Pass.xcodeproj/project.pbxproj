@@ -28,7 +28,6 @@
 		84DB4F962A73C61300C2DD0E /* AddFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F952A73C61300C2DD0E /* AddFolder.swift */; };
 		84DB4F9A2A766BEF00C2DD0E /* HomeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F992A766BEF00C2DD0E /* HomeSelector.swift */; };
 		84DB4F9C2A7678E100C2DD0E /* HomeSelectorNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F9B2A7678E100C2DD0E /* HomeSelectorNavigation.swift */; };
-		84DB4F9E2A77DDA700C2DD0E /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F9D2A77DDA700C2DD0E /* FolderView.swift */; };
 		84E4C5122A249E87005D793F /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5112A249E87005D793F /* Cryptography.swift */; };
 		84E4C5142A25CEA2005D793F /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */; };
 		84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5162A263FB8005D793F /* AddDB_Password.swift */; };
@@ -45,6 +44,7 @@
 		84F8850C2A07F7A000B35956 /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850B2A07F7A000B35956 /* Encrypter.swift */; };
 		84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850D2A07F7AC00B35956 /* Decrypter.swift */; };
 		84FFB4CA2A93AC970001FA72 /* CD_Database+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FFB4C82A93AC970001FA72 /* CD_Database+CoreDataClass.swift */; };
+		84FFB4CD2A93AD460001FA72 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FFB4CC2A93AD460001FA72 /* DataConverter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +90,6 @@
 		84DB4F952A73C61300C2DD0E /* AddFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolder.swift; sourceTree = "<group>"; };
 		84DB4F992A766BEF00C2DD0E /* HomeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSelector.swift; sourceTree = "<group>"; };
 		84DB4F9B2A7678E100C2DD0E /* HomeSelectorNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSelectorNavigation.swift; sourceTree = "<group>"; };
-		84DB4F9D2A77DDA700C2DD0E /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
 		84E4C5112A249E87005D793F /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 		84E4C5162A263FB8005D793F /* AddDB_Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Password.swift; sourceTree = "<group>"; };
@@ -109,6 +108,7 @@
 		84F8850B2A07F7A000B35956 /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
 		84F8850D2A07F7AC00B35956 /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
 		84FFB4C82A93AC970001FA72 /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		84FFB4CC2A93AD460001FA72 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				84922B352A21E18500CE7945 /* DB_Converter.swift */,
+				84FFB4CC2A93AD460001FA72 /* DataConverter.swift */,
 			);
 			path = Mapping;
 			sourceTree = "<group>";
@@ -262,7 +263,6 @@
 			children = (
 				84DB4F8D2A739D6C00C2DD0E /* EntryDetails.swift */,
 				84DB4F8F2A739D9100C2DD0E /* FolderDetails.swift */,
-				84DB4F9D2A77DDA700C2DD0E /* FolderView.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -509,7 +509,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84DB4F9E2A77DDA700C2DD0E /* FolderView.swift in Sources */,
 				84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */,
 				84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */,
 				84F4207C29EEA0F2000D7600 /* FileManager.swift in Sources */,
@@ -517,6 +516,7 @@
 				84922B3B2A21F15600CE7945 /* Home.swift in Sources */,
 				84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */,
 				84F4207829EEA0F2000D7600 /* Database.swift in Sources */,
+				84FFB4CD2A93AD460001FA72 /* DataConverter.swift in Sources */,
 				84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */,
 				84E4C5142A25CEA2005D793F /* PasswordGenerator.swift in Sources */,
 				84E4C5122A249E87005D793F /* Cryptography.swift in Sources */,

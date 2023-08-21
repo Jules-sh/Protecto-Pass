@@ -51,8 +51,8 @@ internal struct DB_Converter : Converter {
     
     internal static func toCD(_ encrypted: EncryptedDatabase, context: NSManagedObjectContext) -> CD_Database {
         let cdDB : CD_Database = CD_Database(context: context)
-        cdDB.name = encrypted.name
-        cdDB.dbDescription = encrypted.dbDescription
+        cdDB.name = DataConverter.stringToData(encrypted.name)
+        cdDB.objectDescription = DataConverter.stringToData(encrypted.description)
         cdDB.header = encrypted.header.parseHeader()
         for folder in encrypted.folders {
             cdDB.addToFolders(FolderConverter.toCD(folder, context: context))

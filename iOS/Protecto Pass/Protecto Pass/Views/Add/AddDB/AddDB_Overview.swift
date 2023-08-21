@@ -116,14 +116,14 @@ internal struct AddDB_Overview: View {
         creationWrapper.storageType = storage
         navigationController.db = Database(
             name: creationWrapper.name,
-            dbDescription: creationWrapper.description,
+            description: creationWrapper.description,
+            folders: [],
+            entries: [],
             header: DB_Header(
                 encryption: encryption,
                 storageType: storage,
                 salt: PasswordGenerator.generateSalt()
             ),
-            folders: [],
-            entries: [],
             key: SymmetricKey(size: .bits256),
             password: creationWrapper.password
         )

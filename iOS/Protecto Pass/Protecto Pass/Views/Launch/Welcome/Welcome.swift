@@ -72,7 +72,7 @@ internal struct Welcome: View {
             VStack {
                 Text(db.name)
                     .font(.headline)
-                Text(db.dbDescription)
+                Text(db.description)
                     .font(.subheadline)
                     .lineLimit(2, reservesSpace: true)
             }

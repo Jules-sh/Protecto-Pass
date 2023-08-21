@@ -62,4 +62,12 @@ internal struct DB_Header {
     internal func parseHeader() -> String {
         return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt)"
     }
+    
+    /// A preview header to use in previews and tests.
+    /// The salt is still dynamically generated every time
+    internal static let previewHeader : DB_Header = DB_Header(
+        encryption: .AES256,
+        storageType: .CoreData,
+        salt: PasswordGenerator.generateSalt()
+    )
 }

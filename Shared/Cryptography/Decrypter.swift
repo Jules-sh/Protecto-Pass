@@ -92,10 +92,10 @@ internal struct Decrypter {
         }
         let decryptedDatabase : Database = Database(
             name: db!.name,
-            dbDescription: db!.dbDescription,
-            header: db!.header,
+            description: db!.description,
             folders: decryptedFolders,
             entries: decryptedEntries,
+            header: db!.header,
             key: key!,
             password: userPassword!
         )
@@ -127,8 +127,13 @@ internal struct Decrypter {
             try AES.GCM.SealedBox(combined: folder.name),
             using: key!
         )
+        let decryptedDescription : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: folder.description),
+            using: key!
+        )
         let decryptedFolder : Folder = Folder(
             name: String(data: decryptedName, encoding: .utf8)!,
+            description: String(data: decryptedDescription, encoding: .utf8)!,
             folders: decryptedFolders,
             entries: decryptedEntries
         )
@@ -180,10 +185,10 @@ internal struct Decrypter {
         }
         let decryptedDatabase : Database = Database(
             name: db!.name,
-            dbDescription: db!.dbDescription,
-            header: db!.header,
+            description: db!.description,
             folders: decryptedFolders,
             entries: decryptedEntries,
+            header: db!.header,
             key: key!,
             password: userPassword!
         )
@@ -212,8 +217,13 @@ internal struct Decrypter {
             try ChaChaPoly.SealedBox(combined: folder.name),
             using: key!
         )
+        let decryptedDescription : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: folder.description),
+            using: key!
+        )
         let decryptedFolder : Folder = Folder(
             name: String(data: decryptedName, encoding: .utf8)!,
+            description: String(data: decryptedDescription, encoding: .utf8)!,
             folders: decryptedFolders,
             entries: decryptedEntries
         )

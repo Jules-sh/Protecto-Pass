@@ -85,10 +85,10 @@ internal struct Encrypter {
         let encryptedKey : Data = try encryptAESKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
-            dbDescription: db!.dbDescription,
-            header: db!.header,
+            description: db!.description,
             folders: encryptedFolders,
             entries: encryptedEntries,
+            header: db!.header,
             key: encryptedKey
         )
         return encryptedDatabase
@@ -119,8 +119,13 @@ internal struct Encrypter {
             Cryptography.stringToData(folder.name),
             using: key!
         ).combined!
+        let encryptedDescription : Data = try AES.GCM.seal(
+            Cryptography.stringToData(folder.description),
+            using: key!
+        ).combined!
         let encryptedFolder : EncryptedFolder = EncryptedFolder(
             name: encryptedName,
+            description: encryptedDescription,
             folders: encryptedFolders,
             entries: encryptedEntries
         )
@@ -173,10 +178,10 @@ internal struct Encrypter {
         let encryptedKey : Data = try encryptChaChaPolyKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
-            dbDescription: db!.dbDescription,
-            header: db!.header,
+            description: db!.description,
             folders: encryptedFolders,
             entries: encryptedEntries,
+            header: db!.header,
             key: encryptedKey
         )
         return encryptedDatabase
@@ -208,8 +213,13 @@ internal struct Encrypter {
             Cryptography.stringToData(folder.name),
             using: key!
         ).combined
+        let encryptedDescription : Data = try ChaChaPoly.seal(
+            Cryptography.stringToData(folder.description),
+            using: key!
+        ).combined
         let encryptedFolder : EncryptedFolder = EncryptedFolder(
             name: encryptedName,
+            description: encryptedDescription,
             folders: encryptedFolders,
             entries: encryptedEntries
         )

@@ -21,6 +21,7 @@ internal struct FolderDetails_Previews: PreviewProvider {
         FolderDetails(
             folder: Folder(
                 name: "Test Folder",
+                description: "Test Description",
                 folders: [],
                 entries: []
             )

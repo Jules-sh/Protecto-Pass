@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-private struct 
 
 internal struct DatabaseContentView : View {
     

@@ -9,59 +9,53 @@ import Foundation
 
 /// The General Folder of which other Folder Types
 /// inherit from
-internal class GeneralFolder<D, F, E> {
-    
-    /// The name of the Folder, you could also say the title
-    internal let name : D
-    
-    /// The description provided to this Folder
-    internal let description : D
-    
-    /// Each folder can contain folders which again
-    /// can also contain folders.
-    internal var folders : [F]
-    
-    /// The Entries stored in this Folder
-    internal var entries : [E]
-    
-    internal init(
-        name : D,
-        description : D,
-        folders : [F],
-        entries : [E]
-    ) {
-        self.name = name
-        self.description = description
-        self.folders = folders
-        self.entries = entries
-    }
-}
+internal class GeneralFolder<D, F, E> : ME_DataStructure<D, F, E> {}
 
 /// The Folder Object that is used when the App is running
 internal final class Folder : GeneralFolder<String, Folder, Entry>, Identifiable {
     
     internal let id: UUID = UUID()
+    
+    /// An static preview folder with sample data to use in Previews and Tests
+    internal static let previewFolder : Folder = Folder(
+        name: "Private",
+        description: "This is an preview Folder only to use in previews and tests",
+        folders: [],
+        entries: []
+    )
 }
 
 /// The Object holding an encrypted Folder
 internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry> {
     
-    internal init(from coreData : CD_Folder) {
+    override init(
+        name: Data,
+        description: Data,
+        folders: [EncryptedFolder],
+        entries: [EncryptedEntry]
+    ) {
         super.init(
-            name: coreData.name!,
-            description: coreData.folderDescription!,
-            folders: [],
-            entries: []
+            name: name,
+            description: description,
+            folders: folders,
+            entries: entries
         )
-        var folders : [EncryptedFolder] = []
+    }
+    
+    internal convenience init(from coreData : CD_Folder) {
+        var localFolders : [EncryptedFolder] = []
         for folder in coreData.folders! {
-            folders.append(EncryptedFolder(from: folder as! CD_Folder))
+            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
         }
-        self.folders.append(contentsOf: folders)
-        var entries : [EncryptedEntry] = []
+        var localEntries : [EncryptedEntry] = []
         for entry in coreData.entries! {
-            entries.append(EncryptedEntry(from: entry as! CD_Entry))
+            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
         }
-        self.entries.append(contentsOf: entries)
+        self.init(
+            name: coreData.name!,
+            description: coreData.objectDescription!,
+            folders: localFolders,
+            entries: localEntries
+        )
     }
 }

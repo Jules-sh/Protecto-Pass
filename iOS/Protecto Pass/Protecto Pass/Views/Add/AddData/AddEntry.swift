@@ -11,9 +11,10 @@ import SwiftUI
 /// This entry is stored in the current folder
 internal struct AddEntry: View {
     
-    /// The folder the user currently is active in
-    // TODO: make state variable with a switch for the user to decide which folder this entry contains
-//    internal let folder : Folder
+    @EnvironmentObject private var db : Database
+    
+    /// The parent folder of this Entry if there is
+    @State internal var folder : Folder?
     
     @State private var title : String = ""
     
@@ -32,10 +33,11 @@ internal struct AddEntry: View {
                 .symbolRenderingMode(.hierarchical)
                 .resizable()
                 .scaledToFit()
-                .padding(.horizontal, 100)
-            List {
+                .padding(.horizontal, 75)
+            Group {
                 TextField("Title", text: $title)
                     .textInputAutocapitalization(.words)
+                    .padding(.top, 40)
                 Group {
                     TextField("Username", text: $username)
                         .textContentType(.username)
@@ -49,14 +51,30 @@ internal struct AddEntry: View {
                     .lineLimit(5...10)
                     .textInputAutocapitalization(.sentences)
             }
+            .textFieldStyle(.roundedBorder)
         }
+        .padding(.horizontal, 25)
         .navigationTitle("New Entry")
         .navigationBarTitleDisplayMode(.automatic)
+        .toolbarRole(.editor)
+        .toolbar(.automatic, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") {
+                    
+                }
+            }
+        }
     }
 }
 
 internal struct AddEntry_Previews: PreviewProvider {
+    
+    @StateObject private static var database : Database = Database.previewDB
+    
     static var previews: some View {
         AddEntry()
+            .environmentObject(database)
+        
     }
 }

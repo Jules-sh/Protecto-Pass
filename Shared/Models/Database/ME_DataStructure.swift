@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// ME Data Structure is short for Multiple Entity Data Structure,
 /// which is used to store multiple entities in one Object.
 /// Objects which have a folder-like structure or features, inherit from this class

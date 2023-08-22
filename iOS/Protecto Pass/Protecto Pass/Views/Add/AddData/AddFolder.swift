@@ -14,8 +14,10 @@ internal struct AddFolder: View {
     /// The name of the Folder
     @State private var name : String = ""
     
-    /// The Folder this folder is stored in
-    @State internal var folder : Folder
+    @State private var description : String = ""
+    
+    /// The parent folder of this Folder
+    @State internal var folder : Folder?
     
     var body: some View {
         VStack {
@@ -29,9 +31,10 @@ internal struct AddFolder: View {
                 .textInputAutocapitalization(.words)
                 .textFieldStyle(.roundedBorder)
                 .padding(.top, 40)
-            TextField("Name", text: $name)
+            TextField("Description", text: $description, axis: .vertical)
                 .textInputAutocapitalization(.sentences)
                 .textFieldStyle(.roundedBorder)
+                .lineLimit(3...10)
         }
         .padding(.horizontal, 25)
         .navigationTitle("New Folder")
@@ -49,12 +52,11 @@ internal struct AddFolder: View {
 }
 
 internal struct AddFolder_Previews: PreviewProvider {
+    
+    @StateObject private static var database : Database = Database.previewDB
+    
     static var previews: some View {
-        AddFolder(folder: Folder(
-            name: "Test",
-            description: "Test Description",
-            folders: [],
-            entries: [])
-        )
+        AddFolder()
+            .environmentObject(database)
     }
 }

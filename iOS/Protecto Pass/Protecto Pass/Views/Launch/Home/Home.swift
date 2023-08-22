@@ -19,46 +19,7 @@ internal struct Home: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                Section("Entries") {
-                    ForEach(db.entries) {
-                        entry in
-                        NavigationLink(entry.title) {
-                            EntryDetails(entry: entry)
-                        }
-                    }
-                }
-                Section("Folder") {
-                    ForEach(db.folders) {
-                        folder in
-                        NavigationLink(folder.name) {
-                            FolderDetails(folder: folder)
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.automatic)
-            .toolbarRole(.navigationStack)
-            .toolbar(.automatic, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        NavigationLink {
-                            AddEntry()
-                        } label: {
-                            Label("Add Entry", systemImage: "doc")
-                        }
-                        NavigationLink {
-                            AddFolder()
-                        } label: {
-                            Label("Add Folder", systemImage: "folder")
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
+            ME_ContentView(db)
         }
     }
 }

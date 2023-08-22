@@ -33,8 +33,12 @@ internal class ME_DataStructure<D, F, E> {
     }
 }
 
+/// Subclass of ME Data Structure with types of decrypted Objects
 internal class Decrypted_ME_DataStructure : ME_DataStructure<String, Folder, Entry> {}
 
+/// Subclass of ME Data Structure with types of encrypted Objects
 internal class Encrypted_ME_DataStructure : ME_DataStructure<Data, EncryptedFolder, EncryptedEntry> {}
 
+/// Protocol which most of the Decrypted Data Structures conform to in order to use them in UI
+/// Components such as Picker and a generated List
 internal protocol DecryptedDataStructure : Hashable, Identifiable {}

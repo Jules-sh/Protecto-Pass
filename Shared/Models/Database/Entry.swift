@@ -9,7 +9,7 @@ import Foundation
 
 /// The Struct representing an Entry
 /// while this App is running
-internal struct Entry : Identifiable {
+internal struct Entry : DecryptedDataStructure {
     
     internal let id: UUID = UUID()
     

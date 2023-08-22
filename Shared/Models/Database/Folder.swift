@@ -7,12 +7,8 @@
 
 import Foundation
 
-/// The General Folder of which other Folder Types
-/// inherit from
-internal class GeneralFolder<D, F, E> : ME_DataStructure<D, F, E> {}
-
 /// The Folder Object that is used when the App is running
-internal final class Folder : GeneralFolder<String, Folder, Entry>, Identifiable {
+internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure {
     
     internal let id: UUID = UUID()
     
@@ -23,10 +19,22 @@ internal final class Folder : GeneralFolder<String, Folder, Entry>, Identifiable
         folders: [],
         entries: []
     )
+    
+    static func == (lhs: Folder, rhs: Folder) -> Bool {
+        return lhs.name == rhs.name && lhs.description == rhs.description && lhs.folders == rhs.folders && lhs.entries == rhs.entries
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(description)
+        hasher.combine(folders)
+        hasher.combine(entries)
+        hasher.combine(id)
+    }
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry> {
+internal final class EncryptedFolder : Encrypted_ME_DataStructure {
     
     override init(
         name: Data,

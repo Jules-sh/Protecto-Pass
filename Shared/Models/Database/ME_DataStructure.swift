@@ -32,3 +32,9 @@ internal class ME_DataStructure<D, F, E> {
         self.entries = entries
     }
 }
+
+internal class Decrypted_ME_DataStructure : ME_DataStructure<String, Folder, Entry> {}
+
+internal class Encrypted_ME_DataStructure : ME_DataStructure<Data, EncryptedFolder, EncryptedEntry> {}
+
+internal protocol DecryptedDataStructure : Hashable, Identifiable {}

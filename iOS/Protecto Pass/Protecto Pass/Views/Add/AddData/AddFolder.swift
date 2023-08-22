@@ -11,13 +11,23 @@ import SwiftUI
 /// is added to the Database
 internal struct AddFolder: View {
     
+    @EnvironmentObject private var db : Database
+    
     /// The name of the Folder
     @State private var name : String = ""
     
     @State private var description : String = ""
     
     /// The parent folder of this Folder
-    @State internal var folder : Folder?
+    @State private var folder : Folder?
+    
+    @State private var storeInFolder : Bool
+    
+    internal init(
+        folder : Folder? = nil
+    ) {
+        storeInFolder = folder != nil
+    }
     
     var body: some View {
         VStack {
@@ -27,14 +37,27 @@ internal struct AddFolder: View {
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal, 75)
-            TextField("Name", text: $name)
-                .textInputAutocapitalization(.words)
-                .textFieldStyle(.roundedBorder)
-                .padding(.top, 40)
-            TextField("Description", text: $description, axis: .vertical)
-                .textInputAutocapitalization(.sentences)
-                .textFieldStyle(.roundedBorder)
-                .lineLimit(3...10)
+            Group {
+                TextField("Name", text: $name)
+                    .textInputAutocapitalization(.words)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.top, 40)
+                TextField("Description", text: $description, axis: .vertical)
+                    .textInputAutocapitalization(.sentences)
+                    .textFieldStyle(.roundedBorder)
+                    .lineLimit(3...10)
+            }
+            Group {
+                Toggle(isOn: $storeInFolder) {
+                    Label("Store in Folder", systemImage: "folder")
+                }
+                Picker("Folder", selection: $folder) {
+                    ForEach(db.folders) {
+                        folder in
+                        Text(folder.name)
+                    }
+                }
+            }
         }
         .padding(.horizontal, 25)
         .navigationTitle("New Folder")

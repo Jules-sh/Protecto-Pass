@@ -48,14 +48,22 @@ internal struct AddFolder: View {
                     .lineLimit(3...10)
             }
             Group {
-                Toggle(isOn: $storeInFolder) {
+                Toggle(isOn: $storeInFolder.animation()) {
                     Label("Store in Folder", systemImage: "folder")
                 }
-                Picker("Folder", selection: $folder) {
-                    ForEach(db.folders) {
-                        folder in
-                        Text(folder.name)
+                if storeInFolder {
+                    Picker("Folder", selection: $folder) {
+                        if (db.folders.isEmpty) {
+                            Text("No folder available")
+                        } else {
+                            ForEach(db.folders) {
+                                folder in
+                                Text(folder.name)
+                            }
+                        }
                     }
+                    .disabled(db.folders.isEmpty)
+                    .pickerStyle(.menu)
                 }
             }
         }

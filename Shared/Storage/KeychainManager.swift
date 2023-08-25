@@ -1,17 +1,13 @@
 //
-//  FileManager.swift
+//  KeychainManager.swift
 //  Protecto Pass
 //
-//  Created by Julian Schumacher on 28.03.23.
+//  Created by Julian Schumacher on 25.08.23.
 //
 
 import Foundation
 
-/// The Struct controling reading and writing
-/// from and to a file, if the user selected that he wants
-/// this safe to be stored as a file
-internal struct FileManager {
-    
+internal struct KeychainManager {
     internal static func storeDatabase(_ db : EncryptedDatabase) -> Void {
         
     }
@@ -20,5 +16,4 @@ internal struct FileManager {
         // TODO: implement
         return []
     }
-    
 }

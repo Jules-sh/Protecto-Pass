@@ -112,6 +112,7 @@ internal struct AddDB_Overview: View {
     /// that isn't entered by the User
     private func done() -> Void {
         // TODO: these two lines as well as the data in the creation Wrapper may be pointless
+        // They are still entered, in case the creation process will expand one day
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
         navigationController.db = Database(
@@ -128,7 +129,7 @@ internal struct AddDB_Overview: View {
             password: creationWrapper.password
         )
         do {
-            try Storage.storeDatabase(navigationController.db!.encrypt())
+            try Storage.storeDatabase(navigationController.db!, context: viewContext)
             navigationController.navigationSheetShown.toggle()
             navigationController.openDatabaseToHome.toggle()
         } catch {

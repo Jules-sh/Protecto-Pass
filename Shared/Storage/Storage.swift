@@ -15,17 +15,34 @@ import Foundation
 /// Data.
 internal struct Storage {
     
-    internal static func storeDatabase(_ db : EncryptedDatabase) -> Void {
-        
+    /// Stores the passed Database to the right Storage.
+    /// if you want to store something in Core Data, the connected context has to be provided.
+    internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?) throws -> Void {
+        let database : EncryptedDatabase = try db.encrypt()
+        switch db.header.storageType {
+        case .CoreData:
+            assert(context != nil, "To store Core Data Databases, a Context must be provided to the storeDatabase Function")
+            try CoreDataManager.storeDatabase(database, context: context!)
+        case .File:
+            FileManager.storeDatabase(database)
+        case .Keychain:
+            KeychainManager.storeDatabase(database)
+            break
+        }
     }
     
+    /// Loads all the Databases from the different Storage Options
     internal static func load(with context : NSManagedObjectContext) throws -> [EncryptedDatabase] {
         var result : [EncryptedDatabase] = []
-        let coreData : [CD_Database] = try context.fetch(CD_Database.fetchRequest())
-        let cdAsEncrypted : [EncryptedDatabase] = DB_Converter.fromCD(coreData)
-        result.append(contentsOf: cdAsEncrypted)
+        // Core Data
+        let coreData : [EncryptedDatabase] = try CoreDataManager.load(with: context)
+        result.append(contentsOf: coreData)
         // File System
+        let fileSystem : [EncryptedDatabase] = FileManager.load()
+        result.append(contentsOf: fileSystem)
         // Keychain
+        let keychain : [EncryptedDatabase] = KeychainManager.load()
+        result.append(contentsOf: keychain)
         return result
     }
 }

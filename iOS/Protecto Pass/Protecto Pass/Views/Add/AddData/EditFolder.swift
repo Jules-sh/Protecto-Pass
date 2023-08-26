@@ -2,14 +2,20 @@
 //  AddFolder.swift
 //  Protecto Pass
 //
-//  Created by Julian Schumacher on 28.07.23.
+//  Created by Julian Schumacher as AddFolder.swift on 28.07.23.
+//
+//  Renamed by Julian Schumacher to EditFolder.swift on 26.08.23.
 //
 
 import SwiftUI
 
 /// A Screen to create a new Folder which then
 /// is added to the Database
-internal struct AddFolder: View {
+internal struct EditFolder: View {
+    
+    @Environment(\.managedObjectContext) private var context
+    
+    @Environment(\.dismiss) private var dismiss
     
     @EnvironmentObject private var db : Database
     
@@ -21,7 +27,9 @@ internal struct AddFolder: View {
     /// The parent folder of this Folder
     @State private var folder : Folder?
     
-    @State private var storeInFolder : Bool
+    @State private var storeInFolder : Bool = false
+    
+    @State private var errStoring : Bool = false
     
     internal init(
         folder : Folder? = nil
@@ -67,6 +75,12 @@ internal struct AddFolder: View {
                 }
             }
         }
+        .alert("Error saving", isPresented: $errStoring) {
+            Button("Cancel", role: .cancel) {}
+            Button("Try again") { save() }
+        } message: {
+            Text("An Error occurred when trying to save the data.\nPlease try again")
+        }
         .padding(.horizontal, 25)
         .navigationTitle("New Folder")
         .navigationBarTitleDisplayMode(.automatic)
@@ -75,19 +89,29 @@ internal struct AddFolder: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
-                    
+                    save()
                 }
             }
         }
     }
+    
+    /// Saves the Data and dismisses this View
+    private func save() -> Void {
+        do {
+            try Storage.storeDatabase(db, context: context)
+            dismiss()
+        } catch {
+            errStoring.toggle()
+        }
+    }
 }
 
-internal struct AddFolder_Previews: PreviewProvider {
+internal struct EditFolder_Previews: PreviewProvider {
     
     @StateObject private static var database : Database = Database.previewDB
     
     static var previews: some View {
-        AddFolder()
+        EditFolder()
             .environmentObject(database)
     }
 }

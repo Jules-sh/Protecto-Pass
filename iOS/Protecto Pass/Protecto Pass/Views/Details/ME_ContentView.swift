@@ -42,12 +42,12 @@ internal struct ME_ContentView : View {
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     NavigationLink {
-                        AddEntry()
+                        EditEntry()
                     } label: {
                         Label("Add Entry", systemImage: "doc")
                     }
                     NavigationLink {
-                        AddFolder()
+                        EditFolder()
                     } label: {
                         Label("Add Folder", systemImage: "folder")
                     }

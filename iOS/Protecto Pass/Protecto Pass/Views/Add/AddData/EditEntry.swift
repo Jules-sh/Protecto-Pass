@@ -2,14 +2,20 @@
 //  AddEntry.swift
 //  Protecto Pass
 //
-//  Created by Julian Schumacher on 28.07.23.
+//  Created by Julian Schumacher as AddEntry.swift on 28.07.23.
+//
+//  Renamed by Julian Schumacher to EditEntry.swift on 26.08.23.
 //
 
 import SwiftUI
 
 /// View to add a new Entry with all it's data.
 /// This entry is stored in the current folder
-internal struct AddEntry: View {
+internal struct EditEntry: View {
+    
+    @Environment(\.managedObjectContext) private var context
+    
+    @Environment(\.dismiss) private var dismiss
     
     @EnvironmentObject private var db : Database
     
@@ -25,6 +31,8 @@ internal struct AddEntry: View {
     @State private var url : String = ""
     
     @State private var notes : String = ""
+    
+    @State private var errStoring : Bool = false
     
     var body: some View {
         VStack {
@@ -53,6 +61,12 @@ internal struct AddEntry: View {
             }
             .textFieldStyle(.roundedBorder)
         }
+        .alert("Error saving", isPresented: $errStoring) {
+            Button("Cancel", role: .cancel) {}
+            Button("Try again") { save() }
+        } message: {
+            Text("An Error occurred when trying to save the data.\nPlease try again")
+        }
         .padding(.horizontal, 25)
         .navigationTitle("New Entry")
         .navigationBarTitleDisplayMode(.automatic)
@@ -66,14 +80,24 @@ internal struct AddEntry: View {
             }
         }
     }
+    
+    /// Saves the data and dismisses this View
+    private func save() -> Void {
+        do {
+            try Storage.storeDatabase(db, context: context)
+            dismiss()
+        } catch {
+            errStoring.toggle()
+        }
+    }
 }
 
-internal struct AddEntry_Previews: PreviewProvider {
+internal struct EditEntry_Previews: PreviewProvider {
     
     @StateObject private static var database : Database = Database.previewDB
     
     static var previews: some View {
-        AddEntry()
+        EditEntry()
             .environmentObject(database)
         
     }

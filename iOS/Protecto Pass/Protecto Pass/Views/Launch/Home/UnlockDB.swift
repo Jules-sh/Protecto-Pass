@@ -56,7 +56,7 @@ internal struct UnlockDB: View {
                     .font(.title)
                 Divider()
             } footer: {
-                Text(db.dbDescription)
+                Text(db.description)
             }
             TextField("Enter your Password...", text: $password)
                 .textCase(.none)

@@ -9,7 +9,9 @@ import Foundation
 
 /// The Struct representing an Entry
 /// while this App is running
-internal struct Entry {
+internal struct Entry : DecryptedDataStructure {
+    
+    internal let id: UUID = UUID()
     
     /// The Title of this Entry describing
     /// what it stores
@@ -31,6 +33,14 @@ internal struct Entry {
     /// Notes to this Entry storing whatever
     /// the User wants to write down here
     internal let notes : String
+    
+    internal static let previewEntry : Entry = Entry(
+        title: "Password Safe",
+        username: "user",
+        password: "testPassword",
+        url: nil,
+        notes: "This is a preview Entry, only to use in previews and tests"
+    )
 }
 
 /// The Encrypted Entry storing all the

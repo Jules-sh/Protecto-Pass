@@ -8,55 +8,62 @@
 import Foundation
 
 /// The Folder Object that is used when the App is running
-internal struct Folder {
+internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure {
     
-    /// The name of the Folder, you could also say the title
-    internal let name : String
+    internal let id: UUID = UUID()
     
-    /// Each folder can contain folders which again
-    /// can also contain folders.
-    internal let folders : [Folder]
+    /// An static preview folder with sample data to use in Previews and Tests
+    internal static let previewFolder : Folder = Folder(
+        name: "Private",
+        description: "This is an preview Folder only to use in previews and tests",
+        folders: [],
+        entries: []
+    )
     
-    /// The Entries stored in this Folder
-    internal let entries : [Entry]
+    static func == (lhs: Folder, rhs: Folder) -> Bool {
+        return lhs.name == rhs.name && lhs.description == rhs.description && lhs.folders == rhs.folders && lhs.entries == rhs.entries
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(description)
+        hasher.combine(folders)
+        hasher.combine(entries)
+        hasher.combine(id)
+    }
 }
 
 /// The Object holding an encrypted Folder
-internal struct EncryptedFolder {
+internal final class EncryptedFolder : Encrypted_ME_DataStructure {
     
-    /// The name of this Folder encrypted
-    /// and securlely stores as bytes
-    internal let name : Data
-    
-    /// The Folders inside this Folders, each encrypted
-    /// to an encrypted Folder again
-    internal let folders : [EncryptedFolder]
-    
-    /// The Entries in this Folder encrypted to
-    /// Encrypted Entries
-    internal let entries : [EncryptedEntry]
-    
-    internal init(
-        name : Data,
-        folders : [EncryptedFolder],
-        entries : [EncryptedEntry]
+    override init(
+        name: Data,
+        description: Data,
+        folders: [EncryptedFolder],
+        entries: [EncryptedEntry]
     ) {
-        self.name = name
-        self.folders = folders
-        self.entries = entries
+        super.init(
+            name: name,
+            description: description,
+            folders: folders,
+            entries: entries
+        )
     }
     
-    internal init(from coreData : CD_Folder) {
-        name = coreData.name!
-        var folders : [EncryptedFolder] = []
+    internal convenience init(from coreData : CD_Folder) {
+        var localFolders : [EncryptedFolder] = []
         for folder in coreData.folders! {
-            folders.append(EncryptedFolder(from: folder as! CD_Folder))
+            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
         }
-        self.folders = folders
-        var entries : [EncryptedEntry] = []
+        var localEntries : [EncryptedEntry] = []
         for entry in coreData.entries! {
-            entries.append(EncryptedEntry(from: entry as! CD_Entry))
+            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
         }
-        self.entries = entries
+        self.init(
+            name: coreData.name!,
+            description: coreData.objectDescription!,
+            folders: localFolders,
+            entries: localEntries
+        )
     }
 }

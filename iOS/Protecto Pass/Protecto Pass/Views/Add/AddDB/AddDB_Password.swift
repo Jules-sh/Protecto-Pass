@@ -54,6 +54,7 @@ internal struct AddDB_Password: View {
                 .scaledToFit()
                 .padding(.horizontal, 100)
             TextField("Password", text: $password)
+                .autocorrectionDisabled()
                 .padding(.top, 50)
                 .onChange(of: password) {
                     _ in
@@ -175,13 +176,13 @@ internal struct AddDB_Password: View {
     }
 }
 
-/// View to verify the previosly entered password
+/// View to verify the previously entered password
 internal struct AddDB_PasswordVerification : View {
     
     /// The Creation Wrapper for this process
     @EnvironmentObject private var creationWrapper : DB_CreationWrapper
     
-    /// The verification passsword
+    /// The verification password
     @State private var verifyPassword : String = ""
     
     /// When set to true, presents an alert stating that the passwords are different
@@ -203,6 +204,7 @@ internal struct AddDB_PasswordVerification : View {
                 .scaledToFit()
                 .padding(.horizontal, 100)
             TextField("Verify Password", text: $verifyPassword)
+                .autocorrectionDisabled()
                 .padding(.top, 50)
                 .onChange(of: verifyPassword) {
                     _ in

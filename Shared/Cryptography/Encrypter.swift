@@ -85,10 +85,10 @@ internal struct Encrypter {
         let encryptedKey : Data = try encryptAESKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
-            dbDescription: db!.dbDescription,
-            header: db!.header,
+            description: db!.description,
             folders: encryptedFolders,
             entries: encryptedEntries,
+            header: db!.header,
             key: encryptedKey
         )
         return encryptedDatabase
@@ -100,7 +100,7 @@ internal struct Encrypter {
             key!.withUnsafeBytes {
                 return Data(Array($0))
             },
-            using: SymmetricKey(data: password!.data(using: .utf8)!)
+            using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         ).combined!
     }
     
@@ -116,11 +116,16 @@ internal struct Encrypter {
             encryptedEntries.append(try encryptAES(entry: entry))
         }
         let encryptedName : Data = try AES.GCM.seal(
-            Cryptography.stringToData(folder.name),
+            DataConverter.stringToData(folder.name),
+            using: key!
+        ).combined!
+        let encryptedDescription : Data = try AES.GCM.seal(
+            DataConverter.stringToData(folder.description),
             using: key!
         ).combined!
         let encryptedFolder : EncryptedFolder = EncryptedFolder(
             name: encryptedName,
+            description: encryptedDescription,
             folders: encryptedFolders,
             entries: encryptedEntries
         )
@@ -130,23 +135,23 @@ internal struct Encrypter {
     /// Encrypts the passed Entry with AES and returns an encrypted Entry
     private func encryptAES(entry : Entry) throws -> EncryptedEntry {
         let encryptedTitle : Data = try AES.GCM.seal(
-            Cryptography.stringToData(entry.title),
+            DataConverter.stringToData(entry.title),
             using: key!
         ).combined!
         let encryptedUsername : Data = try AES.GCM.seal(
-            Cryptography.stringToData(entry.username),
+            DataConverter.stringToData(entry.username),
             using: key!
         ).combined!
         let encryptedPassword = try AES.GCM.seal(
-            Cryptography.stringToData(entry.password),
+            DataConverter.stringToData(entry.password),
             using: key!
         ).combined!
         let encryptedURL = try AES.GCM.seal(
-            Cryptography.stringToData(entry.url!.absoluteString),
+            DataConverter.stringToData(entry.url!.absoluteString),
             using: key!
         ).combined!
         let encryptedNotes : Data = try AES.GCM.seal(
-            Cryptography.stringToData(entry.notes),
+            DataConverter.stringToData(entry.notes),
             using: key!
         ).combined!
         let encryptedEntry : EncryptedEntry = EncryptedEntry(
@@ -173,10 +178,10 @@ internal struct Encrypter {
         let encryptedKey : Data = try encryptChaChaPolyKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
-            dbDescription: db!.dbDescription,
-            header: db!.header,
+            description: db!.description,
             folders: encryptedFolders,
             entries: encryptedEntries,
+            header: db!.header,
             key: encryptedKey
         )
         return encryptedDatabase
@@ -188,7 +193,7 @@ internal struct Encrypter {
             key!.withUnsafeBytes {
                 return Data(Array($0))
             },
-            using: SymmetricKey(data: password!.data(using: .utf8)!)
+            using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         ).combined
     }
     
@@ -205,11 +210,16 @@ internal struct Encrypter {
             encryptedEntries.append(try encryptChaChaPoly(entry: entry))
         }
         let encryptedName : Data = try ChaChaPoly.seal(
-            Cryptography.stringToData(folder.name),
+            DataConverter.stringToData(folder.name),
+            using: key!
+        ).combined
+        let encryptedDescription : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(folder.description),
             using: key!
         ).combined
         let encryptedFolder : EncryptedFolder = EncryptedFolder(
             name: encryptedName,
+            description: encryptedDescription,
             folders: encryptedFolders,
             entries: encryptedEntries
         )
@@ -219,23 +229,23 @@ internal struct Encrypter {
     /// Encrypts the passed Entry with ChaChaPoly and returns an encrypted Entry
     private func encryptChaChaPoly(entry : Entry) throws -> EncryptedEntry {
         let encryptedTitle : Data = try ChaChaPoly.seal(
-            Cryptography.stringToData(entry.title),
+            DataConverter.stringToData(entry.title),
             using: key!
         ).combined
         let encryptedUsername : Data = try ChaChaPoly.seal(
-            Cryptography.stringToData(entry.username),
+            DataConverter.stringToData(entry.username),
             using: key!
         ).combined
         let encryptedPassword = try ChaChaPoly.seal(
-            Cryptography.stringToData(entry.password),
+            DataConverter.stringToData(entry.password),
             using: key!
         ).combined
         let encryptedURL = try ChaChaPoly.seal(
-            Cryptography.stringToData(entry.url!.absoluteString),
+            DataConverter.stringToData(entry.url!.absoluteString),
             using: key!
         ).combined
         let encryptedNotes : Data = try ChaChaPoly.seal(
-            Cryptography.stringToData(entry.notes),
+            DataConverter.stringToData(entry.notes),
             using: key!
         ).combined
         let encryptedEntry : EncryptedEntry = EncryptedEntry(

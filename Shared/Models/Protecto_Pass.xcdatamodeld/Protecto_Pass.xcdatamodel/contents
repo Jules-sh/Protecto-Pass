@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22G74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="CD_Database" representedClassName="CD_Database" syncable="YES" codeGenerationType="category">
-        <attribute name="dbDescription" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22G90" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CD_Database" representedClassName="CD_Database" parentEntity="CD_ME_DataStructure" syncable="YES" codeGenerationType="class">
         <attribute name="header" attributeType="String" defaultValueString="Protecto Pass is a great App" allowsCloudEncryption="YES"/>
         <attribute name="key" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <attribute name="name" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
-        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="database" inverseEntity="CD_Entry"/>
-        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="database" inverseEntity="CD_Folder"/>
     </entity>
-    <entity name="CD_Entry" representedClassName="CD_Entry" syncable="YES" codeGenerationType="category">
+    <entity name="CD_Entry" representedClassName="CD_Entry" syncable="YES" codeGenerationType="class">
         <attribute name="notes" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="password" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="title" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="url" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="username" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Database" inverseName="entries" inverseEntity="CD_Database"/>
-        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="entries" inverseEntity="CD_Folder"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="entries" inverseEntity="CD_ME_DataStructure"/>
     </entity>
-    <entity name="CD_Folder" representedClassName="CD_Folder" syncable="YES" codeGenerationType="category">
+    <entity name="CD_Folder" representedClassName="CD_Folder" parentEntity="CD_ME_DataStructure" syncable="YES" codeGenerationType="class">
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="folders" inverseEntity="CD_ME_DataStructure"/>
+    </entity>
+    <entity name="CD_ME_DataStructure" representedClassName="CD_ME_DataStructure" isAbstract="YES" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_Database" inverseName="folders" inverseEntity="CD_Database"/>
-        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="folder" inverseEntity="CD_Entry"/>
-        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="folders" inverseEntity="CD_Folder"/>
+        <attribute name="objectDescription" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="parent" inverseEntity="CD_Entry"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="parent" inverseEntity="CD_Folder"/>
     </entity>
 </model>

@@ -20,8 +20,8 @@ internal struct PersistenceController {
         let viewContext = result.container.viewContext
         for i in 0..<10 {
             let db : CD_Database = CD_Database(context: viewContext)
-            db.name = "Database \(i)"
-            db.dbDescription = "This is the Database Number \(i)"
+            db.name = DataConverter.stringToData("Database \(i)")
+            db.objectDescription = DataConverter.stringToData("This is the Database Number \(i)")
             let header : DB_Header = DB_Header(salt: "Salt")
             db.header = header.parseHeader()
         }

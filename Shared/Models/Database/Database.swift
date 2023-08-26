@@ -11,57 +11,31 @@ import Foundation
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<F, E, K> : Identifiable {
-    
-    /// The Name of the Database
-    internal let name : String
-    
-    /// The Description of this Database
-    internal let dbDescription : String
+internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identifiable {
     
     /// The Header for this Database
     internal let header : DB_Header
-    
-    /// All the Folders in this Database
-    internal let folders : [F]
-    
-    /// All the entries in the "root" directory
-    internal let entries : [E]
     
     /// The Key that should be used to
     /// encrypt and decrypt this Database
     internal let key : K
     
-    internal init(name : String, dbDescription : String, header : DB_Header, folders : [F], entries : [E], key : K) {
-        self.name = name
-        self.dbDescription = dbDescription
+    internal init(
+        name : String,
+        description : String,
+        folders : [F],
+        entries : [E],
+        header : DB_Header,
+        key : K
+    ) {
         self.header = header
-        self.folders = folders
-        self.entries = entries
         self.key = key
-    }
-    
-    internal init(from coreData : CD_Database) {
-        // All of these conditions have to be matched, otherwise this
-        // init constructor is called to create something else than an
-        // encrypted Database
-        assert(F.self is EncryptedFolder.Type)
-        assert(E.self is EncryptedEntry.Type)
-        assert(K.self is Data.Type)
-        name = coreData.name!
-        dbDescription = coreData.dbDescription!
-        header = DB_Header.parseString(string: coreData.header!)
-        var localFolders : [EncryptedFolder] = []
-        for folder in coreData.folders! {
-            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
-        }
-        folders = localFolders as! [F]
-        var localEntries : [EncryptedEntry] = []
-        for entry in coreData.entries! {
-            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
-        }
-        entries = localEntries as! [E]
-        key = coreData.key! as! K
+        super.init(
+            name: name,
+            description: description,
+            folders: folders,
+            entries: entries
+        )
     }
 }
 
@@ -73,15 +47,22 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
     
     internal init(
         name : String,
-        dbDescription : String,
-        header : DB_Header,
+        description : String,
         folders : [Folder],
         entries : [Entry],
+        header : DB_Header,
         key : SymmetricKey,
         password : String
     ) {
         self.password = password
-        super.init(name: name, dbDescription: dbDescription, header: header, folders: folders, entries: entries, key: key)
+        super.init(
+            name: name,
+            description: description,
+            folders: folders,
+            entries: entries,
+            header: header,
+            key: key
+        )
     }
     
     /// Attempts to encrypt the Database using the provided Password.
@@ -95,14 +76,14 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
     /// The Preview Database to use in Previews or Tests
     internal static let previewDB : Database = Database(
         name: "Preview Database",
-        dbDescription: "This is a Preview Database used in Tests and Previews",
+        description: "This is a Preview Database used in Tests and Previews",
+        folders: [],
+        entries: [],
         header: DB_Header(
             encryption: .AES256,
             storageType: .CoreData,
             salt: "salt"
         ),
-        folders: [],
-        entries: [],
         key: SymmetricKey(size: .bits256),
         password: "Password"
     )
@@ -110,6 +91,43 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
 
 /// The object storing an encrypted Database
 internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Data> {
+    
+    override init(
+        name: String,
+        description: String,
+        folders: [EncryptedFolder],
+        entries: [EncryptedEntry],
+        header: DB_Header,
+        key: Data
+    ) {
+        super.init(
+            name: name,
+            description: description,
+            folders: folders,
+            entries: entries,
+            header: header,
+            key: key
+        )
+    }
+    
+    internal convenience init(from coreData : CD_Database) {
+        var localFolders : [EncryptedFolder] = []
+        for folder in coreData.folders! {
+            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
+        }
+        var localEntries : [EncryptedEntry] = []
+        for entry in coreData.entries! {
+            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
+        }
+        self.init(
+            name: String(data: coreData.name!, encoding: .utf8)!,
+            description: String(data: coreData.objectDescription!, encoding: .utf8)!,
+            folders: localFolders,
+            entries: localEntries,
+            header: DB_Header.parseString(string: coreData.header!),
+            key: coreData.key!
+        )
+    }
     
     /// Attempts to decrypt the encrypted Database using the provided Password.
     /// If successful, returns the decrypted Database.
@@ -122,14 +140,14 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
     /// The Preview Database to use in Previews or Tests
     internal static let previewDB : EncryptedDatabase = EncryptedDatabase(
         name: "Preview Database",
-        dbDescription: "This is an encrypted Preview Database used in Tests and Previews",
+        description: "This is an encrypted Preview Database used in Tests and Previews",
+        folders: [],
+        entries: [],
         header: DB_Header(
             encryption: .AES256,
             storageType: .CoreData,
             salt: "salt"
         ),
-        folders: [],
-        entries: [],
         key: Data()
     )
 }

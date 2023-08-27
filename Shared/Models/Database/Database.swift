@@ -13,6 +13,8 @@ import Foundation
 /// this class puts these common things together
 internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identifiable {
     
+    internal let id : UUID = UUID()
+    
     /// The Header for this Database
     internal let header : DB_Header
     
@@ -40,7 +42,7 @@ internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identi
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, ObservableObject {
+internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, ObservableObject, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -87,6 +89,18 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
         key: SymmetricKey(size: .bits256),
         password: "Password"
     )
+    
+    static func == (lhs: Database, rhs: Database) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(description)
+        hasher.combine(folders)
+        hasher.combine(entries)
+        hasher.combine(id)
+    }
 }
 
 /// The object storing an encrypted Database

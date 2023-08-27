@@ -1,5 +1,5 @@
 //
-//  AddFolder.swift
+//  EditFolder.swift
 //  Protecto Pass
 //
 //  Created by Julian Schumacher as AddFolder.swift on 28.07.23.

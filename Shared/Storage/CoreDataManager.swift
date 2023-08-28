@@ -20,7 +20,7 @@ internal struct CoreDataManager : DatabaseCache, DatabaseManager {
     
     internal static func storeDatabase(_ db : EncryptedDatabase, context : NSManagedObjectContext) throws -> Void {
         if databaseExists(id: db.id) {
-            update(id: <#T##UUID#>, with: <#T##EncryptedDatabase#>)
+            try update(id: <#T##UUID#>, with: <#T##EncryptedDatabase#>)
         } else {
             
         }
@@ -29,15 +29,19 @@ internal struct CoreDataManager : DatabaseCache, DatabaseManager {
     
     internal static var allDatabases: [CD_Database] = []
     
-    internal static func accessCache(id: UUID) -> CD_Database {
-        return allDatabases.first(where: { $0.id == id})!
+    internal static func accessCache(id: UUID) throws -> CD_Database {
+        if databaseExists(id: id) {
+            return allDatabases.first(where: { $0.id == id})!
+        } else {
+            throw DatabaseDoesNotExistError()
+        }
     }
     
     static func databaseExists(id : UUID) -> Bool {
         return allDatabases.contains(where: { $0.id == id })
     }
     
-    static func update(id: UUID, with new: EncryptedDatabase) {
-        let cdDatabase : CD_Database = accessCache(id: id)
+    static func update(id: UUID, with new: EncryptedDatabase) throws -> Void {
+        let cdDatabase : CD_Database = try accessCache(id: id)
     }
 }

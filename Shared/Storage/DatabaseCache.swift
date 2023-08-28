@@ -13,9 +13,9 @@ internal protocol DatabaseCache {
     
     static var allDatabases : [Database] { get }
     
-    static func accessCache(id : UUID) -> Database
+    static func accessCache(id : UUID) throws -> Database
     
-    static func update(id : UUID, with new : EncryptedDatabase) -> Void
+    static func update(id : UUID, with new : EncryptedDatabase) throws -> Void
     
     static func databaseExists(id : UUID) -> Bool
 }

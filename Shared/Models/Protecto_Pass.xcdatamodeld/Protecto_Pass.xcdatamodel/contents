@@ -23,8 +23,8 @@
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="folders" inverseEntity="CD_ME_DataStructure"/>
     </entity>
     <entity name="CD_Image" representedClassName="CD_Image" syncable="YES" codeGenerationType="class">
-        <attribute name="compressionQuality" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="dataType" optional="YES" attributeType="String"/>
+        <attribute name="compressionQuality" optional="YES" attributeType="Binary"/>
+        <attribute name="dataType" optional="YES" attributeType="Binary"/>
         <attribute name="imageData" optional="YES" attributeType="Binary"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="images" inverseEntity="CD_ME_DataStructure"/>
     </entity>

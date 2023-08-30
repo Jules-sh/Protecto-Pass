@@ -9,11 +9,11 @@ import SwiftUI
 
 internal struct ME_ContentView : View {
     
-    internal init(_ data : ME_DataStructure<String, Folder, Entry>) {
+    internal init(_ data : ME_DataStructure<String, Folder, Entry, String, Date, [Data]>) {
         dataStructure = data
     }
     
-    private let dataStructure : ME_DataStructure<String, Folder, Entry>
+    private let dataStructure : ME_DataStructure<String, Folder, Entry, String, Date, [Data]>
     
     var body: some View {
         List {

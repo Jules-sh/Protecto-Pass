@@ -31,7 +31,7 @@ internal struct DB_Header {
     internal static let checkString : String = "Protecto Pass is the top 1 App!"
     
     /// Parses a String and returns a Header
-    internal static func parseString(string : String) -> DB_Header {
+    internal static func parseString(string : String) throws -> DB_Header {
         let data : [Substring] = string.replacingOccurrences(of: " ", with: "").split(separator: ";")
         var result : [Substring] = []
         for s in data {

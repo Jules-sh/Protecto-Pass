@@ -132,8 +132,8 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedFolder : Folder = Folder(
-            name: String(data: decryptedName, encoding: .utf8)!,
-            description: String(data: decryptedDescription, encoding: .utf8)!,
+            name: DataConverter.dataToString(decryptedName),
+            description: DataConverter.dataToString(decryptedDescription),
             folders: decryptedFolders,
             entries: decryptedEntries
         )
@@ -162,11 +162,11 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedEntry : Entry = Entry(
-            title: String(data: decryptedTitle, encoding: .utf8)!,
-            username: String(data: decryptedUsername, encoding: .utf8)!,
-            password: String(data: decryptedPassword, encoding: .utf8)!,
-            url: URL(string: String(data: decryptedURL, encoding: .utf8)!)!,
-            notes: String(data: decryptedNotes, encoding: .utf8)!
+            title: DataConverter.dataToString(decryptedTitle)
+            username: DataConverter.dataToString(decryptedUsername)
+            password: DataConverter.dataToString(decryptedPassword)
+            url: URL(string: DataConverter.dataToString(decryptedURL))
+            notes: DataConverter.dataToString(decryptedNotes)
         )
         return decryptedEntry
     }
@@ -222,8 +222,8 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedFolder : Folder = Folder(
-            name: String(data: decryptedName, encoding: .utf8)!,
-            description: String(data: decryptedDescription, encoding: .utf8)!,
+            name: DataConverter.dataToString(decryptedName)
+            description: DataConverter.dataToString(decryptedDescription)
             folders: decryptedFolders,
             entries: decryptedEntries
         )
@@ -252,11 +252,11 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedEntry : Entry = Entry(
-            title: String(data: decryptedTitle, encoding: .utf8)!,
-            username: String(data: decryptedUsername, encoding: .utf8)!,
-            password: String(data: decryptedPassword, encoding: .utf8)!,
-            url: URL(string: String(data: decryptedURL, encoding: .utf8)!)!,
-            notes: String(data: decryptedNotes, encoding: .utf8)!
+            title: DataConverter.dataToString(decryptedTitle)
+            username: DataConverter.dataToString(decryptedUsername)
+            password: DataConverter.dataToString(decryptedPassword)
+            url: URL(string: DataConverter.dataToString(decryptedURL))
+            notes: DataConverter.dataToString(decryptedNotes)
         )
         return decryptedEntry
     }

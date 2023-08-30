@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 /// The Folder Object that is used when the App is running
 internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure {
     
+    /// ID to conform to Decrypted Data Structure
     internal let id: UUID = UUID()
     
     /// An static preview folder with sample data to use in Previews and Tests
@@ -17,7 +19,12 @@ internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure
         name: "Private",
         description: "This is an preview Folder only to use in previews and tests",
         folders: [],
-        entries: []
+        entries: [],
+        images: [],
+        iconName: "folder",
+        documents: [],
+        created: Date.now,
+        lastEdited: Date.now
     )
     
     static func == (lhs: Folder, rhs: Folder) -> Bool {
@@ -25,6 +32,10 @@ internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure
     }
     
     func hash(into hasher: inout Hasher) {
+        hasher.combine(iconName)
+        hasher.combine(documents)
+        hasher.combine(created)
+        hasher.combine(lastEdited)
         hasher.combine(name)
         hasher.combine(description)
         hasher.combine(folders)
@@ -36,17 +47,27 @@ internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure
 /// The Object holding an encrypted Folder
 internal final class EncryptedFolder : Encrypted_ME_DataStructure {
     
-    override init(
+    override internal init(
         name: Data,
         description: Data,
         folders: [EncryptedFolder],
-        entries: [EncryptedEntry]
+        entries: [EncryptedEntry],
+        images : [Encrypted_DB_Image],
+        iconName : Data,
+        documents: Data,
+        created : Data,
+        lastEdited : Data
     ) {
         super.init(
             name: name,
             description: description,
             folders: folders,
-            entries: entries
+            entries: entries,
+            images: images,
+            iconName: iconName,
+            documents: documents,
+            created: created,
+            lastEdited: lastEdited
         )
     }
     
@@ -63,7 +84,11 @@ internal final class EncryptedFolder : Encrypted_ME_DataStructure {
             name: coreData.name!,
             description: coreData.objectDescription!,
             folders: localFolders,
-            entries: localEntries
+            entries: localEntries,
+            iconName: coreData.iconName!,
+            documents: coreData.documents!,
+            created: coreData.created!,
+            lastEdited: coreData.lastEdited!
         )
     }
 }

@@ -26,7 +26,7 @@ internal struct Storage {
             assert(context != nil, "To store Core Data Databases, a Context must be provided to the storeDatabase Function")
             try CoreDataManager.storeDatabase(database, context: context!)
         case .File:
-            FileManager.storeDatabase(database)
+            DatabaseFileManager.storeDatabase(database)
         case .Keychain:
             KeychainManager.storeDatabase(database)
             break

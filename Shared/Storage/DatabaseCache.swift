@@ -15,14 +15,7 @@ internal protocol DatabaseCache {
     
     static func accessCache(id : UUID) throws -> Database
     
-    static func update(id : UUID, with new : EncryptedDatabase) throws -> Void
+    static func update(id : UUID, with new : Database) -> Void
     
     static func databaseExists(id : UUID) -> Bool
-}
-
-internal protocol DatabaseManager {
-    
-    static func load() -> [EncryptedDatabase]
-    
-    static func storeDatabase(_ db : EncryptedDatabase) -> Void
 }

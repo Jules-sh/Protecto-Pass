@@ -7,15 +7,22 @@
 
 import Foundation
 
-internal struct KeychainManager : DatabaseCache, DatabaseManager {
-    typealias Database = <#type#>
+internal struct KeychainManager : DatabaseCache {
+        
+    static var allDatabases: [String] = []
+
+    static func accessCache(id: UUID) throws -> String {
+        // TODO: implement
+        return ""
+    }
     
-    static func update(id: UUID, with new: EncryptedDatabase) {
-        <#code#>
+    static func update(id: UUID, with new: String) {
+        // TODO: implement
     }
     
     static func databaseExists(id: UUID) -> Bool {
-        <#code#>
+        // TODO: implement
+        return true
     }
     
     

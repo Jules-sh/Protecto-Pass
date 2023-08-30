@@ -19,12 +19,14 @@
 		846455D02A9BA517003D023C /* DatabaseCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* DatabaseCache.swift */; };
 		846455D42A9C7913003D023C /* DatabaseDoesNotExistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455D32A9C7913003D023C /* DatabaseDoesNotExistError.swift */; };
 		8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474FDA92A93612C007F4215 /* ME_DataStructure.swift */; };
+		8481C7D92A9E282E004EC48E /* DatabaseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481C7D82A9E282E004EC48E /* DatabaseContent.swift */; };
 		848480B429EFF09D008EA77C /* AddDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848480B329EFF09D008EA77C /* AddDB.swift */; };
 		84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B352A21E18500CE7945 /* DB_Converter.swift */; };
 		84922B392A21F11300CE7945 /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B382A21F11300CE7945 /* SetUpView.swift */; };
 		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
 		849ECBDA2A27667C00954BC9 /* DB_CreationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */; };
 		849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ECBE12A27708F00954BC9 /* ListTile.swift */; };
+		84A3ABEA2A9F6E7D0089521E /* DB_Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A3ABE92A9F6E7D0089521E /* DB_Image.swift */; };
 		84ACC7A42A6AB8130033E83A /* AddDB_Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ACC7A32A6AB8130033E83A /* AddDB_Navigation.swift */; };
 		84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F8D2A739D6C00C2DD0E /* EntryDetails.swift */; };
 		84DB4F902A739D9100C2DD0E /* Me_Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F8F2A739D9100C2DD0E /* Me_Details.swift */; };
@@ -85,12 +87,14 @@
 		846455CF2A9BA517003D023C /* DatabaseCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseCache.swift; sourceTree = "<group>"; };
 		846455D32A9C7913003D023C /* DatabaseDoesNotExistError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseDoesNotExistError.swift; sourceTree = "<group>"; };
 		8474FDA92A93612C007F4215 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
+		8481C7D82A9E282E004EC48E /* DatabaseContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContent.swift; sourceTree = "<group>"; };
 		848480B329EFF09D008EA77C /* AddDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB.swift; sourceTree = "<group>"; };
 		84922B352A21E18500CE7945 /* DB_Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Converter.swift; sourceTree = "<group>"; };
 		84922B382A21F11300CE7945 /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
 		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_CreationWrapper.swift; sourceTree = "<group>"; };
 		849ECBE12A27708F00954BC9 /* ListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTile.swift; sourceTree = "<group>"; };
+		84A3ABE92A9F6E7D0089521E /* DB_Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Image.swift; sourceTree = "<group>"; };
 		84ACC7A32A6AB8130033E83A /* AddDB_Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddDB_Navigation.swift; path = "Protecto Pass/Navigation/AddDB_Navigation.swift"; sourceTree = SOURCE_ROOT; };
 		84DB4F8D2A739D6C00C2DD0E /* EntryDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryDetails.swift; sourceTree = "<group>"; };
 		84DB4F8F2A739D9100C2DD0E /* Me_Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Me_Details.swift; sourceTree = "<group>"; };
@@ -362,6 +366,8 @@
 				84F4206929EEA0F1000D7600 /* Entry.swift */,
 				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
 				84F4206B29EEA0F1000D7600 /* Database.swift */,
+				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
+				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -525,6 +531,7 @@
 				84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */,
 				84F4207C29EEA0F2000D7600 /* DatabaseFileManager.swift in Sources */,
 				84922B3B2A21F15600CE7945 /* Home.swift in Sources */,
+				8481C7D92A9E282E004EC48E /* DatabaseContent.swift in Sources */,
 				84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */,
 				84F4207829EEA0F2000D7600 /* Database.swift in Sources */,
 				84FFB4CD2A93AD460001FA72 /* DataConverter.swift in Sources */,
@@ -551,6 +558,7 @@
 				842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */,
 				84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */,
 				84DB4F962A73C61300C2DD0E /* EditFolder.swift in Sources */,
+				84A3ABEA2A9F6E7D0089521E /* DB_Image.swift in Sources */,
 				84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */,
 				84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */,
 				84DB4F9C2A7678E100C2DD0E /* HomeSelectorNavigation.swift in Sources */,

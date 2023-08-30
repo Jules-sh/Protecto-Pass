@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 
-internal enum ImageType {
+internal enum ImageType : String, RawRepresentable {
     case JPG
     
     case PNG
 }
+
+internal struct UnknownImageType : Error {}
 
 /// The General super class of the DB Images
 internal class General_DB_Image<I, T, Q>  {
@@ -36,4 +38,13 @@ internal class General_DB_Image<I, T, Q>  {
 
 internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?> {}
 
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data> {}
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?> {
+    
+    override internal init(image: Data, type: Data, quality: Data?) {
+        super.init(image: image, type: type, quality: quality)
+    }
+    
+    internal convenience init(from coreData : CD_Image) {
+        self.init(image: coreData.imageData!, type: coreData.dataType!, quality: coreData.compressionQuality)
+    }
+}

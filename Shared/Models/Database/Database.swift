@@ -12,7 +12,7 @@ import UIKit
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, String, Date, Do, I>, Identifiable {
+internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, Date, Do, I>, Identifiable {
     
     internal let id : UUID = UUID()
     
@@ -53,7 +53,7 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry, [Data], UIImage, SymmetricKey>, ObservableObject, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<Folder, Entry, [Data], DB_Image, SymmetricKey>, ObservableObject, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -63,7 +63,7 @@ internal final class Database : GeneralDatabase<Folder, Entry, [Data], UIImage, 
         description : String,
         folders : [Folder],
         entries : [Entry],
-        images : [UIImage],
+        images : [DB_Image],
         iconName : String,
         documents : [Data],
         created : Date,
@@ -172,8 +172,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         }
         var localImages : [Encrypted_DB_Image] = []
         for image in coreData.images! {
-            // TODO: implement
-            localImages.append(Encrypted_DB_Image)
+            localImages.append(Encrypted_DB_Image(from: image as! CD_Image))
         }
         self.init(
             name: DataConverter.dataToString(coreData.name!),

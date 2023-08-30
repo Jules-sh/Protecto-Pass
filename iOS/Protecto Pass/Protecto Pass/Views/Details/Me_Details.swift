@@ -11,7 +11,7 @@ import SwiftUI
 
 internal struct Me_Details: View {
     
-    internal let me : ME_DataStructure<String, Folder, Entry, String, Date, [Data]>
+    internal let me : ME_DataStructure<String, Folder, Entry, Date, [Data], DB_Image>
     
     var body: some View {
         List {

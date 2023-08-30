@@ -25,4 +25,23 @@ internal struct DataConverter {
     internal static func dateToString(_ date : Date) -> String {
         return date.ISO8601Format(.iso8601)
     }
+    
+    internal static func dateToData(_ date : Date) -> Data {
+        return stringToData(dateToString(date))
+    }
+    
+    internal static func dataToDate(_ data : Data) throws -> Date {
+        return try stringToDate(dataToString(data))
+    }
+    
+    internal static func imageToData(_ image : DB_Image) throws -> Data {
+        if image.type == .JPG {
+            assert(image.quality != nil)
+            return image.image.jpegData(compressionQuality: CGFloat(image.quality!))!
+        } else if image.type == .PNG {
+            return image.image.pngData()!
+        } else {
+            throw UnknownImageType()
+        }
+    }
 }

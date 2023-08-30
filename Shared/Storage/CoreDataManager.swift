@@ -33,7 +33,7 @@ internal struct CoreDataManager : DatabaseCache {
     internal static func load(with context : NSManagedObjectContext) throws -> [EncryptedDatabase] {
         let databases : [CD_Database] = try context.fetch(CD_Database.fetchRequest())
         allDatabases = databases
-        let encryptedDatabases : [EncryptedDatabase] = DB_Converter.fromCD(databases)
+        let encryptedDatabases : [EncryptedDatabase] = try DB_Converter.fromCD(databases)
         return encryptedDatabases
     }
     

@@ -6,12 +6,15 @@
         <attribute name="key" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
     </entity>
     <entity name="CD_DatabaseContent" representedClassName="CD_DatabaseContent" isAbstract="YES" syncable="YES" codeGenerationType="class">
-        <attribute name="created" optional="YES" attributeType="Binary"/>
-        <attribute name="documents" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <attribute name="iconName" optional="YES" attributeType="Binary"/>
-        <attribute name="lastEdited" optional="YES" attributeType="Binary"/>
+        <attribute name="created" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="lastEdited" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
     </entity>
-    <entity name="CD_Entry" representedClassName="CD_Entry" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
+    <entity name="CD_Document" representedClassName="CD_Document" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
+        <attribute name="documentData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="type" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_NativeType" inverseName="documents" inverseEntity="CD_NativeType"/>
+    </entity>
+    <entity name="CD_Entry" representedClassName="CD_Entry" parentEntity="CD_NativeType" syncable="YES" codeGenerationType="class">
         <attribute name="notes" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="password" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="title" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
@@ -22,17 +25,21 @@
     <entity name="CD_Folder" representedClassName="CD_Folder" parentEntity="CD_ME_DataStructure" syncable="YES" codeGenerationType="class">
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="folders" inverseEntity="CD_ME_DataStructure"/>
     </entity>
-    <entity name="CD_Image" representedClassName="CD_Image" syncable="YES" codeGenerationType="class">
-        <attribute name="compressionQuality" optional="YES" attributeType="Binary"/>
-        <attribute name="dataType" optional="YES" attributeType="Binary"/>
-        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+    <entity name="CD_Image" representedClassName="CD_Image" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
+        <attribute name="compressionQuality" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="dataType" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="images" inverseEntity="CD_ME_DataStructure"/>
     </entity>
-    <entity name="CD_ME_DataStructure" representedClassName="CD_ME_DataStructure" isAbstract="YES" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
+    <entity name="CD_ME_DataStructure" representedClassName="CD_ME_DataStructure" isAbstract="YES" parentEntity="CD_NativeType" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="objectDescription" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="parent" inverseEntity="CD_Entry"/>
         <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="parent" inverseEntity="CD_Folder"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Image" inverseName="parent" inverseEntity="CD_Image"/>
+    </entity>
+    <entity name="CD_NativeType" representedClassName="CD_NativeType" isAbstract="YES" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
+        <attribute name="iconName" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Document" inverseName="parent" inverseEntity="CD_Document"/>
     </entity>
 </model>

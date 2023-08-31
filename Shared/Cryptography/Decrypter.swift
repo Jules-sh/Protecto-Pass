@@ -10,11 +10,18 @@
 import CryptoKit
 import Foundation
 
+/// The possible errors when decrypting a Database
 internal enum DecryptionError : Error {
+    
+    /// There's been an error unlocking the Database
     case errUnlocking
+    
+    /// The encryption that was used
+    /// for this Database is unknown
     case unknownEncryption
 }
 
+/// Decrypter to decrypt a Database and all it's components
 internal struct Decrypter {
     
     /// Decrypter specified for AES 256 Bit Encryption
@@ -90,11 +97,16 @@ internal struct Decrypter {
         for entry in db!.entries {
             decryptedEntries.append(try decryptAES(entry: entry))
         }
+        var decryptedImages : [DB_Image] = []
+        for image in db!.images {
+            decryptedImages.append(try decryptAES(image: image))
+        }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             description: db!.description,
             folders: decryptedFolders,
             entries: decryptedEntries,
+            images: decryptedImages,
             header: db!.header,
             key: key!,
             password: userPassword!
@@ -110,10 +122,7 @@ internal struct Decrypter {
         )
         return SymmetricKey(data: data)
     }
-    
-    
-    
-    
+        
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
         var decryptedFolders : [Folder] = []
         for folder in folder.folders {
@@ -170,6 +179,13 @@ internal struct Decrypter {
         )
         return decryptedEntry
     }
+    
+    private func decryptAES(image : Encrypted_DB_Image) throws -> DB_Image {
+        
+    }
+    
+    
+    // START ChaChaPoly DECRYPTION
     
     /// Decrypts ChaChaPoly Encrypted Databases
     /// Throws an Error if something went wrong

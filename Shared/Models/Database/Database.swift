@@ -14,6 +14,7 @@ import UIKit
 /// this class puts these common things together
 internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, Date, Do, I>, Identifiable {
     
+    /// ID to conform to identifiable
     internal let id : UUID = UUID()
     
     /// The Header for this Database
@@ -30,7 +31,7 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
         entries : [E],
         images : [I],
         iconName : String,
-        documents : Do,
+        documents : [Do],
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -53,7 +54,7 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry, [Data], DB_Image, SymmetricKey>, ObservableObject, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_Image, SymmetricKey>, ObservableObject, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -65,7 +66,7 @@ internal final class Database : GeneralDatabase<Folder, Entry, [Data], DB_Image,
         entries : [Entry],
         images : [DB_Image],
         iconName : String,
-        documents : [Data],
+        documents : [DB_Document],
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -117,6 +118,18 @@ internal final class Database : GeneralDatabase<Folder, Entry, [Data], DB_Image,
     )
     
     static func == (lhs: Database, rhs: Database) -> Bool {
+        return lhs.name == rhs.name &&
+        lhs.description == rhs.description &&
+        lhs.folders == rhs.folders &&
+        lhs.entries == rhs.entries &&
+        lhs.images == rhs.images &&
+        lhs.iconName == rhs.iconName &&
+        lhs.documents == rhs.documents &&
+        lhs.created == rhs.created &&
+        lhs.lastEdited == rhs.lastEdited &&
+        lhs.header.parseHeader() == rhs.header.parseHeader() &&
+        lhs.key == rhs.key &&
+        lhs.password == rhs.password &&
         lhs.id == rhs.id
     }
     
@@ -131,7 +144,7 @@ internal final class Database : GeneralDatabase<Folder, Entry, [Data], DB_Image,
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Image, Data> {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data> {
     
     override internal init(
         name: String,
@@ -140,7 +153,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         entries: [EncryptedEntry],
         images: [Encrypted_DB_Image],
         iconName: String,
-        documents: Data,
+        documents: [Encrypted_DB_Document],
         created : Date,
         lastEdited : Date,
         header: DB_Header,
@@ -174,6 +187,10 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         for image in coreData.images! {
             localImages.append(Encrypted_DB_Image(from: image as! CD_Image))
         }
+        var localDocuments : [Encrypted_DB_Document] = []
+        for doc in coreData.documents! {
+            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        }
         self.init(
             name: DataConverter.dataToString(coreData.name!),
             description: DataConverter.dataToString(coreData.objectDescription!),
@@ -181,9 +198,9 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             entries: localEntries,
             images: localImages,
             iconName: DataConverter.dataToString(coreData.iconName!),
-            documents: coreData.documents!,
-            created: try DataConverter.stringToDate(DataConverter.dataToString(coreData.created!)),
-            lastEdited: try DataConverter.stringToDate(DataConverter.dataToString(coreData.lastEdited!)),
+            documents: localDocuments,
+            created: try DataConverter.dataToDate(coreData.created!),
+            lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
             header: try DB_Header.parseString(string: coreData.header!),
             key: coreData.key!
         )
@@ -205,7 +222,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         entries: [],
         images: [],
         iconName: "externaldrive",
-        documents: Data(),
+        documents: [],
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(

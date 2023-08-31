@@ -8,16 +8,25 @@
 import Foundation
 import UIKit
 
+/// The Type chosen be the User to
+/// convert the Image to when storing it.
 internal enum ImageType : String, RawRepresentable {
+    /// The JPG option has been chosen.
+    /// This requires a compression quality parameter
+    /// in the Image Type
     case JPG
     
+    /// The PNG option has been chosen.
+    /// The quality parameter is optional now
+    /// and an be nil
     case PNG
 }
 
+/// The Image Type is unknown which resulted in an Error.
 internal struct UnknownImageType : Error {}
 
 /// The General super class of the DB Images
-internal class General_DB_Image<I, T, Q>  {
+internal class General_DB_Image<I, T, Q, De> : DatabaseContent<De>  {
     
     /// The actual Image or data of it
     internal let image : I
@@ -29,22 +38,64 @@ internal class General_DB_Image<I, T, Q>  {
     /// jpeg
     internal let quality : Q
     
-    internal init(image : I, type : T, quality : Q) {
+    internal init(
+        image : I,
+        type : T,
+        quality : Q,
+        created : De,
+        lastEdited : De
+    ) {
         self.image = image
         self.type = type
         self.quality = quality
+        super.init(created: created, lastEdited: lastEdited)
     }
 }
 
-internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?> {}
-
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?> {
+/// The Decrypted Data Structure for Images stored in this App
+internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?, Date>, DecryptedDataStructure {
     
-    override internal init(image: Data, type: Data, quality: Data?) {
-        super.init(image: image, type: type, quality: quality)
+    /// ID to conform to identifiable protocol
+    internal let id: UUID = UUID()
+    
+    static func == (lhs: DB_Image, rhs: DB_Image) -> Bool {
+        return lhs.image == rhs.image && lhs.type == rhs.type && lhs.quality == rhs.quality && lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(image)
+        hasher.combine(type)
+        hasher.combine(quality)
+        hasher.combine(id)
+    }
+}
+
+/// The Encrypted Data Structure being used when the Database is still encrypted.
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?, Data> {
+    
+    override internal init(
+        image: Data,
+        type: Data,
+        quality: Data?,
+        created : Data,
+        lastEdited : Data
+    ) {
+        super.init(
+            image: image,
+            type: type,
+            quality: quality,
+            created: created,
+            lastEdited: lastEdited
+        )
     }
     
     internal convenience init(from coreData : CD_Image) {
-        self.init(image: coreData.imageData!, type: coreData.dataType!, quality: coreData.compressionQuality)
+        self.init(
+            image: coreData.imageData!,
+            type: coreData.dataType!,
+            quality: coreData.compressionQuality,
+            created: coreData.created!,
+            lastEdited: coreData.lastEdited!
+        )
     }
 }

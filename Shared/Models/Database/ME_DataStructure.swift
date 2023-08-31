@@ -10,7 +10,7 @@ import Foundation
 /// ME Data Structure is short for Multiple Entity Data Structure,
 /// which is used to store multiple entities in one Object.
 /// Objects which have a folder-like structure or features, inherit from this class
-internal class ME_DataStructure<D, F, E, De, Do, I> : DatabaseContent<D, De, Do> {
+internal class ME_DataStructure<D, F, E, De, Do, I> : NativeType<De, D, Do> {
     
     /// The Name of this Data Structure
     internal let name : D
@@ -40,7 +40,7 @@ internal class ME_DataStructure<D, F, E, De, Do, I> : DatabaseContent<D, De, Do>
         entries : [E],
         images : [I],
         iconName : D,
-        documents : Do,
+        documents : [Do],
         created : De,
         lastEdited : De
     ) {
@@ -59,10 +59,10 @@ internal class ME_DataStructure<D, F, E, De, Do, I> : DatabaseContent<D, De, Do>
 }
 
 /// Subclass of ME Data Structure with types of decrypted Objects
-internal class Decrypted_ME_DataStructure : ME_DataStructure<String, Folder, Entry, Date, [Data], DB_Image> {}
+internal class Decrypted_ME_DataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image> {}
 
 /// Subclass of ME Data Structure with types of encrypted Objects
-internal class Encrypted_ME_DataStructure : ME_DataStructure<Data, EncryptedFolder, EncryptedEntry, Data, Data, Encrypted_DB_Image> {}
+internal class Encrypted_ME_DataStructure : ME_DataStructure<Data, EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Document, Encrypted_DB_Image> {}
 
 /// Protocol which most of the Decrypted Data Structures conform to in order to use them in
 /// UI Components such as Picker and a generated List

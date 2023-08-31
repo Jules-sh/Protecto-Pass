@@ -28,7 +28,7 @@ internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure
     )
     
     static func == (lhs: Folder, rhs: Folder) -> Bool {
-        return lhs.name == rhs.name && lhs.description == rhs.description && lhs.folders == rhs.folders && lhs.entries == rhs.entries
+        return lhs.name == rhs.name && lhs.description == rhs.description && lhs.folders == rhs.folders && lhs.entries == rhs.entries && lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
@@ -54,7 +54,7 @@ internal final class EncryptedFolder : Encrypted_ME_DataStructure {
         entries: [EncryptedEntry],
         images : [Encrypted_DB_Image],
         iconName : Data,
-        documents: Data,
+        documents: [Encrypted_DB_Document],
         created : Data,
         lastEdited : Data
     ) {
@@ -80,13 +80,22 @@ internal final class EncryptedFolder : Encrypted_ME_DataStructure {
         for entry in coreData.entries! {
             localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
         }
+        var localImages : [Encrypted_DB_Image] = []
+        for image in coreData.images! {
+            localImages.append(Encrypted_DB_Image(from: image as! CD_Image))
+        }
+        var localDocuments : [Encrypted_DB_Document] = []
+        for doc in coreData.documents! {
+            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        }
         self.init(
             name: coreData.name!,
             description: coreData.objectDescription!,
             folders: localFolders,
             entries: localEntries,
+            images: localImages,
             iconName: coreData.iconName!,
-            documents: coreData.documents!,
+            documents: localDocuments,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

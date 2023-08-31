@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-internal class GeneralEntry<D, U, I, De, Do> : DatabaseContent<I, De, Do> {
+internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
     
     /// The Title of this Entry
     internal let title : D
@@ -33,7 +33,7 @@ internal class GeneralEntry<D, U, I, De, Do> : DatabaseContent<I, De, Do> {
         url: U,
         notes: D,
         iconName : I,
-        documents : Do,
+        documents : [Do],
         created : De,
         lastEdited : De
     ) {
@@ -53,8 +53,9 @@ internal class GeneralEntry<D, U, I, De, Do> : DatabaseContent<I, De, Do> {
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, String, Date, [Data]>, DecryptedDataStructure {
+internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Document>, DecryptedDataStructure {
     
+    /// ID to conform to Identifiable
     internal let id: UUID = UUID()
     
     internal static let previewEntry : Entry = Entry(
@@ -76,7 +77,8 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, [Data]>, D
         lhs.url == rhs.url &&
         lhs.notes == rhs.notes &&
         lhs.created == rhs.created &&
-        lhs.lastEdited == rhs.lastEdited
+        lhs.lastEdited == rhs.lastEdited &&
+        lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
@@ -94,7 +96,7 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, [Data]>, D
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Data> {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encrypted_DB_Document> {
     
     override internal init(
         title : Data,
@@ -103,7 +105,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Data>
         url : Data,
         notes : Data,
         iconName : Data,
-        documents : Data,
+        documents : [Encrypted_DB_Document],
         created : Data,
         lastEdited : Data
     ) {
@@ -121,6 +123,10 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Data>
     }
     
     internal init(from coreData : CD_Entry) {
+        var localDocuments : [Encrypted_DB_Document] = []
+        for doc in coreData.documents! {
+            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        }
         super.init(
             title: coreData.title!,
             username: coreData.username!,
@@ -128,7 +134,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Data>
             url: coreData.url!,
             notes: coreData.notes!,
             iconName: coreData.iconName!,
-            documents: coreData.documents!,
+            documents: localDocuments,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

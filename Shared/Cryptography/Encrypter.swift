@@ -10,7 +10,8 @@
 import CryptoKit
 import Foundation
 
-/// Struct used to encypt Databases into encrypted Databases
+/// Struct used to encrypt Databases and their components
+/// into encrypted Databases
 internal struct Encrypter {
     
     /// Encrypter specified for AES 256 Bit Encryption

@@ -9,31 +9,19 @@ import Foundation
 
 /// The Super class of most Database Content Objects
 /// that are stored within the App
-internal class DatabaseContent<I, De, Do> {
-    
-    /// The Name of the SF-Symbol representing what this
-    /// Database Content is
-    internal let iconName : I
-    
-    /// All the documents connected to this Database
-    /// Content
-    internal let documents : Do
+internal class DatabaseContent<D> {
     
     /// The Date of creation for this Object
-    internal let created : De
+    internal let created : D
     
     /// The last edit date indicates when this
     /// Object was edited the last time
-    internal let lastEdited : De
+    internal let lastEdited : D
     
     internal init(
-        iconName : I,
-        documents : Do,
-        created : De,
-        lastEdited : De
+        created : D,
+        lastEdited : D
     ) {
-        self.iconName = iconName
-        self.documents = documents
         self.created = created
         self.lastEdited = lastEdited
     }

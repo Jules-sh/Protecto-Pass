@@ -30,7 +30,7 @@ internal struct Cryptography {
     
     /// Converts the specified String to Bytes, but before hashes it using SHA-256
     internal static func sha256HashBytes(_ string : String) -> Data {
-        let hashed : SHA256Digest = SHA256.hash(data: string.utf8.map { UInt8($0) })
+        let hashed : SHA256Digest = SHA256.hash(data: DataConverter.stringToData(string))
         return hashed.withUnsafeBytes {
             return Data(Array($0))
         }

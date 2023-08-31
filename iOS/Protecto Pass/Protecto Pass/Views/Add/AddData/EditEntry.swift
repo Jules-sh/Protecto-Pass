@@ -1,5 +1,5 @@
 //
-//  AddEntry.swift
+//  EditEntry.swift
 //  Protecto Pass
 //
 //  Created by Julian Schumacher as AddEntry.swift on 28.07.23.

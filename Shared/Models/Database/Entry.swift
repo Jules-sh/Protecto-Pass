@@ -6,82 +6,137 @@
 //
 
 import Foundation
+import SwiftUI
 
-/// The Struct representing an Entry
-/// while this App is running
-internal struct Entry : DecryptedDataStructure {
+internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
     
-    internal let id: UUID = UUID()
+    /// The Title of this Entry
+    internal let title : D
     
-    /// The Title of this Entry describing
-    /// what it stores
-    internal let title : String
+    /// The Username connected to this Entry
+    internal let username : D
     
-    /// The Username or login name
-    /// to this Entry
-    internal let username : String
+    /// The Password stored with this Entry
+    internal let password : D
     
-    /// The Password of this Entry being stored here.
-    /// This is in the already decrypted state
-    internal let password : String
+    /// The URL this Entry is connected to
+    internal let url : U
     
-    /// The URL / Link to a website if
-    /// this Entry is connected to a
-    /// web platform
-    internal let url : URL?
-    
-    /// Notes to this Entry storing whatever
-    /// the User wants to write down here
-    internal let notes : String
-    
-    internal static let previewEntry : Entry = Entry(
-        title: "Password Safe",
-        username: "user",
-        password: "testPassword",
-        url: nil,
-        notes: "This is a preview Entry, only to use in previews and tests"
-    )
-}
-
-/// The Encrypted Entry storing all the
-/// Data of an Entry secure and encrypted
-internal struct EncryptedEntry {
-    
-    /// The Title encrypted and stores as bytes
-    internal let title : Data
-    
-    /// The Username encrypted and stores as bytes
-    internal let username : Data
-    
-    /// The Password encrypted, safe and securely stores
-    /// as bytes
-    internal let password : Data
-    
-    /// The URL stores as Bytes
-    internal let url : Data
-    
-    /// The Notes encrypted and stored as bytes
-    internal let notes : Data
+    /// Some notes storing whatever
+    /// the User wants to add to this Entry
+    internal let notes : D
     
     internal init(
-        title : Data,
-        username : Data,
-        password : Data,
-        url : Data,
-        notes : Data
+        title: D,
+        username: D,
+        password: D,
+        url: U,
+        notes: D,
+        iconName : I,
+        documents : [Do],
+        created : De,
+        lastEdited : De
     ) {
         self.title = title
         self.username = username
         self.password = password
         self.url = url
         self.notes = notes
+        super.init(
+            iconName: iconName,
+            documents: documents,
+            created: created,
+            lastEdited: lastEdited
+        )
+    }
+}
+
+/// The Struct representing an Entry
+/// while this App is running
+internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Document>, DecryptedDataStructure {
+    
+    /// ID to conform to Identifiable
+    internal let id: UUID = UUID()
+    
+    internal static let previewEntry : Entry = Entry(
+        title: "Password Safe",
+        username: "user",
+        password: "testPassword",
+        url: nil,
+        notes: "This is a preview Entry, only to use in previews and tests",
+        iconName: "folder",
+        documents: [],
+        created: Date.now,
+        lastEdited: Date.now
+    )
+    
+    static func == (lhs: Entry, rhs: Entry) -> Bool {
+        return lhs.title == rhs.title &&
+        lhs.username == rhs.username &&
+        lhs.password == rhs.password &&
+        lhs.url == rhs.url &&
+        lhs.notes == rhs.notes &&
+        lhs.created == rhs.created &&
+        lhs.lastEdited == rhs.lastEdited &&
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(iconName)
+        hasher.combine(documents)
+        hasher.combine(created)
+        hasher.combine(lastEdited)
+        hasher.combine(title)
+        hasher.combine(username)
+        hasher.combine(password)
+        hasher.combine(url)
+        hasher.combine(notes)
+    }
+}
+
+/// The Encrypted Entry storing all the
+/// Data of an Entry secure and encrypted
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encrypted_DB_Document> {
+    
+    override internal init(
+        title : Data,
+        username : Data,
+        password : Data,
+        url : Data,
+        notes : Data,
+        iconName : Data,
+        documents : [Encrypted_DB_Document],
+        created : Data,
+        lastEdited : Data
+    ) {
+        super.init(
+            title: title,
+            username: username,
+            password: password,
+            url: url,
+            notes: notes,
+            iconName: iconName,
+            documents: documents,
+            created: created,
+            lastEdited: lastEdited
+        )
     }
     
     internal init(from coreData : CD_Entry) {
-        title = coreData.title!
-        username = coreData.username!
-        password = coreData.password!
-        url = coreData.url!
-        notes = coreData.notes!
+        var localDocuments : [Encrypted_DB_Document] = []
+        for doc in coreData.documents! {
+            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        }
+        super.init(
+            title: coreData.title!,
+            username: coreData.username!,
+            password: coreData.password!,
+            url: coreData.url!,
+            notes: coreData.notes!,
+            iconName: coreData.iconName!,
+            documents: localDocuments,
+            created: coreData.created!,
+            lastEdited: coreData.lastEdited!
+        )
     }
 }

@@ -7,11 +7,15 @@
 
 import CryptoKit
 import Foundation
+import UIKit
 
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identifiable {
+internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, Date, Do, I>, Identifiable {
+    
+    /// ID to conform to identifiable
+    internal let id : UUID = UUID()
     
     /// The Header for this Database
     internal let header : DB_Header
@@ -25,6 +29,11 @@ internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identi
         description : String,
         folders : [F],
         entries : [E],
+        images : [I],
+        iconName : String,
+        documents : [Do],
+        created : Date,
+        lastEdited : Date,
         header : DB_Header,
         key : K
     ) {
@@ -34,13 +43,18 @@ internal class GeneralDatabase<F, E, K> : ME_DataStructure<String, F, E>, Identi
             name: name,
             description: description,
             folders: folders,
-            entries: entries
+            entries: entries,
+            images: images,
+            iconName: iconName,
+            documents: documents,
+            created: created,
+            lastEdited : lastEdited
         )
     }
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, ObservableObject {
+internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_Image, SymmetricKey>, ObservableObject, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -50,6 +64,11 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
         description : String,
         folders : [Folder],
         entries : [Entry],
+        images : [DB_Image],
+        iconName : String,
+        documents : [DB_Document],
+        created : Date,
+        lastEdited : Date,
         header : DB_Header,
         key : SymmetricKey,
         password : String
@@ -60,6 +79,11 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
             description: description,
             folders: folders,
             entries: entries,
+            images: images,
+            iconName: iconName,
+            documents: documents,
+            created: created,
+            lastEdited: lastEdited,
             header: header,
             key: key
         )
@@ -79,6 +103,11 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
         description: "This is a Preview Database used in Tests and Previews",
         folders: [],
         entries: [],
+        images: [],
+        iconName: "externaldrive",
+        documents: [],
+        created: Date.now,
+        lastEdited: Date.now,
         header: DB_Header(
             encryption: .AES256,
             storageType: .CoreData,
@@ -87,16 +116,46 @@ internal final class Database : GeneralDatabase<Folder, Entry, SymmetricKey>, Ob
         key: SymmetricKey(size: .bits256),
         password: "Password"
     )
+    
+    static func == (lhs: Database, rhs: Database) -> Bool {
+        return lhs.name == rhs.name &&
+        lhs.description == rhs.description &&
+        lhs.folders == rhs.folders &&
+        lhs.entries == rhs.entries &&
+        lhs.images == rhs.images &&
+        lhs.iconName == rhs.iconName &&
+        lhs.documents == rhs.documents &&
+        lhs.created == rhs.created &&
+        lhs.lastEdited == rhs.lastEdited &&
+        lhs.header.parseHeader() == rhs.header.parseHeader() &&
+        lhs.key == rhs.key &&
+        lhs.password == rhs.password &&
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(header.parseHeader())
+        hasher.combine(name)
+        hasher.combine(description)
+        hasher.combine(folders)
+        hasher.combine(entries)
+        hasher.combine(id)
+    }
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Data> {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data> {
     
-    override init(
+    override internal init(
         name: String,
         description: String,
         folders: [EncryptedFolder],
         entries: [EncryptedEntry],
+        images: [Encrypted_DB_Image],
+        iconName: String,
+        documents: [Encrypted_DB_Document],
+        created : Date,
+        lastEdited : Date,
         header: DB_Header,
         key: Data
     ) {
@@ -105,12 +164,17 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             description: description,
             folders: folders,
             entries: entries,
+            images: images,
+            iconName: iconName,
+            documents: documents,
+            created: created,
+            lastEdited: lastEdited,
             header: header,
             key: key
         )
     }
     
-    internal convenience init(from coreData : CD_Database) {
+    internal convenience init(from coreData : CD_Database) throws {
         var localFolders : [EncryptedFolder] = []
         for folder in coreData.folders! {
             localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
@@ -119,12 +183,25 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         for entry in coreData.entries! {
             localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
         }
+        var localImages : [Encrypted_DB_Image] = []
+        for image in coreData.images! {
+            localImages.append(Encrypted_DB_Image(from: image as! CD_Image))
+        }
+        var localDocuments : [Encrypted_DB_Document] = []
+        for doc in coreData.documents! {
+            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        }
         self.init(
-            name: String(data: coreData.name!, encoding: .utf8)!,
-            description: String(data: coreData.objectDescription!, encoding: .utf8)!,
+            name: DataConverter.dataToString(coreData.name!),
+            description: DataConverter.dataToString(coreData.objectDescription!),
             folders: localFolders,
             entries: localEntries,
-            header: DB_Header.parseString(string: coreData.header!),
+            images: localImages,
+            iconName: DataConverter.dataToString(coreData.iconName!),
+            documents: localDocuments,
+            created: try DataConverter.dataToDate(coreData.created!),
+            lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
+            header: try DB_Header.parseString(string: coreData.header!),
             key: coreData.key!
         )
     }
@@ -143,6 +220,11 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         description: "This is an encrypted Preview Database used in Tests and Previews",
         folders: [],
         entries: [],
+        images: [],
+        iconName: "externaldrive",
+        documents: [],
+        created: Date.now,
+        lastEdited: Date.now,
         header: DB_Header(
             encryption: .AES256,
             storageType: .CoreData,

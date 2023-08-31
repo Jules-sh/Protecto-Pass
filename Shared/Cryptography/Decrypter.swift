@@ -9,12 +9,20 @@
 
 import CryptoKit
 import Foundation
+import UIKit
 
+/// The possible errors when decrypting a Database
 internal enum DecryptionError : Error {
+    
+    /// There's been an error unlocking the Database
     case errUnlocking
+    
+    /// The encryption that was used
+    /// for this Database is unknown
     case unknownEncryption
 }
 
+/// Decrypter to decrypt a Database and all it's components
 internal struct Decrypter {
     
     /// Decrypter specified for AES 256 Bit Encryption
@@ -90,11 +98,24 @@ internal struct Decrypter {
         for entry in db!.entries {
             decryptedEntries.append(try decryptAES(entry: entry))
         }
+        var decryptedImages : [DB_Image] = []
+        for image in db!.images {
+            decryptedImages.append(try decryptAES(image: image))
+        }
+        var decryptedDocuments : [DB_Document] = []
+        for doc in db!.documents {
+            decryptedDocuments.append(try decryptAES(document: doc))
+        }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             description: db!.description,
             folders: decryptedFolders,
             entries: decryptedEntries,
+            images: decryptedImages,
+            iconName: db!.iconName,
+            documents: decryptedDocuments,
+            created: db!.created,
+            lastEdited: db!.lastEdited,
             header: db!.header,
             key: key!,
             password: userPassword!
@@ -111,9 +132,7 @@ internal struct Decrypter {
         return SymmetricKey(data: data)
     }
     
-    
-    
-    
+    /// Decrypts the passed Folder using AES and returns an decrypted Folder
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
         var decryptedFolders : [Folder] = []
         for folder in folder.folders {
@@ -123,6 +142,14 @@ internal struct Decrypter {
         for entry in folder.entries {
             decryptedEntries.append(try decryptAES(entry: entry))
         }
+        var decryptedImages : [DB_Image] = []
+        for image in folder.images {
+            decryptedImages.append(try decryptAES(image: image))
+        }
+        var decryptedDocuments : [DB_Document] = []
+        for doc in folder.documents {
+            decryptedDocuments.append(try decryptAES(document: doc))
+        }
         let decryptedName : Data = try AES.GCM.open(
             try AES.GCM.SealedBox(combined: folder.name),
             using: key!
@@ -131,16 +158,38 @@ internal struct Decrypter {
             try AES.GCM.SealedBox(combined: folder.description),
             using: key!
         )
+        let decryptedIconName : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: folder.iconName),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: folder.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: folder.lastEdited),
+            using: key!
+        )
         let decryptedFolder : Folder = Folder(
-            name: String(data: decryptedName, encoding: .utf8)!,
-            description: String(data: decryptedDescription, encoding: .utf8)!,
+            name: DataConverter.dataToString(decryptedName),
+            description: DataConverter.dataToString(decryptedDescription),
             folders: decryptedFolders,
-            entries: decryptedEntries
+            entries: decryptedEntries,
+            images: decryptedImages,
+            iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
         )
         return decryptedFolder
     }
     
+    /// Decrypts the passed Entry using AES and returns and decrypted Entry
     private func decryptAES(entry : EncryptedEntry) throws -> Entry {
+        var decryptedDocuments : [DB_Document] = []
+        for doc in entry.documents {
+            decryptedDocuments.append(try decryptAES(document: doc))
+        }
         let decryptedTitle : Data = try AES.GCM.open(
             try AES.GCM.SealedBox(combined: entry.title),
             using: key!
@@ -161,15 +210,102 @@ internal struct Decrypter {
             try AES.GCM.SealedBox(combined: entry.notes),
             using: key!
         )
+        let decryptedIconName : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.iconName),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: entry.lastEdited),
+            using: key!
+        )
         let decryptedEntry : Entry = Entry(
-            title: String(data: decryptedTitle, encoding: .utf8)!,
-            username: String(data: decryptedUsername, encoding: .utf8)!,
-            password: String(data: decryptedPassword, encoding: .utf8)!,
-            url: URL(string: String(data: decryptedURL, encoding: .utf8)!)!,
-            notes: String(data: decryptedNotes, encoding: .utf8)!
+            title: DataConverter.dataToString(decryptedTitle),
+            username: DataConverter.dataToString(decryptedUsername),
+            password: DataConverter.dataToString(decryptedPassword),
+            url: URL(string: DataConverter.dataToString(decryptedURL)),
+            notes: DataConverter.dataToString(decryptedNotes),
+            iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
         )
         return decryptedEntry
     }
+    
+    /// Decrypts the passed Image using AES and returns a decrypted Image
+    private func decryptAES(image : Encrypted_DB_Image) throws -> DB_Image {
+        let decryptedImageData : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: image.image),
+            using: key!
+        )
+        let decryptedTypeData : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: image.type),
+            using: key!
+        )
+        let decryptedTypeString : String = DataConverter.dataToString(decryptedTypeData)
+        let decryptedQuality : Double?
+        if image.quality != nil {
+            decryptedQuality = DataConverter.dataToDouble(
+                try AES.GCM.open(
+                    AES.GCM.SealedBox(combined: image.quality!),
+                    using: key!
+                )
+            )
+        } else {
+            decryptedQuality = nil
+        }
+        
+        let decryptedCreatedDate : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: image.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: image.lastEdited),
+            using: key!
+        )
+        let decryptedImageObj : DB_Image = DB_Image(
+            image: UIImage(data: decryptedImageData)!,
+            type: ImageType(rawValue: decryptedTypeString)!,
+            quality: decryptedQuality,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+        )
+        return decryptedImageObj
+    }
+    
+    /// Decrypts the passed document using AES and returns a decrypted Document
+    private func decryptAES(document : Encrypted_DB_Document) throws -> DB_Document {
+        let decryptedDocumentData : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: document.document),
+            using: key!
+        )
+        let decryptedType : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: document.type),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: document.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: document.lastEdited),
+            using: key!
+        )
+        let decryptedDocument : DB_Document = DB_Document(
+            document: decryptedDocumentData,
+            type: DataConverter.dataToString(decryptedType),
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+        )
+        return decryptedDocument
+    }
+    
+    
+    // START ChaChaPoly DECRYPTION
     
     /// Decrypts ChaChaPoly Encrypted Databases
     /// Throws an Error if something went wrong
@@ -183,11 +319,24 @@ internal struct Decrypter {
         for entry in db!.entries {
             decryptedEntries.append(try decryptChaChaPoly(entry: entry))
         }
+        var decryptedImages : [DB_Image] = []
+        for image in db!.images {
+            decryptedImages.append(try decryptChaChaPoly(image: image))
+        }
+        var decryptedDocuments : [DB_Document] = []
+        for doc in db!.documents {
+            decryptedDocuments.append(try decryptChaChaPoly(document: doc))
+        }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             description: db!.description,
             folders: decryptedFolders,
             entries: decryptedEntries,
+            images: decryptedImages,
+            iconName: db!.iconName,
+            documents: decryptedDocuments,
+            created: db!.created,
+            lastEdited: db!.lastEdited,
             header: db!.header,
             key: key!,
             password: userPassword!
@@ -213,24 +362,53 @@ internal struct Decrypter {
         for entry in folder.entries {
             decryptedEntries.append(try decryptChaChaPoly(entry: entry))
         }
+        var decryptedImages : [DB_Image] = []
+        for image in folder.images {
+            decryptedImages.append(try decryptChaChaPoly(image: image))
+        }
+        var decryptedDocuments : [DB_Document] = []
+        for doc in folder.documents {
+            decryptedDocuments.append(try decryptChaChaPoly(document: doc))
+        }
         let decryptedName : Data = try ChaChaPoly.open(
-            try ChaChaPoly.SealedBox(combined: folder.name),
+            ChaChaPoly.SealedBox(combined: folder.name),
             using: key!
         )
         let decryptedDescription : Data = try ChaChaPoly.open(
-            try ChaChaPoly.SealedBox(combined: folder.description),
+            ChaChaPoly.SealedBox(combined: folder.description),
+            using: key!
+        )
+        let decryptedIconName : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: folder.iconName),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: folder.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: folder.lastEdited),
             using: key!
         )
         let decryptedFolder : Folder = Folder(
-            name: String(data: decryptedName, encoding: .utf8)!,
-            description: String(data: decryptedDescription, encoding: .utf8)!,
+            name: DataConverter.dataToString(decryptedName),
+            description: DataConverter.dataToString(decryptedDescription),
             folders: decryptedFolders,
-            entries: decryptedEntries
+            entries: decryptedEntries,
+            images: decryptedImages,
+            iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
         )
         return decryptedFolder
     }
     
     private func decryptChaChaPoly(entry : EncryptedEntry) throws -> Entry {
+        var decryptedDocuments : [DB_Document] = []
+        for doc in entry.documents {
+            decryptedDocuments.append(try decryptChaChaPoly(document: doc))
+        }
         let decryptedTitle : Data = try ChaChaPoly.open(
             try ChaChaPoly.SealedBox(combined: entry.title),
             using: key!
@@ -251,13 +429,95 @@ internal struct Decrypter {
             try ChaChaPoly.SealedBox(combined: entry.notes),
             using: key!
         )
+        let decryptedIconName : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: entry.iconName),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: entry.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: entry.lastEdited),
+            using: key!
+        )
         let decryptedEntry : Entry = Entry(
-            title: String(data: decryptedTitle, encoding: .utf8)!,
-            username: String(data: decryptedUsername, encoding: .utf8)!,
-            password: String(data: decryptedPassword, encoding: .utf8)!,
-            url: URL(string: String(data: decryptedURL, encoding: .utf8)!)!,
-            notes: String(data: decryptedNotes, encoding: .utf8)!
+            title: DataConverter.dataToString(decryptedTitle),
+            username: DataConverter.dataToString(decryptedUsername),
+            password: DataConverter.dataToString(decryptedPassword),
+            url: URL(string: DataConverter.dataToString(decryptedURL)),
+            notes: DataConverter.dataToString(decryptedNotes),
+            iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
         )
         return decryptedEntry
+    }
+    
+    private func decryptChaChaPoly(image : Encrypted_DB_Image) throws -> DB_Image {
+        let decryptedImageData : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: image.image),
+            using: key!
+        )
+        let decryptedTypeData : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: image.type),
+            using: key!
+        )
+        let decryptedTypeString : String = DataConverter.dataToString(decryptedTypeData)
+        let decryptedQuality : Double?
+        if image.quality != nil {
+            decryptedQuality = DataConverter.dataToDouble(
+                try ChaChaPoly.open(
+                    ChaChaPoly.SealedBox(combined: image.quality!),
+                    using: key!
+                )
+            )
+        } else {
+            decryptedQuality = nil
+        }
+        
+        let decryptedCreatedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: image.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: image.lastEdited),
+            using: key!
+        )
+        let decryptedImageObj : DB_Image = DB_Image(
+            image: UIImage(data: decryptedImageData)!,
+            type: ImageType(rawValue: decryptedTypeString)!,
+            quality: decryptedQuality,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+        )
+        return decryptedImageObj
+    }
+    
+    private func decryptChaChaPoly(document : Encrypted_DB_Document) throws -> DB_Document {
+        let decryptedDocumentData : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: document.document),
+            using: key!
+        )
+        let decryptedType : Data = try ChaChaPoly.open(
+            try ChaChaPoly.SealedBox(combined: document.type),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: document.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: document.lastEdited),
+            using: key!
+        )
+        let decryptedDocument : DB_Document = DB_Document(
+            document: decryptedDocumentData,
+            type: DataConverter.dataToString(decryptedType),
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+        )
+        return decryptedDocument
     }
 }

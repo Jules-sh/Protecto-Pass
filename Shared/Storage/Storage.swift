@@ -15,6 +15,8 @@ import Foundation
 /// Data.
 internal struct Storage {
     
+    internal static var allDatabases : [EncryptedDatabase] = []
+    
     /// Stores the passed Database to the right Storage.
     /// if you want to store something in Core Data, the connected context has to be provided.
     internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?) throws -> Void {
@@ -24,7 +26,7 @@ internal struct Storage {
             assert(context != nil, "To store Core Data Databases, a Context must be provided to the storeDatabase Function")
             try CoreDataManager.storeDatabase(database, context: context!)
         case .File:
-            FileManager.storeDatabase(database)
+            DatabaseFileManager.storeDatabase(database)
         case .Keychain:
             KeychainManager.storeDatabase(database)
             break
@@ -38,11 +40,12 @@ internal struct Storage {
         let coreData : [EncryptedDatabase] = try CoreDataManager.load(with: context)
         result.append(contentsOf: coreData)
         // File System
-        let fileSystem : [EncryptedDatabase] = FileManager.load()
+        let fileSystem : [EncryptedDatabase] = DatabaseFileManager.load()
         result.append(contentsOf: fileSystem)
         // Keychain
         let keychain : [EncryptedDatabase] = KeychainManager.load()
         result.append(contentsOf: keychain)
+        allDatabases = result
         return result
     }
 }

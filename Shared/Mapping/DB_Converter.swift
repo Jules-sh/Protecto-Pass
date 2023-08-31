@@ -11,7 +11,7 @@ import CoreData
 import Foundation
 
 /// Protocol all converters in this File must conform to
-private protocol Converter {
+private protocol DatabaseConverterProtocol {
     
     /// The Core Data type of the converter
     associatedtype CoreData : NSManagedObject
@@ -20,10 +20,10 @@ private protocol Converter {
     associatedtype Encrypted
     
     /// Converts the specified Core Data Object to an encrypted Object
-    static func fromCD(_ coreData : CoreData) -> Encrypted
+    static func fromCD(_ coreData : CoreData) throws -> Encrypted
     
     /// Converts all the specified Core Data Objects to encrypted Objects
-    static func fromCD(_ coreData : [CoreData]) -> [Encrypted]
+    static func fromCD(_ coreData : [CoreData]) throws -> [Encrypted]
     
     /// Converts the specified encrypted Object to a core Data Object
     static func toCD(_ encrypted : Encrypted, context : NSManagedObjectContext) -> CoreData
@@ -35,16 +35,16 @@ private protocol Converter {
 /// Converts the stored Databases (e.g. Core Data) into
 /// Encrypted Databases and back.
 /// Works with Arrays.
-internal struct DB_Converter : Converter {
+internal struct DB_Converter : DatabaseConverterProtocol {
     
-    internal static func fromCD(_ coreData: CD_Database) -> EncryptedDatabase {
-        return EncryptedDatabase(from: coreData)
+    internal static func fromCD(_ coreData: CD_Database) throws -> EncryptedDatabase {
+        return try EncryptedDatabase(from: coreData)
     }
-
-    internal static func fromCD(_ coreData : [CD_Database]) -> [EncryptedDatabase] {
+    
+    internal static func fromCD(_ coreData : [CD_Database]) throws -> [EncryptedDatabase] {
         var result : [EncryptedDatabase] = []
         for cdDatabase in coreData {
-            result.append(fromCD(cdDatabase))
+            result.append(try fromCD(cdDatabase))
         }
         return result
     }
@@ -69,7 +69,7 @@ internal struct DB_Converter : Converter {
     }
 }
 
-private struct FolderConverter : Converter {
+private struct FolderConverter : DatabaseConverterProtocol {
     
     fileprivate static func fromCD(_ coreData: CD_Folder) -> EncryptedFolder {
         return EncryptedFolder(from: coreData)
@@ -104,7 +104,7 @@ private struct FolderConverter : Converter {
     }
 }
 
-private struct EntryConverter : Converter {
+private struct EntryConverter : DatabaseConverterProtocol {
     
     fileprivate static func fromCD(_ coreData: CD_Entry) -> EncryptedEntry {
         return EncryptedEntry(from: coreData)

@@ -44,4 +44,12 @@ internal struct DataConverter {
             throw UnknownImageType()
         }
     }
+    
+    internal static func doubleToData(_ double : Double) -> Data {
+        return stringToData(String(double))
+    }
+    
+    internal static func dataToDouble(_ data : Data) -> Double {
+        return Double(dataToString(data))!
+    }
 }

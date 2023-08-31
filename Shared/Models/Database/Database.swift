@@ -73,6 +73,7 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         key : SymmetricKey,
         password : String
     ) {
+        self.password = password
         super.init(
             name: name,
             description: description,
@@ -86,7 +87,6 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
             header: header,
             key: key
         )
-        self.password = password
     }
     
     /// Attempts to encrypt the Database using the provided Password.

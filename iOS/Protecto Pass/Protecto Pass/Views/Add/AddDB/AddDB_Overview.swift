@@ -115,19 +115,19 @@ internal struct AddDB_Overview: View {
         // They are still entered, in case the creation process will expand one day
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
-        navigationController.db = Database(
-            name: creationWrapper.name,
-            description: creationWrapper.description,
-            folders: [],
-            entries: [],
-            header: DB_Header(
-                encryption: encryption,
-                storageType: storage,
-                salt: PasswordGenerator.generateSalt()
-            ),
-            key: SymmetricKey(size: .bits256),
-            password: creationWrapper.password
-        )
+//        navigationController.db = Database(
+//            name: creationWrapper.name,
+//            description: creationWrapper.description,
+//            folders: [],
+//            entries: [],
+//            header: DB_Header(
+//                encryption: encryption,
+//                storageType: storage,
+//                salt: PasswordGenerator.generateSalt()
+//            ),
+//            key: SymmetricKey(size: .bits256),
+//            password: creationWrapper.password
+//        )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext)
             navigationController.navigationSheetShown.toggle()

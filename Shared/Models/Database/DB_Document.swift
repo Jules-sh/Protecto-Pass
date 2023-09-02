@@ -71,4 +71,23 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data> {
             lastEdited: coreData.lastEdited!
         )
     }
+    
+    internal convenience init(from json : [String : String]) {
+        self.init(
+            document: json["document"]!,
+            type: json["type"]!,
+            created: json["created"]!,
+            lastEdited: json["lastEdited"]!
+        )
+    }
+    
+    internal func parseJSON() -> [String : String] {
+        let json : [String : String] = [
+            "document" : document.base64EncodedString(),
+            "type" : type.base64EncodedString(),
+            "created" : created.base64EncodedString(),
+            "lastEdited" : lastEdited.base64EncodedString()
+        ]
+        return json
+    }
 }

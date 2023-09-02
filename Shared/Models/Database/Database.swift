@@ -206,6 +206,77 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         )
     }
     
+    internal convenience init(from json : [String : Any]) throws {
+        var localFolders : [EncryptedFolder] = []
+        let jsonFolders : [[String : Any]] = json["folders"] as! [[String : Any]]
+        for jsonFolder in jsonFolders {
+            localFolders.append(EncryptedFolder(from: jsonFolder))
+        }
+        var localEntries : [EncryptedEntry] = []
+        let jsonEntries : [[String : Any]] = json["entries"] as! [[String : Any]]
+        for jsonEntry in jsonEntries {
+            localEntries.append(EncryptedEntry(from: jsonEntry))
+        }
+        var localImages : [Encrypted_DB_Image] = []
+        let jsonImages : [[String : String]] = json["images"] as! [[String : String]]
+        for jsonImage in jsonImages{
+            localImages.append(Encrypted_DB_Image(from: jsonImage))
+        }
+        var localDocuments : [Encrypted_DB_Document] = []
+        let jsonDocuments : [[String : String]] = json["documents"] as! [[String : String]]
+        for jsonDocument in jsonDocuments {
+            localDocuments.append(Encrypted_DB_Document(from: jsonDocument))
+        }
+        self.init(
+            name: json["name"] as! String,
+            description: json["description"] as! String,
+            folders: localFolders,
+            entries: localEntries,
+            images: localImages,
+            iconName: json["iconName"] as! String,
+            documents: localDocuments,
+            created: try DataConverter.stringToDate(json["created"] as! String),
+            lastEdited: try DataConverter.stringToDate(json["lastEdited"] as! String),
+            header: try DB_Header.parseString(string: json["header"] as! String),
+            key: json["key"] as! Data
+        )
+    }
+    
+    /// Parses this Object to a json dictionary and returns it
+    internal func parseJSON() -> [String : Any] {
+        var localFolders : [[String : Any]] = []
+        for folder in folders {
+            localFolders.append(folder.parseJSON())
+        }
+        var localEntries : [[String : Any]] = []
+        for entry in entries {
+            localEntries.append(entry.parseJSON())
+        }
+        var localImages : [[String : String]] = []
+        for image in images {
+            localImages.append(image.parseJSON())
+        }
+        var localDocuments : [[String : String]] = []
+        for document in documents {
+            localDocuments.append(document.parseJSON())
+        }
+        let json : [String : Any] = [
+            "name" : name,
+            "description" : description,
+            "folders" : localFolders,
+            "entries" : localEntries,
+            "images" : localImages,
+            "iconName" : iconName,
+            "documents" : localDocuments,
+            "created" : DataConverter.dateToString(created),
+            "lastEdited" : DataConverter.dateToString(lastEdited),
+            "header" : header.parseHeader(),
+            // TODO: review options
+            "key" : key.base64EncodedString()
+        ]
+        return json
+    }
+    
     /// Attempts to decrypt the encrypted Database using the provided Password.
     /// If successful, returns the decrypted Database.
     /// Otherwise an error is thrown

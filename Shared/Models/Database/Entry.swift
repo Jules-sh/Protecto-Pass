@@ -139,4 +139,43 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             lastEdited: coreData.lastEdited!
         )
     }
+    
+    internal convenience init(from json : [String : Any]) {
+        var localDocuments : [Encrypted_DB_Document] = []
+        let jsonDocuments : [[String : String]] = json["documents"] as! [[String : String]]
+        for jsonDocument in jsonDocuments {
+            localDocuments.append(Encrypted_DB_Document(from: jsonDocument))
+        }
+        self.init(
+            title: json["title"] as! Data,
+            username: json["username"] as! Data,
+            password: json["password"] as! Data,
+            url: json["url"] as! Data,
+            notes: json["notes"] as! Data,
+            iconName: json["iconName"] as! Data,
+            documents: localDocuments,
+            created: json["created"] as! Data,
+            lastEdited: json["lastEdited"] as! Data
+        )
+    }
+    
+    /// Parses this Object to a json dictionary and returns it
+    internal func parseJSON() -> [String : Any] {
+        var localDocuments : [[String : String]] = []
+        for document in documents {
+            localDocuments.append(document.parseJSON())
+        }
+        let json : [String : Any] = [
+            "title" : title.base64EncodedString(),
+            "username" : username.base64EncodedString(),
+            "password" : password.base64EncodedString(),
+            "url" : url.base64EncodedString(),
+            "notes" : notes.base64EncodedString(),
+            "iconName" : iconName.base64EncodedString(),
+            "documents" : localDocuments,
+            "created" : created.base64EncodedString(),
+            "lastEdited" : lastEdited.base64EncodedString()
+        ]
+        return json
+    }
 }

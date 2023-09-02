@@ -8,8 +8,10 @@
 import Foundation
 import UIKit
 
+internal class GeneralFolder<D, F, E, De, Do, I> : ME_DataStructure<D, F, E, De, Do, I> {}
+
 /// The Folder Object that is used when the App is running
-internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure {
+internal final class Folder : GeneralFolder<String, Folder, Entry, Date, DB_Document, DB_Image>, DecryptedDataStructure {
     
     /// ID to conform to Decrypted Data Structure
     internal let id: UUID = UUID()
@@ -45,7 +47,7 @@ internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : Encrypted_ME_DataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Document, Encrypted_DB_Image> {
     
     override internal init(
         name: Data,
@@ -99,5 +101,71 @@ internal final class EncryptedFolder : Encrypted_ME_DataStructure {
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )
+    }
+    
+    internal convenience init(from json : [String : Any]) {
+        var localFolders : [EncryptedFolder] = []
+        let jsonFolders : [[String : Any]] = json["folders"] as! [[String : Any]]
+        for jsonFolder in jsonFolders {
+            localFolders.append(EncryptedFolder(from: jsonFolder))
+        }
+        var localEntries : [EncryptedEntry] = []
+        let jsonEntries : [[String : Any]] = json["entries"] as! [[String : Any]]
+        for jsonEntry in jsonEntries {
+            localEntries.append(EncryptedEntry(from: jsonEntry))
+        }
+        var localImages : [Encrypted_DB_Image] = []
+        let jsonImages : [[String : String]] = json["images"] as! [[String : String]]
+        for jsonImage in jsonImages{
+            localImages.append(Encrypted_DB_Image(from: jsonImage))
+        }
+        var localDocuments : [Encrypted_DB_Document] = []
+        let jsonDocuments : [[String : String]] = json["documents"] as! [[String : String]]
+        for jsonDocument in jsonDocuments {
+            localDocuments.append(Encrypted_DB_Document(from: jsonDocument))
+        }
+        self.init(
+            name: json["name"] as! Data,
+            description: json["description"] as! Data,
+            folders: localFolders,
+            entries: localEntries,
+            images: localImages,
+            iconName: json["iconName"] as! Data,
+            documents: localDocuments,
+            created: json["created"] as! Data,
+            lastEdited: json["lastEdited"] as! Data
+        )
+    }
+    
+    /// Parses this Object to a json dictionary and returns it
+    internal func parseJSON() -> [String : Any] {
+        var localFolders : [[String : Any]] = []
+        for folder in folders {
+            localFolders.append(folder.parseJSON())
+        }
+        var localEntries : [[String : Any]] = []
+        for entry in entries {
+            localEntries.append(entry.parseJSON())
+        }
+        var localImages : [[String : String]] = []
+        for image in images {
+            localImages.append(image.parseJSON())
+        }
+        var localDocuments : [[String : String]] = []
+        for document in documents {
+            localDocuments.append(document.parseJSON())
+        }
+        let json : [String : Any] = [
+            "name" : name.base64EncodedString(),
+            "description" : description.base64EncodedString(),
+            "folders" : localFolders,
+            "entries" : localEntries,
+            "images" : localImages,
+            "iconName" : iconName.base64EncodedString(),
+            "documents" : localDocuments,
+            "created" : created.base64EncodedString(),
+            "lastEdited" : lastEdited.base64EncodedString(),
+        ]
+        return json
     }
 }

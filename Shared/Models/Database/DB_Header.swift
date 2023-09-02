@@ -41,7 +41,8 @@ internal struct DB_Header {
         return DB_Header(
             encryption: Cryptography.Encryption(rawValue: String(result[0]))!,
             storageType: StorageType(rawValue: String(result[1]))!,
-            salt: String(result[2])
+            salt: String(result[2]),
+            path: URL(string: String(result[3]))
         )
     }
     
@@ -58,9 +59,13 @@ internal struct DB_Header {
     /// against rainbow attacks
     internal var salt : String
     
+    /// The Path where to store the Database on
+    /// the System or Cloud
+    internal var path : URL? = nil
+    
     /// Parses this Header to a String which is ready to be stored
     internal func parseHeader() -> String {
-        return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt)"
+        return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt); path: \(path?.absoluteString ?? "")"
     }
     
     /// A preview header to use in previews and tests.
@@ -68,6 +73,7 @@ internal struct DB_Header {
     internal static let previewHeader : DB_Header = DB_Header(
         encryption: .AES256,
         storageType: .CoreData,
-        salt: PasswordGenerator.generateSalt()
+        salt: PasswordGenerator.generateSalt(),
+        path: URL(string: "/")
     )
 }

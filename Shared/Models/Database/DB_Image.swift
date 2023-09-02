@@ -53,7 +53,7 @@ internal class General_DB_Image<I, T, Q, De> : DatabaseContent<De>  {
 }
 
 /// The Decrypted Data Structure for Images stored in this App
-internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?, Date>, DecryptedDataStructure {
+internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double, Date>, DecryptedDataStructure {
     
     /// ID to conform to identifiable protocol
     internal let id: UUID = UUID()
@@ -71,12 +71,12 @@ internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?, Da
 }
 
 /// The Encrypted Data Structure being used when the Database is still encrypted.
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?, Data> {
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Data> {
     
     override internal init(
         image: Data,
         type: Data,
-        quality: Data?,
+        quality: Data,
         created : Data,
         lastEdited : Data
     ) {
@@ -93,9 +93,31 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?, Da
         self.init(
             image: coreData.imageData!,
             type: coreData.dataType!,
-            quality: coreData.compressionQuality,
+            quality: coreData.compressionQuality!,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )
+    }
+    
+    internal convenience init(from json : [String : String]) {
+        self.init(
+            image: json["image"]!,
+            type: json["type"]!,
+            quality: json["quality"]!,
+            created: json["created"]!,
+            lastEdited: json["lastEdited"]!
+        )
+    }
+    
+    /// Parses this Object to a json dictionary and returns it
+    internal func parseJSON() -> [String : String] {
+        let json : [String : String] = [
+            "image" : image.base64EncodedString(),
+            "type" : type.base64EncodedString(),
+            "quality" : quality.base64EncodedString(),
+            "created" : created.base64EncodedString(),
+            "lastEdited" : lastEdited.base64EncodedString()
+        ]
+        return json
     }
 }

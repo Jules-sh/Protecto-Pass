@@ -11,7 +11,6 @@ internal struct DataConverter {
     
     /// Converts the passed String to Data (Bytes)
     internal static func stringToData(_ string : String) -> Data {
-        return Data(string.utf8.map { UInt8($0) })
         return string.data(using: .utf8)!
     }
     

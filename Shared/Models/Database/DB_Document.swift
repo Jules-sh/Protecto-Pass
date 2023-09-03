@@ -47,7 +47,7 @@ internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataS
 }
 
 /// Encrypted Document type storing the encrypted values
-internal final class Encrypted_DB_Document : GeneralDocument<Data, Data> {
+internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, EncryptedDataStructure {
     
     override internal init(
         document: Data,
@@ -63,6 +63,31 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data> {
         )
     }
     
+    private enum DB_DocumentCodingKeys: CodingKey {
+        case document
+        case type
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DB_DocumentCodingKeys.self)
+        try container.encode(document, forKey: .document)
+        try container.encode(type, forKey: .type)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: DB_DocumentCodingKeys.self)
+        self.init(
+            document: try container.decode(Data.self, forKey: .document),
+            type: try container.decode(Data.self, forKey: .type),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+        )
+    }
+    
     internal convenience init(from coreData : CD_Document) {
         self.init(
             document: coreData.documentData!,
@@ -70,24 +95,5 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data> {
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )
-    }
-    
-    internal convenience init(from json : [String : String]) {
-        self.init(
-            document: json["document"]!,
-            type: json["type"]!,
-            created: json["created"]!,
-            lastEdited: json["lastEdited"]!
-        )
-    }
-    
-    internal func parseJSON() -> [String : String] {
-        let json : [String : String] = [
-            "document" : document.base64EncodedString(),
-            "type" : type.base64EncodedString(),
-            "created" : created.base64EncodedString(),
-            "lastEdited" : lastEdited.base64EncodedString()
-        ]
-        return json
     }
 }

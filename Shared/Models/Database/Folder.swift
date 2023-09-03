@@ -47,7 +47,7 @@ internal final class Folder : GeneralFolder<String, Folder, Entry, Date, DB_Docu
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Document, Encrypted_DB_Image> {
+internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Document, Encrypted_DB_Image>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
@@ -70,6 +70,46 @@ internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, Encr
             documents: documents,
             created: created,
             lastEdited: lastEdited
+        )
+    }
+    
+    private enum FolderCodingKeys: CodingKey {
+        case name
+        case description
+        case folders
+        case entries
+        case images
+        case iconName
+        case documents
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: FolderCodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        try container.encode(folders, forKey: .folders)
+        try container.encode(entries, forKey: .entries)
+        try container.encode(images, forKey: .images)
+        try container.encode(iconName, forKey: .iconName)
+        try container.encode(documents, forKey: .documents)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal  convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: FolderCodingKeys.self)
+        self.init(
+            name: try container.decode(Data.self, forKey: .name),
+            description: try container.decode(Data.self, forKey: .description),
+            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
+            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
+            images: try container.decode([Encrypted_DB_Image].self, forKey: .images),
+            iconName: try container.decode(Data.self, forKey: .iconName),
+            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     
@@ -101,71 +141,5 @@ internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, Encr
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )
-    }
-    
-    internal convenience init(from json : [String : Any]) {
-        var localFolders : [EncryptedFolder] = []
-        let jsonFolders : [[String : Any]] = json["folders"] as! [[String : Any]]
-        for jsonFolder in jsonFolders {
-            localFolders.append(EncryptedFolder(from: jsonFolder))
-        }
-        var localEntries : [EncryptedEntry] = []
-        let jsonEntries : [[String : Any]] = json["entries"] as! [[String : Any]]
-        for jsonEntry in jsonEntries {
-            localEntries.append(EncryptedEntry(from: jsonEntry))
-        }
-        var localImages : [Encrypted_DB_Image] = []
-        let jsonImages : [[String : String]] = json["images"] as! [[String : String]]
-        for jsonImage in jsonImages{
-            localImages.append(Encrypted_DB_Image(from: jsonImage))
-        }
-        var localDocuments : [Encrypted_DB_Document] = []
-        let jsonDocuments : [[String : String]] = json["documents"] as! [[String : String]]
-        for jsonDocument in jsonDocuments {
-            localDocuments.append(Encrypted_DB_Document(from: jsonDocument))
-        }
-        self.init(
-            name: json["name"] as! Data,
-            description: json["description"] as! Data,
-            folders: localFolders,
-            entries: localEntries,
-            images: localImages,
-            iconName: json["iconName"] as! Data,
-            documents: localDocuments,
-            created: json["created"] as! Data,
-            lastEdited: json["lastEdited"] as! Data
-        )
-    }
-    
-    /// Parses this Object to a json dictionary and returns it
-    internal func parseJSON() -> [String : Any] {
-        var localFolders : [[String : Any]] = []
-        for folder in folders {
-            localFolders.append(folder.parseJSON())
-        }
-        var localEntries : [[String : Any]] = []
-        for entry in entries {
-            localEntries.append(entry.parseJSON())
-        }
-        var localImages : [[String : String]] = []
-        for image in images {
-            localImages.append(image.parseJSON())
-        }
-        var localDocuments : [[String : String]] = []
-        for document in documents {
-            localDocuments.append(document.parseJSON())
-        }
-        let json : [String : Any] = [
-            "name" : name.base64EncodedString(),
-            "description" : description.base64EncodedString(),
-            "folders" : localFolders,
-            "entries" : localEntries,
-            "images" : localImages,
-            "iconName" : iconName.base64EncodedString(),
-            "documents" : localDocuments,
-            "created" : created.base64EncodedString(),
-            "lastEdited" : lastEdited.base64EncodedString(),
-        ]
-        return json
     }
 }

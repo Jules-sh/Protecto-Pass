@@ -61,3 +61,9 @@ internal class ME_DataStructure<D, F, E, De, Do, I> : NativeType<De, D, Do> {
 /// Protocol which most of the Decrypted Data Structures conform to in order to use them in
 /// UI Components such as Picker and a generated List
 internal protocol DecryptedDataStructure : Hashable, Identifiable {}
+
+/// Protocol which all of the encrypted Data Structures must conforms to in order
+/// to store them in a File
+internal protocol EncryptedDataStructure : Codable {
+    
+}

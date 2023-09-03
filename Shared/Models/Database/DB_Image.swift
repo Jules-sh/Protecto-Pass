@@ -71,7 +71,7 @@ internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double, Dat
 }
 
 /// The Encrypted Data Structure being used when the Database is still encrypted.
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Data> {
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         image: Data,
@@ -89,6 +89,34 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Dat
         )
     }
     
+    private enum DB_ImageCodingKeys: CodingKey {
+        case image
+        case type
+        case quality
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DB_ImageCodingKeys.self)
+        try container.encode(image, forKey: .image)
+        try container.encode(type, forKey: .type)
+        try container.encode(quality, forKey: .quality)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: DB_ImageCodingKeys.self)
+        self.init(
+            image: try container.decode(Data.self, forKey: .image),
+            type: try container.decode(Data.self, forKey: .type),
+            quality: try container.decode(Data.self, forKey: .quality),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+        )
+    }
+    
     internal convenience init(from coreData : CD_Image) {
         self.init(
             image: coreData.imageData!,
@@ -97,27 +125,5 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Dat
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )
-    }
-    
-    internal convenience init(from json : [String : String]) {
-        self.init(
-            image: json["image"]!,
-            type: json["type"]!,
-            quality: json["quality"]!,
-            created: json["created"]!,
-            lastEdited: json["lastEdited"]!
-        )
-    }
-    
-    /// Parses this Object to a json dictionary and returns it
-    internal func parseJSON() -> [String : String] {
-        let json : [String : String] = [
-            "image" : image.base64EncodedString(),
-            "type" : type.base64EncodedString(),
-            "quality" : quality.base64EncodedString(),
-            "created" : created.base64EncodedString(),
-            "lastEdited" : lastEdited.base64EncodedString()
-        ]
-        return json
     }
 }

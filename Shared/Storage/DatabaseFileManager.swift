@@ -34,24 +34,29 @@ internal struct DatabaseFileManager : DatabaseCache {
     }
     
     internal static func storeDatabase(_ db : EncryptedDatabase) throws -> Void {
-        let jsonDB : [String : Any] = db.parseJSON()
         guard let url : URL = db.header.path else {
-            throw Error()
+            throw NonexistentPathError()
         }
-        var jsonAsString : String = ""
-        for jsonPair in jsonDB {
-            jsonAsString.append("\(jsonPair.key): \(jsonPair.value)")
-        }
-        // TODO: allowLossyConversion?
-        let utf8Data : Data = jsonAsString.data(using: .utf8)!
+        let jsonEncoder : JSONEncoder = JSONEncoder()
+        let jsonData : Data = try jsonEncoder.encode(db)
         // TODO: review options
-        let base64Data : Data = utf8Data.base64EncodedData()
-        try base64Data.write(to: url)
+        try jsonData.write(to: url, options: [.atomic, .completeFileProtection])
         update(id: db.id, with: db)
     }
     
-    internal static func load() -> [EncryptedDatabase] {
-        // TODO: implement
-        return []
+    internal static func load() throws -> [EncryptedDatabase] {
+        // TODO: get path from somewhere
+        let path : URL = URL(string: "/")!
+        var paths : [URL] = []
+        paths.append(path)
+        
+        var databases : [EncryptedDatabase] = []
+        let jsonDecoder : JSONDecoder = JSONDecoder()
+        for path in paths {
+            let dbData : Data = try Data(contentsOf: path)
+            let jsonDB : EncryptedDatabase = try jsonDecoder.decode(EncryptedDatabase.self, from: dbData)
+            databases.append(jsonDB)
+        }
+        return databases
     }
 }

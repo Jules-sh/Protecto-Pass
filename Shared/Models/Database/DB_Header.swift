@@ -11,7 +11,7 @@ import Foundation
 
 /// The Header for an encrypted Database containing the
 /// important information about the Database
-internal struct DB_Header {
+internal struct DB_Header : Codable {
     
     /// The Enum to declare how the Database is stored.
     internal enum StorageType : String, RawRepresentable, CaseIterable, Identifiable {
@@ -46,14 +46,26 @@ internal struct DB_Header {
         )
     }
     
+    internal init(
+        encryption : Cryptography.Encryption,
+        storageType : StorageType,
+        salt : String,
+        path : URL? = nil
+    ) {
+        self.encryption = encryption
+        self.storageType = storageType
+        self.salt = salt
+        self.path = path
+    }
+    
     ///The Enum telling the App
     ///which Encryption was used to encrypt
     ///the Database
-    internal var encryption : Cryptography.Encryption = .AES256
+    internal var encryption : Cryptography.Encryption
     
     /// The Enum telling the App how the Database
     /// is stored.
-    internal var storageType : StorageType = .CoreData
+    internal var storageType : StorageType
     
     /// The Salt to secure the password of the database
     /// against rainbow attacks
@@ -61,7 +73,7 @@ internal struct DB_Header {
     
     /// The Path where to store the Database on
     /// the System or Cloud
-    internal var path : URL? = nil
+    internal var path : URL?
     
     /// Parses this Header to a String which is ready to be stored
     internal func parseHeader() -> String {
@@ -76,4 +88,29 @@ internal struct DB_Header {
         salt: PasswordGenerator.generateSalt(),
         path: URL(string: "/")
     )
+    
+    private enum HeaderCodingKeys: CodingKey {
+        case encryption
+        case storageType
+        case salt
+        case path
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: HeaderCodingKeys.self)
+        try container.encode(encryption.rawValue, forKey: .encryption)
+        try container.encode(storageType.rawValue, forKey: .storageType)
+        try container.encode(salt, forKey: .salt)
+        try container.encode(path, forKey: .path)
+    }
+    
+    internal init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: HeaderCodingKeys.self)
+        self.init(
+            encryption: Cryptography.Encryption(rawValue: try container.decode(String.self, forKey: .encryption))!,
+            storageType: StorageType(rawValue: try container.decode(String.self, forKey: .storageType))!,
+            salt: try container.decode(String.self, forKey: .salt),
+            path: try container.decode(URL?.self, forKey: .path)
+        )
+    }
 }

@@ -144,7 +144,7 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data> {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data>, EncryptedDataStructure {
     
     override internal init(
         name: String,
@@ -171,6 +171,52 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             lastEdited: lastEdited,
             header: header,
             key: key
+        )
+    }
+    
+    private enum DatabaseCodingKeys: CodingKey {
+        case name
+        case description
+        case folders
+        case entries
+        case images
+        case iconName
+        case documents
+        case created
+        case lastEdited
+        case header
+        case key
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DatabaseCodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        try container.encode(folders, forKey: .folders)
+        try container.encode(entries, forKey: .entries)
+        try container.encode(images, forKey: .images)
+        try container.encode(iconName, forKey: .iconName)
+        try container.encode(documents, forKey: .documents)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+        try container.encode(header, forKey: .header)
+        try container.encode(key, forKey: .key)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: DatabaseCodingKeys.self)
+        self.init(
+            name: try container.decode(String.self, forKey: .name),
+            description: try container.decode(String.self, forKey: .description),
+            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
+            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
+            images: try container.decode([Encrypted_DB_Image].self, forKey: .images),
+            iconName: try container.decode(String.self, forKey: .iconName),
+            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            created: try container.decode(Date.self, forKey: .created),
+            lastEdited: try container.decode(Date.self, forKey: .lastEdited),
+            header: try container.decode(DB_Header.self, forKey: .header),
+            key:try container.decode(Data.self, forKey: .key)
         )
     }
     
@@ -204,77 +250,6 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             header: try DB_Header.parseString(string: coreData.header!),
             key: coreData.key!
         )
-    }
-    
-    internal convenience init(from json : [String : Any]) throws {
-        var localFolders : [EncryptedFolder] = []
-        let jsonFolders : [[String : Any]] = json["folders"] as! [[String : Any]]
-        for jsonFolder in jsonFolders {
-            localFolders.append(EncryptedFolder(from: jsonFolder))
-        }
-        var localEntries : [EncryptedEntry] = []
-        let jsonEntries : [[String : Any]] = json["entries"] as! [[String : Any]]
-        for jsonEntry in jsonEntries {
-            localEntries.append(EncryptedEntry(from: jsonEntry))
-        }
-        var localImages : [Encrypted_DB_Image] = []
-        let jsonImages : [[String : String]] = json["images"] as! [[String : String]]
-        for jsonImage in jsonImages{
-            localImages.append(Encrypted_DB_Image(from: jsonImage))
-        }
-        var localDocuments : [Encrypted_DB_Document] = []
-        let jsonDocuments : [[String : String]] = json["documents"] as! [[String : String]]
-        for jsonDocument in jsonDocuments {
-            localDocuments.append(Encrypted_DB_Document(from: jsonDocument))
-        }
-        self.init(
-            name: json["name"] as! String,
-            description: json["description"] as! String,
-            folders: localFolders,
-            entries: localEntries,
-            images: localImages,
-            iconName: json["iconName"] as! String,
-            documents: localDocuments,
-            created: try DataConverter.stringToDate(json["created"] as! String),
-            lastEdited: try DataConverter.stringToDate(json["lastEdited"] as! String),
-            header: try DB_Header.parseString(string: json["header"] as! String),
-            key: json["key"] as! Data
-        )
-    }
-    
-    /// Parses this Object to a json dictionary and returns it
-    internal func parseJSON() -> [String : Any] {
-        var localFolders : [[String : Any]] = []
-        for folder in folders {
-            localFolders.append(folder.parseJSON())
-        }
-        var localEntries : [[String : Any]] = []
-        for entry in entries {
-            localEntries.append(entry.parseJSON())
-        }
-        var localImages : [[String : String]] = []
-        for image in images {
-            localImages.append(image.parseJSON())
-        }
-        var localDocuments : [[String : String]] = []
-        for document in documents {
-            localDocuments.append(document.parseJSON())
-        }
-        let json : [String : Any] = [
-            "name" : name,
-            "description" : description,
-            "folders" : localFolders,
-            "entries" : localEntries,
-            "images" : localImages,
-            "iconName" : iconName,
-            "documents" : localDocuments,
-            "created" : DataConverter.dateToString(created),
-            "lastEdited" : DataConverter.dateToString(lastEdited),
-            "header" : header.parseHeader(),
-            // TODO: review options
-            "key" : key.base64EncodedString()
-        ]
-        return json
     }
     
     /// Attempts to decrypt the encrypted Database using the provided Password.

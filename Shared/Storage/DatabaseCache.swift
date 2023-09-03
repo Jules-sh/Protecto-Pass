@@ -28,3 +28,7 @@ internal protocol DatabaseCache {
     /// Returns whether the database exists in this cache or not
     static func databaseExists(id : UUID) -> Bool
 }
+
+/// Error thrown when the Cache tries to access a Database
+/// that does not exist, at least not in this particular Cache
+internal struct DatabaseDoesNotExistError : Error {}

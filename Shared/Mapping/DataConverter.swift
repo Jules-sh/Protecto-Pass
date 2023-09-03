@@ -11,7 +11,7 @@ internal struct DataConverter {
     
     /// Converts the passed String to Data (Bytes)
     internal static func stringToData(_ string : String) -> Data {
-        return Data(string.utf8.map { UInt8($0) })
+        return string.data(using: .utf8)!
     }
     
     internal static func dataToString(_ data : Data) -> String {
@@ -36,8 +36,7 @@ internal struct DataConverter {
     
     internal static func imageToData(_ image : DB_Image) throws -> Data {
         if image.type == .JPG {
-            assert(image.quality != nil)
-            return image.image.jpegData(compressionQuality: CGFloat(image.quality!))!
+            return image.image.jpegData(compressionQuality: CGFloat(image.quality))!
         } else if image.type == .PNG {
             return image.image.pngData()!
         } else {

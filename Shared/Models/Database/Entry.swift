@@ -96,7 +96,7 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encrypted_DB_Document> {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encrypted_DB_Document>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -119,6 +119,46 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             documents: documents,
             created: created,
             lastEdited: lastEdited
+        )
+    }
+    
+    private enum EntryCodingKeys: CodingKey {
+        case title
+        case username
+        case password
+        case url
+        case notes
+        case iconName
+        case documents
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: EntryCodingKeys.self)
+        try container.encode(title, forKey: .title)
+        try container.encode(username, forKey: .username)
+        try container.encode(password, forKey: .password)
+        try container.encode(url, forKey: .url)
+        try container.encode(notes, forKey: .notes)
+        try container.encode(iconName, forKey: .iconName)
+        try container.encode(documents, forKey: .documents)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: EntryCodingKeys.self)
+        self.init(
+            title: try container.decode(Data.self, forKey: .title),
+            username: try container.decode(Data.self, forKey: .username),
+            password: try container.decode(Data.self, forKey: .password),
+            url: try container.decode(Data.self, forKey: .url),
+            notes: try container.decode(Data.self, forKey: .notes),
+            iconName: try container.decode(Data.self, forKey: .iconName),
+            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     

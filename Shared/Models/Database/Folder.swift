@@ -8,8 +8,10 @@
 import Foundation
 import UIKit
 
+internal class GeneralFolder<D, F, E, De, Do, I> : ME_DataStructure<D, F, E, De, Do, I> {}
+
 /// The Folder Object that is used when the App is running
-internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure {
+internal final class Folder : GeneralFolder<String, Folder, Entry, Date, DB_Document, DB_Image>, DecryptedDataStructure {
     
     /// ID to conform to Decrypted Data Structure
     internal let id: UUID = UUID()
@@ -45,7 +47,7 @@ internal final class Folder : Decrypted_ME_DataStructure, DecryptedDataStructure
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : Encrypted_ME_DataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Document, Encrypted_DB_Image>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
@@ -68,6 +70,46 @@ internal final class EncryptedFolder : Encrypted_ME_DataStructure {
             documents: documents,
             created: created,
             lastEdited: lastEdited
+        )
+    }
+    
+    private enum FolderCodingKeys: CodingKey {
+        case name
+        case description
+        case folders
+        case entries
+        case images
+        case iconName
+        case documents
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: FolderCodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        try container.encode(folders, forKey: .folders)
+        try container.encode(entries, forKey: .entries)
+        try container.encode(images, forKey: .images)
+        try container.encode(iconName, forKey: .iconName)
+        try container.encode(documents, forKey: .documents)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal  convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: FolderCodingKeys.self)
+        self.init(
+            name: try container.decode(Data.self, forKey: .name),
+            description: try container.decode(Data.self, forKey: .description),
+            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
+            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
+            images: try container.decode([Encrypted_DB_Image].self, forKey: .images),
+            iconName: try container.decode(Data.self, forKey: .iconName),
+            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     

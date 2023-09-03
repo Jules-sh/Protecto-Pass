@@ -144,7 +144,7 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data> {
+internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data>, EncryptedDataStructure {
     
     override internal init(
         name: String,
@@ -171,6 +171,52 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             lastEdited: lastEdited,
             header: header,
             key: key
+        )
+    }
+    
+    private enum DatabaseCodingKeys: CodingKey {
+        case name
+        case description
+        case folders
+        case entries
+        case images
+        case iconName
+        case documents
+        case created
+        case lastEdited
+        case header
+        case key
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DatabaseCodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        try container.encode(folders, forKey: .folders)
+        try container.encode(entries, forKey: .entries)
+        try container.encode(images, forKey: .images)
+        try container.encode(iconName, forKey: .iconName)
+        try container.encode(documents, forKey: .documents)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+        try container.encode(header, forKey: .header)
+        try container.encode(key, forKey: .key)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: DatabaseCodingKeys.self)
+        self.init(
+            name: try container.decode(String.self, forKey: .name),
+            description: try container.decode(String.self, forKey: .description),
+            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
+            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
+            images: try container.decode([Encrypted_DB_Image].self, forKey: .images),
+            iconName: try container.decode(String.self, forKey: .iconName),
+            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            created: try container.decode(Date.self, forKey: .created),
+            lastEdited: try container.decode(Date.self, forKey: .lastEdited),
+            header: try container.decode(DB_Header.self, forKey: .header),
+            key:try container.decode(Data.self, forKey: .key)
         )
     }
     

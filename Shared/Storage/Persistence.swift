@@ -22,7 +22,7 @@ internal struct PersistenceController {
             let db : CD_Database = CD_Database(context: viewContext)
             db.name = DataConverter.stringToData("Database \(i)")
             db.objectDescription = DataConverter.stringToData("This is the Database Number \(i)")
-            let header : DB_Header = DB_Header(salt: "Salt")
+            let header : DB_Header = DB_Header(encryption: .AES256, storageType: .CoreData, salt: "Salt")
             db.header = header.parseHeader()
         }
         do {
@@ -61,7 +61,7 @@ internal struct PersistenceController {
             }
         })
         // NSPersistentStoreFileProtectionKey is not available
-        // in macOS, so this is only compiled and added, if the OS
+        // on macOS, so this is only compiled and added, if the OS
         // is not macOS
 #if !os(macOS)
         // Core Data Encryption Idea from: https://cocoacasts.com/is-core-data-encrypted

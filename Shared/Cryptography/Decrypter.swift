@@ -247,18 +247,12 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedTypeString : String = DataConverter.dataToString(decryptedTypeData)
-        let decryptedQuality : Double?
-        if image.quality != nil {
-            decryptedQuality = DataConverter.dataToDouble(
-                try AES.GCM.open(
-                    AES.GCM.SealedBox(combined: image.quality!),
-                    using: key!
-                )
+        let decryptedQuality : Double = DataConverter.dataToDouble(
+            try AES.GCM.open(
+                AES.GCM.SealedBox(combined: image.quality),
+                using: key!
             )
-        } else {
-            decryptedQuality = nil
-        }
-        
+        )
         let decryptedCreatedDate : Data = try AES.GCM.open(
             AES.GCM.SealedBox(combined: image.created),
             using: key!
@@ -465,18 +459,12 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedTypeString : String = DataConverter.dataToString(decryptedTypeData)
-        let decryptedQuality : Double?
-        if image.quality != nil {
-            decryptedQuality = DataConverter.dataToDouble(
-                try ChaChaPoly.open(
-                    ChaChaPoly.SealedBox(combined: image.quality!),
-                    using: key!
-                )
+        let decryptedQuality : Double = DataConverter.dataToDouble(
+            try ChaChaPoly.open(
+                ChaChaPoly.SealedBox(combined: image.quality),
+                using: key!
             )
-        } else {
-            decryptedQuality = nil
-        }
-        
+        )
         let decryptedCreatedDate : Data = try ChaChaPoly.open(
             ChaChaPoly.SealedBox(combined: image.created),
             using: key!

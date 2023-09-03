@@ -237,15 +237,10 @@ internal struct Encrypter {
             DataConverter.stringToData(image.type.rawValue),
             using: key!
         ).combined!
-        let encryptedQuality : Data?
-        if image.quality != nil {
-            encryptedQuality = try AES.GCM.seal(
-                DataConverter.doubleToData(image.quality!),
-                using: key!
-            ).combined!
-        } else {
-            encryptedQuality = nil
-        }
+        let encryptedQuality : Data = try AES.GCM.seal(
+            DataConverter.doubleToData(image.quality),
+            using: key!
+        ).combined!
         let encryptedCreatedDate : Data = try AES.GCM.seal(
             DataConverter.dateToData(image.created),
             using: key!
@@ -457,15 +452,10 @@ internal struct Encrypter {
             DataConverter.stringToData(image.type.rawValue),
             using: key!
         ).combined
-        let encryptedQuality : Data?
-        if image.quality != nil {
-            encryptedQuality = try ChaChaPoly.seal(
-                DataConverter.doubleToData(image.quality!),
+        let encryptedQuality : Data = try ChaChaPoly.seal(
+                DataConverter.doubleToData(image.quality),
                 using: key!
             ).combined
-        } else {
-            encryptedQuality = nil
-        }
         let encryptedCreatedDate : Data = try ChaChaPoly.seal(
             DataConverter.dateToData(image.created),
             using: key!

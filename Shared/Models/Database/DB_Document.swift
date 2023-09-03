@@ -47,7 +47,7 @@ internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataS
 }
 
 /// Encrypted Document type storing the encrypted values
-internal final class Encrypted_DB_Document : GeneralDocument<Data, Data> {
+internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, EncryptedDataStructure {
     
     override internal init(
         document: Data,
@@ -60,6 +60,31 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data> {
             type: type,
             created: created,
             lastEdited: lastEdited
+        )
+    }
+    
+    private enum DB_DocumentCodingKeys: CodingKey {
+        case document
+        case type
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DB_DocumentCodingKeys.self)
+        try container.encode(document, forKey: .document)
+        try container.encode(type, forKey: .type)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: DB_DocumentCodingKeys.self)
+        self.init(
+            document: try container.decode(Data.self, forKey: .document),
+            type: try container.decode(Data.self, forKey: .type),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     

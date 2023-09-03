@@ -53,7 +53,7 @@ internal class General_DB_Image<I, T, Q, De> : DatabaseContent<De>  {
 }
 
 /// The Decrypted Data Structure for Images stored in this App
-internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?, Date>, DecryptedDataStructure {
+internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double, Date>, DecryptedDataStructure {
     
     /// ID to conform to identifiable protocol
     internal let id: UUID = UUID()
@@ -71,12 +71,12 @@ internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double?, Da
 }
 
 /// The Encrypted Data Structure being used when the Database is still encrypted.
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?, Data> {
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         image: Data,
         type: Data,
-        quality: Data?,
+        quality: Data,
         created : Data,
         lastEdited : Data
     ) {
@@ -89,11 +89,39 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data?, Da
         )
     }
     
+    private enum DB_ImageCodingKeys: CodingKey {
+        case image
+        case type
+        case quality
+        case created
+        case lastEdited
+    }
+    
+    internal func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: DB_ImageCodingKeys.self)
+        try container.encode(image, forKey: .image)
+        try container.encode(type, forKey: .type)
+        try container.encode(quality, forKey: .quality)
+        try container.encode(created, forKey: .created)
+        try container.encode(lastEdited, forKey: .lastEdited)
+    }
+    
+    internal convenience init(from decoder: Decoder) throws {
+        let container : KeyedDecodingContainer = try decoder.container(keyedBy: DB_ImageCodingKeys.self)
+        self.init(
+            image: try container.decode(Data.self, forKey: .image),
+            type: try container.decode(Data.self, forKey: .type),
+            quality: try container.decode(Data.self, forKey: .quality),
+            created: try container.decode(Data.self, forKey: .created),
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+        )
+    }
+    
     internal convenience init(from coreData : CD_Image) {
         self.init(
             image: coreData.imageData!,
             type: coreData.dataType!,
-            quality: coreData.compressionQuality,
+            quality: coreData.compressionQuality!,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

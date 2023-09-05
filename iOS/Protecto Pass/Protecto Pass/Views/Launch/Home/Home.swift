@@ -24,7 +24,6 @@ internal struct Home: View {
     }
 }
 
-/// The Preview for the Home View
 internal struct Home_Previews: PreviewProvider {
     static var previews: some View {
         Home(db: Database.previewDB)

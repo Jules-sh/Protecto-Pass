@@ -71,7 +71,7 @@ internal struct Welcome: View {
                 Group {
                     Text("No Databases found.")
                     Button("Open from File") {
-                     
+                     // TODO: implement function
                     }
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()

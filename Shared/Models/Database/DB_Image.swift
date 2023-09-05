@@ -68,6 +68,15 @@ internal final class DB_Image : General_DB_Image<UIImage, ImageType, Double, Dat
         hasher.combine(quality)
         hasher.combine(id)
     }
+    
+    /// The preview Image to use in SwiftUI Previews
+    internal static let previewImage : DB_Image = DB_Image(
+        image: UIImage(systemName: "car")!,
+        type: .JPG,
+        quality: 0.8,
+        created: Date.now,
+        lastEdited: Date.now
+    )
 }
 
 /// The Encrypted Data Structure being used when the Database is still encrypted.

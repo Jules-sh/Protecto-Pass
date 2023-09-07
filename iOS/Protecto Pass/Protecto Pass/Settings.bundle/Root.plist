@@ -20,9 +20,9 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Large Display</string>
+			<string>Large Screen</string>
 			<key>Key</key>
-			<string>large_display_preference</string>
+			<string>large_screen_preference</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>
@@ -68,7 +68,7 @@
 			<key>DefaultValue</key>
 			<string>1.0.0</string>
 			<key>Key</key>
-			<string>app_version_preferences_title</string>
+			<string>app_version_preference</string>
 		</dict>
 		<dict>
 			<key>Type</key>

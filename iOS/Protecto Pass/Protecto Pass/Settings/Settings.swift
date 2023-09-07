@@ -10,9 +10,9 @@ import SwiftUI
 
 /// Enum with a case for every Settings value with the stored identifier
 /// String
-private enum Settings : String, RawRepresentable {
+internal enum Settings : String, RawRepresentable {
 
-    case largeDisplay = "large_display_preference"
+    case largeScreen = "large_screen_preference"
 
     case compactMode = "compact_mode_preference"
 
@@ -26,12 +26,19 @@ private enum Settings : String, RawRepresentable {
 internal struct SettingsHelper {
 
     /// Load the current Value of the Settings
-    internal static func load() -> Void {
+    internal static func load() -> [Settings : Bool] {
+        let largeScreen : Bool = UserDefaults.standard.bool(forKey: Settings.largeScreen.rawValue)
+        let compactMode : Bool = UserDefaults.standard.bool(forKey: Settings.compactMode.rawValue)
+        return [
+            .largeScreen : largeScreen,
+            .compactMode : compactMode
+        ]
     }
 
     /// Update the Settings Values in the Settings App, if necessary
     internal static func update() -> Void {
-
+        UserDefaults.standard.set(Bundle.main.infoDictionary!["CFBundleShortVersionString"], forKey: Settings.appVersion.rawValue)
+        UserDefaults.standard.set(Bundle.main.infoDictionary!["CFBundleVersion"], forKey: Settings.buildVersion.rawValue)
     }
 }
 

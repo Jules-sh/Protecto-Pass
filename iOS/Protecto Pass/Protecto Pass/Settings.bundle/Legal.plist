@@ -7,6 +7,23 @@
 	<key>StringsTable</key>
 	<string>Legal</string>
 	<key>PreferenceSpecifiers</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Legal</string>
+			<key>FooterText</key>
+			<string>legal_footer_text</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Copyright</string>
+			<key>FooterText</key>
+			<string>copyright_footer_text</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -19,6 +19,7 @@
 		843312242AA59FC700ADA474 /* IconChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843312232AA59FC700ADA474 /* IconChooser.swift */; };
 		845300282A98B9F300CA4529 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300272A98B9F300CA4529 /* KeychainManager.swift */; };
 		8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300292A98BA9200CA4529 /* CoreDataManager.swift */; };
+		846302332AA99F7600C051E3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 846302322AA99F7600C051E3 /* Settings.bundle */; };
 		846455D02A9BA517003D023C /* DatabaseCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* DatabaseCache.swift */; };
 		8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474FDA92A93612C007F4215 /* ME_DataStructure.swift */; };
 		8481C7D92A9E282E004EC48E /* DatabaseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481C7D82A9E282E004EC48E /* DatabaseContent.swift */; };
@@ -93,6 +94,7 @@
 		843312232AA59FC700ADA474 /* IconChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconChooser.swift; sourceTree = "<group>"; };
 		845300272A98B9F300CA4529 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		845300292A98BA9200CA4529 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		846302322AA99F7600C051E3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		846455CF2A9BA517003D023C /* DatabaseCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseCache.swift; sourceTree = "<group>"; };
 		8474FDA92A93612C007F4215 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
 		8481C7D82A9E282E004EC48E /* DatabaseContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContent.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 		842EAC6929D832670014C8F8 /* Protecto Pass */ = {
 			isa = PBXGroup;
 			children = (
+				846302322AA99F7600C051E3 /* Settings.bundle */,
 				842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */,
 				84F4206129EEA0F1000D7600 /* Shared */,
 				84C4749C29E446F400543BA0 /* Views */,
@@ -501,6 +504,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 842EAC5E29D832670014C8F8;
 			productRefGroup = 842EAC6829D832670014C8F8 /* Products */;
@@ -520,6 +524,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				842EAC7229D832680014C8F8 /* Preview Assets.xcassets in Resources */,
+				846302332AA99F7600C051E3 /* Settings.bundle in Resources */,
 				842EAC6F29D832680014C8F8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

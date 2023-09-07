@@ -2,9 +2,11 @@
 
 "View" = "UI";
 "view_footer_text" = "Einstellungen welche die UI betreffen";
-"Large Display" = "Großer Bildschirm";
+"Large Screen" = "Großer Bildschirm";
 "Compact Mode" = "Kompakter Modus";
 "About" = "Über";
 "about_footer_text" = "Informationen über die App";
 "Legal" = "Rechtliches";
 "legal_footer_text" = "Rechtliche Informationen und Copyright";
+"Security" = "Sicherheit";
+"security_footer_text" = "Sicherheitsrelevante Einstellungen";

@@ -60,4 +60,9 @@ internal struct Storage {
         result.sort(by: { $0.lastEdited < $1.lastEdited })
         return result
     }
+
+    /// Resets all Data of this App and the connected Cloud Container
+    internal static func clearAll() -> Void {
+        // TODO: implement
+    }
 }

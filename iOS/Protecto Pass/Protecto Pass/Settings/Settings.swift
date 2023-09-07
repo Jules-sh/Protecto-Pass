@@ -19,24 +19,53 @@ internal enum Settings : String, RawRepresentable {
     case appVersion = "app_version_preference"
 
     case buildVersion = "build_version_preference"
+
+    case resetApp = "reset_app_preference"
 }
 
 /// Struct to manage Settings, load and update them
 /// out of this App in the Systems Settings App.
 internal struct SettingsHelper {
 
-    /// Load the current Value of the Settings
+    /// Loads all the Data to:
+    /// 1. the Settings App
+    /// 2. This App (returns a Dictionary of all Settings and their values)
     internal static func load() -> [Settings : Bool] {
-        let largeScreen : Bool = UserDefaults.standard.bool(forKey: Settings.largeScreen.rawValue)
-        let compactMode : Bool = UserDefaults.standard.bool(forKey: Settings.compactMode.rawValue)
+        update()
+        return loadData()
+    }
+
+    /// Load the current Value of the Settings
+    private static func loadData() -> [Settings : Bool] {
+        let largeScreen : Bool
+        let compactMode : Bool
+        if checkReset() {
+            largeScreen = false
+            compactMode = false
+            reset()
+        } else {
+            largeScreen = UserDefaults.standard.bool(forKey: Settings.largeScreen.rawValue)
+            compactMode = UserDefaults.standard.bool(forKey: Settings.compactMode.rawValue)
+        }
         return [
             .largeScreen : largeScreen,
             .compactMode : compactMode
         ]
     }
 
+    /// Checks whether the "Reset App" Switch in the System Settings App
+    /// has been set to true
+    private static func checkReset() -> Bool {
+        return UserDefaults.standard.bool(forKey: Settings.resetApp.rawValue)
+    }
+
+    /// Resets the App
+    private static func reset() -> Void {
+        Storage.clearAll()
+    }
+
     /// Update the Settings Values in the Settings App, if necessary
-    internal static func update() -> Void {
+    private static func update() -> Void {
         UserDefaults.standard.set(Bundle.main.infoDictionary!["CFBundleShortVersionString"], forKey: Settings.appVersion.rawValue)
         UserDefaults.standard.set(Bundle.main.infoDictionary!["CFBundleVersion"], forKey: Settings.buildVersion.rawValue)
     }
@@ -54,7 +83,7 @@ private struct CompactModeSettingsKey : EnvironmentKey {
 
 /// Defines both, the compact Mode and large Screen variable for the SwiftUI
 /// Environment
-extension EnvironmentValues {
+internal extension EnvironmentValues {
     var compactMode : Bool {
         get { self[CompactModeSettingsKey.self] }
         set { self[CompactModeSettingsKey.self] = newValue }

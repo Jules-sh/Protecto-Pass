@@ -18,10 +18,6 @@ internal struct Welcome: View {
     
     /// The Object to control the navigation of and with the AddDB Sheet
     @EnvironmentObject private var navigationSheet : AddDB_Navigation
-
-    @Environment(\.largeScreen) private var largeScreen
-
-    @Environment(\.compactMode) private var compactMode
     
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
@@ -80,8 +76,6 @@ internal struct Welcome: View {
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()
                     }
-                    Text(String(largeScreen))
-                    Text(String(compactMode))
                 }.padding(2.5)
             }
         }

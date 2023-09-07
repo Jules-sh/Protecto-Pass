@@ -12,6 +12,24 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
+			<string>Security</string>
+			<key>FooterText</key>
+			<string>security_footer_text</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Reset App</string>
+			<key>Key</key>
+			<string>reset_app_preference</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
 			<string>View</string>
 			<key>FooterText</key>
 			<string>view_footer_text</string>

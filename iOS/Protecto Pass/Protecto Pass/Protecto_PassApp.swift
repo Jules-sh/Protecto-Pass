@@ -23,7 +23,6 @@ internal struct Protecto_PassApp: App {
         let settings : [Settings : Bool] = SettingsHelper.load()
         largeScreen = settings[.largeScreen]!
         compactMode = settings[.compactMode]!
-        updateSettings()
     }
 
     var body: some Scene {
@@ -33,10 +32,5 @@ internal struct Protecto_PassApp: App {
                 .environment(\.largeScreen, largeScreen)
                 .environment(\.compactMode, compactMode)
         }
-    }
-
-    /// Updates the Settings
-    private func updateSettings() -> Void {
-        SettingsHelper.update()
     }
 }

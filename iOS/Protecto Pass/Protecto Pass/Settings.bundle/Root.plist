@@ -34,7 +34,51 @@
 			<key>Key</key>
 			<string>compact_mode_preference</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Legal</string>
+			<key>FooterText</key>
+			<string>legal_footer_text</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>Legal</string>
+			<key>File</key>
+			<string>Legal</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>About</string>
+			<key>FooterText</key>
+			<string>about_footer_text</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>App Version</string>
+			<key>DefaultValue</key>
+			<string>1.0.0</string>
+			<key>Key</key>
+			<string>app_version_preferences_title</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Build Version</string>
+			<key>DefaultValue</key>
+			<string>1</string>
+			<key>Key</key>
+			<string>build_version_preference</string>
 		</dict>
 	</array>
 </dict>

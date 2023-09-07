@@ -19,6 +19,7 @@
 		843312242AA59FC700ADA474 /* IconChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843312232AA59FC700ADA474 /* IconChooser.swift */; };
 		845300282A98B9F300CA4529 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300272A98B9F300CA4529 /* KeychainManager.swift */; };
 		8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300292A98BA9200CA4529 /* CoreDataManager.swift */; };
+		84627AC12AA9CA2000415827 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84627AC02AA9CA2000415827 /* Settings.swift */; };
 		846302332AA99F7600C051E3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 846302322AA99F7600C051E3 /* Settings.bundle */; };
 		846455D02A9BA517003D023C /* DatabaseCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* DatabaseCache.swift */; };
 		8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474FDA92A93612C007F4215 /* ME_DataStructure.swift */; };
@@ -94,6 +95,8 @@
 		843312232AA59FC700ADA474 /* IconChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconChooser.swift; sourceTree = "<group>"; };
 		845300272A98B9F300CA4529 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		845300292A98BA9200CA4529 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Protecto-Pass-Info.plist"; sourceTree = "<group>"; };
+		84627AC02AA9CA2000415827 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		846302322AA99F7600C051E3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		846455CF2A9BA517003D023C /* DatabaseCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseCache.swift; sourceTree = "<group>"; };
 		8474FDA92A93612C007F4215 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
@@ -120,7 +123,6 @@
 		84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 		84E4C5162A263FB8005D793F /* AddDB_Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Password.swift; sourceTree = "<group>"; };
 		84E4C5182A264D56005D793F /* Protecto Pass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Protecto Pass.entitlements"; sourceTree = "<group>"; };
-		84E4C5192A264DED005D793F /* Protecto-Pass-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Protecto-Pass-Info.plist"; sourceTree = SOURCE_ROOT; };
 		84E4C51A2A276107005D793F /* AddDB_Overview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Overview.swift; sourceTree = "<group>"; };
 		84EDFCFC2A94995B00A50A96 /* ME_ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_ContentView.swift; sourceTree = "<group>"; };
 		84F4206829EEA0F1000D7600 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				842EAC6929D832670014C8F8 /* Protecto Pass */,
+				84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */,
 				842EAC8029D832680014C8F8 /* Protecto PassTests */,
 				842EAC8A29D832680014C8F8 /* Protecto PassUITests */,
 				842EAC6829D832670014C8F8 /* Products */,
@@ -185,13 +188,13 @@
 		842EAC6929D832670014C8F8 /* Protecto Pass */ = {
 			isa = PBXGroup;
 			children = (
-				846302322AA99F7600C051E3 /* Settings.bundle */,
 				842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */,
 				84F4206129EEA0F1000D7600 /* Shared */,
 				84C4749C29E446F400543BA0 /* Views */,
 				846E689B2A703EB800BC049A /* Navigation */,
+				84627ABF2AA9C9A200415827 /* Settings */,
+				846302322AA99F7600C051E3 /* Settings.bundle */,
 				842EAC7829D832680014C8F8 /* Info.plist */,
-				84E4C5192A264DED005D793F /* Protecto-Pass-Info.plist */,
 				84E4C5182A264D56005D793F /* Protecto Pass.entitlements */,
 				842EAC6E29D832680014C8F8 /* Assets.xcassets */,
 				842EAC7029D832680014C8F8 /* Preview Content */,
@@ -222,6 +225,14 @@
 				842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */,
 			);
 			path = "Protecto PassUITests";
+			sourceTree = "<group>";
+		};
+		84627ABF2AA9C9A200415827 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				84627AC02AA9CA2000415827 /* Settings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		846E689B2A703EB800BC049A /* Navigation */ = {
@@ -505,6 +516,8 @@
 				en,
 				Base,
 				de,
+				fr,
+				es,
 			);
 			mainGroup = 842EAC5E29D832670014C8F8;
 			productRefGroup = 842EAC6829D832670014C8F8 /* Products */;
@@ -552,6 +565,7 @@
 			files = (
 				84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */,
 				84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */,
+				84627AC12AA9CA2000415827 /* Settings.swift in Sources */,
 				84F4207C29EEA0F2000D7600 /* DatabaseFileManager.swift in Sources */,
 				84A3ABEE2AA057620089521E /* NativeType.swift in Sources */,
 				84922B3B2A21F15600CE7945 /* Home.swift in Sources */,

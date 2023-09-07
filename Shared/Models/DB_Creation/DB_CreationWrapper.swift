@@ -27,7 +27,7 @@ internal final class DB_CreationWrapper : ObservableObject {
     internal final var encryption : Cryptography.Encryption = .AES256
     
     /// The way the Database should be stored
-    internal final var storageType : DB_Header.StorageType = .CoreData
+    internal final var storageType : Storage.StorageType = .CoreData
     
     /// The Path on where to store the Database
     internal final var path : URL? = nil

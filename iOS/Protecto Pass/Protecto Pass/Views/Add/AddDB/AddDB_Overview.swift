@@ -28,7 +28,7 @@ internal struct AddDB_Overview: View {
     @State private var encryption : Cryptography.Encryption = .AES256
     
     /// The Type of Storage used to store this Database
-    @State private var storage : DB_Header.StorageType = .CoreData
+    @State private var storage : Storage.StorageType = .CoreData
     
     /// Whether the password is shown or not
     @State private var passwordShown : Bool = false
@@ -68,7 +68,7 @@ internal struct AddDB_Overview: View {
                     }
                 }
                 Picker("Storage", selection: $storage) {
-                    ForEach(DB_Header.StorageType.allCases) {
+                    ForEach(Storage.StorageType.allCases) {
                         s in
                         Text(s.rawValue)
                     }

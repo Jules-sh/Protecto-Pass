@@ -13,20 +13,6 @@ import Foundation
 /// important information about the Database
 internal struct DB_Header : Codable {
     
-    /// The Enum to declare how the Database is stored.
-    internal enum StorageType : String, RawRepresentable, CaseIterable, Identifiable {
-        var id : Self { self }
-        
-        /// Storing this Database as an encrypted Core Data Instance
-        case CoreData
-        
-        /// Storing this Database in an local encrypted binary File
-        case File
-        
-        /// Storing this Database only local in the Keychain.
-        case Keychain
-    }
-    
     /// The Check String to check if the Decryption of the Database has been successful
     internal static let checkString : String = "Protecto Pass is the top 1 App!"
     
@@ -40,7 +26,7 @@ internal struct DB_Header : Codable {
         }
         return DB_Header(
             encryption: Cryptography.Encryption(rawValue: String(result[0]))!,
-            storageType: StorageType(rawValue: String(result[1]))!,
+            storageType: Storage.StorageType(rawValue: String(result[1]))!,
             salt: String(result[2]),
             path: URL(string: String(result[3]))
         )
@@ -48,7 +34,7 @@ internal struct DB_Header : Codable {
     
     internal init(
         encryption : Cryptography.Encryption,
-        storageType : StorageType,
+        storageType : Storage.StorageType,
         salt : String,
         path : URL? = nil
     ) {
@@ -65,7 +51,7 @@ internal struct DB_Header : Codable {
     
     /// The Enum telling the App how the Database
     /// is stored.
-    internal var storageType : StorageType
+    internal var storageType : Storage.StorageType
     
     /// The Salt to secure the password of the database
     /// against rainbow attacks
@@ -108,7 +94,7 @@ internal struct DB_Header : Codable {
         let container : KeyedDecodingContainer = try decoder.container(keyedBy: HeaderCodingKeys.self)
         self.init(
             encryption: Cryptography.Encryption(rawValue: try container.decode(String.self, forKey: .encryption))!,
-            storageType: StorageType(rawValue: try container.decode(String.self, forKey: .storageType))!,
+            storageType: Storage.StorageType(rawValue: try container.decode(String.self, forKey: .storageType))!,
             salt: try container.decode(String.self, forKey: .salt),
             path: try container.decode(URL?.self, forKey: .path)
         )

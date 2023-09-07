@@ -18,19 +18,45 @@ internal struct ME_ContentView : View {
     var body: some View {
         List {
             Section("Entries") {
-                ForEach(dataStructure.entries) {
-                    entry in
-                    NavigationLink(entry.title) {
-                        EntryDetails(entry: entry)
+                if !dataStructure.entries.isEmpty {
+                    ForEach(dataStructure.entries) {
+                        entry in
+                        NavigationLink(entry.title) {
+                            EntryDetails(entry: entry)
+                        }
                     }
+                } else {
+                    Text("No Entries found")
                 }
             }
             Section("Folder") {
-                ForEach(dataStructure.folders) {
-                    folder in
-                    NavigationLink(folder.name) {
-                        ME_ContentView(folder)
+                if !dataStructure.folders.isEmpty {
+                    ForEach(dataStructure.folders) {
+                        folder in
+                        NavigationLink(folder.name) {
+                            ME_ContentView(folder)
+                        }
                     }
+                } else {
+                    Text("No Folders found")
+                }
+            }
+            Section("Images") {
+                if !dataStructure.images.isEmpty {
+                    ForEach(dataStructure.images) {
+                        image in
+                    }
+                } else {
+                    Text("No Images found")
+                }
+            }
+            Section("Documents") {
+                if !dataStructure.documents.isEmpty {
+                    ForEach(dataStructure.documents) {
+                        document in
+                    }
+                } else {
+                    Text("No Documents found")
                 }
             }
         }

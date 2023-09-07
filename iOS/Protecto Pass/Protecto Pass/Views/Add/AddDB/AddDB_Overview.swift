@@ -28,7 +28,7 @@ internal struct AddDB_Overview: View {
     @State private var encryption : Cryptography.Encryption = .AES256
     
     /// The Type of Storage used to store this Database
-    @State private var storage : DB_Header.StorageType = .CoreData
+    @State private var storage : Storage.StorageType = .CoreData
     
     /// Whether the password is shown or not
     @State private var passwordShown : Bool = false
@@ -68,7 +68,7 @@ internal struct AddDB_Overview: View {
                     }
                 }
                 Picker("Storage", selection: $storage) {
-                    ForEach(DB_Header.StorageType.allCases) {
+                    ForEach(Storage.StorageType.allCases) {
                         s in
                         Text(s.rawValue)
                     }
@@ -115,19 +115,25 @@ internal struct AddDB_Overview: View {
         // They are still entered, in case the creation process will expand one day
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
-//        navigationController.db = Database(
-//            name: creationWrapper.name,
-//            description: creationWrapper.description,
-//            folders: [],
-//            entries: [],
-//            header: DB_Header(
-//                encryption: encryption,
-//                storageType: storage,
-//                salt: PasswordGenerator.generateSalt()
-//            ),
-//            key: SymmetricKey(size: .bits256),
-//            password: creationWrapper.password
-//        )
+        navigationController.db = Database(
+            name: creationWrapper.name,
+            description: creationWrapper.description,
+            folders: [],
+            entries: [],
+            images: [],
+            iconName: creationWrapper.iconName,
+            documents: [],
+            created: Date.now,
+            lastEdited: Date.now,
+            header: DB_Header(
+                encryption: encryption,
+                storageType: storage,
+                salt: PasswordGenerator.generateSalt(),
+                path: creationWrapper.path
+            ),
+            key: SymmetricKey(size: .bits256),
+            password: creationWrapper.password
+        )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext)
             navigationController.navigationSheetShown.toggle()

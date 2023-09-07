@@ -17,6 +17,9 @@ internal final class DB_CreationWrapper : ObservableObject {
     /// The Database's description
     internal final var description : String = ""
     
+    /// The IconName for this Database
+    internal final var iconName : String = ""
+    
     /// The Password the User chose to lock and unlock the Database with
     internal final var password : String = ""
     
@@ -24,5 +27,8 @@ internal final class DB_CreationWrapper : ObservableObject {
     internal final var encryption : Cryptography.Encryption = .AES256
     
     /// The way the Database should be stored
-    internal final var storageType : DB_Header.StorageType = .CoreData
+    internal final var storageType : Storage.StorageType = .CoreData
+    
+    /// The Path on where to store the Database
+    internal final var path : URL? = nil
 }

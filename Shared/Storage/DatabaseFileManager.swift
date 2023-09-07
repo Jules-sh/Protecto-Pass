@@ -46,9 +46,9 @@ internal struct DatabaseFileManager : DatabaseCache {
     
     internal static func load() throws -> [EncryptedDatabase] {
         // TODO: get path from somewhere
-        let path : URL = URL(string: "/")!
+//        let path : URL = URL(string: "/")!
         var paths : [URL] = []
-        paths.append(path)
+//        paths.append(path)
         
         var databases : [EncryptedDatabase] = []
         let jsonDecoder : JSONDecoder = JSONDecoder()

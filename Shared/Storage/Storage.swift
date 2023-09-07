@@ -15,6 +15,20 @@ import Foundation
 /// Data.
 internal struct Storage {
     
+    /// The Enum to declare how the Database is stored.
+    internal enum StorageType : String, RawRepresentable, CaseIterable, Identifiable {
+        var id : Self { self }
+        
+        /// Storing this Database as an encrypted Core Data Instance
+        case CoreData
+        
+        /// Storing this Database in an local encrypted binary File
+        case File
+        
+        /// Storing this Database only local in the Keychain.
+        case Keychain
+    }
+    
     /// Stores the passed Database to the right Storage.
     /// if you want to store something in Core Data, the connected context has to be provided.
     internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?) throws -> Void {

@@ -53,8 +53,9 @@ internal struct AddDB_Password: View {
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal, 100)
-            TextField("Password", text: $password)
+            PasswordField(title: "Enter a Password", text: $password)
                 .autocorrectionDisabled()
+                .textContentType(.newPassword)
                 .padding(.top, 50)
                 .onChange(of: password) {
                     _ in
@@ -62,7 +63,6 @@ internal struct AddDB_Password: View {
                 }
                 .padding(.top, 10)
                 .textCase(.none)
-                .textContentType(.newPassword)
                 .textInputAutocapitalization(.never)
                 .padding(.horizontal, 25)
                 .textFieldStyle(.roundedBorder)

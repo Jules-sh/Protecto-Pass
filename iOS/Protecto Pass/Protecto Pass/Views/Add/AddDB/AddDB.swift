@@ -28,20 +28,33 @@ internal struct AddDB: View {
     /// When set to true presents and alert that a name is required
     @State private var errEmptyName : Bool = false
     
+    /// The Name of the icon, to represent the database
+    @State private var iconName = "externaldrive"
+    
+    /// When set to true, the icon chooser view is shown
+    @State private var iconChooserShown : Bool = false
+    
     var body: some View {
         NavigationStack {
-            Image(systemName: "plus.rectangle.on.rectangle")
-                .renderingMode(.original)
-                .symbolRenderingMode(.hierarchical)
-                .resizable()
-                .scaledToFit()
-                .padding(.horizontal, 100)
+            Button {
+                iconChooserShown.toggle()
+            } label: {
+                Image(systemName: iconName)
+                    .renderingMode(.original)
+                    .symbolRenderingMode(.hierarchical)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.primary)
+            }
+            .sheet(isPresented: $iconChooserShown) {
+                IconChooser(iconName: $iconName, type: .database)
+            }
+            .padding(.horizontal, 100)
             VStack {
                 TextField("Name", text: $name)
                     .padding(.top, 50)
                     .textInputAutocapitalization(.words)
                     .alert("Empty Name", isPresented: $errEmptyName) {
-                        
                     } message: {
                         Text("A Name for the Database is required.\nPlease enter one")
                     }
@@ -81,6 +94,7 @@ internal struct AddDB: View {
         }
         creationWrapper.name = name
         creationWrapper.description = description
+        creationWrapper.iconName = iconName
         next.toggle()
     }
 }

@@ -24,6 +24,33 @@ internal struct Welcome: View {
     
     var body: some View {
         NavigationStack {
+            build()
+                .sheet(isPresented: $navigationSheet.navigationSheetShown) {
+                    AddDB()
+                        .environmentObject(navigationSheet)
+                }
+                .toolbarRole(.navigationStack)
+                .toolbar(.automatic, for: .navigationBar)
+                .toolbar {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            navigationSheet.navigationSheetShown.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
+                .navigationTitle("Welcome")
+                .navigationBarTitleDisplayMode(.automatic)
+                .navigationDestination(isPresented: $navigationSheet.openDatabaseToHome) {
+                    Home(db: navigationSheet.db!)
+                }
+        }
+    }
+    
+    @ViewBuilder
+    private func build() -> some View {
+        if !databases.isEmpty {
             // Geometry Reader use with Scroll View: https://stackoverflow.com/questions/58226768/how-to-make-the-row-fill-the-screen-width-with-some-padding-using-swiftui
             // Used answer: https://stackoverflow.com/a/58230599
             GeometryReader {
@@ -38,27 +65,18 @@ internal struct Welcome: View {
                         .padding(15)
                     }
                 }
-                // Sheet has to be outside, didn't work inside of ForEach
-                .sheet(isPresented: $navigationSheet.navigationSheetShown) {
-                    AddDB()
-                        .environmentObject(navigationSheet)
-                }
             }
-            .toolbarRole(.navigationStack)
-            .toolbar(.automatic, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        navigationSheet.navigationSheetShown.toggle()
-                    } label: {
-                        Image(systemName: "plus")
+        } else {
+            VStack {
+                Group {
+                    Text("No Databases found.")
+                    Button("Open from File") {
+                     // TODO: implement function
                     }
-                }
-            }
-            .navigationTitle("Welcome")
-            .navigationBarTitleDisplayMode(.automatic)
-            .navigationDestination(isPresented: $navigationSheet.openDatabaseToHome) {
-                Home(db: navigationSheet.db!)
+                    Button("Create new one") {
+                        navigationSheet.navigationSheetShown.toggle()
+                    }
+                }.padding(2.5)
             }
         }
     }
@@ -87,8 +105,18 @@ internal struct Welcome: View {
     }
 }
 
-/// Preview Provider for the Home View
-internal struct Welcome_Previews: PreviewProvider {
+internal struct EmptyWelcome_Previews: PreviewProvider {
+    static var previews: some View {
+        Welcome(
+            databases: [
+                //                EncryptedDatabase.previewDB,
+            ]
+        )
+        .environmentObject(AddDB_Navigation())
+    }
+}
+
+internal struct FilledWelcome_Previews: PreviewProvider {
     static var previews: some View {
         Welcome(
             databases: [

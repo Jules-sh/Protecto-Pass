@@ -132,7 +132,9 @@ internal struct AddDB_Overview: View {
                 path: creationWrapper.path
             ),
             key: SymmetricKey(size: .bits256),
-            password: creationWrapper.password
+            password: creationWrapper.password,
+            // TODO: change
+            allowBiometrics: true
         )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext)

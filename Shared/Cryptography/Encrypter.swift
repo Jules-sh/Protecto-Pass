@@ -105,7 +105,8 @@ internal struct Encrypter {
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
-            key: encryptedKey
+            key: encryptedKey,
+            allowBiometrics: db!.allowBiometrics
         )
         return encryptedDatabase
     }
@@ -319,7 +320,8 @@ internal struct Encrypter {
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
-            key: encryptedKey
+            key: encryptedKey,
+            allowBiometrics: db!.allowBiometrics
         )
         return encryptedDatabase
     }

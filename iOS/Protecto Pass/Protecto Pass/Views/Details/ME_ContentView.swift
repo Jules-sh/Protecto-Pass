@@ -8,6 +8,8 @@
 import SwiftUI
 
 internal struct ME_ContentView : View {
+
+    @Environment(\.largeScreen) private var largeScreen : Bool
     
     internal init(_ data : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>) {
         dataStructure = data
@@ -17,6 +19,15 @@ internal struct ME_ContentView : View {
     
     var body: some View {
         List {
+            if largeScreen {
+                Section {
+                } header: {
+                    Image(systemName: dataStructure.iconName)
+                        .resizable()
+                        .scaledToFit()
+                        .padding()
+                }
+            }
             Section("Entries") {
                 if !dataStructure.entries.isEmpty {
                     ForEach(dataStructure.entries) {
@@ -98,5 +109,16 @@ internal struct ME_ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ME_ContentView(db)
             .environmentObject(db)
+    }
+}
+
+internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
+
+    @StateObject private static var db : Database = Database.previewDB
+
+    static var previews: some View {
+        ME_ContentView(db)
+            .environmentObject(db)
+            .environment(\.largeScreen, true)
     }
 }

@@ -58,7 +58,7 @@ internal struct AddDB_Overview: View {
             } header: {
                 Text("Password")
             } footer: {
-                Text("Tap on the password to display it in clear-text")
+                Text("Tap to \(passwordShown ? "Hide" : "Show")")
             }
             Section {
                 Picker("Encryption", selection: $encryption) {

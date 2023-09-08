@@ -65,33 +65,16 @@ internal struct AddDB_CompactMode: View {
                     TextField("Description", text: $description)
                 } header: {
                     Text("General")
-                } footer: {
-                    VStack(alignment: .leading) {
-                        Text("General Information about the Database")
-                        Text("Name is required")
-                        Text("Description is optional")
-                    }
                 }
-                Section {
-                    Button {
-                        iconChooserPresented.toggle()
-                    } label: {
-                        Label("Icon", systemImage: iconName)
-                    }
-                    .sheet(isPresented: $iconChooserPresented) {
-                        IconChooser(iconName: $iconName, type: .database)
-                    }
-                } header: {
-                    Text("Representation")
-                } footer: {
-                    Text("Choose an Icon for your Database")
+                Button {
+                    iconChooserPresented.toggle()
+                } label: {
+                    Label("Icon", systemImage: iconName)
                 }
-                Section {
-                    PasswordField(title: "Password", text: $password, newPassword: true)
-                        .onChange(of: password) {
-                            _ in
-                            checkRequirements()
-                        }
+                .sheet(isPresented: $iconChooserPresented) {
+                    IconChooser(iconName: $iconName, type: .database)
+                }
+                Section("Security") {
                     Toggle("Allow Biometrics", isOn: $allowBiometrics)
                     Picker("Encryption", selection: $encryption) {
                         ForEach(Cryptography.Encryption.allCases) {
@@ -99,16 +82,34 @@ internal struct AddDB_CompactMode: View {
                             Text(e.rawValue)
                         }
                     }
+                }
+                Section {
+                    PasswordField(title: "Password", text: $password, newPassword: true)
+                        .onChange(of: password) {
+                            _ in
+                            checkRequirements()
+                        }
+                        .alert("Error", isPresented: $errChecking) {
+                            Button("Ok") {}
+                        } message: {
+                            Text("An Error appear, please try again")
+                        }
+                        .alert("Missing requirements", isPresented: $errRequirements) {
+                            Button("Ok") {}
+                        } message: {
+                            Text("Not all requirements are met.\nPlease meet all the requirements and then try again")
+                        }
                 } header: {
-                    Text("Security")
+                    EmptyView()
                 } footer: {
                     VStack(alignment: .leading) {
                         Text("Password requirements:")
+                        Text("At least:")
                         requirementRow("8 Characters", isMet: isLengthMet)
-                        requirementRow("At least 1 Upper Case Letter", isMet: containsUpperCaseLetter)
-                        requirementRow("At least 1 Lower Case Letter", isMet: containsLowerCaseLetter)
-                        requirementRow("At least 1 number", isMet: containsNumber)
-                        requirementRow("At least 1 symbol", isMet: containsSymbol)
+                        requirementRow("1 Upper Case Letter", isMet: containsUpperCaseLetter)
+                        requirementRow("1 Lower Case Letter", isMet: containsLowerCaseLetter)
+                        requirementRow("1 number", isMet: containsNumber)
+                        requirementRow("1 symbol", isMet: containsSymbol)
                     }
                 }
                 Section {
@@ -172,7 +173,17 @@ internal struct AddDB_CompactMode: View {
         }
     }
 
+    /// Whether all requirements are met or not
+    private var allChecked : Bool {
+        containsUpperCaseLetter && containsLowerCaseLetter && containsNumber && containsSymbol && password.count >= 8
+    }
+
+    /// Executed when the user pressed "done"
     private func done() -> Void {
+        guard allChecked else {
+            errRequirements.toggle()
+            return
+        }
     }
 }
 

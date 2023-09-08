@@ -252,7 +252,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         }
         self.init(
             name: DataConverter.dataToString(coreData.name!),
-            description: DataConverter.dataToString(coreData.objectDescription!),
+            description: DataConverter.dataToString(coreData.objectDescription),
             folders: localFolders,
             entries: localEntries,
             images: localImages,

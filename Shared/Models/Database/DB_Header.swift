@@ -63,6 +63,7 @@ internal struct DB_Header : Codable {
     
     /// Parses this Header to a String which is ready to be stored
     internal func parseHeader() -> String {
+        // TODO: escape semicolon in salt
         return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt); path: \(path?.absoluteString ?? "")"
     }
     

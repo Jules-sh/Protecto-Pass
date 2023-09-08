@@ -14,8 +14,11 @@ internal struct DataConverter {
         return string.data(using: .utf8)!
     }
     
-    internal static func dataToString(_ data : Data) -> String {
-        return String(data: data, encoding: .utf8)!
+    internal static func dataToString(_ data : Data?) -> String {
+        guard data != nil else {
+            return ""
+        }
+        return String(data: data!, encoding: .utf8)!
     }
     
     internal static func stringToDate(_ string : String) throws -> Date {

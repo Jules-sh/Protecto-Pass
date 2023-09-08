@@ -97,6 +97,7 @@ internal struct PasswordGenerator {
     internal func generatePassword() -> String {
         // Discussion: https://stackoverflow.com/questions/26845307/generate-random-alphanumeric-string-in-swift
         // Solution: https://stackoverflow.com/a/26845710
+        // TODO: is this a secure random function?
         return String((0..<length).map { _ in getContent().randomElement()! })
     }
 }

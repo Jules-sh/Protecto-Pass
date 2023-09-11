@@ -41,7 +41,6 @@ internal struct Storage {
             try DatabaseFileManager.storeDatabase(database)
         case .Keychain:
             KeychainManager.storeDatabase(database)
-            break
         }
     }
     

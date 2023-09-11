@@ -74,11 +74,12 @@ internal struct AddDB_Password: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Password requirements:")
+                    Text("At least:")
                     requirementRow("8 Characters", isMet: isLengthMet)
-                    requirementRow("At least 1 Upper Case Letter", isMet: containsUpperCaseLetter)
-                    requirementRow("At least 1 Lower Case Letter", isMet: containsLowerCaseLetter)
-                    requirementRow("At least 1 number", isMet: containsNumber)
-                    requirementRow("At least 1 symbol", isMet: containsSymbol)
+                    requirementRow("1 Upper Case Letter", isMet: containsUpperCaseLetter)
+                    requirementRow("1 Lower Case Letter", isMet: containsLowerCaseLetter)
+                    requirementRow("1 number", isMet: containsNumber)
+                    requirementRow("1 symbol", isMet: containsSymbol)
                 }
                 .alert("Error", isPresented: $errChecking) {
                     Button("Ok") {}
@@ -183,7 +184,7 @@ internal struct AddDB_PasswordVerification : View {
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal, 100)
-            TextField("Verify Password", text: $verifyPassword)
+            PasswordField(title: "Verify Password", text: $verifyPassword, newPassword: true)
                 .autocorrectionDisabled()
                 .padding(.top, 50)
                 .onChange(of: verifyPassword) {

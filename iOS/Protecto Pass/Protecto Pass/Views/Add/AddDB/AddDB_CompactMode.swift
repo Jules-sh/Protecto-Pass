@@ -57,6 +57,13 @@ internal struct AddDB_CompactMode: View {
     /// When set to true, presents an alert, stating that not all requirements are met.
     @State private var errRequirements : Bool = false
 
+    /// The URL to the directory chosen by the User to store
+    /// this Database in
+    @State private var path : URL? = nil
+
+    /// Whether the directory selector is presented or not
+    @State private var selectorPresented : Bool = false
+
     var body: some View {
         NavigationStack {
             List {
@@ -113,11 +120,23 @@ internal struct AddDB_CompactMode: View {
                     }
                 }
                 Section {
-                    Picker("Storage", selection: $storage) {
+                    Picker("Storage", selection: $storage.animation()) {
                         ForEach(Storage.StorageType.allCases) {
                             s in
                             Text(s.rawValue)
                         }
+                    }
+                    if storage == .File {
+                        Button {
+                            selectorPresented.toggle()
+                        } label: {
+                            Label(path != nil ? path!.relativePath : "Path", systemImage: path != nil ? "folder" : "questionmark.folder")
+                        }
+                        .fileImporter(
+                            isPresented: $selectorPresented,
+                            allowedContentTypes: [.folder],
+                            allowsMultipleSelection: false
+                        ) { path = try! $0.get().first }
                     }
                 }
             }

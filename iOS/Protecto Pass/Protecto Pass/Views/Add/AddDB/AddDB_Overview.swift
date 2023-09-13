@@ -36,6 +36,10 @@ internal struct AddDB_Overview: View {
     /// When set to true, displays an alert with an Error Message, because
     /// something went wrong when saving the Database
     @State private var errSavingPresented : Bool = false
+
+    @State private var path : URL? = nil
+
+    @State private var selectorPresented : Bool = false
     
     var body: some View {
         List {
@@ -58,7 +62,7 @@ internal struct AddDB_Overview: View {
             } header: {
                 Text("Password")
             } footer: {
-                Text("Tap on the password to display it in clear-text")
+                Text("Tap to \(passwordShown ? "Hide" : "Show")")
             }
             Section {
                 Picker("Encryption", selection: $encryption) {
@@ -67,11 +71,23 @@ internal struct AddDB_Overview: View {
                         Text(e.rawValue)
                     }
                 }
-                Picker("Storage", selection: $storage) {
+                Picker("Storage", selection: $storage.animation()) {
                     ForEach(Storage.StorageType.allCases) {
                         s in
                         Text(s.rawValue)
                     }
+                }
+                if storage == .File {
+                    Button {
+                        selectorPresented.toggle()
+                    } label: {
+                        Label(path != nil ? path!.relativePath : "Path", systemImage: path != nil ? "folder" : "questionmark.folder")
+                    }
+                    .fileImporter(
+                        isPresented: $selectorPresented,
+                        allowedContentTypes: [.folder],
+                        allowsMultipleSelection: false
+                    ) { path = try! $0.get().first }
                 }
             } header: {
                 Text("Further Configuration")
@@ -111,10 +127,11 @@ internal struct AddDB_Overview: View {
     /// This Methods creates a Database and generates all the data
     /// that isn't entered by the User
     private func done() -> Void {
-        // TODO: these two lines as well as the data in the creation Wrapper may be pointless
+        // TODO: these three lines as well as the data in the creation Wrapper may be pointless
         // They are still entered, in case the creation process will expand one day
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
+        creationWrapper.path = path
         navigationController.db = Database(
             name: creationWrapper.name,
             description: creationWrapper.description,
@@ -126,13 +143,15 @@ internal struct AddDB_Overview: View {
             created: Date.now,
             lastEdited: Date.now,
             header: DB_Header(
-                encryption: encryption,
-                storageType: storage,
+                encryption: creationWrapper.encryption,
+                storageType: creationWrapper.storageType,
                 salt: PasswordGenerator.generateSalt(),
                 path: creationWrapper.path
             ),
-            key: SymmetricKey(size: .bits256),
-            password: creationWrapper.password
+            key: PasswordGenerator.generateKey(),
+            password: creationWrapper.password,
+            // TODO: change
+            allowBiometrics: true
         )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext)

@@ -39,7 +39,6 @@ internal struct DatabaseFileManager : DatabaseCache {
         }
         let jsonEncoder : JSONEncoder = JSONEncoder()
         let jsonData : Data = try jsonEncoder.encode(db)
-        // TODO: review options
         try jsonData.write(to: url, options: [.atomic, .completeFileProtection])
         update(id: db.id, with: db)
     }

@@ -22,8 +22,12 @@ internal struct PersistenceController {
             let db : CD_Database = CD_Database(context: viewContext)
             db.name = DataConverter.stringToData("Database \(i)")
             db.objectDescription = DataConverter.stringToData("This is the Database Number \(i)")
+            db.iconName = DataConverter.stringToData("externaldrive")
             let header : DB_Header = DB_Header(encryption: .AES256, storageType: .CoreData, salt: "Salt")
             db.header = header.parseHeader()
+            db.created = DataConverter.dateToData(Date.now)
+            db.lastEdited = DataConverter.dateToData(Date.now)
+            db.key = Data(count: 10)
         }
         do {
             try viewContext.save()

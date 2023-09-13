@@ -23,6 +23,9 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
     /// The Key that should be used to
     /// encrypt and decrypt this Database
     internal let key : K
+
+    /// Whether or not biometrics are allow to decrypt and unlock this Database
+    internal let allowBiometrics : Bool
     
     internal init(
         name : String,
@@ -35,10 +38,12 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
         created : Date,
         lastEdited : Date,
         header : DB_Header,
-        key : K
+        key : K,
+        allowBiometrics : Bool
     ) {
         self.header = header
         self.key = key
+        self.allowBiometrics = allowBiometrics
         super.init(
             name: name,
             description: description,
@@ -71,7 +76,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         lastEdited : Date,
         header : DB_Header,
         key : SymmetricKey,
-        password : String
+        password : String,
+        allowBiometrics : Bool
     ) {
         self.password = password
         super.init(
@@ -85,7 +91,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
             created: created,
             lastEdited: lastEdited,
             header: header,
-            key: key
+            key: key,
+            allowBiometrics: allowBiometrics
         )
     }
     
@@ -114,7 +121,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
             salt: "salt"
         ),
         key: SymmetricKey(size: .bits256),
-        password: "Password"
+        password: "Password",
+        allowBiometrics: true
     )
     
     static func == (lhs: Database, rhs: Database) -> Bool {
@@ -157,7 +165,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         created : Date,
         lastEdited : Date,
         header: DB_Header,
-        key: Data
+        key: Data,
+        allowBiometrics : Bool
     ) {
         super.init(
             name: name,
@@ -170,7 +179,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             created: created,
             lastEdited: lastEdited,
             header: header,
-            key: key
+            key: key,
+            allowBiometrics: allowBiometrics
         )
     }
     
@@ -186,6 +196,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         case lastEdited
         case header
         case key
+        case allowBiometrics
     }
     
     func encode(to encoder: Encoder) throws {
@@ -201,6 +212,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         try container.encode(lastEdited, forKey: .lastEdited)
         try container.encode(header, forKey: .header)
         try container.encode(key, forKey: .key)
+        try container.encode(allowBiometrics, forKey: .allowBiometrics)
     }
     
     internal convenience init(from decoder: Decoder) throws {
@@ -216,7 +228,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             created: try container.decode(Date.self, forKey: .created),
             lastEdited: try container.decode(Date.self, forKey: .lastEdited),
             header: try container.decode(DB_Header.self, forKey: .header),
-            key:try container.decode(Data.self, forKey: .key)
+            key:try container.decode(Data.self, forKey: .key),
+            allowBiometrics: try container.decode(Bool.self, forKey: .allowBiometrics)
         )
     }
     
@@ -239,7 +252,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         }
         self.init(
             name: DataConverter.dataToString(coreData.name!),
-            description: DataConverter.dataToString(coreData.objectDescription!),
+            description: DataConverter.dataToString(coreData.objectDescription),
             folders: localFolders,
             entries: localEntries,
             images: localImages,
@@ -248,7 +261,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             created: try DataConverter.dataToDate(coreData.created!),
             lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
             header: try DB_Header.parseString(string: coreData.header!),
-            key: coreData.key!
+            key: coreData.key!,
+            allowBiometrics: coreData.allowBiometrics
         )
     }
     
@@ -276,6 +290,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             storageType: .CoreData,
             salt: "salt"
         ),
-        key: Data()
+        key: Data(),
+        allowBiometrics: true
     )
 }

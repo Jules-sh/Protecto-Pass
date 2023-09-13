@@ -54,11 +54,13 @@ internal struct AddDB: View {
                 TextField("Name", text: $name)
                     .padding(.top, 50)
                     .textInputAutocapitalization(.words)
+                    .keyboardType(.namePhonePad)
                     .alert("Empty Name", isPresented: $errEmptyName) {
                     } message: {
                         Text("A Name for the Database is required.\nPlease enter one")
                     }
                 TextField("Description", text: $description)
+                    .keyboardType(.asciiCapable)
             }
             .textInputAutocapitalization(.sentences)
             .textCase(.none)

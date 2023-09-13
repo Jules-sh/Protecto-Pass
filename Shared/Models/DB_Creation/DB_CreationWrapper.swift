@@ -22,6 +22,9 @@ internal final class DB_CreationWrapper : ObservableObject {
     
     /// The Password the User chose to lock and unlock the Database with
     internal final var password : String = ""
+
+    /// Whether or not to allow biometrics to unlock this Database
+    internal final var allowBiometrics : Bool = false
     
     /// The Encryption Algorithm being used to encrypt the Database
     internal final var encryption : Cryptography.Encryption = .AES256

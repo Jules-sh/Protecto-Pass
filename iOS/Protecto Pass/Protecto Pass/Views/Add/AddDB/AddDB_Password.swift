@@ -13,7 +13,7 @@ internal struct AddDB_Password: View {
     /// The creation wrapper created to begin of this process
     @EnvironmentObject private var creationWrapper : DB_CreationWrapper
     
-    /// Whether the passwords are equival or not
+    /// Whether the passwords are equal or not
     @State private var passwordStatus : Bool = false
     
     /// The Password chosen to create the Database
@@ -34,7 +34,7 @@ internal struct AddDB_Password: View {
     /// Set to true if the password contains at least one symbol
     @State private var containsSymbol : Bool = false
     
-    /// When toggled, an alert is displayed telling the user somthing
+    /// When toggled, an alert is displayed telling the user something
     /// went wrong
     @State private var errChecking : Bool = false
     
@@ -74,11 +74,12 @@ internal struct AddDB_Password: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Password requirements:")
+                    Text("At least:")
                     requirementRow("8 Characters", isMet: isLengthMet)
-                    requirementRow("At least 1 Upper Case Letter", isMet: containsUpperCaseLetter)
-                    requirementRow("At least 1 Lower Case Letter", isMet: containsLowerCaseLetter)
-                    requirementRow("At least 1 number", isMet: containsNumber)
-                    requirementRow("At least 1 symbol", isMet: containsSymbol)
+                    requirementRow("1 Upper Case Letter", isMet: containsUpperCaseLetter)
+                    requirementRow("1 Lower Case Letter", isMet: containsLowerCaseLetter)
+                    requirementRow("1 number", isMet: containsNumber)
+                    requirementRow("1 symbol", isMet: containsSymbol)
                 }
                 .alert("Error", isPresented: $errChecking) {
                     Button("Ok") {}
@@ -140,36 +141,16 @@ internal struct AddDB_Password: View {
     private func checkRequirements() -> Void {
         // TODO: maybe change regex
         // Length
-        if password.count >= 8 {
-            isLengthMet = true
-        } else {
-            isLengthMet = false
-        }
+        isLengthMet = password.count >= 8
         do {
             // Upper Case
-            if password.contains(try Regex("[A-Z]")) {
-                containsUpperCaseLetter = true
-            } else {
-                containsUpperCaseLetter = false
-            }
+            containsUpperCaseLetter = password.contains(try Regex("[A-Z]"))
             // Lower Case
-            if password.contains(try Regex("[a-z]")) {
-                containsLowerCaseLetter = true
-            } else {
-                containsLowerCaseLetter = false
-            }
+            containsLowerCaseLetter = password.contains(try Regex("[a-z]"))
             // Number
-            if password.contains(try Regex("[0-9]")) {
-                containsNumber = true
-            } else {
-                containsNumber = false
-            }
+            containsNumber = password.contains(try Regex("[0-9]"))
             // Symbols
-            if password.contains(try Regex("[^A-Za-z0-9\\w\\s]")) {
-                containsSymbol = true
-            } else {
-                containsSymbol = false
-            }
+            containsSymbol = password.contains(try Regex("[^A-Za-z0-9\\w\\s]"))
         } catch {
             errChecking.toggle()
         }
@@ -203,7 +184,7 @@ internal struct AddDB_PasswordVerification : View {
                 .resizable()
                 .scaledToFit()
                 .padding(.horizontal, 100)
-            TextField("Verify Password", text: $verifyPassword)
+            PasswordField(title: "Verify Password", text: $verifyPassword, newPassword: true)
                 .autocorrectionDisabled()
                 .padding(.top, 50)
                 .onChange(of: verifyPassword) {

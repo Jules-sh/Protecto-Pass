@@ -15,19 +15,28 @@ import SwiftUI
 /// The View that is shown to the User as soon as
 /// he opens the App
 internal struct Welcome: View {
-    
+
+    @Environment(\.compactMode) private var compactMode
+
     /// The Object to control the navigation of and with the AddDB Sheet
     @EnvironmentObject private var navigationSheet : AddDB_Navigation
     
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
+
+    @State private var selectorPresented : Bool = false
     
     var body: some View {
         NavigationStack {
             build()
                 .sheet(isPresented: $navigationSheet.navigationSheetShown) {
-                    AddDB()
-                        .environmentObject(navigationSheet)
+                    if compactMode {
+                        AddDB_CompactMode()
+                            .environmentObject(navigationSheet)
+                    } else {
+                        AddDB()
+                            .environmentObject(navigationSheet)
+                    }
                 }
                 .toolbarRole(.navigationStack)
                 .toolbar(.automatic, for: .navigationBar)
@@ -71,7 +80,16 @@ internal struct Welcome: View {
                 Group {
                     Text("No Databases found.")
                     Button("Open from File") {
-                     // TODO: implement function
+                        selectorPresented.toggle()
+                    }
+                    .fileImporter(
+                        isPresented: $selectorPresented,
+                        allowedContentTypes: [.folder],
+                        allowsMultipleSelection: false
+                    ) {
+                        try! $0.get()
+//                        path = try! $0.get().first
+
                     }
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()
@@ -108,11 +126,10 @@ internal struct Welcome: View {
 internal struct EmptyWelcome_Previews: PreviewProvider {
     static var previews: some View {
         Welcome(
-            databases: [
-                //                EncryptedDatabase.previewDB,
-            ]
+            databases: []
         )
         .environmentObject(AddDB_Navigation())
+        .environment(\.compactMode, false)
     }
 }
 
@@ -124,5 +141,28 @@ internal struct FilledWelcome_Previews: PreviewProvider {
             ]
         )
         .environmentObject(AddDB_Navigation())
+        .environment(\.compactMode, false)
+    }
+}
+
+internal struct EmptyWelcomeCompact_Previews: PreviewProvider {
+    static var previews: some View {
+        Welcome(
+            databases: []
+        )
+        .environmentObject(AddDB_Navigation())
+        .environment(\.compactMode, true)
+    }
+}
+
+internal struct FilledWelcomeCompact_Previews: PreviewProvider {
+    static var previews: some View {
+        Welcome(
+            databases: [
+                EncryptedDatabase.previewDB,
+            ]
+        )
+        .environmentObject(AddDB_Navigation())
+        .environment(\.compactMode, true)
     }
 }

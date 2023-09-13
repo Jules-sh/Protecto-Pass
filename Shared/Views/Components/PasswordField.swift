@@ -13,11 +13,11 @@ internal struct PasswordField: View {
     /// The Title of this Password Field
     internal let title : String
     
-    /// Whether this is a new Password or not
-    internal let newPassword : Bool = false
-    
     /// Where to write the text to
     @Binding internal var text : String
+
+    /// Whether this is a new Password or not
+    internal var newPassword : Bool = false
     
     /// Whether the Password is shown or not
     @State private var isShown : Bool = false
@@ -28,7 +28,14 @@ internal struct PasswordField: View {
             .autocorrectionDisabled()
             .textCase(.none)
             .textInputAutocapitalization(.never)
-            .textFieldStyle(.roundedBorder)
+            .keyboardType(.asciiCapable)
+        // TODO: change, because text is deleted when changing
+//            .onChange(of: text) {
+//                _ in
+//                if isShown {
+//                    isShown.toggle()
+//                }
+//            }
     }
     
     @ViewBuilder
@@ -49,7 +56,7 @@ internal struct PasswordField: View {
                     Image(systemName: isShown ? "eye.slash" : "eye")
                 }
                 .foregroundColor(.primary)
-                .padding(.trailing, 25)
+                .padding(.trailing, 10)
             }
         }
     }

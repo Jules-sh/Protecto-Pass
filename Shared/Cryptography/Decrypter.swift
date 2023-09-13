@@ -118,7 +118,8 @@ internal struct Decrypter {
             lastEdited: db!.lastEdited,
             header: db!.header,
             key: key!,
-            password: userPassword!
+            password: userPassword!,
+            allowBiometrics: db!.allowBiometrics
         )
         return decryptedDatabase
     }
@@ -333,7 +334,8 @@ internal struct Decrypter {
             lastEdited: db!.lastEdited,
             header: db!.header,
             key: key!,
-            password: userPassword!
+            password: userPassword!,
+            allowBiometrics: db!.allowBiometrics
         )
         return decryptedDatabase
     }

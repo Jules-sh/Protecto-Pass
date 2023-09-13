@@ -5,6 +5,7 @@
 //  Created by Julian Schumacher on 30.05.23.
 //
 
+import CryptoKit
 import Foundation
 
 /// Struct to generate random and secure Passwords
@@ -33,11 +34,15 @@ internal struct PasswordGenerator {
     
     /// Generates a secure salt for the password.
     /// The size is 64 bits and it contains every possible content
+    /// Also, the salt does not contains ':' or  ';'
     internal static func generateSalt() -> String {
-        return generatePassword(
+        var salt : String = generatePassword(
             length: 64,
             characters: PasswordContent.getAll()
         )
+        salt.replace(":", with: ".")
+        salt.replace(";", with: "_")
+        return salt
     }
     
     /// Generates a random and secure password with the
@@ -97,6 +102,11 @@ internal struct PasswordGenerator {
     internal func generatePassword() -> String {
         // Discussion: https://stackoverflow.com/questions/26845307/generate-random-alphanumeric-string-in-swift
         // Solution: https://stackoverflow.com/a/26845710
+        // TODO: is this a secure random function?
         return String((0..<length).map { _ in getContent().randomElement()! })
+    }
+
+    internal static func generateKey() -> SymmetricKey {
+        return SymmetricKey(size: .bits256)
     }
 }

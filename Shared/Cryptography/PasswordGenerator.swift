@@ -33,11 +33,15 @@ internal struct PasswordGenerator {
     
     /// Generates a secure salt for the password.
     /// The size is 64 bits and it contains every possible content
+    /// Also, the salt does not contains ':' or  ';'
     internal static func generateSalt() -> String {
-        return generatePassword(
+        var salt : String = generatePassword(
             length: 64,
             characters: PasswordContent.getAll()
         )
+        salt.replace(":", with: ".")
+        salt.replace(";", with: "_")
+        return salt
     }
     
     /// Generates a random and secure password with the

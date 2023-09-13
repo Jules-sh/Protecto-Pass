@@ -24,11 +24,12 @@ internal struct DB_Header : Codable {
             let split : [Substring] = s.split(separator: ":")
             result.append(split[1])
         }
+        let pathString : String = String(result[3])
         return DB_Header(
             encryption: Cryptography.Encryption(rawValue: String(result[0]))!,
             storageType: Storage.StorageType(rawValue: String(result[1]))!,
             salt: String(result[2]),
-            path: URL(string: String(result[3]))
+            path: pathString == "nil" ? nil : URL(string: String(result[3]))
         )
     }
     
@@ -63,8 +64,7 @@ internal struct DB_Header : Codable {
     
     /// Parses this Header to a String which is ready to be stored
     internal func parseHeader() -> String {
-        // TODO: escape semicolon in salt
-        return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt); path: \(path?.absoluteString ?? "")"
+        return "encryption: \(encryption.rawValue); storagetype: \(storageType.rawValue); salt: \(salt); path: \(path?.absoluteString ?? "nil")"
     }
     
     /// A preview header to use in previews and tests.

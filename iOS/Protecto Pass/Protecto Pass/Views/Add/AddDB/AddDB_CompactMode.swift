@@ -69,7 +69,9 @@ internal struct AddDB_CompactMode: View {
             List {
                 Section {
                     TextField("Name", text: $name)
+                        .keyboardType(.namePhonePad)
                     TextField("Description", text: $description)
+                        .keyboardType(.asciiCapable)
                 } header: {
                     Text("General")
                 }

@@ -76,6 +76,15 @@ internal struct ME_ContentView : View {
         .toolbarRole(.navigationStack)
         .toolbar(.automatic, for: .navigationBar)
         .toolbar {
+            if dataStructure is Database {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .cancel) {
+
+                    } label: {
+                        Image(systemName: "lock")
+                    }
+                }
+            }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     NavigationLink {
@@ -87,6 +96,16 @@ internal struct ME_ContentView : View {
                         EditFolder()
                     } label: {
                         Label("Add Folder", systemImage: "folder")
+                    }
+                    NavigationLink {
+                        EditFolder()
+                    } label: {
+                        Label("Add Image", systemImage: "photo")
+                    }
+                    NavigationLink {
+                        EditFolder()
+                    } label: {
+                        Label("Add Document", systemImage: "doc.text")
                     }
                     Divider()
                     NavigationLink {

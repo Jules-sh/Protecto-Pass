@@ -28,6 +28,13 @@ internal struct PasswordField: View {
             .autocorrectionDisabled()
             .textCase(.none)
             .textInputAutocapitalization(.never)
+        // TODO: change, because text is deleted when changing
+//            .onChange(of: text) {
+//                _ in
+//                if isShown {
+//                    isShown.toggle()
+//                }
+//            }
     }
     
     @ViewBuilder

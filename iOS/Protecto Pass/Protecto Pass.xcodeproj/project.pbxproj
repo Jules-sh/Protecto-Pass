@@ -42,7 +42,6 @@
 		84DB4F942A73C60E00C2DD0E /* EditEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F932A73C60E00C2DD0E /* EditEntry.swift */; };
 		84DB4F962A73C61300C2DD0E /* EditFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F952A73C61300C2DD0E /* EditFolder.swift */; };
 		84DB4F9A2A766BEF00C2DD0E /* HomeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F992A766BEF00C2DD0E /* HomeSelector.swift */; };
-		84DB4F9C2A7678E100C2DD0E /* HomeSelectorNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F9B2A7678E100C2DD0E /* HomeSelectorNavigation.swift */; };
 		84E4C5122A249E87005D793F /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5112A249E87005D793F /* Cryptography.swift */; };
 		84E4C5142A25CEA2005D793F /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */; };
 		84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5162A263FB8005D793F /* AddDB_Password.swift */; };
@@ -120,7 +119,6 @@
 		84DB4F932A73C60E00C2DD0E /* EditEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEntry.swift; sourceTree = "<group>"; };
 		84DB4F952A73C61300C2DD0E /* EditFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolder.swift; sourceTree = "<group>"; };
 		84DB4F992A766BEF00C2DD0E /* HomeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSelector.swift; sourceTree = "<group>"; };
-		84DB4F9B2A7678E100C2DD0E /* HomeSelectorNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSelectorNavigation.swift; sourceTree = "<group>"; };
 		84E4C5112A249E87005D793F /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
 		84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 		84E4C5162A263FB8005D793F /* AddDB_Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Password.swift; sourceTree = "<group>"; };
@@ -241,7 +239,6 @@
 			isa = PBXGroup;
 			children = (
 				84ACC7A32A6AB8130033E83A /* AddDB_Navigation.swift */,
-				84DB4F9B2A7678E100C2DD0E /* HomeSelectorNavigation.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -607,7 +604,6 @@
 				84A3ABEA2A9F6E7D0089521E /* DB_Image.swift in Sources */,
 				84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */,
 				84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */,
-				84DB4F9C2A7678E100C2DD0E /* HomeSelectorNavigation.swift in Sources */,
 				84DB4F902A739D9100C2DD0E /* Me_Details.swift in Sources */,
 				8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */,
 				849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */,

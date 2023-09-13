@@ -36,6 +36,10 @@ internal struct AddDB_Overview: View {
     /// When set to true, displays an alert with an Error Message, because
     /// something went wrong when saving the Database
     @State private var errSavingPresented : Bool = false
+
+    @State private var path : URL? = nil
+
+    @State private var selectorPresented : Bool = false
     
     var body: some View {
         List {
@@ -67,11 +71,23 @@ internal struct AddDB_Overview: View {
                         Text(e.rawValue)
                     }
                 }
-                Picker("Storage", selection: $storage) {
+                Picker("Storage", selection: $storage.animation()) {
                     ForEach(Storage.StorageType.allCases) {
                         s in
                         Text(s.rawValue)
                     }
+                }
+                if storage == .File {
+                    Button {
+                        selectorPresented.toggle()
+                    } label: {
+                        Label(path != nil ? path!.relativePath : "Path", systemImage: path != nil ? "folder" : "questionmark.folder")
+                    }
+                    .fileImporter(
+                        isPresented: $selectorPresented,
+                        allowedContentTypes: [.folder],
+                        allowsMultipleSelection: false
+                    ) { path = try! $0.get().first }
                 }
             } header: {
                 Text("Further Configuration")

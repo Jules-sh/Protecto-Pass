@@ -23,6 +23,8 @@ internal struct Welcome: View {
     
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
+
+    @State private var selectorPresented : Bool = false
     
     var body: some View {
         NavigationStack {
@@ -77,7 +79,16 @@ internal struct Welcome: View {
                 Group {
                     Text("No Databases found.")
                     Button("Open from File") {
-                     // TODO: implement function
+                        selectorPresented.toggle()
+                    }
+                    .fileImporter(
+                        isPresented: $selectorPresented,
+                        allowedContentTypes: [.folder],
+                        allowsMultipleSelection: false
+                    ) {
+                        try! $0.get()
+//                        path = try! $0.get().first
+
                     }
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()

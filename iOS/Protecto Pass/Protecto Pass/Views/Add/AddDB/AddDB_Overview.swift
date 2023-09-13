@@ -127,10 +127,11 @@ internal struct AddDB_Overview: View {
     /// This Methods creates a Database and generates all the data
     /// that isn't entered by the User
     private func done() -> Void {
-        // TODO: these two lines as well as the data in the creation Wrapper may be pointless
+        // TODO: these three lines as well as the data in the creation Wrapper may be pointless
         // They are still entered, in case the creation process will expand one day
         creationWrapper.encryption = encryption
         creationWrapper.storageType = storage
+        creationWrapper.path = path
         navigationController.db = Database(
             name: creationWrapper.name,
             description: creationWrapper.description,
@@ -142,12 +143,12 @@ internal struct AddDB_Overview: View {
             created: Date.now,
             lastEdited: Date.now,
             header: DB_Header(
-                encryption: encryption,
-                storageType: storage,
+                encryption: creationWrapper.encryption,
+                storageType: creationWrapper.storageType,
                 salt: PasswordGenerator.generateSalt(),
                 path: creationWrapper.path
             ),
-            key: SymmetricKey(size: .bits256),
+            key: PasswordGenerator.generateKey(),
             password: creationWrapper.password,
             // TODO: change
             allowBiometrics: true

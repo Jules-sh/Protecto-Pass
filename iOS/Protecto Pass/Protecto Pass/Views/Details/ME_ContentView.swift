@@ -9,6 +9,9 @@ import SwiftUI
 
 internal struct ME_ContentView : View {
 
+    /// Controls the navigation flow, only necessary if this represents a Database
+    @EnvironmentObject private var navigationController : AddDB_Navigation
+
     @Environment(\.largeScreen) private var largeScreen : Bool
     
     internal init(_ data : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>) {
@@ -79,7 +82,8 @@ internal struct ME_ContentView : View {
             if dataStructure is Database {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-
+                        // TODO: add closing Database
+                        navigationController.openDatabaseToHome.toggle()
                     } label: {
                         Image(systemName: "lock")
                     }

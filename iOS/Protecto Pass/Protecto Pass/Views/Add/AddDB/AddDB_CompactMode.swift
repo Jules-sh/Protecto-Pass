@@ -9,7 +9,12 @@ import SwiftUI
 
 internal struct AddDB_CompactMode: View {
 
+    @Environment(\.managedObjectContext) private var viewContext
+
     @Environment(\.dismiss) private var dismiss
+
+    /// Controls the navigation when adding and creating a new Database
+    @EnvironmentObject private var navigationController : AddDB_Navigation
 
     /// The Name of the Database
     @State private var name : String = ""
@@ -63,6 +68,9 @@ internal struct AddDB_CompactMode: View {
 
     /// Whether the directory selector is presented or not
     @State private var selectorPresented : Bool = false
+
+    /// When there's an error saving data, setting this to true will display an error alert
+    @State private var errSavingPresented : Bool = false
 
     var body: some View {
         NavigationStack {
@@ -142,6 +150,11 @@ internal struct AddDB_CompactMode: View {
                     }
                 }
             }
+            .alert("Error Saving", isPresented: $errSavingPresented) {
+
+            } message: {
+                Text("An error occurred while saving the Database, please try again.")
+            }
             .navigationTitle("Add Database")
             .navigationBarTitleDisplayMode(.automatic)
             .toolbarRole(.navigationStack)
@@ -204,6 +217,36 @@ internal struct AddDB_CompactMode: View {
         guard allChecked else {
             errRequirements.toggle()
             return
+        }
+        // TODO: these three lines as well as the data in the creation Wrapper may be pointless
+        // They are still entered, in case the creation process will expand one day
+        navigationController.db = Database(
+            name: name,
+            description: description,
+            folders: [],
+            entries: [],
+            images: [],
+            iconName: iconName,
+            documents: [],
+            created: Date.now,
+            lastEdited: Date.now,
+            header: DB_Header(
+                encryption: encryption,
+                storageType: storage,
+                salt: PasswordGenerator.generateSalt(),
+                path: path
+            ),
+            key: PasswordGenerator.generateKey(),
+            password: password,
+            // TODO: change
+            allowBiometrics: true
+        )
+        do {
+            try Storage.storeDatabase(navigationController.db!, context: viewContext)
+            navigationController.navigationSheetShown.toggle()
+            navigationController.openDatabaseToHome.toggle()
+        } catch {
+            errSavingPresented.toggle()
         }
     }
 }

@@ -32,6 +32,7 @@ internal struct Welcome: View {
                 .sheet(isPresented: $navigationSheet.navigationSheetShown) {
                     if compactMode {
                         AddDB_CompactMode()
+                            .environmentObject(navigationSheet)
                     } else {
                         AddDB()
                             .environmentObject(navigationSheet)

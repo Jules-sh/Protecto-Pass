@@ -5,6 +5,7 @@
 //  Created by Julian Schumacher on 30.05.23.
 //
 
+import CryptoKit
 import Foundation
 
 /// Struct to generate random and secure Passwords
@@ -103,5 +104,9 @@ internal struct PasswordGenerator {
         // Solution: https://stackoverflow.com/a/26845710
         // TODO: is this a secure random function?
         return String((0..<length).map { _ in getContent().randomElement()! })
+    }
+
+    internal static func generateKey() -> SymmetricKey {
+        return SymmetricKey(size: .bits256)
     }
 }

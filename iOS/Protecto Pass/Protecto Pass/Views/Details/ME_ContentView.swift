@@ -83,7 +83,9 @@ internal struct ME_ContentView : View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         // TODO: add closing Database
-                        navigationController.openDatabaseToHome.toggle()
+                        withAnimation {
+                            navigationController.openDatabaseToHome.toggle()
+                        }
                     } label: {
                         Image(systemName: "lock")
                     }

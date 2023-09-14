@@ -14,11 +14,11 @@ internal struct UnlockDB: View {
     internal let db : EncryptedDatabase
     
     /// The unlocked Database
-    private var unlockedDB : Database
+    @State private var unlockedDB : Database?
     
     internal init(db : EncryptedDatabase) {
         self.db = db
-        unlockedDB = Database.previewDB
+        unlockedDB = nil
     }
     
     /// The Password entered by the User with which
@@ -58,10 +58,7 @@ internal struct UnlockDB: View {
             } footer: {
                 Text(db.description)
             }
-            TextField("Enter your Password...", text: $password)
-                .textCase(.none)
-                .textContentType(.password)
-                .textInputAutocapitalization(.none)
+            PasswordField(title: "Enter your Password...", text: $password)
                 .multilineTextAlignment(.leading)
                 .textFieldStyle(.roundedBorder)
         }
@@ -69,11 +66,20 @@ internal struct UnlockDB: View {
         .navigationBarTitleDisplayMode(.automatic)
         .padding(20)
         .navigationDestination(isPresented: $unlockSuccess) {
-            Home(db: unlockedDB)
+            Home(db: unlockedDB!)
         }
         .alert("Error Unlock Database", isPresented: $errDecryptingPresented) {
         } message: {
             Text("An Error occurred while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
+        }
+        .toolbarRole(.navigationStack)
+        .toolbar(.automatic, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Unlock") {
+                    tryUnlocking()
+                }
+            }
         }
     }
     
@@ -118,7 +124,7 @@ internal struct UnlockDB: View {
     }
     
     /// Try to unlock the Database with the provided password
-    private mutating func tryUnlocking() -> Void {
+    private func tryUnlocking() -> Void {
         do {
             unlockedDB = try db.decrypt(using: password)
             unlockSuccess.toggle()

@@ -15,7 +15,7 @@ internal struct Me_Details: View {
     
     var body: some View {
         List {
-            Section {
+            Section("General") {
                 ListTile(name: "Name", data: me.name)
                 if me.description.isEmpty {
                     ListTile(name: "Description", data: "No Description provided")
@@ -26,14 +26,14 @@ internal struct Me_Details: View {
                             .foregroundColor(.gray)
                     }
                 }
-            } header: {
-                Text("General")
             }
-            Section {
+            Section("Content") {
                 Text("Contains \(me.folders.count) Folders")
                 Text("Contains \(me.entries.count) Entries")
-            } header: {
-                Text("Content")
+            }
+            Section("Timeline") {
+                ListTile(name: "Created", date: me.created)
+                ListTile(name: "Last edited", date: me.lastEdited)
             }
         }
         .navigationTitle("\(me.name) Details")

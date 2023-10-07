@@ -103,7 +103,6 @@ internal struct AddDB_CompactMode: View {
                 Section {
                     PasswordField(title: "Password", text: $password, newPassword: true)
                         .onChange(of: password) {
-                            _ in
                             checkRequirements()
                         }
                         .alert("Error", isPresented: $errChecking) {

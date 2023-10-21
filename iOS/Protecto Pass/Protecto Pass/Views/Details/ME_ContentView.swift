@@ -140,7 +140,6 @@ internal struct ME_ContentView_Previews: PreviewProvider {
     
     static var previews: some View {
         ME_ContentView(db)
-            .environmentObject(db)
     }
 }
 
@@ -150,7 +149,6 @@ internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
 
     static var previews: some View {
         ME_ContentView(db)
-            .environmentObject(db)
             .environment(\.largeScreen, true)
     }
 }

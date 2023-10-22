@@ -98,7 +98,6 @@ internal struct Welcome: View {
                     ) {
                         let path : URL = try! $0.get().first!
                         let jsonDecoder : JSONDecoder = JSONDecoder()
-                        
                         do {
                             dbFromPath = try jsonDecoder.decode(
                                 EncryptedDatabase.self,

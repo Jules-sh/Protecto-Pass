@@ -29,11 +29,11 @@ internal struct Welcome: View {
     
     /// The Database, stored as file, selected by the User
     /// on the File System
-    @State private var dbFromPath : EncryptedDatabase? = nil
+    @State private var dbFromPath : EncryptedDatabase?
     
     @State private var unlockDBFromPathPresented : Bool = false
-    
-    @State private var errReadingDatabaseFromPathShown : Bool = true
+
+    @State private var errReadingDatabaseFromPathShown : Bool = false
     
     var body: some View {
         NavigationStack {
@@ -98,6 +98,7 @@ internal struct Welcome: View {
                     ) {
                         let path : URL = try! $0.get().first!
                         let jsonDecoder : JSONDecoder = JSONDecoder()
+                        
                         do {
                             dbFromPath = try jsonDecoder.decode(
                                 EncryptedDatabase.self,
@@ -115,6 +116,7 @@ internal struct Welcome: View {
                         Text("There's been an error while reading the Database from the File System.\nPlease try again")
                     }
                     .navigationDestination(isPresented: $unlockDBFromPathPresented) {
+                        // TODO: preview Database in Production Code
                         UnlockDB(db: dbFromPath ?? EncryptedDatabase.previewDB)
                     }
                     Button("Create new one") {

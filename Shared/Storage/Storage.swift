@@ -51,7 +51,7 @@ internal struct Storage {
         let coreData : [EncryptedDatabase] = try CoreDataManager.load(with: context)
         result.append(contentsOf: coreData)
         // File System
-        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load()
+        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(with: context)
         result.append(contentsOf: fileSystem)
         // Keychain
         let keychain : [EncryptedDatabase] = KeychainManager.load()

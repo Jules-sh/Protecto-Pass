@@ -58,7 +58,6 @@ internal struct AddDB_Password: View {
                 .textContentType(.newPassword)
                 .padding(.top, 50)
                 .onChange(of: password) {
-                    _ in
                     checkRequirements()
                 }
                 .padding(.top, 10)
@@ -188,7 +187,6 @@ internal struct AddDB_PasswordVerification : View {
                 .autocorrectionDisabled()
                 .padding(.top, 50)
                 .onChange(of: verifyPassword) {
-                    _ in
                     checkEqual()
                 }
                 .padding(.top, 10)

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22G91" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="AppData" representedClassName="AppData" syncable="YES" codeGenerationType="class">
+        <relationship name="paths" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="DB_Path" inverseName="appData" inverseEntity="DB_Path"/>
+    </entity>
     <entity name="CD_Database" representedClassName="CD_Database" parentEntity="CD_ME_DataStructure" syncable="YES" codeGenerationType="class">
         <attribute name="allowBiometrics" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="header" attributeType="String" defaultValueString="Protecto Pass is a great App" allowsCloudEncryption="YES"/>
@@ -42,5 +45,15 @@
     <entity name="CD_NativeType" representedClassName="CD_NativeType" isAbstract="YES" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="iconName" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Document" inverseName="parent" inverseEntity="CD_Document"/>
+    </entity>
+    <entity name="DB_Path" representedClassName="DB_Path" syncable="YES" codeGenerationType="class">
+        <attribute name="isiCloud" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
+        <attribute name="path" optional="YES" attributeType="URI" minValueString="0" allowsCloudEncryption="YES"/>
+        <relationship name="appData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AppData" inverseName="paths" inverseEntity="AppData"/>
+    </entity>
+    <entity name="Preferences" representedClassName="Preferences" syncable="YES" codeGenerationType="class">
+        <attribute name="compactMode" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
+        <attribute name="largeScreen" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
+        <attribute name="syncToiCloud" optional="YES" attributeType="Boolean" defaultValueString="YES" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
     </entity>
 </model>

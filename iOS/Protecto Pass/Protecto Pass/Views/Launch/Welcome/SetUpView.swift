@@ -47,7 +47,7 @@ internal struct SetUpView: View {
             }
             .alert("Error", isPresented: $errInitPresented) {
             } message: {
-                Text("An Error occurred while loading. Please force close and restart the Application")
+                Text("An Error occurred while loading. \nPlease force close and restart the Application")
             }
         }
     }

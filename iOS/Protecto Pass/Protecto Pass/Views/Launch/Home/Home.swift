@@ -29,3 +29,10 @@ internal struct Home_Previews: PreviewProvider {
         Home(db: Database.previewDB)
     }
 }
+
+internal struct Home_LargeScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        Home(db: Database.previewDB)
+            .environment(\.largeScreen, true)
+    }
+}

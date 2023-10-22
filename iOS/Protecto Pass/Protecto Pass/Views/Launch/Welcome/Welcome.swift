@@ -15,16 +15,25 @@ import SwiftUI
 /// The View that is shown to the User as soon as
 /// he opens the App
 internal struct Welcome: View {
-
+    
     @Environment(\.compactMode) private var compactMode
-
+    
     /// The Object to control the navigation of and with the AddDB Sheet
     @EnvironmentObject private var navigationSheet : AddDB_Navigation
     
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
-
+    
+    /// Whether or not the file Importer is shown
     @State private var selectorPresented : Bool = false
+    
+    /// The Database, stored as file, selected by the User
+    /// on the File System
+    @State private var dbFromPath : EncryptedDatabase?
+    
+    @State private var unlockDBFromPathPresented : Bool = false
+
+    @State private var errReadingDatabaseFromPathShown : Bool = false
     
     var body: some View {
         NavigationStack {
@@ -87,9 +96,27 @@ internal struct Welcome: View {
                         allowedContentTypes: [.folder],
                         allowsMultipleSelection: false
                     ) {
-                        try! $0.get()
-//                        path = try! $0.get().first
-
+                        let path : URL = try! $0.get().first!
+                        let jsonDecoder : JSONDecoder = JSONDecoder()
+                        do {
+                            dbFromPath = try jsonDecoder.decode(
+                                EncryptedDatabase.self,
+                                from: try Data(
+                                    contentsOf: path,
+                                    options: [.uncached]
+                                )
+                            )
+                        } catch {
+                            errReadingDatabaseFromPathShown.toggle()
+                        }
+                    }
+                    .alert("Error Reading DB", isPresented: $errReadingDatabaseFromPathShown) {
+                    } message: {
+                        Text("There's been an error while reading the Database from the File System.\nPlease try again")
+                    }
+                    .navigationDestination(isPresented: $unlockDBFromPathPresented) {
+                        // TODO: preview Database in Production Code
+                        UnlockDB(db: dbFromPath ?? EncryptedDatabase.previewDB)
                     }
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()

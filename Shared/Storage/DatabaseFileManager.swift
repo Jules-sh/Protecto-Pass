@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import CoreData
 
 /// The Struct controlling reading and writing
 /// from and to a file, if the user selected that he wants
@@ -43,12 +44,14 @@ internal struct DatabaseFileManager : DatabaseCache {
         update(id: db.id, with: db)
     }
     
-    internal static func load() throws -> [EncryptedDatabase] {
-        // TODO: get path from somewhere
-//        let path : URL = URL(string: "/")!
+    internal static func load(with context : NSManagedObjectContext) throws -> [EncryptedDatabase] {
+        let appData : AppData = try context.fetch(AppData.fetchRequest()).first!
+        // Sort for iCloud and not
         var paths : [URL] = []
-//        paths.append(path)
-        
+        for path in appData.paths! {
+            let localPath = path as! DB_Path
+            paths.append(localPath.path!)
+        }
         var databases : [EncryptedDatabase] = []
         let jsonDecoder : JSONDecoder = JSONDecoder()
         for path in paths {

@@ -103,7 +103,6 @@ internal struct AddDB_CompactMode: View {
                 Section {
                     PasswordField(title: "Password", text: $password, newPassword: true)
                         .onChange(of: password) {
-                            _ in
                             checkRequirements()
                         }
                         .alert("Error", isPresented: $errChecking) {
@@ -146,7 +145,9 @@ internal struct AddDB_CompactMode: View {
                             isPresented: $selectorPresented,
                             allowedContentTypes: [.folder],
                             allowsMultipleSelection: false
-                        ) { path = try! $0.get().first }
+                        ) {
+                            path = try! $0.get().first
+                        }
                     }
                 }
             }

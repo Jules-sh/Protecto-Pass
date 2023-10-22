@@ -10,34 +10,47 @@
 import SwiftUI
 
 internal struct Me_Details: View {
+
+    @Environment(\.dismiss) private var dismiss
     
     internal let me : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
     
     var body: some View {
-        List {
-            Section("General") {
-                ListTile(name: "Name", data: me.name)
-                if me.description.isEmpty {
-                    ListTile(name: "Description", data: "No Description provided")
-                } else {
-                    Group {
-                        Text("Description")
-                        Text(me.description)
-                            .foregroundColor(.gray)
+        NavigationStack {
+            List {
+                Section("General") {
+                    ListTile(name: "Name", data: me.name)
+                    if me.description.isEmpty {
+                        ListTile(name: "Description", data: "No Description provided")
+                    } else {
+                        Group {
+                            Text("Description")
+                            Text(me.description)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                Section("Content") {
+                    Text("Contains \(me.folders.count) Folders")
+                    Text("Contains \(me.entries.count) Entries")
+                }
+                Section("Timeline") {
+                    ListTile(name: "Created", date: me.created)
+                    ListTile(name: "Last edited", date: me.lastEdited)
+                }
+            }
+            .navigationTitle("Details")
+            .navigationBarTitleDisplayMode(.automatic)
+            .toolbarRole(.navigationStack)
+            .toolbar(.automatic, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
                     }
                 }
             }
-            Section("Content") {
-                Text("Contains \(me.folders.count) Folders")
-                Text("Contains \(me.entries.count) Entries")
-            }
-            Section("Timeline") {
-                ListTile(name: "Created", date: me.created)
-                ListTile(name: "Last edited", date: me.lastEdited)
-            }
         }
-        .navigationTitle("\(me.name) Details")
-        .navigationBarTitleDisplayMode(.automatic)
     }
 }
 

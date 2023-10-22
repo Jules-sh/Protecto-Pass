@@ -12,13 +12,17 @@ internal struct ME_ContentView : View {
     /// Controls the navigation flow, only necessary if this represents a Database
     @EnvironmentObject private var navigationController : AddDB_Navigation
 
+    /// Whether the User activated the large Screen preference or not
     @Environment(\.largeScreen) private var largeScreen : Bool
     
     internal init(_ data : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>) {
         dataStructure = data
     }
-    
+
+    /// The Data Structure which is displayed in this View
     private let dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
+
+    @State private var detailsPresented : Bool = false
     
     var body: some View {
         List {
@@ -74,6 +78,9 @@ internal struct ME_ContentView : View {
                 }
             }
         }
+        .sheet(isPresented: $detailsPresented) {
+            Me_Details(me: dataStructure)
+        }
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
@@ -82,8 +89,10 @@ internal struct ME_ContentView : View {
             if dataStructure is Database {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
-                        // TODO: add closing Database
-                        navigationController.openDatabaseToHome.toggle()
+                        // TODO: add closing Database Code
+                        withAnimation {
+                            navigationController.openDatabaseToHome.toggle()
+                        }
                     } label: {
                         Image(systemName: "lock")
                     }
@@ -112,8 +121,8 @@ internal struct ME_ContentView : View {
                         Label("Add Document", systemImage: "doc.text")
                     }
                     Divider()
-                    NavigationLink {
-                        Me_Details(me: dataStructure)
+                    Button {
+                        detailsPresented.toggle()
                     } label: {
                         Label("Details", systemImage: "info.circle")
                     }
@@ -131,7 +140,6 @@ internal struct ME_ContentView_Previews: PreviewProvider {
     
     static var previews: some View {
         ME_ContentView(db)
-            .environmentObject(db)
     }
 }
 
@@ -141,7 +149,6 @@ internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
 
     static var previews: some View {
         ME_ContentView(db)
-            .environmentObject(db)
             .environment(\.largeScreen, true)
     }
 }

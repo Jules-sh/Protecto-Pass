@@ -13,10 +13,7 @@ import SwiftUI
 /// String
 internal enum Settings : String, RawRepresentable {
     
-    case syncPathToiCloud = "sync_paths_preference"
-    
-    case syncSettingsToiCloud = "sync_settings_preference"
-    
+    // Root View
     case largeScreen = "large_screen_preference"
     
     case compactMode = "compact_mode_preference"
@@ -26,6 +23,14 @@ internal enum Settings : String, RawRepresentable {
     case buildVersion = "build_version_preference"
     
     case resetApp = "reset_app_preference"
+    
+    
+    // iCloud View
+    case syncPathToiCloud = "sync_paths_preference"
+    
+    case syncSettingsToiCloud = "sync_settings_preference"
+    
+    case deleteiCloudData = "delete_icloud_data_preference"
 }
 
 /// Struct to manage Settings, load and update them
@@ -48,7 +53,8 @@ internal struct SettingsHelper {
     internal static func initialize(with context : NSManagedObjectContext) -> Void {
         if iCloudPaths {
             if try! context.fetch(AppData.fetchRequest()).first == nil {
-                let appData : AppData = AppData(context: context)
+                // Create new App Data Object, so it's available later
+                let _ = AppData(context: context)
             }
         }
         if iCloudSettings {

@@ -47,7 +47,6 @@
         <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Document" inverseName="parent" inverseEntity="CD_Document"/>
     </entity>
     <entity name="DB_Path" representedClassName="DB_Path" syncable="YES" codeGenerationType="class">
-        <attribute name="isiCloud" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="path" optional="YES" attributeType="URI" minValueString="0" allowsCloudEncryption="YES"/>
         <relationship name="appData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AppData" inverseName="paths" inverseEntity="AppData"/>
     </entity>

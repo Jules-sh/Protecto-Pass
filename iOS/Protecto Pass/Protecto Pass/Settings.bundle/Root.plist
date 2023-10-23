@@ -12,6 +12,22 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
+			<string>General</string>
+			<key>FooterText</key>
+			<string>general_footer_text</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>Sync to iCloud</string>
+			<key>File</key>
+			<string>iCloud</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
 			<string>View</string>
 			<key>FooterText</key>
 			<string>view_footer_text</string>

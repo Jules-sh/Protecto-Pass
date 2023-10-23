@@ -14,20 +14,19 @@ internal struct Protecto_PassApp: App {
     private let persistenceController : PersistenceController = PersistenceController.shared
 
     /// Indicates whether the "Large Screen" Setting is true or false
-    private let largeScreen : Bool
+    @State private var largeScreen : Bool = false
 
     /// Whether the compact Mode is activated or not
-    private let compactMode : Bool
-
-    internal init() {
-        let settings : [Settings : Bool] = SettingsHelper.load()
-        largeScreen = settings[.largeScreen]!
-        compactMode = settings[.compactMode]!
-    }
+    @State private var compactMode : Bool = false
 
     var body: some Scene {
         WindowGroup {
             SetUpView()
+                .onAppear {
+                    let settings : [Settings : Bool] = SettingsHelper.load(with: persistenceController.container.viewContext)
+                    largeScreen = settings[.largeScreen]!
+                    compactMode = settings[.compactMode]!
+                }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.largeScreen, largeScreen)
                 .environment(\.compactMode, compactMode)

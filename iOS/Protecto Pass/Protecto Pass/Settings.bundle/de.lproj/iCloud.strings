@@ -1,0 +1,12 @@
+
+/* German Localization for the Settings Bundle iCloud Page */
+
+"Sync to iCloud" = "Zu iCloud synchronisieren";
+"footer_text" = "Wähle welche Komponenten zu iCloud synchronisiert werden sollen.
+
+Pfade: Die Pfade der als Datei gespeicherten Datenbanken werden zu iCloud synchronisiert.
+
+Einstellungen: Die Einstellungen der App.
+";
+"Settings" = "Einstellungen";
+"Paths" = "Pfade";

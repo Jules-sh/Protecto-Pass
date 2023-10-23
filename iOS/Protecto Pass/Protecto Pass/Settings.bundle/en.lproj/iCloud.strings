@@ -1,0 +1,12 @@
+
+/* English Localization for the Settings Bundle iCloud Page */
+
+"Sync to iCloud" = "Sync to iCloud";
+"footer_text" = "Choose the Components of the App you want to sync to iCloud
+
+Paths: The Paths of the Databases stored as Files will be synced to iCloud.
+
+Settings: The Settings of the App.
+";
+"Settings" = "Settings";
+"Paths" = "Paths";

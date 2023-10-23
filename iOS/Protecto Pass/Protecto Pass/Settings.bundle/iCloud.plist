@@ -22,7 +22,7 @@
 			<key>Title</key>
 			<string>Paths</string>
 			<key>Key</key>
-			<string>sync_path_preference</string>
+			<string>sync_paths_preference</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>

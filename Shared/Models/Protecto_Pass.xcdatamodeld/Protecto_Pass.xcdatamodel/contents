@@ -54,6 +54,5 @@
     <entity name="Preferences" representedClassName="Preferences" syncable="YES" codeGenerationType="class">
         <attribute name="compactMode" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="largeScreen" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
-        <attribute name="syncToiCloud" optional="YES" attributeType="Boolean" defaultValueString="YES" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
     </entity>
 </model>

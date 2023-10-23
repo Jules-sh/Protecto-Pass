@@ -18,15 +18,17 @@ internal struct Protecto_PassApp: App {
 
     /// Whether the compact Mode is activated or not
     @State private var compactMode : Bool = false
+    
+    internal init() {
+        let settings : [Settings : Bool] = SettingsHelper.load()
+        compactMode = settings[.compactMode]!
+        largeScreen = settings[.largeScreen]!
+    }
 
     var body: some Scene {
         WindowGroup {
             SetUpView()
-                .onAppear {
-                    let settings : [Settings : Bool] = SettingsHelper.load(with: persistenceController.container.viewContext)
-                    largeScreen = settings[.largeScreen]!
-                    compactMode = settings[.compactMode]!
-                }
+                .onAppear { SettingsHelper.initialize(with: persistenceController.container.viewContext) }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.largeScreen, largeScreen)
                 .environment(\.compactMode, compactMode)

@@ -2,7 +2,7 @@
 /* French Localization for the Settings Bundle iCloud Page */
 
 "Sync to iCloud" = "Synchroniser avec iCloud";
-"footer_text" = "Choisissez les composants de l'application que vous souhaitez synchroniser avec iCloud
+"icloud_footer_text" = "Choisissez les composants de l'application que vous souhaitez synchroniser avec iCloud
 
 Chemins : les chemins des bases de données stockées sous forme de fichiers seront synchronisés avec iCloud.
 

@@ -28,7 +28,7 @@ internal struct Protecto_PassApp: App {
     var body: some Scene {
         WindowGroup {
             SetUpView()
-                .onAppear { SettingsHelper.initialize(with: persistenceController.container.viewContext) }
+                .onAppear { SettingsHelper.loadiCloud(with: persistenceController.container.viewContext) }
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.largeScreen, largeScreen)
                 .environment(\.compactMode, compactMode)

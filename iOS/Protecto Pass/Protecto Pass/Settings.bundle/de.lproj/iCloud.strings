@@ -2,7 +2,7 @@
 /* German Localization for the Settings Bundle iCloud Page */
 
 "Sync to iCloud" = "Zu iCloud synchronisieren";
-"footer_text" = "Wähle welche Komponenten zu iCloud synchronisiert werden sollen.
+"icloud_footer_text" = "Wähle aus, welche Komponenten zu iCloud synchronisiert werden sollen.
 
 Pfade: Die Pfade der als Datei gespeicherten Datenbanken werden zu iCloud synchronisiert.
 
@@ -10,3 +10,6 @@ Einstellungen: Die Einstellungen der App.
 ";
 "Settings" = "Einstellungen";
 "Paths" = "Pfade";
+"Delete Data" = "Daten löschen";
+"Privacy" = "Privatsphäre";
+"privacy_footer_text" = "Lösche die in iCloud gesicherten und synchronisierten Daten";

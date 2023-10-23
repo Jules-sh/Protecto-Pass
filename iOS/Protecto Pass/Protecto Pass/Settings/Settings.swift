@@ -42,7 +42,7 @@ internal struct SettingsHelper {
     
     /// Whether the Paths of the databases should be synced to iCloud or not
     private static var iCloudPaths : Bool = true
-    
+
     private static var largeScreen : Bool = false
     
     private static var compactMode : Bool = false
@@ -50,20 +50,29 @@ internal struct SettingsHelper {
     
     /// Initialized the Settings, creates the Preferences Object in
     /// iCloud if needed
-    internal static func initialize(with context : NSManagedObjectContext) -> Void {
-        if iCloudPaths {
-            if try! context.fetch(AppData.fetchRequest()).first == nil {
-                // Create new App Data Object, so it's available later
-                let _ = AppData(context: context)
+    internal static func loadiCloud(with context : NSManagedObjectContext) -> Void {
+        if checkiCloudReset() {
+            if let appData : AppData = try! context.fetch(AppData.fetchRequest()).first {
+                context.delete(appData)
             }
-        }
-        if iCloudSettings {
-            if let settingsFromiCloud : Preferences = try! context.fetch(Preferences.fetchRequest()).first {
-                update(compactMode: settingsFromiCloud.compactMode, largeScreen: settingsFromiCloud.largeScreen)
-            } else {
-                let preferences : Preferences = Preferences(context: context)
-                preferences.compactMode = compactMode
-                preferences.largeScreen = largeScreen
+            if let preferences : Preferences = try! context.fetch(Preferences.fetchRequest()).first {
+                context.delete(preferences)
+            }
+        } else {
+            if iCloudPaths {
+                if try! context.fetch(AppData.fetchRequest()).first == nil {
+                    // Create new App Data Object, so it's available later
+                    let _ = AppData(context: context)
+                }
+            }
+            if iCloudSettings {
+                if let settingsFromiCloud : Preferences = try! context.fetch(Preferences.fetchRequest()).first {
+                    update(compactMode: settingsFromiCloud.compactMode, largeScreen: settingsFromiCloud.largeScreen)
+                } else {
+                    let preferences : Preferences = Preferences(context: context)
+                    preferences.compactMode = compactMode
+                    preferences.largeScreen = largeScreen
+                }
             }
         }
     }
@@ -102,6 +111,12 @@ internal struct SettingsHelper {
     /// has been set to true
     private static func checkReset() -> Bool {
         return UserDefaults.standard.bool(forKey: Settings.resetApp.rawValue)
+    }
+    
+    /// Checks if the "Delete Data" Switch in the iCloud Subview of the Settings
+    /// App has been toggled
+    private static func checkiCloudReset() -> Bool {
+        return UserDefaults.standard.bool(forKey: Settings.deleteiCloudData.rawValue)
     }
     
     /// Resets the App

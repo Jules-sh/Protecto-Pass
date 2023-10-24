@@ -53,5 +53,6 @@
     <entity name="Preferences" representedClassName="Preferences" syncable="YES" codeGenerationType="class">
         <attribute name="compactMode" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
         <attribute name="largeScreen" optional="YES" attributeType="Boolean" defaultValueString="NO" allowsCloudEncryption="YES" usesScalarValueType="YES"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
     </entity>
 </model>

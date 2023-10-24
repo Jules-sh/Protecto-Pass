@@ -31,6 +31,9 @@ internal enum Settings : String, RawRepresentable {
     case syncSettingsToiCloud = "sync_settings_preference"
     
     case deleteiCloudData = "delete_icloud_data_preference"
+    
+    // Background Settings
+    case lastUpdated = "settings_last_updated"
 }
 
 /// Struct to manage Settings, load and update them
@@ -50,28 +53,39 @@ internal struct SettingsHelper {
     
     /// Initialized the Settings, creates the Preferences Object in
     /// iCloud if needed
-    internal static func loadiCloud(with context : NSManagedObjectContext) -> Void {
+    internal static func loadiCloud(with context : NSManagedObjectContext) throws -> Void {
         if checkiCloudReset() {
-            if let appData : AppData = try! context.fetch(AppData.fetchRequest()).first {
+            if let appData : AppData = try context.fetch(AppData.fetchRequest()).first {
                 context.delete(appData)
             }
-            if let preferences : Preferences = try! context.fetch(Preferences.fetchRequest()).first {
+            if let preferences : Preferences = try context.fetch(Preferences.fetchRequest()).first {
                 context.delete(preferences)
             }
         } else {
             if iCloudPaths {
-                if try! context.fetch(AppData.fetchRequest()).first == nil {
+                if try context.fetch(AppData.fetchRequest()).first == nil {
                     // Create new App Data Object, so it's available later
                     let _ = AppData(context: context)
                 }
             }
             if iCloudSettings {
-                if let settingsFromiCloud : Preferences = try! context.fetch(Preferences.fetchRequest()).first {
-                    update(compactMode: settingsFromiCloud.compactMode, largeScreen: settingsFromiCloud.largeScreen)
+                let lastUpdated : Data = DataConverter.dateToData(Date.now)
+                if let settingsFromiCloud : Preferences = try context.fetch(Preferences.fetchRequest()).first {
+                    if try DataConverter.dataToDate(UserDefaults.standard.data(forKey: Settings.lastUpdated.rawValue)!) < DataConverter.dataToDate(settingsFromiCloud.lastUpdated!) {
+                        compactMode = settingsFromiCloud.compactMode
+                        largeScreen = settingsFromiCloud.largeScreen
+                        UserDefaults.standard.set(lastUpdated, forKey: Settings.lastUpdated.rawValue)
+                    } else {
+                        settingsFromiCloud.compactMode = compactMode
+                        settingsFromiCloud.largeScreen = largeScreen
+                        settingsFromiCloud.lastUpdated = lastUpdated
+                    }
+                    updateSettings()
                 } else {
                     let preferences : Preferences = Preferences(context: context)
                     preferences.compactMode = compactMode
                     preferences.largeScreen = largeScreen
+                    preferences.lastUpdated = lastUpdated
                 }
             }
         }
@@ -110,13 +124,23 @@ internal struct SettingsHelper {
     /// Checks whether the "Reset App" Switch in the System Settings App
     /// has been set to true
     private static func checkReset() -> Bool {
-        return UserDefaults.standard.bool(forKey: Settings.resetApp.rawValue)
+        if UserDefaults.standard.bool(forKey: Settings.resetApp.rawValue) {
+            UserDefaults.standard.set(false, forKey: Settings.resetApp.rawValue)
+            return true
+        } else {
+            return false
+        }
     }
     
     /// Checks if the "Delete Data" Switch in the iCloud Subview of the Settings
     /// App has been toggled
     private static func checkiCloudReset() -> Bool {
-        return UserDefaults.standard.bool(forKey: Settings.deleteiCloudData.rawValue)
+        if UserDefaults.standard.bool(forKey: Settings.deleteiCloudData.rawValue) {
+            UserDefaults.standard.set(false, forKey: Settings.deleteiCloudData.rawValue)
+            return true
+        } else {
+            return false
+        }
     }
     
     /// Resets the App
@@ -132,7 +156,7 @@ internal struct SettingsHelper {
     }
     
     /// Updates all the Settings with those from iCloud
-    private static func update(compactMode : Bool, largeScreen : Bool) -> Void {
+    private static func updateSettings() -> Void {
         UserDefaults.standard.set(compactMode, forKey: Settings.compactMode.rawValue)
         UserDefaults.standard.setValue(largeScreen, forKey: Settings.largeScreen.rawValue)
     }

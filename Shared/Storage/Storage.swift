@@ -45,13 +45,13 @@ internal struct Storage {
     }
     
     /// Loads all the Databases from the different Storage Options
-    internal static func load(with context : NSManagedObjectContext) throws -> [EncryptedDatabase] {
+    internal static func load(with context : NSManagedObjectContext, and paths : [URL]) throws -> [EncryptedDatabase] {
         var result : [EncryptedDatabase] = []
         // Core Data
         let coreData : [EncryptedDatabase] = try CoreDataManager.load(with: context)
         result.append(contentsOf: coreData)
         // File System
-        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(with: context)
+        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(with: paths)
         result.append(contentsOf: fileSystem)
         // Keychain
         let keychain : [EncryptedDatabase] = KeychainManager.load()

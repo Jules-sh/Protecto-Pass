@@ -44,22 +44,15 @@ internal struct DatabaseFileManager : DatabaseCache {
         update(id: db.id, with: db)
     }
     
-    internal static func load(with context : NSManagedObjectContext) throws -> [EncryptedDatabase] {
-//        let appData : AppData = try context.fetch(AppData.fetchRequest()).first!
-//        // Sort for iCloud and not
-//        var paths : [URL] = []
-//        for path in appData.paths! {
-//            let localPath = path as! DB_Path
-//            paths.append(localPath.path!)
-//        }
-//        var databases : [EncryptedDatabase] = []
-//        let jsonDecoder : JSONDecoder = JSONDecoder()
-//        for path in paths {
-//            let dbData : Data = try Data(contentsOf: path)
-//            let jsonDB : EncryptedDatabase = try jsonDecoder.decode(EncryptedDatabase.self, from: dbData)
-//            databases.append(jsonDB)
-//        }
-//        return databases
-        return []
+    internal static func load(with paths : [URL]) throws -> [EncryptedDatabase] {
+        // Sort for iCloud and not
+        var databases : [EncryptedDatabase] = []
+        let jsonDecoder : JSONDecoder = JSONDecoder()
+        for path in paths {
+            let dbData : Data = try Data(contentsOf: path)
+            let jsonDB : EncryptedDatabase = try jsonDecoder.decode(EncryptedDatabase.self, from: dbData)
+            databases.append(jsonDB)
+        }
+        return databases
     }
 }

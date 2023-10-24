@@ -184,4 +184,8 @@ internal extension EnvironmentValues {
         get { self[LargeScreenSettingsKey.self] }
         set { self[LargeScreenSettingsKey.self] = newValue }
     }
+    
+    func appendPath(_ path : URL) -> Void {
+        AppDataHelper.appendPath(path)
+    }
 }

@@ -8,7 +8,7 @@
 import CoreData
 import Foundation
 
-internal enum AppDataKeys : String, RawRepresentable {
+private enum AppDataKeys : String, RawRepresentable {
     case paths = "app_data_paths"
 }
 
@@ -16,9 +16,14 @@ internal struct AppDataHelper {
     
     internal private(set) static var paths : [URL] = []
     
+    private static var cdAppData : AppData? = nil
+    
     internal static func appendPath(_ path : URL) -> Void {
         paths.append(path)
-        var localPaths : [String] = paths.map { url in url.absoluteString }
+        let localPaths : [String] = paths.map { url in url.absoluteString }
+//        let cdPath : DB_Path = DB_Path(context: context)
+//        cdPath.path = path
+//        cdAppData!.addToPaths(cdPath)
         UserDefaults.standard.set(localPaths, forKey: AppDataKeys.paths.rawValue)
     }
     
@@ -30,6 +35,15 @@ internal struct AppDataHelper {
     }
     
     internal static func loadiCloud(with context : NSManagedObjectContext) throws -> Void {
-        try context.fetch(AppData.fetchRequest())
+        if let localAppData = try context.fetch(AppData.fetchRequest()).first {
+            cdAppData = localAppData
+            var localPaths : [URL] = []
+            for path in cdAppData!.paths! {
+                localPaths.append((path as! DB_Path).path!)
+            }
+            paths = localPaths
+        } else {
+            cdAppData = AppData(context: context)
+        }
     }
 }

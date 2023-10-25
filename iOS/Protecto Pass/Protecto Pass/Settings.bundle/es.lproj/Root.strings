@@ -11,3 +11,7 @@
 "legal_footer_text" = "Información sobre Caso Legal y Copyright";
 "Security" = "Seguridad";
 "security_footer_text" = "Configuraciones relacionadas con la seguridad";
+"General" = "";
+"general_footer_text" = "";
+"Sync to iCloud" = "";
+"Reset App" = "";

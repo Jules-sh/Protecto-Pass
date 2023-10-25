@@ -11,3 +11,7 @@
 "legal_footer_text" = "Rechtliche Informationen und Copyright";
 "Security" = "Sicherheit";
 "security_footer_text" = "Sicherheitsrelevante Einstellungen";
+"General" = "Generell";
+"general_footer_text" = "";
+"Sync to iCloud" = "Zu iCloud synchronisieren";
+"Reset App" = "App zurücksetzen";

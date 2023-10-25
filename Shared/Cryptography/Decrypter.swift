@@ -77,6 +77,7 @@ internal struct Decrypter {
     /// See Error for more details
     internal mutating func decrypt(using password : String) throws -> Database {
         self.password = password + db!.header.salt
+        userPassword = password
         if encryption == .AES256 {
             return try decryptAES()
         } else if encryption == .ChaChaPoly {

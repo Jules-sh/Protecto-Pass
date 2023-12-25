@@ -18,7 +18,7 @@ internal struct UnlockDB: View {
     
     internal init(db : EncryptedDatabase) {
         self.db = db
-        unlockedDB = nil
+        _unlockedDB = State(initialValue: nil)
     }
     
     /// The Password entered by the User with which
@@ -126,7 +126,8 @@ internal struct UnlockDB: View {
     /// Try to unlock the Database with the provided password
     private func tryUnlocking() -> Void {
         do {
-            unlockedDB = try db.decrypt(using: password)
+            let localDatabase : Database = try db.decrypt(using: password)
+            unlockedDB = localDatabase
             unlockSuccess.toggle()
         } catch {
             errDecryptingPresented.toggle()

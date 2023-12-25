@@ -69,23 +69,23 @@ internal struct SettingsHelper {
                 }
             }
             if iCloudSettings {
-                let lastUpdated : Data = DataConverter.dateToData(Date.now)
+                let updatedNow : Data = DataConverter.dateToData(Date.now)
                 if let settingsFromiCloud : Preferences = try context.fetch(Preferences.fetchRequest()).first {
                     if try DataConverter.dataToDate(UserDefaults.standard.data(forKey: Settings.lastUpdated.rawValue)!) < DataConverter.dataToDate(settingsFromiCloud.lastUpdated!) {
                         compactMode = settingsFromiCloud.compactMode
                         largeScreen = settingsFromiCloud.largeScreen
-                        UserDefaults.standard.set(lastUpdated, forKey: Settings.lastUpdated.rawValue)
+                        UserDefaults.standard.set(updatedNow, forKey: Settings.lastUpdated.rawValue)
                     } else {
                         settingsFromiCloud.compactMode = compactMode
                         settingsFromiCloud.largeScreen = largeScreen
-                        settingsFromiCloud.lastUpdated = lastUpdated
+                        settingsFromiCloud.lastUpdated = updatedNow
                     }
                     updateSettings()
                 } else {
                     let preferences : Preferences = Preferences(context: context)
                     preferences.compactMode = compactMode
                     preferences.largeScreen = largeScreen
-                    preferences.lastUpdated = lastUpdated
+                    preferences.lastUpdated = updatedNow
                 }
             }
         }

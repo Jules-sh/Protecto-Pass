@@ -37,7 +37,7 @@ internal struct Welcome: View {
     @State private var dbFromPath : EncryptedDatabase?
     
     @State private var dbToUnlock : EncryptedDatabase = EncryptedDatabase.previewDB
-
+    
     @State private var errReadingDatabaseFromPathShown : Bool = false
     
     var body: some View {
@@ -60,8 +60,17 @@ internal struct Welcome: View {
                 .toolbar(.automatic, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            navigationSheet.navigationSheetShown.toggle()
+                        Menu {
+                            Button {
+                                navigationSheet.navigationSheetShown.toggle()
+                            } label: {
+                                Label("Create new one", systemImage: "plus")
+                            }
+                            Button {
+                                selectorPresented.toggle()
+                            } label: {
+                                Label("Open from File", systemImage: "doc")
+                            }
                         } label: {
                             Image(systemName: "plus")
                         }

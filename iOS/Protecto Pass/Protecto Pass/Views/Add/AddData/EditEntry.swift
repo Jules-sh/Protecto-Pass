@@ -35,47 +35,53 @@ internal struct EditEntry: View {
     @State private var errStoring : Bool = false
     
     var body: some View {
-        VStack {
-            Image(systemName: "doc")
-                .renderingMode(.original)
-                .symbolRenderingMode(.hierarchical)
-                .resizable()
-                .scaledToFit()
-                .padding(.horizontal, 75)
-            Group {
-                TextField("Title", text: $title)
-                    .textInputAutocapitalization(.words)
-                    .padding(.top, 40)
-                Group {
-                    TextField("Username", text: $username)
-                        .textContentType(.username)
-                    TextField("Password", text: $password)
-                        .textContentType(.password)
-                    TextField("URL", text: $url)
-                        .textContentType(.password)
+        NavigationStack {
+            VStack {
+                Button {
+                } label: {
+                    Image(systemName: "doc")
+                        .renderingMode(.original)
+                        .symbolRenderingMode(.hierarchical)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 75)
+                        .foregroundStyle(.foreground)
                 }
-                .textInputAutocapitalization(.never)
-                TextField("Notes", text: $notes, axis: .vertical)
-                    .lineLimit(5...10)
-                    .textInputAutocapitalization(.sentences)
+                Group {
+                    TextField("Title", text: $title)
+                        .textInputAutocapitalization(.words)
+                        .padding(.top, 40)
+                    Group {
+                        TextField("Username", text: $username)
+                            .textContentType(.username)
+                        TextField("Password", text: $password)
+                            .textContentType(.password)
+                        TextField("URL", text: $url)
+                            .textContentType(.password)
+                    }
+                    .textInputAutocapitalization(.never)
+                    TextField("Notes", text: $notes, axis: .vertical)
+                        .lineLimit(5...10)
+                        .textInputAutocapitalization(.sentences)
+                }
+                .textFieldStyle(.roundedBorder)
             }
-            .textFieldStyle(.roundedBorder)
-        }
-        .alert("Error saving", isPresented: $errStoring) {
-            Button("Cancel", role: .cancel) {}
-            Button("Try again") { save() }
-        } message: {
-            Text("An Error occurred when trying to save the data.\nPlease try again")
-        }
-        .padding(.horizontal, 25)
-        .navigationTitle("New Entry")
-        .navigationBarTitleDisplayMode(.automatic)
-        .toolbarRole(.editor)
-        .toolbar(.automatic, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    
+            .alert("Error saving", isPresented: $errStoring) {
+                Button("Cancel", role: .cancel) {}
+                Button("Try again") { save() }
+            } message: {
+                Text("An Error occurred when trying to save the data.\nPlease try again")
+            }
+            .padding(.horizontal, 25)
+            .navigationTitle("New Entry")
+            .navigationBarTitleDisplayMode(.automatic)
+            .toolbarRole(.editor)
+            .toolbar(.automatic, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        
+                    }
                 }
             }
         }

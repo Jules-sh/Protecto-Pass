@@ -22,7 +22,20 @@ internal struct ME_ContentView : View {
     /// The Data Structure which is displayed in this View
     private let dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
 
+    /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
+    
+    /// Whether or not the sheet to add an entry is presented
+    @State private var addEntryPresented : Bool = false
+    
+    /// Whether or not the sheet to add a folder is presented
+    @State private var addFolderPresented : Bool = false
+    
+    /// Whether or not the sheet to add an image is presented
+    @State private var addImagePresented : Bool = false
+    
+    /// Whether or not the sheet to add a document is presented
+    @State private var addDocPresented : Bool = false
     
     var body: some View {
         List {
@@ -81,6 +94,20 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
+        .sheet(isPresented: $addEntryPresented) {
+            EditEntry()
+        }
+        .sheet(isPresented: $addFolderPresented) {
+            EditFolder()
+        }
+        .sheet(isPresented: $addImagePresented) {
+            // TODO: udpate
+            EditEntry()
+        }
+        .sheet(isPresented: $addDocPresented) {
+            // TODO: udpate
+            EditEntry()
+        }
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
@@ -100,23 +127,23 @@ internal struct ME_ContentView : View {
             }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
-                    NavigationLink {
-                        EditEntry()
+                    Button {
+                        addEntryPresented.toggle()
                     } label: {
                         Label("Add Entry", systemImage: "doc")
                     }
-                    NavigationLink {
-                        EditFolder()
+                    Button {
+                        addFolderPresented.toggle()
                     } label: {
                         Label("Add Folder", systemImage: "folder")
                     }
-                    NavigationLink {
-                        EditFolder()
+                    Button {
+                        addImagePresented.toggle()
                     } label: {
                         Label("Add Image", systemImage: "photo")
                     }
-                    NavigationLink {
-                        EditFolder()
+                    Button {
+                        addDocPresented.toggle()
                     } label: {
                         Label("Add Document", systemImage: "doc.text")
                     }

@@ -20,6 +20,7 @@ internal struct Home: View {
     var body: some View {
         NavigationStack {
             ME_ContentView(db)
+                .environmentObject(db)
         }
     }
 }

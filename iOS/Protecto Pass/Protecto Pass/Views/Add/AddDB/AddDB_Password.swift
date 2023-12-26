@@ -130,7 +130,7 @@ internal struct AddDB_Password: View {
                 .renderingMode(.template)
             // Makes the symbols appear less bold
                 .symbolRenderingMode(.hierarchical)
-                .foregroundColor(isMet ? .green : .red)
+                .foregroundStyle(isMet ? .green : .red)
             Text(requirement)
         }
     }
@@ -206,7 +206,7 @@ internal struct AddDB_PasswordVerification : View {
                         Image(systemName: equal ? "checkmark.circle" : "x.circle")
                             .renderingMode(.template)
                             .symbolRenderingMode(.hierarchical)
-                            .foregroundColor(equal ? .green : .red)
+                            .foregroundStyle(equal ? .green : .red)
                         Text(equal ? "The Passwords are equal" : "The Passwords are not equal")
                     }
                 }

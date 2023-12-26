@@ -183,7 +183,7 @@ internal struct AddDB_CompactMode: View {
                 .renderingMode(.template)
             // Makes the symbols appear less bold
                 .symbolRenderingMode(.hierarchical)
-                .foregroundColor(isMet ? .green : .red)
+                .foregroundStyle(isMet ? .green : .red)
             Text(requirement)
         }
     }

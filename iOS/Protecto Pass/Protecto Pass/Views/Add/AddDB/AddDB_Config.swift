@@ -20,7 +20,7 @@ internal struct AddDB_Config: View {
                 .symbolRenderingMode(.hierarchical)
                 .resizable()
                 .scaledToFit()
-                .foregroundColor(.primary)
+                .foregroundStyle(.foreground)
                 .padding(.horizontal, 100)
             Picker("Encryption", selection: $encryption) {
                 ForEach(Cryptography.Encryption.allCases) {

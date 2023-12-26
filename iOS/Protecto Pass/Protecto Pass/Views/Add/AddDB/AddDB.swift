@@ -44,7 +44,7 @@ internal struct AddDB: View {
                     .symbolRenderingMode(.hierarchical)
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.foreground)
             }
             .sheet(isPresented: $iconChooserShown) {
                 IconChooser(iconName: $iconName, type: .database)

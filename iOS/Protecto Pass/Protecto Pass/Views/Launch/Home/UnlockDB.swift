@@ -11,15 +11,12 @@ import SwiftUI
 internal struct UnlockDB: View {
     
     /// The Encrypted Database the User wants to unlock
-    internal let db : EncryptedDatabase
+    @Binding internal var db : EncryptedDatabase
+    
+    @EnvironmentObject private var navigationSheet : AddDB_Navigation
     
     /// The unlocked Database
-    @State private var unlockedDB : Database?
-    
-    internal init(db : EncryptedDatabase) {
-        self.db = db
-        _unlockedDB = State(initialValue: nil)
-    }
+    @State private var unlockedDB : Database? = nil
     
     /// The Password entered by the User with which
     /// the App tries to unlock the Database
@@ -29,55 +26,51 @@ internal struct UnlockDB: View {
     /// toggle this to show the error message
     @State private var errDecryptingPresented : Bool = false
     
-    /// If the unlock of the database has been successful, this is set to true
-    @State private var unlockSuccess : Bool = false
-    
     var body: some View {
-        VStack(alignment: .leading) {
-            Section {
+        NavigationStack {
+            VStack(alignment: .leading) {
                 Section {
-                    Text("Encrypted with \(db.header.encryption.rawValue)")
-                    Text("Stored in \(db.header.storageType.rawValue)")
+                    Section {
+                        Text("Encrypted with \(db.header.encryption.rawValue)")
+                        Text("Stored in \(db.header.storageType.rawValue)")
+                    } header: {
+                        Text("General")
+                            .font(.headline)
+                    }
+                    Divider()
+                    Section {
+                        Text("Contains \(folderCountInDB()) Folders")
+                        Text("Contains \(entryCountInDB()) Entries")
+                    } header: {
+                        Text("Content")
+                            .font(.headline)
+                    }
+                    Divider()
                 } header: {
-                    Text("General")
-                        .font(.headline)
+                    Text("Information")
+                        .font(.title)
+                    Divider()
+                } footer: {
+                    Text(db.description)
                 }
-                Divider()
-                Section {
-                    Text("Contains \(folderCountInDB()) Folders")
-                    Text("Contains \(entryCountInDB()) Entries")
-                } header: {
-                    Text("Content")
-                        .font(.headline)
-                }
-                Divider()
-            } header: {
-                Text("Information")
-                    .font(.title)
-                Divider()
-            } footer: {
-                Text(db.description)
+                PasswordField(title: "Enter your Password...", text: $password)
+                    .multilineTextAlignment(.leading)
+                    .textFieldStyle(.roundedBorder)
             }
-            PasswordField(title: "Enter your Password...", text: $password)
-                .multilineTextAlignment(.leading)
-                .textFieldStyle(.roundedBorder)
-        }
-        .navigationTitle("Unlock \(db.name)")
-        .navigationBarTitleDisplayMode(.automatic)
-        .padding(20)
-        .navigationDestination(isPresented: $unlockSuccess) {
-            Home(db: unlockedDB!)
-        }
-        .alert("Error Unlock Database", isPresented: $errDecryptingPresented) {
-        } message: {
-            Text("An Error occurred while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
-        }
-        .toolbarRole(.navigationStack)
-        .toolbar(.automatic, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Unlock") {
-                    tryUnlocking()
+            .navigationTitle("Unlock \(db.name)")
+            .navigationBarTitleDisplayMode(.automatic)
+            .padding(20)
+            .alert("Error Unlock Database", isPresented: $errDecryptingPresented) {
+            } message: {
+                Text("An Error occurred while trying to unlock the Database\nMaybe the entered Password is incorrect.\nIf This Error remains, the Database may be corrupt.")
+            }
+            .toolbarRole(.navigationStack)
+            .toolbar(.automatic, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Unlock") {
+                        tryUnlocking()
+                    }
                 }
             }
         }
@@ -128,7 +121,8 @@ internal struct UnlockDB: View {
         do {
             let localDatabase : Database = try db.decrypt(using: password)
             unlockedDB = localDatabase
-            unlockSuccess.toggle()
+            navigationSheet.db = unlockedDB
+            navigationSheet.openDatabaseToHome.toggle()
         } catch {
             errDecryptingPresented.toggle()
         }
@@ -137,7 +131,9 @@ internal struct UnlockDB: View {
 
 /// The Preview for this Database Unlock Screen
 internal struct UnlockDB_Previews: PreviewProvider {
+    
+    @State private static var db : EncryptedDatabase = EncryptedDatabase.previewDB
     static var previews: some View {
-        UnlockDB(db: EncryptedDatabase.previewDB)
+        UnlockDB(db: $db)
     }
 }

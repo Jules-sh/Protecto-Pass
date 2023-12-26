@@ -24,6 +24,11 @@ internal struct Welcome: View {
     /// All the Databases of the App.
     internal let databases : [EncryptedDatabase]
     
+    /// Whether or not the unlock Database View as a sheet is shown.
+    /// This does only apply to Databases already in the VIew.
+    /// Databases imported from file are controlled via the unlockDBFromPathPresented Property
+    @State private var unlockDBShown : Bool = false
+    
     /// Whether or not the file Importer is shown
     @State private var selectorPresented : Bool = false
     
@@ -31,13 +36,17 @@ internal struct Welcome: View {
     /// on the File System
     @State private var dbFromPath : EncryptedDatabase?
     
-    @State private var unlockDBFromPathPresented : Bool = false
+    @State private var dbToUnlock : EncryptedDatabase = EncryptedDatabase.previewDB
 
     @State private var errReadingDatabaseFromPathShown : Bool = false
     
     var body: some View {
         NavigationStack {
             build()
+                .sheet(isPresented: $unlockDBShown) {
+                    UnlockDB(db: $dbToUnlock)
+                        .environmentObject(navigationSheet)
+                }
                 .sheet(isPresented: $navigationSheet.navigationSheetShown) {
                     if compactMode {
                         AddDB_CompactMode()
@@ -60,9 +69,6 @@ internal struct Welcome: View {
                 }
                 .navigationTitle("Welcome")
                 .navigationBarTitleDisplayMode(.automatic)
-                .navigationDestination(isPresented: $navigationSheet.openDatabaseToHome) {
-                    Home(db: navigationSheet.db!)
-                }
         }
     }
     
@@ -109,14 +115,11 @@ internal struct Welcome: View {
                         } catch {
                             errReadingDatabaseFromPathShown.toggle()
                         }
+                        dbToUnlock = dbFromPath!
                     }
                     .alert("Error Reading DB", isPresented: $errReadingDatabaseFromPathShown) {
                     } message: {
                         Text("There's been an error while reading the Database from the File System.\nPlease try again")
-                    }
-                    .navigationDestination(isPresented: $unlockDBFromPathPresented) {
-                        // TODO: preview Database in Production Code
-                        UnlockDB(db: dbFromPath ?? EncryptedDatabase.previewDB)
                     }
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()
@@ -129,8 +132,10 @@ internal struct Welcome: View {
     /// Returns the Container for the Database
     @ViewBuilder
     private func container(for db : EncryptedDatabase, width : CGFloat) -> some View {
-        NavigationLink {
-            UnlockDB(db: db)
+        Button {
+            dbToUnlock = db
+            unlockDBShown.toggle()
+            print("Width: \(width)")
         } label: {
             VStack {
                 Text(db.name)
@@ -143,8 +148,8 @@ internal struct Welcome: View {
             .frame(width: width - 150)
         }
         .foregroundColor(.white)
-        .padding(.horizontal, 75)
-        .padding(.vertical, 100)
+        .contentMargins(.horizontal, 75)
+        .contentMargins(.vertical, 100)
         .background(Color.gray)
         .cornerRadius(15)
     }

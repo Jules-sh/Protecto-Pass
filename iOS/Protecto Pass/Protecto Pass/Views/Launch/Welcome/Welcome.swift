@@ -154,11 +154,11 @@ internal struct Welcome: View {
                     .lineLimit(2, reservesSpace: true)
             }
             // - 150 because horizontal padding is 75
-            .frame(width: width - 150)
+            .frame(width: abs(width - 150))
         }
         .foregroundColor(.white)
-        .contentMargins(.horizontal, 75)
-        .contentMargins(.vertical, 100)
+        .padding(.horizontal, 75)
+        .padding(.vertical, 100)
         .background(Color.gray)
         .cornerRadius(15)
     }

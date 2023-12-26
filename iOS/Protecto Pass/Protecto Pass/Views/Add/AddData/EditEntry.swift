@@ -34,18 +34,26 @@ internal struct EditEntry: View {
     
     @State private var errStoring : Bool = false
     
+    @State private var iconName : String = "doc"
+    
+    @State private var iconChooserShown : Bool = false
+    
     var body: some View {
         NavigationStack {
             VStack {
                 Button {
+                    iconChooserShown.toggle()
                 } label: {
-                    Image(systemName: "doc")
+                    Image(systemName: iconName)
                         .renderingMode(.original)
                         .symbolRenderingMode(.hierarchical)
                         .resizable()
                         .scaledToFit()
                         .padding(.horizontal, 75)
                         .foregroundStyle(.foreground)
+                }
+                .sheet(isPresented: $iconChooserShown) {
+                    IconChooser(iconName: $iconName, type: .entry)
                 }
                 Group {
                     TextField("Title", text: $title)
@@ -57,7 +65,7 @@ internal struct EditEntry: View {
                         TextField("Password", text: $password)
                             .textContentType(.password)
                         TextField("URL", text: $url)
-                            .textContentType(.password)
+                            .textContentType(.URL)
                     }
                     .textInputAutocapitalization(.never)
                     TextField("Notes", text: $notes, axis: .vertical)

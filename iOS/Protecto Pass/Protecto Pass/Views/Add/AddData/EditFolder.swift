@@ -13,6 +13,8 @@ import SwiftUI
 /// is added to the Database
 internal struct EditFolder: View {
     
+    // Test
+    
     @Environment(\.managedObjectContext) private var context
     
     @Environment(\.dismiss) private var dismiss

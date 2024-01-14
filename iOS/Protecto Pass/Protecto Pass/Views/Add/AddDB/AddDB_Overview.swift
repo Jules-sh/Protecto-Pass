@@ -151,7 +151,8 @@ internal struct AddDB_Overview: View {
             key: PasswordGenerator.generateKey(),
             password: creationWrapper.password,
             // TODO: change
-            allowBiometrics: true
+            allowBiometrics: true,
+            id: UUID()
         )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext)

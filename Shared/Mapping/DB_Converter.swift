@@ -65,6 +65,7 @@ internal struct DB_Converter : DatabaseConverterProtocol {
         cdDB.header = encrypted.header.parseHeader()
         cdDB.key = encrypted.key
         cdDB.allowBiometrics = encrypted.allowBiometrics
+        cdDB.id = encrypted.id
         return cdDB
     }
 }

@@ -120,7 +120,8 @@ internal struct Decrypter {
             header: db!.header,
             key: key!,
             password: userPassword!,
-            allowBiometrics: db!.allowBiometrics
+            allowBiometrics: db!.allowBiometrics,
+            id: db!.id
         )
         return decryptedDatabase
     }
@@ -336,7 +337,8 @@ internal struct Decrypter {
             header: db!.header,
             key: key!,
             password: userPassword!,
-            allowBiometrics: db!.allowBiometrics
+            allowBiometrics: db!.allowBiometrics,
+            id: db!.id
         )
         return decryptedDatabase
     }

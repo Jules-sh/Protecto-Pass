@@ -239,7 +239,8 @@ internal struct AddDB_CompactMode: View {
             ),
             key: PasswordGenerator.generateKey(),
             password: password,
-            allowBiometrics: allowBiometrics
+            allowBiometrics: allowBiometrics,
+            id: UUID()
         )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext)

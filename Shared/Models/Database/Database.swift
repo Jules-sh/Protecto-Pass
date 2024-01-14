@@ -15,7 +15,7 @@ import UIKit
 internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, Date, Do, I>, Identifiable {
     
     /// ID to conform to identifiable
-    internal let id : UUID = UUID()
+    internal let id : UUID
     
     /// The Header for this Database
     internal let header : DB_Header
@@ -39,8 +39,10 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
         lastEdited : Date,
         header : DB_Header,
         key : K,
-        allowBiometrics : Bool
+        allowBiometrics : Bool,
+        id: UUID
     ) {
+        self.id = id
         self.header = header
         self.key = key
         self.allowBiometrics = allowBiometrics
@@ -77,7 +79,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         header : DB_Header,
         key : SymmetricKey,
         password : String,
-        allowBiometrics : Bool
+        allowBiometrics : Bool,
+        id: UUID
     ) {
         self.password = password
         super.init(
@@ -92,7 +95,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
             lastEdited: lastEdited,
             header: header,
             key: key,
-            allowBiometrics: allowBiometrics
+            allowBiometrics: allowBiometrics,
+            id: id
         )
     }
     
@@ -122,7 +126,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         ),
         key: SymmetricKey(size: .bits256),
         password: "Password",
-        allowBiometrics: true
+        allowBiometrics: true,
+        id: UUID()
     )
     
     static func == (lhs: Database, rhs: Database) -> Bool {
@@ -166,7 +171,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         lastEdited : Date,
         header: DB_Header,
         key: Data,
-        allowBiometrics : Bool
+        allowBiometrics : Bool,
+        id: UUID
     ) {
         super.init(
             name: name,
@@ -180,7 +186,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             lastEdited: lastEdited,
             header: header,
             key: key,
-            allowBiometrics: allowBiometrics
+            allowBiometrics: allowBiometrics,
+            id: id
         )
     }
     
@@ -197,6 +204,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         case header
         case key
         case allowBiometrics
+        case id
     }
     
     func encode(to encoder: Encoder) throws {
@@ -213,6 +221,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         try container.encode(header, forKey: .header)
         try container.encode(key, forKey: .key)
         try container.encode(allowBiometrics, forKey: .allowBiometrics)
+        try container.encode(id, forKey: .id)
     }
     
     internal convenience init(from decoder: Decoder) throws {
@@ -229,7 +238,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             lastEdited: try container.decode(Date.self, forKey: .lastEdited),
             header: try container.decode(DB_Header.self, forKey: .header),
             key:try container.decode(Data.self, forKey: .key),
-            allowBiometrics: try container.decode(Bool.self, forKey: .allowBiometrics)
+            allowBiometrics: try container.decode(Bool.self, forKey: .allowBiometrics),
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     
@@ -262,7 +272,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
             header: try DB_Header.parseString(string: coreData.header!),
             key: coreData.key!,
-            allowBiometrics: coreData.allowBiometrics
+            allowBiometrics: coreData.allowBiometrics,
+            id: coreData.id!
         )
     }
     
@@ -291,6 +302,7 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
             salt: "salt"
         ),
         key: Data(),
-        allowBiometrics: true
+        allowBiometrics: true,
+        id: UUID()
     )
 }

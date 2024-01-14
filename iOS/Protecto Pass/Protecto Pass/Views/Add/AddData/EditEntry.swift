@@ -17,25 +17,36 @@ internal struct EditEntry: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    /// The Database to store this Object in
     @EnvironmentObject private var db : Database
     
     /// The parent folder of this Entry if there is
     @State internal var folder : Folder?
     
+    /// The Title of this entry
     @State private var title : String = ""
     
+    /// The Username of this Entry.
+    /// This typically is a Name, not a link
     @State private var username : String = ""
     
+    /// The Passwort stored in this Entry.
+    /// This is the most important part
     @State private var password : String = ""
     
+    /// The URL to where the entry is connected to
     @State private var url : String = ""
     
+    /// Some Notes to this Entry
     @State private var notes : String = ""
     
+    /// Whether or not an error has appeared storing the Database
     @State private var errStoring : Bool = false
     
+    /// The name of the icon representing this Entry
     @State private var iconName : String = "doc"
     
+    /// Whether or not the icon Chooser is shown
     @State private var iconChooserShown : Bool = false
     
     var body: some View {

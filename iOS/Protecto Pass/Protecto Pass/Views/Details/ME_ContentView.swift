@@ -6,22 +6,25 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 internal struct ME_ContentView : View {
-
+    
     /// Controls the navigation flow, only necessary if this represents a Database
     @EnvironmentObject private var navigationController : AddDB_Navigation
-
+    
     /// Whether the User activated the large Screen preference or not
     @Environment(\.largeScreen) private var largeScreen : Bool
+    
+    @EnvironmentObject private var db : Database
     
     internal init(_ data : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>) {
         dataStructure = data
     }
-
+    
     /// The Data Structure which is displayed in this View
     private let dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
-
+    
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
     
@@ -36,6 +39,9 @@ internal struct ME_ContentView : View {
     
     /// Whether or not the sheet to add a document is presented
     @State private var addDocPresented : Bool = false
+    
+    /// The Photos selected to add to the Password Safe
+    @State private var photosSelected : [PhotosPickerItem] = []
     
     var body: some View {
         List {
@@ -60,50 +66,56 @@ internal struct ME_ContentView : View {
                     Text("No Entries found")
                 }
             }
-            Section("Folder") {
-                if !dataStructure.folders.isEmpty {
-                    ForEach(dataStructure.folders) {
-                        folder in
-                        NavigationLink(folder.name) {
-                            ME_ContentView(folder)
-                        }
-                    }
-                } else {
-                    Text("No Folders found")
-                }
-            }
-            Section("Images") {
-                if !dataStructure.images.isEmpty {
-                    ForEach(dataStructure.images) {
-                        image in
-                    }
-                } else {
-                    Text("No Images found")
-                }
-            }
-            Section("Documents") {
-                if !dataStructure.documents.isEmpty {
-                    ForEach(dataStructure.documents) {
-                        document in
-                    }
-                } else {
-                    Text("No Documents found")
-                }
-            }
+            //            Section("Folder") {
+            //                if !dataStructure.folders.isEmpty {
+            //                    ForEach(dataStructure.folders) {
+            //                        folder in
+            //                        NavigationLink(folder.name) {
+            //                            ME_ContentView(folder)
+            //                        }
+            //                    }
+            //                } else {
+            //                    Text("No Folders found")
+            //                }
+            //            }
+            //            Section("Images") {
+            //                if !dataStructure.images.isEmpty {
+            //                    ForEach(dataStructure.images) {
+            //                        image in
+            //                    }
+            //                } else {
+            //                    Text("No Images found")
+            //                }
+            //            }
+            //            Section("Documents") {
+            //                if !dataStructure.documents.isEmpty {
+            //                    ForEach(dataStructure.documents) {
+            //                        document in
+            //                    }
+            //                } else {
+            //                    Text("No Documents found")
+            //                }
+            //            }
         }
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
         .sheet(isPresented: $addEntryPresented) {
             EditEntry()
+                .environmentObject(db)
         }
         .sheet(isPresented: $addFolderPresented) {
             EditFolder()
+                .environmentObject(db)
         }
-        .sheet(isPresented: $addImagePresented) {
-            // TODO: udpate
-            EditEntry()
-        }
+        .photosPicker(
+            isPresented: $addImagePresented,
+            selection: $photosSelected,
+            maxSelectionCount: 1000,
+            selectionBehavior: .continuousAndOrdered,
+            matching: .images,
+            preferredItemEncoding: .automatic
+        )
         .sheet(isPresented: $addDocPresented) {
             // TODO: udpate
             EditEntry()
@@ -125,6 +137,15 @@ internal struct ME_ContentView : View {
                     }
                 }
             }
+            if dataStructure is Database {
+                ToolbarItem(placement: .principal) {
+                    Button {
+                        print("Test")
+                    } label: {
+                        Image(systemName: "trash")
+                    }
+                }
+            }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
@@ -140,7 +161,7 @@ internal struct ME_ContentView : View {
                     Button {
                         addImagePresented.toggle()
                     } label: {
-                        Label("Add Image", systemImage: "photo")
+                        Label("Add Images", systemImage: "photo")
                     }
                     Button {
                         addDocPresented.toggle()
@@ -158,6 +179,42 @@ internal struct ME_ContentView : View {
                 }
             }
         }
+        .onChange(of: photosSelected) {
+            for photo in photosSelected {
+                Task {
+                    do {
+                        let image : UIImage = try await photo.loadTransferable(type: DBSoleImage.self)!.image
+                        db.images.append(
+                            DB_Image(
+                                image: image,
+                                quality: 0.5,
+                                created: Date.now,
+                                lastEdited: Date.now
+                            )
+                        )
+                    } catch {
+                        throw ImageLoadingError()
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// The Struct representing the loaded image in this View
+private struct DBSoleImage : Transferable {
+    
+    /// The Image when loading has completed
+    fileprivate let image : UIImage
+    
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(importedContentType: .image) {
+            data in
+            guard let image = UIImage(data: data) else {
+                throw ImageLoadingError()
+            }
+            return DBSoleImage(image: image)
+        }
     }
 }
 
@@ -171,9 +228,9 @@ internal struct ME_ContentView_Previews: PreviewProvider {
 }
 
 internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
-
+    
     @StateObject private static var db : Database = Database.previewDB
-
+    
     static var previews: some View {
         ME_ContentView(db)
             .environment(\.largeScreen, true)

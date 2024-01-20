@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="AppData" representedClassName="AppData" syncable="YES" codeGenerationType="class">
         <relationship name="paths" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="DB_Path" inverseName="appData" inverseEntity="DB_Path"/>
     </entity>
@@ -31,7 +31,6 @@
     </entity>
     <entity name="CD_Image" representedClassName="CD_Image" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="compressionQuality" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <attribute name="dataType" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="images" inverseEntity="CD_ME_DataStructure"/>
     </entity>

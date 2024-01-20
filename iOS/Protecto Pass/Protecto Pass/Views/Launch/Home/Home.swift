@@ -12,7 +12,7 @@ import SwiftUI
 internal struct Home: View {
     
     /// The Database that the User has just unlocked
-    internal var db : Database
+    @StateObject internal var db : Database
     
     /// Whether the Popover on the action button is presented or not
     @State private var addPopoverPresented : Bool = false

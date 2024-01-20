@@ -44,13 +44,7 @@ internal struct DataConverter {
 
     /// Converts an Image to Bytes
     internal static func imageToData(_ image : DB_Image) throws -> Data {
-        if image.type == .JPG {
-            return image.image.jpegData(compressionQuality: CGFloat(image.quality))!
-        } else if image.type == .PNG {
-            return image.image.pngData()!
-        } else {
-            throw UnknownImageType()
-        }
+        return image.image.jpegData(compressionQuality: CGFloat(image.quality))!
     }
 
     /// Converts a Double to Bytes

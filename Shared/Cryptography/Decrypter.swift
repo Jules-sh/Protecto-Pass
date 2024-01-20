@@ -245,11 +245,6 @@ internal struct Decrypter {
             try AES.GCM.SealedBox(combined: image.image),
             using: key!
         )
-        let decryptedTypeData : Data = try AES.GCM.open(
-            try AES.GCM.SealedBox(combined: image.type),
-            using: key!
-        )
-        let decryptedTypeString : String = DataConverter.dataToString(decryptedTypeData)
         let decryptedQuality : Double = DataConverter.dataToDouble(
             try AES.GCM.open(
                 AES.GCM.SealedBox(combined: image.quality),
@@ -266,7 +261,6 @@ internal struct Decrypter {
         )
         let decryptedImageObj : DB_Image = DB_Image(
             image: UIImage(data: decryptedImageData)!,
-            type: ImageType(rawValue: decryptedTypeString)!,
             quality: decryptedQuality,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
@@ -459,11 +453,6 @@ internal struct Decrypter {
             try ChaChaPoly.SealedBox(combined: image.image),
             using: key!
         )
-        let decryptedTypeData : Data = try ChaChaPoly.open(
-            try ChaChaPoly.SealedBox(combined: image.type),
-            using: key!
-        )
-        let decryptedTypeString : String = DataConverter.dataToString(decryptedTypeData)
         let decryptedQuality : Double = DataConverter.dataToDouble(
             try ChaChaPoly.open(
                 ChaChaPoly.SealedBox(combined: image.quality),
@@ -480,7 +469,6 @@ internal struct Decrypter {
         )
         let decryptedImageObj : DB_Image = DB_Image(
             image: UIImage(data: decryptedImageData)!,
-            type: ImageType(rawValue: decryptedTypeString)!,
             quality: decryptedQuality,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)

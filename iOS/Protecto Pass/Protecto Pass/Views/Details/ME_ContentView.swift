@@ -10,6 +10,8 @@ import PhotosUI
 
 internal struct ME_ContentView : View {
     
+    @Environment(\.managedObjectContext) private var context
+    
     /// Controls the navigation flow, only necessary if this represents a Database
     @EnvironmentObject private var navigationController : AddDB_Navigation
     
@@ -43,6 +45,10 @@ internal struct ME_ContentView : View {
     /// The Photos selected to add to the Password Safe
     @State private var photosSelected : [PhotosPickerItem] = []
     
+    @State private var errLoadingImagePresented : Bool = false
+    
+    @State private var errSavingPresented : Bool = false
+    
     var body: some View {
         List {
             if largeScreen {
@@ -66,36 +72,37 @@ internal struct ME_ContentView : View {
                     Text("No Entries found")
                 }
             }
-            //            Section("Folder") {
-            //                if !dataStructure.folders.isEmpty {
-            //                    ForEach(dataStructure.folders) {
-            //                        folder in
-            //                        NavigationLink(folder.name) {
-            //                            ME_ContentView(folder)
-            //                        }
-            //                    }
-            //                } else {
-            //                    Text("No Folders found")
-            //                }
-            //            }
-            //            Section("Images") {
-            //                if !dataStructure.images.isEmpty {
-            //                    ForEach(dataStructure.images) {
-            //                        image in
-            //                    }
-            //                } else {
-            //                    Text("No Images found")
-            //                }
-            //            }
-            //            Section("Documents") {
-            //                if !dataStructure.documents.isEmpty {
-            //                    ForEach(dataStructure.documents) {
-            //                        document in
-            //                    }
-            //                } else {
-            //                    Text("No Documents found")
-            //                }
-            //            }
+            Section("Folder") {
+                if !dataStructure.folders.isEmpty {
+                    ForEach(dataStructure.folders) {
+                        folder in
+                        NavigationLink(folder.name) {
+                            ME_ContentView(folder)
+                        }
+                    }
+                } else {
+                    Text("No Folders found")
+                }
+            }
+            Section("Images") {
+                if !dataStructure.images.isEmpty {
+                    ForEach(dataStructure.images) {
+                        image in
+                        Image(uiImage: image.image)
+                    }
+                } else {
+                    Text("No Images found")
+                }
+            }
+            Section("Documents") {
+                if !dataStructure.documents.isEmpty {
+                    ForEach(dataStructure.documents) {
+                        document in
+                    }
+                } else {
+                    Text("No Documents found")
+                }
+            }
         }
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
@@ -137,15 +144,6 @@ internal struct ME_ContentView : View {
                     }
                 }
             }
-            if dataStructure is Database {
-                ToolbarItem(placement: .principal) {
-                    Button {
-                        print("Test")
-                    } label: {
-                        Image(systemName: "trash")
-                    }
-                }
-            }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
@@ -179,7 +177,9 @@ internal struct ME_ContentView : View {
                 }
             }
         }
-        .onChange(of: photosSelected) {
+        .onChange(of: addImagePresented) {
+            // Guard to not call this code when opening the Picker
+            guard !addImagePresented else { return }
             for photo in photosSelected {
                 Task {
                     do {
@@ -192,11 +192,23 @@ internal struct ME_ContentView : View {
                                 lastEdited: Date.now
                             )
                         )
+                        do {
+                            try Storage.storeDatabase(db, context: context)
+                        } catch {
+                            errSavingPresented.toggle()
+                        }
                     } catch {
-                        throw ImageLoadingError()
+                        errLoadingImagePresented.toggle()
                     }
                 }
             }
+            // Clear photosSelected to not add a Photo twice when new photos are added via picker
+            photosSelected = []
+        }
+        .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
+        .alert("Error saving Database", isPresented: $errSavingPresented) {
+        } message: {
+            Text("An Error arised saving the Database")
         }
     }
 }

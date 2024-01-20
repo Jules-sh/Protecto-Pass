@@ -13,7 +13,7 @@ import Foundation
 internal class ME_DataStructure<D, F, E, De, Do, I> : NativeType<De, D, Do> {
     
     /// The Name of this Data Structure
-    internal let name : D
+    @Published internal var name : D
     
     /// A closer description of this Object
     ///
@@ -21,17 +21,17 @@ internal class ME_DataStructure<D, F, E, De, Do, I> : NativeType<De, D, Do> {
     /// This reflects the objectDescription Property in
     /// Core Data, because the description parameter is
     /// already taken.
-    internal let description : D
+    @Published internal var description : D
     
     /// All the folders stored in this Multiple Entity
     /// Data Structure
-    internal var folders : [F]
+    @Published internal var folders : [F]
     
     /// All the entries stored within this Structure
-    internal var entries : [E]
+    @Published internal var entries : [E]
     
     /// The Images stored in this Folder
-    internal var images : [I]
+    @Published internal var images : [I]
     
     internal init(
         name : D,

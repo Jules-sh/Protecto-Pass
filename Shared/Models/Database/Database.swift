@@ -61,7 +61,7 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_Image, SymmetricKey>, ObservableObject, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_Image, SymmetricKey>, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String

@@ -45,63 +45,112 @@ internal struct ME_ContentView : View {
     /// The Photos selected to add to the Password Safe
     @State private var photosSelected : [PhotosPickerItem] = []
     
+    /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
     
+    /// Presents an alert stating an error has appeared in saving the database when set to true
     @State private var errSavingPresented : Bool = false
     
+    @State private var imageDetailsPresented : Bool = false
+    
+    @State private var selectedImage : DB_Image?
+    
     var body: some View {
-        List {
-            if largeScreen {
-                Section {
-                } header: {
-                    Image(systemName: dataStructure.iconName)
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                }
-            }
-            Section("Entries") {
-                if !dataStructure.entries.isEmpty {
-                    ForEach(dataStructure.entries) {
-                        entry in
-                        NavigationLink(entry.title) {
-                            EntryDetails(entry: entry)
+        GeometryReader {
+            metrics in
+            List {
+                //                if largeScreen {
+                //                    Section {
+                //                    } header: {
+                //                        Image(systemName: dataStructure.iconName)
+                //                            .resizable()
+                //                            .scaledToFit()
+                //                            .padding()
+                //                    }
+                //                }
+                //            Section("Entries") {
+                //                if !dataStructure.entries.isEmpty {
+                //                    ForEach(dataStructure.entries) {
+                //                        entry in
+                //                        NavigationLink(entry.title) {
+                //                            EntryDetails(entry: entry)
+                //                        }
+                //                    }
+                //                } else {
+                //                    Text("No Entries found")
+                //                }
+                //            }
+                //            Section("Folder") {
+                //                if !dataStructure.folders.isEmpty {
+                //                    ForEach(dataStructure.folders) {
+                //                        folder in
+                //                        NavigationLink(folder.name) {
+                //                            ME_ContentView(folder)
+                //                        }
+                //                    }
+                //                } else {
+                //                    Text("No Folders found")
+                //                }
+                //            }
+                Section("Images") {
+                    if !dataStructure.images.isEmpty {
+                        if dataStructure.images.count <= 9 {
+                            // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
+                            ScrollView {
+                                LazyVGrid(
+                                    columns: [
+                                        GridItem(
+                                            .fixed(metrics.size.width / 3),
+                                            spacing: 2
+                                        ),
+                                        GridItem(
+                                            .fixed(metrics.size.width / 3),
+                                            spacing: 2
+                                        ),
+                                        GridItem(
+                                            .fixed(metrics.size.width / 3),
+                                            spacing: 2
+                                        ),
+                                    ],
+                                    spacing: 2
+                                ) {
+                                    ForEach(dataStructure.images) {
+                                        image in
+                                        Button {
+                                            selectedImage = image
+                                            imageDetailsPresented.toggle()
+                                        } label: {
+                                            Image(uiImage: image.image)
+                                                .resizable()
+                                                .frame(
+                                                    width: metrics.size.width / 3,
+                                                    height: metrics.size.width / 3
+                                                )
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            NavigationLink {
+                                EmptyView()
+//                                ImageListDetails()
+                            } label: {
+                                Label("Show all images (\(dataStructure.images.count))", systemImage: "photo")
+                            }
                         }
+                    } else {
+                        Text("No Images found")
                     }
-                } else {
-                    Text("No Entries found")
                 }
-            }
-            Section("Folder") {
-                if !dataStructure.folders.isEmpty {
-                    ForEach(dataStructure.folders) {
-                        folder in
-                        NavigationLink(folder.name) {
-                            ME_ContentView(folder)
-                        }
-                    }
-                } else {
-                    Text("No Folders found")
-                }
-            }
-            Section("Images") {
-                if !dataStructure.images.isEmpty {
-                    ForEach(dataStructure.images) {
-                        image in
-                        Image(uiImage: image.image)
-                    }
-                } else {
-                    Text("No Images found")
-                }
-            }
-            Section("Documents") {
-                if !dataStructure.documents.isEmpty {
-                    ForEach(dataStructure.documents) {
-                        document in
-                    }
-                } else {
-                    Text("No Documents found")
-                }
+                //        Section("Documents") {
+                //            if !dataStructure.documents.isEmpty {
+                //                ForEach(dataStructure.documents) {
+                //                    document in
+                //                }
+                //            } else {
+                //                Text("No Documents found")
+                //            }
+                //        }
             }
         }
         .sheet(isPresented: $detailsPresented) {
@@ -126,6 +175,9 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $addDocPresented) {
             // TODO: udpate
             EditEntry()
+        }
+        .sheet(isPresented: $imageDetailsPresented) {
+            ImageDetails(image: $selectedImage)
         }
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
         .navigationBarTitleDisplayMode(.automatic)

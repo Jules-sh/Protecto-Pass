@@ -144,7 +144,6 @@ internal struct Welcome: View {
         Button {
             dbToUnlock = db
             unlockDBShown.toggle()
-            print("Width: \(width)")
         } label: {
             VStack {
                 Text(db.name)

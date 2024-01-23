@@ -114,7 +114,14 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         description: "This is a Preview Database used in Tests and Previews",
         folders: [],
         entries: [],
-        images: [],
+        images: [
+            DB_Image(
+                image: UIImage(systemName: "plus")!,
+                quality: 0.5,
+                created: Date.now,
+                lastEdited: Date.now
+            )
+        ],
         iconName: "externaldrive",
         documents: [],
         created: Date.now,

@@ -14,11 +14,13 @@ internal struct ImageDetails: View {
     @Environment(\.dismiss) private var dismiss
     
     /// The Image displayed in this View
-    internal let image : DB_Image
+    @Binding internal var image : DB_Image?
     
     var body: some View {
         NavigationStack {
-            Image(uiImage: image.image)
+            Image(uiImage: image!.image)
+                .resizable()
+                .scaledToFit()
                 .toolbarRole(.navigationStack)
                 .toolbar(.automatic, for: .navigationBar)
                 .toolbar {
@@ -50,7 +52,10 @@ internal struct ImageDetails: View {
 }
 
 internal struct ImageDetails_Previews: PreviewProvider {
+    
+    @State static private var image : DB_Image? = DB_Image.previewImage
+    
     static var previews: some View {
-        ImageDetails(image: DB_Image.previewImage)
+        ImageDetails(image: $image)
     }
 }

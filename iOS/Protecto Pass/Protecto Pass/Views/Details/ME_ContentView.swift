@@ -18,14 +18,25 @@ internal struct ME_ContentView : View {
     /// Whether the User activated the large Screen preference or not
     @Environment(\.largeScreen) private var largeScreen : Bool
     
+    /// The Database used to store the complere Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
     
-    internal init(_ data : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>) {
-        dataStructure = data
+    private let id : UUID
+    
+    internal init(id : UUID) {
+        self.id = id
+        dataStructure = nil
+        if id == db.id {
+            dataStructure = db
+        } else {
+            for folder in db.folders {
+                checkFolder(folder, id: id)
+            }
+        }
     }
     
     /// The Data Structure which is displayed in this View
-    private let dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
+    private var dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>?
     
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
@@ -93,49 +104,49 @@ internal struct ME_ContentView : View {
                 //                }
                 //            }
                 Section("Images") {
-                    if !dataStructure.images.isEmpty {
-                        if dataStructure.images.count <= 9 {
+                    if !dataStructure!.images.isEmpty {
+                        if dataStructure!.images.count <= 9 {
                             // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
-                            ScrollView {
-                                LazyVGrid(
-                                    columns: [
-                                        GridItem(
-                                            .fixed(metrics.size.width / 3),
-                                            spacing: 2
-                                        ),
-                                        GridItem(
-                                            .fixed(metrics.size.width / 3),
-                                            spacing: 2
-                                        ),
-                                        GridItem(
-                                            .fixed(metrics.size.width / 3),
-                                            spacing: 2
-                                        ),
-                                    ],
-                                    spacing: 2
-                                ) {
-                                    ForEach(dataStructure.images) {
-                                        image in
-                                        Button {
-                                            selectedImage = image
-                                            imageDetailsPresented.toggle()
-                                        } label: {
-                                            Image(uiImage: image.image)
-                                                .resizable()
-                                                .frame(
-                                                    width: metrics.size.width / 3,
-                                                    height: metrics.size.width / 3
-                                                )
-                                        }
-                                    }
-                                }
-                            }
+                            //                            ScrollView {
+                            //                                LazyVGrid(
+                            //                                    columns: [
+                            //                                        GridItem(
+                            //                                            .fixed(metrics.size.width / 3),
+                            //                                            spacing: 2
+                            //                                        ),
+                            //                                        GridItem(
+                            //                                            .fixed(metrics.size.width / 3),
+                            //                                            spacing: 2
+                            //                                        ),
+                            //                                        GridItem(
+                            //                                            .fixed(metrics.size.width / 3),
+                            //                                            spacing: 2
+                            //                                        ),
+                            //                                    ],
+                            //                                    spacing: 2
+                            //                                ) {
+                            //                                    ForEach(dataStructure.images) {
+                            //                                        image in
+                            //                                        Button {
+                            //                                            selectedImage = image
+                            //                                            imageDetailsPresented.toggle()
+                            //                                        } label: {
+                            //                                            Image(uiImage: image.image)
+                            //                                                .resizable()
+                            //                                                .frame(
+                            //                                                    width: metrics.size.width / 3,
+                            //                                                    height: metrics.size.width / 3
+                            //                                                )
+                            //                                        }
+                            //                                    }
+                            //                                }
+                            //                            }
                         } else {
                             NavigationLink {
-                                EmptyView()
-//                                ImageListDetails()
+                                ImageListDetails()
+                                    .environmentObject(dataStructure!)
                             } label: {
-                                Label("Show all images (\(dataStructure.images.count))", systemImage: "photo")
+                                Label("Show all images (\(dataStructure!.images.count))", systemImage: "photo")
                             }
                         }
                     } else {
@@ -154,7 +165,7 @@ internal struct ME_ContentView : View {
             }
         }
         .sheet(isPresented: $detailsPresented) {
-            Me_Details(me: dataStructure)
+            Me_Details(me: dataStructure!)
         }
         .sheet(isPresented: $addEntryPresented) {
             EditEntry()
@@ -179,7 +190,7 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $imageDetailsPresented) {
             ImageDetails(image: $selectedImage)
         }
-        .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
+        .navigationTitle(dataStructure is Database ? "Home" : dataStructure!.name)
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
         .toolbar(.automatic, for: .navigationBar)
@@ -232,8 +243,8 @@ internal struct ME_ContentView : View {
         .onChange(of: addImagePresented) {
             // Guard to not call this code when opening the Picker
             guard !addImagePresented else { return }
-            for photo in photosSelected {
-                Task {
+            Task {
+                for photo in photosSelected {
                     do {
                         let image : UIImage = try await photo.loadTransferable(type: DBSoleImage.self)!.image
                         db.images.append(
@@ -244,14 +255,14 @@ internal struct ME_ContentView : View {
                                 lastEdited: Date.now
                             )
                         )
-                        do {
-                            try Storage.storeDatabase(db, context: context)
-                        } catch {
-                            errSavingPresented.toggle()
-                        }
                     } catch {
                         errLoadingImagePresented.toggle()
                     }
+                }
+                do {
+                    try Storage.storeDatabase(db, context: context)
+                } catch {
+                    errSavingPresented.toggle()
                 }
             }
             // Clear photosSelected to not add a Photo twice when new photos are added via picker
@@ -262,6 +273,20 @@ internal struct ME_ContentView : View {
         } message: {
             Text("An Error arised saving the Database")
         }
+    }
+    
+    private mutating func checkFolder(_ folder : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>, id : UUID) -> ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>? {
+        guard folder.id != id else {
+            dataStructure = folder
+            return folder
+        }
+        for f in folder.folders {
+            var result = checkFolder(f, id: id)
+            if (result != nil){
+                return result;
+            }
+        }
+        return nil
     }
 }
 
@@ -287,7 +312,8 @@ internal struct ME_ContentView_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(db)
+        ME_ContentView(id: db.id)
+            .environmentObject(db)
     }
 }
 
@@ -296,7 +322,8 @@ internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(db)
+        ME_ContentView(id: db.id)
+            .environmentObject(db)
             .environment(\.largeScreen, true)
     }
 }

@@ -64,6 +64,4 @@ internal protocol DecryptedDataStructure : Hashable, Identifiable {}
 
 /// Protocol which all of the encrypted Data Structures must conforms to in order
 /// to store them in a File
-internal protocol EncryptedDataStructure : Codable {
-    
-}
+internal protocol EncryptedDataStructure : Codable {}

@@ -9,7 +9,10 @@ import SwiftUI
 
 internal struct ImageListDetails: View {
     
-    @Binding internal var images : [DB_Image]
+    /// The full database needed to store it
+    @EnvironmentObject private var db : Database
+    
+    let images : [Int] = []
     
     var body: some View {
         NavigationStack {
@@ -32,20 +35,20 @@ internal struct ImageListDetails: View {
                     ],
                     spacing: 2
                 ) {
-                    ForEach(images) {
-                        image in
-                        Button {
-//                            selectedImage = image
-//                            imageDetailsPresented.toggle()
-                        } label: {
-                            Image(uiImage: image.image)
-                                .resizable()
-                                .frame(
-                                    width: metrics.size.width / 3,
-                                    height: metrics.size.width / 3
-                                )
-                        }
-                    }
+//                    ForEach(images) {
+//                        image in
+//                        Button {
+////                            selectedImage = image
+////                            imageDetailsPresented.toggle()
+//                        } label: {
+//                            Image(uiImage: image.image)
+//                                .resizable()
+//                                .frame(
+//                                    width: metrics.size.width / 3,
+//                                    height: metrics.size.width / 3
+//                                )
+//                        }
+//                    }
                 }
             }
         }
@@ -55,9 +58,12 @@ internal struct ImageListDetails: View {
 
 internal struct ImageListDetails_Previews: PreviewProvider {
     
-    @State static var images : [DB_Image] = [DB_Image.previewImage]
+    @State static private var images : [DB_Image] = [DB_Image.previewImage]
+    
+    @StateObject static private var db : Database = Database.previewDB
     
     static var previews: some View {
-        ImageListDetails(images: $images)
+        ImageListDetails()
+            .environmentObject(db)
     }
 }

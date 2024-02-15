@@ -19,7 +19,7 @@ internal struct Home: View {
     
     var body: some View {
         NavigationStack {
-            ME_ContentView(db)
+            ME_ContentView(id: db.id)
                 .environmentObject(db)
         }
     }
@@ -27,7 +27,7 @@ internal struct Home: View {
 
 internal struct Home_Previews: PreviewProvider {
     static var previews: some View {
-       Home(db: Database.previewDB)
+        Home(db: Database.previewDB)
     }
 }
 

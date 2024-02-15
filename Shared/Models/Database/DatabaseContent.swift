@@ -16,7 +16,7 @@ internal class DatabaseContent<D> {
     
     /// The last edit date indicates when this
     /// Object was edited the last time
-    internal let lastEdited : D
+    internal var lastEdited : D
     
     internal init(
         created : D,

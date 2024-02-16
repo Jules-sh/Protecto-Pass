@@ -65,6 +65,7 @@ internal struct DB_Converter : DatabaseConverterProtocol {
         cdDB.header = encrypted.header.parseHeader()
         cdDB.key = encrypted.key
         cdDB.allowBiometrics = encrypted.allowBiometrics
+        cdDB.id = encrypted.id
         return cdDB
     }
 }
@@ -132,7 +133,6 @@ private struct ImageConverter : DatabaseConverterProtocol {
     fileprivate static func toCD(_ encrypted: Encrypted_DB_Image, context: NSManagedObjectContext) -> CD_Image {
         let cdImage : CD_Image = CD_Image(context: context)
         cdImage.imageData = encrypted.image
-        cdImage.dataType = encrypted.type
         cdImage.compressionQuality = encrypted.quality
         cdImage.created = encrypted.created
         cdImage.lastEdited = encrypted.lastEdited

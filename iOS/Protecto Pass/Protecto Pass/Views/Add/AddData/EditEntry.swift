@@ -17,65 +17,90 @@ internal struct EditEntry: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    /// The Database to store this Object in
     @EnvironmentObject private var db : Database
     
     /// The parent folder of this Entry if there is
     @State internal var folder : Folder?
     
+    /// The Title of this entry
     @State private var title : String = ""
     
+    /// The Username of this Entry.
+    /// This typically is a Name, not a link
     @State private var username : String = ""
     
+    /// The Passwort stored in this Entry.
+    /// This is the most important part
     @State private var password : String = ""
     
+    /// The URL to where the entry is connected to
     @State private var url : String = ""
     
+    /// Some Notes to this Entry
     @State private var notes : String = ""
     
+    /// Whether or not an error has appeared storing the Database
     @State private var errStoring : Bool = false
     
+    /// The name of the icon representing this Entry
+    @State private var iconName : String = "doc"
+    
+    /// Whether or not the icon Chooser is shown
+    @State private var iconChooserShown : Bool = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "doc")
-                .renderingMode(.original)
-                .symbolRenderingMode(.hierarchical)
-                .resizable()
-                .scaledToFit()
-                .padding(.horizontal, 75)
-            Group {
-                TextField("Title", text: $title)
-                    .textInputAutocapitalization(.words)
-                    .padding(.top, 40)
-                Group {
-                    TextField("Username", text: $username)
-                        .textContentType(.username)
-                    TextField("Password", text: $password)
-                        .textContentType(.password)
-                    TextField("URL", text: $url)
-                        .textContentType(.password)
+        NavigationStack {
+            VStack {
+                Button {
+                    iconChooserShown.toggle()
+                } label: {
+                    Image(systemName: iconName)
+                        .renderingMode(.original)
+                        .symbolRenderingMode(.hierarchical)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 75)
+                        .foregroundStyle(.foreground)
                 }
-                .textInputAutocapitalization(.never)
-                TextField("Notes", text: $notes, axis: .vertical)
-                    .lineLimit(5...10)
-                    .textInputAutocapitalization(.sentences)
+                .sheet(isPresented: $iconChooserShown) {
+                    IconChooser(iconName: $iconName, type: .entry)
+                }
+                Group {
+                    TextField("Title", text: $title)
+                        .textInputAutocapitalization(.words)
+                        .padding(.top, 40)
+                    Group {
+                        TextField("Username", text: $username)
+                            .textContentType(.username)
+                        TextField("Password", text: $password)
+                            .textContentType(.password)
+                        TextField("URL", text: $url)
+                            .textContentType(.URL)
+                    }
+                    .textInputAutocapitalization(.never)
+                    TextField("Notes", text: $notes, axis: .vertical)
+                        .lineLimit(5...10)
+                        .textInputAutocapitalization(.sentences)
+                }
+                .textFieldStyle(.roundedBorder)
             }
-            .textFieldStyle(.roundedBorder)
-        }
-        .alert("Error saving", isPresented: $errStoring) {
-            Button("Cancel", role: .cancel) {}
-            Button("Try again") { save() }
-        } message: {
-            Text("An Error occurred when trying to save the data.\nPlease try again")
-        }
-        .padding(.horizontal, 25)
-        .navigationTitle("New Entry")
-        .navigationBarTitleDisplayMode(.automatic)
-        .toolbarRole(.editor)
-        .toolbar(.automatic, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done") {
-                    
+            .alert("Error saving", isPresented: $errStoring) {
+                Button("Cancel", role: .cancel) {}
+                Button("Try again") { save() }
+            } message: {
+                Text("An Error occurred when trying to save the data.\nPlease try again")
+            }
+            .padding(.horizontal, 25)
+            .navigationTitle("New Entry")
+            .navigationBarTitleDisplayMode(.automatic)
+            .toolbarRole(.editor)
+            .toolbar(.automatic, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        
+                    }
                 }
             }
         }

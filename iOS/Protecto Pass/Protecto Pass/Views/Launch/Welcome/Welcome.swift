@@ -37,7 +37,7 @@ internal struct Welcome: View {
     @State private var dbFromPath : EncryptedDatabase?
     
     @State private var dbToUnlock : EncryptedDatabase = EncryptedDatabase.previewDB
-
+    
     @State private var errReadingDatabaseFromPathShown : Bool = false
     
     var body: some View {
@@ -60,8 +60,17 @@ internal struct Welcome: View {
                 .toolbar(.automatic, for: .navigationBar)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            navigationSheet.navigationSheetShown.toggle()
+                        Menu {
+                            Button {
+                                navigationSheet.navigationSheetShown.toggle()
+                            } label: {
+                                Label("Create new one", systemImage: "plus")
+                            }
+                            Button {
+                                selectorPresented.toggle()
+                            } label: {
+                                Label("Open from File", systemImage: "doc")
+                            }
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -135,7 +144,6 @@ internal struct Welcome: View {
         Button {
             dbToUnlock = db
             unlockDBShown.toggle()
-            print("Width: \(width)")
         } label: {
             VStack {
                 Text(db.name)
@@ -145,11 +153,11 @@ internal struct Welcome: View {
                     .lineLimit(2, reservesSpace: true)
             }
             // - 150 because horizontal padding is 75
-            .frame(width: width - 150)
+            .frame(width: abs(width - 150))
         }
         .foregroundColor(.white)
-        .contentMargins(.horizontal, 75)
-        .contentMargins(.vertical, 100)
+        .padding(.horizontal, 75)
+        .padding(.vertical, 100)
         .background(Color.gray)
         .cornerRadius(15)
     }

@@ -55,7 +55,7 @@ internal struct PasswordField: View {
                 } label: {
                     Image(systemName: isShown ? "eye.slash" : "eye")
                 }
-                .foregroundColor(.primary)
+                .foregroundStyle(.foreground)
                 .padding(.trailing, 10)
             }
         }

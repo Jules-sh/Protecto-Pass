@@ -106,7 +106,8 @@ internal struct Encrypter {
             lastEdited: db!.lastEdited,
             header: db!.header,
             key: encryptedKey,
-            allowBiometrics: db!.allowBiometrics
+            allowBiometrics: db!.allowBiometrics,
+            id: db!.id
         )
         return encryptedDatabase
     }
@@ -234,10 +235,6 @@ internal struct Encrypter {
             imageData,
             using: key!
         ).combined!
-        let encryptedType : Data = try AES.GCM.seal(
-            DataConverter.stringToData(image.type.rawValue),
-            using: key!
-        ).combined!
         let encryptedQuality : Data = try AES.GCM.seal(
             DataConverter.doubleToData(image.quality),
             using: key!
@@ -252,7 +249,6 @@ internal struct Encrypter {
         ).combined!
         return Encrypted_DB_Image(
             image: encryptedImageData,
-            type: encryptedType,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate
@@ -321,7 +317,8 @@ internal struct Encrypter {
             lastEdited: db!.lastEdited,
             header: db!.header,
             key: encryptedKey,
-            allowBiometrics: db!.allowBiometrics
+            allowBiometrics: db!.allowBiometrics,
+            id: db!.id
         )
         return encryptedDatabase
     }
@@ -450,10 +447,6 @@ internal struct Encrypter {
             imageData,
             using: key!
         ).combined
-        let encryptedType : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(image.type.rawValue),
-            using: key!
-        ).combined
         let encryptedQuality : Data = try ChaChaPoly.seal(
                 DataConverter.doubleToData(image.quality),
                 using: key!
@@ -468,7 +461,6 @@ internal struct Encrypter {
         ).combined
         return Encrypted_DB_Image(
             image: encryptedImageData,
-            type: encryptedType,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate

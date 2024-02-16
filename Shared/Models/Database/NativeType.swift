@@ -9,15 +9,15 @@ import Foundation
 
 /// Superclass of every Native Type implemented in this App, that could not have
 /// been implemented with a default Type
-internal class NativeType<De, I, Do> : DatabaseContent<De> {
+internal class NativeType<De, I, Do> : DatabaseContent<De>, ObservableObject {
     
     /// The Name of the SF-Symbol representing what this
     /// Database Content is
-    internal let iconName : I
+    @Published internal var iconName : I
     
     /// All the documents connected to this Database
     /// Content
-    internal let documents : [Do]
+    @Published internal var documents : [Do]
     
     internal init(
         iconName: I,

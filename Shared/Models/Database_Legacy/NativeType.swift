@@ -17,7 +17,7 @@ internal class NativeType<De, I, Do> : DatabaseContent<De>, ObservableObject {
     
     /// All the documents connected to this Database
     /// Content
-    @Published internal var documents : [Do]
+    @Published internal var documents : TableOfContents
     
     internal init(
         iconName: I,

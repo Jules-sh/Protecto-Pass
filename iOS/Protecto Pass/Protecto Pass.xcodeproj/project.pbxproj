@@ -254,6 +254,17 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		847D93E72B825E0B00A24E8F /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
+				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
+				8497F7352B7E264700A190FF /* TableOfContents.swift */,
+				8497F7372B7E264E00A190FF /* ToCItem.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		84922B342A21E16F00CE7945 /* Mapping */ = {
 			isa = PBXGroup;
 			children = (
@@ -386,9 +397,10 @@
 		84F4206229EEA0F1000D7600 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				847D93E72B825E0B00A24E8F /* Database */,
 				849ECBD82A27666600954BC9 /* DB_Creation */,
 				84F4206329EEA0F1000D7600 /* Generated */,
-				84F4206729EEA0F1000D7600 /* Database */,
+				84F4206729EEA0F1000D7600 /* Database_Legacy */,
 				84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */,
 			);
 			path = Models;
@@ -401,22 +413,18 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
-		84F4206729EEA0F1000D7600 /* Database */ = {
+		84F4206729EEA0F1000D7600 /* Database_Legacy */ = {
 			isa = PBXGroup;
 			children = (
 				84F4206829EEA0F1000D7600 /* Folder.swift */,
 				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
 				84F4206929EEA0F1000D7600 /* Entry.swift */,
-				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
 				84F4206B29EEA0F1000D7600 /* Database.swift */,
-				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
 				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
 				84A3ABEB2AA055DA0089521E /* DB_Document.swift */,
 				84A3ABED2AA057620089521E /* NativeType.swift */,
-				8497F7352B7E264700A190FF /* TableOfContents.swift */,
-				8497F7372B7E264E00A190FF /* ToCItem.swift */,
 			);
-			path = Database;
+			path = Database_Legacy;
 			sourceTree = "<group>";
 		};
 		84F4206E29EEA0F1000D7600 /* Storage */ = {

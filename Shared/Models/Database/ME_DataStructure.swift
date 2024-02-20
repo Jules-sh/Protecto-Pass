@@ -27,7 +27,7 @@ internal class ME_DataStructure<DA, DE, T> : NativeType<DE, DA, T> {
         name : DA,
         description : DA,
         iconName : DA,
-        contents : T,
+        contents : [T],
         created : DE,
         lastEdited : DE
     ) {

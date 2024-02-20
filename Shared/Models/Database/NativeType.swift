@@ -17,11 +17,11 @@ internal class NativeType<DE, I, T> : DatabaseContent<DE>, ObservableObject {
     
     /// All the documents connected to this Database
     /// Content
-    @Published internal var contents : T
+    @Published internal var contents : [T]
     
     internal init(
         iconName: I,
-        contents : T,
+        contents : [T],
         created : DE,
         lastEdited : DE
     ) {

@@ -31,7 +31,7 @@ internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T>, Identi
         name : String,
         description : String,
         iconName : String,
-        contents : T,
+        contents : [T],
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -55,7 +55,7 @@ internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T>, Identi
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<SymmetricKey, TableOfContents>, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<SymmetricKey, ToCItem>, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -64,7 +64,7 @@ internal final class Database : GeneralDatabase<SymmetricKey, TableOfContents>, 
         name : String,
         description : String,
         iconName : String,
-        contents : TableOfContents,
+        contents : [ToCItem],
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -101,7 +101,7 @@ internal final class Database : GeneralDatabase<SymmetricKey, TableOfContents>, 
         name: "Preview Database",
         description: "This is a Preview Database used in Tests and Previews",
         iconName: "externaldrive",
-        contents: TableOfContents(contents: []),
+        contents: [],
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(
@@ -139,13 +139,13 @@ internal final class Database : GeneralDatabase<SymmetricKey, TableOfContents>, 
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedTableOfContents>, EncryptedDataStructure {
+internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedToCItem>, EncryptedDataStructure {
     
     override internal init(
         name: String,
         description: String,
         iconName: String,
-        contents : EncryptedTableOfContents,
+        contents : [EncryptedToCItem],
         created : Date,
         lastEdited : Date,
         header: DB_Header,
@@ -200,7 +200,7 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedTableOfC
             name: try container.decode(String.self, forKey: .name),
             description: try container.decode(String.self, forKey: .description),
             iconName: try container.decode(String.self, forKey: .iconName),
-            contents: <#T##EncryptedTableOfContents#>,
+            contents: try container.decode([EncryptedToCItem].self, forKey: .contents),
             created: try container.decode(Date.self, forKey: .created),
             lastEdited: try container.decode(Date.self, forKey: .lastEdited),
             header: try container.decode(DB_Header.self, forKey: .header),
@@ -211,27 +211,15 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedTableOfC
     }
     
     internal convenience init(from coreData : CD_Database) throws {
-        var localFolders : [EncryptedFolder] = []
-        for folder in coreData.folders! {
-            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
-        }
-        var localEntries : [EncryptedEntry] = []
-        for entry in coreData.entries! {
-            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
-        }
-        var localImages : [Encrypted_DB_Image] = []
-        for image in coreData.images! {
-            localImages.append(Encrypted_DB_Image(from: image as! CD_Image))
-        }
-        var localDocuments : [Encrypted_DB_Document] = []
-        for doc in coreData.documents! {
-            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        var localContents : [EncryptedToCItem] = []
+        for toc in coreData.contents! {
+            localContents.append(EncryptedToCItem(from: toc as! CD_ToCItem))
         }
         self.init(
             name: DataConverter.dataToString(coreData.name!),
             description: DataConverter.dataToString(coreData.objectDescription),
             iconName: DataConverter.dataToString(coreData.iconName!),
-            contents: ,
+            contents: localContents,
             created: try DataConverter.dataToDate(coreData.created!),
             lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
             header: try DB_Header.parseString(string: coreData.header!),
@@ -254,7 +242,7 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedTableOfC
         name: "Preview Database",
         description: "This is an encrypted Preview Database used in Tests and Previews",
         iconName: "externaldrive",
-        contents: EncryptedTableOfContents(contents: []),
+        contents: [],
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(

@@ -3,8 +3,9 @@
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
 <instance-profile id="tech"
-                 name="Technical"
-                 start-page="technical.md">
+                  name="Technical"
+                  start-page="technical.md">
 
     <toc-element topic="technical.md"/>
+    <toc-element topic="Objects.md"/>
 </instance-profile>

@@ -129,7 +129,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
         case url
         case notes
         case iconName
-        case documents
+        case contents
         case created
         case lastEdited
     }
@@ -142,7 +142,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
         try container.encode(url, forKey: .url)
         try container.encode(notes, forKey: .notes)
         try container.encode(iconName, forKey: .iconName)
-        try container.encode(documents, forKey: .documents)
+        try container.encode(contents, forKey: .contents)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
     }
@@ -156,7 +156,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: try container.decode(Data.self, forKey: .url),
             notes: try container.decode(Data.self, forKey: .notes),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            contents: try container.decode(TableOfContents.self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )

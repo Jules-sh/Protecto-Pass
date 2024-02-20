@@ -257,10 +257,15 @@
 		847D93E72B825E0B00A24E8F /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				84F4206B29EEA0F1000D7600 /* Database.swift */,
+				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
+				84A3ABED2AA057620089521E /* NativeType.swift */,
 				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
 				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
 				8497F7352B7E264700A190FF /* TableOfContents.swift */,
 				8497F7372B7E264E00A190FF /* ToCItem.swift */,
+				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
+				84A3ABEB2AA055DA0089521E /* DB_Document.swift */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -417,12 +422,7 @@
 			isa = PBXGroup;
 			children = (
 				84F4206829EEA0F1000D7600 /* Folder.swift */,
-				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
 				84F4206929EEA0F1000D7600 /* Entry.swift */,
-				84F4206B29EEA0F1000D7600 /* Database.swift */,
-				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
-				84A3ABEB2AA055DA0089521E /* DB_Document.swift */,
-				84A3ABED2AA057620089521E /* NativeType.swift */,
 			);
 			path = Database_Legacy;
 			sourceTree = "<group>";

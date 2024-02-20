@@ -12,7 +12,7 @@ import UIKit
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, Date, Do, I>, Identifiable {
+internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T>, Identifiable {
     
     /// ID to conform to identifiable
     internal let id : UUID
@@ -30,11 +30,8 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
     internal init(
         name : String,
         description : String,
-        folders : [F],
-        entries : [E],
-        images : [I],
         iconName : String,
-        documents : [Do],
+        contents : T,
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -49,11 +46,8 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
         super.init(
             name: name,
             description: description,
-            folders: folders,
-            entries: entries,
-            images: images,
             iconName: iconName,
-            documents: documents,
+            contents: contents,
             created: created,
             lastEdited : lastEdited
         )
@@ -61,7 +55,7 @@ internal class GeneralDatabase<F, E, Do, I, K> : ME_DataStructure<String, F, E, 
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_Image, SymmetricKey>, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<SymmetricKey, TableOfContents>, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -69,11 +63,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
     internal init(
         name : String,
         description : String,
-        folders : [Folder],
-        entries : [Entry],
-        images : [DB_Image],
         iconName : String,
-        documents : [DB_Document],
+        contents : TableOfContents,
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -86,11 +77,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         super.init(
             name: name,
             description: description,
-            folders: folders,
-            entries: entries,
-            images: images,
             iconName: iconName,
-            documents: documents,
+            contents: contents,
             created: created,
             lastEdited: lastEdited,
             header: header,
@@ -112,18 +100,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
     internal static let previewDB : Database = Database(
         name: "Preview Database",
         description: "This is a Preview Database used in Tests and Previews",
-        folders: [],
-        entries: [],
-        images: [
-            DB_Image(
-                image: UIImage(systemName: "plus")!,
-                quality: 0.5,
-                created: Date.now,
-                lastEdited: Date.now
-            )
-        ],
         iconName: "externaldrive",
-        documents: [],
+        contents: TableOfContents(contents: []),
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(
@@ -140,11 +118,8 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
     static func == (lhs: Database, rhs: Database) -> Bool {
         return lhs.name == rhs.name &&
         lhs.description == rhs.description &&
-        lhs.folders == rhs.folders &&
-        lhs.entries == rhs.entries &&
-        lhs.images == rhs.images &&
         lhs.iconName == rhs.iconName &&
-        lhs.documents == rhs.documents &&
+        lhs.contents == rhs.contents &&
         lhs.created == rhs.created &&
         lhs.lastEdited == rhs.lastEdited &&
         lhs.header.parseHeader() == rhs.header.parseHeader() &&
@@ -157,23 +132,20 @@ internal final class Database : GeneralDatabase<Folder, Entry, DB_Document, DB_I
         hasher.combine(header.parseHeader())
         hasher.combine(name)
         hasher.combine(description)
-        hasher.combine(folders)
-        hasher.combine(entries)
+        hasher.combine(contents)
+        hasher.combine(iconName)
         hasher.combine(id)
     }
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, EncryptedEntry, Encrypted_DB_Document, Encrypted_DB_Image, Data>, EncryptedDataStructure {
+internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedTableOfContents>, EncryptedDataStructure {
     
     override internal init(
         name: String,
         description: String,
-        folders: [EncryptedFolder],
-        entries: [EncryptedEntry],
-        images: [Encrypted_DB_Image],
         iconName: String,
-        documents: [Encrypted_DB_Document],
+        contents : EncryptedTableOfContents,
         created : Date,
         lastEdited : Date,
         header: DB_Header,
@@ -184,11 +156,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         super.init(
             name: name,
             description: description,
-            folders: folders,
-            entries: entries,
-            images: images,
             iconName: iconName,
-            documents: documents,
+            contents: contents,
             created: created,
             lastEdited: lastEdited,
             header: header,
@@ -201,11 +170,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
     private enum DatabaseCodingKeys: CodingKey {
         case name
         case description
-        case folders
-        case entries
-        case images
         case iconName
-        case documents
+        case contents
         case created
         case lastEdited
         case header
@@ -218,11 +184,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         var container = encoder.container(keyedBy: DatabaseCodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(description, forKey: .description)
-        try container.encode(folders, forKey: .folders)
-        try container.encode(entries, forKey: .entries)
-        try container.encode(images, forKey: .images)
+        try container.encode(contents, forKey: .contents)
         try container.encode(iconName, forKey: .iconName)
-        try container.encode(documents, forKey: .documents)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
         try container.encode(header, forKey: .header)
@@ -236,11 +199,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         self.init(
             name: try container.decode(String.self, forKey: .name),
             description: try container.decode(String.self, forKey: .description),
-            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
-            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
-            images: try container.decode([Encrypted_DB_Image].self, forKey: .images),
             iconName: try container.decode(String.self, forKey: .iconName),
-            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            contents: <#T##EncryptedTableOfContents#>,
             created: try container.decode(Date.self, forKey: .created),
             lastEdited: try container.decode(Date.self, forKey: .lastEdited),
             header: try container.decode(DB_Header.self, forKey: .header),
@@ -270,11 +230,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
         self.init(
             name: DataConverter.dataToString(coreData.name!),
             description: DataConverter.dataToString(coreData.objectDescription),
-            folders: localFolders,
-            entries: localEntries,
-            images: localImages,
             iconName: DataConverter.dataToString(coreData.iconName!),
-            documents: localDocuments,
+            contents: ,
             created: try DataConverter.dataToDate(coreData.created!),
             lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
             header: try DB_Header.parseString(string: coreData.header!),
@@ -296,11 +253,8 @@ internal final class EncryptedDatabase : GeneralDatabase<EncryptedFolder, Encryp
     internal static let previewDB : EncryptedDatabase = EncryptedDatabase(
         name: "Preview Database",
         description: "This is an encrypted Preview Database used in Tests and Previews",
-        folders: [],
-        entries: [],
-        images: [],
         iconName: "externaldrive",
-        documents: [],
+        contents: EncryptedTableOfContents(contents: []),
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(

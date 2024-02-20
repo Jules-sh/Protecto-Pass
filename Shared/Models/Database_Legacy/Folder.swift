@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-internal class GeneralFolder<D, F, E, De, Do, I> : ME_DataStructure<D, F, E, De, Do, I> {}
+internal class GeneralFolder<DA, DE, T> : ME_DataStructure<DA, DE, T> {}
 
 /// The Folder Object that is used when the App is running
-internal final class Folder : GeneralFolder<String, Folder, Entry, Date, DB_Document, DB_Image>, DecryptedDataStructure {
+internal final class Folder : GeneralFolder<String, Date, TableOfContents>, DecryptedDataStructure {
     
     /// ID to conform to Decrypted Data Structure
     internal let id: UUID = UUID()
@@ -20,54 +20,43 @@ internal final class Folder : GeneralFolder<String, Folder, Entry, Date, DB_Docu
     internal static let previewFolder : Folder = Folder(
         name: "Private",
         description: "This is an preview Folder only to use in previews and tests",
-        folders: [],
-        entries: [],
-        images: [],
         iconName: "folder",
-        documents: [],
+        contents: TableOfContents(contents: []),
         created: Date.now,
         lastEdited: Date.now
     )
     
     static func == (lhs: Folder, rhs: Folder) -> Bool {
-        return lhs.name == rhs.name && lhs.description == rhs.description && lhs.folders == rhs.folders && lhs.entries == rhs.entries && lhs.id == rhs.id
+        return lhs.name == rhs.name && lhs.description == rhs.description && lhs.id == rhs.id && lhs.contents == rhs.contents
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(iconName)
-        hasher.combine(documents)
         hasher.combine(created)
         hasher.combine(lastEdited)
+        hasher.combine(contents)
         hasher.combine(name)
         hasher.combine(description)
-        hasher.combine(folders)
-        hasher.combine(entries)
         hasher.combine(id)
     }
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, EncryptedEntry, Data, Encrypted_DB_Document, Encrypted_DB_Image>, EncryptedDataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedTableOfContents>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
         description: Data,
-        folders: [EncryptedFolder],
-        entries: [EncryptedEntry],
-        images : [Encrypted_DB_Image],
         iconName : Data,
-        documents: [Encrypted_DB_Document],
+        contents: EncryptedTableOfContents,
         created : Data,
         lastEdited : Data
     ) {
         super.init(
             name: name,
             description: description,
-            folders: folders,
-            entries: entries,
-            images: images,
             iconName: iconName,
-            documents: documents,
+            contents: contents,
             created: created,
             lastEdited: lastEdited
         )
@@ -76,11 +65,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, Encr
     private enum FolderCodingKeys: CodingKey {
         case name
         case description
-        case folders
-        case entries
-        case images
+        case contents
         case iconName
-        case documents
         case created
         case lastEdited
     }
@@ -89,11 +75,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, Encr
         var container = encoder.container(keyedBy: FolderCodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(description, forKey: .description)
-        try container.encode(folders, forKey: .folders)
-        try container.encode(entries, forKey: .entries)
-        try container.encode(images, forKey: .images)
+        try container.encode(contents, forKey: .contents)
         try container.encode(iconName, forKey: .iconName)
-        try container.encode(documents, forKey: .documents)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
     }
@@ -103,11 +86,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, Encr
         self.init(
             name: try container.decode(Data.self, forKey: .name),
             description: try container.decode(Data.self, forKey: .description),
-            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
-            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
-            images: try container.decode([Encrypted_DB_Image].self, forKey: .images),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
+            contents: try container.decode(EncryptedTableOfContents.self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
@@ -133,11 +113,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, EncryptedFolder, Encr
         self.init(
             name: coreData.name!,
             description: coreData.objectDescription!,
-            folders: localFolders,
-            entries: localEntries,
-            images: localImages,
             iconName: coreData.iconName!,
-            documents: localDocuments,
+            contents: coreData.tableOfContents,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

@@ -8,34 +8,34 @@
 import Foundation
 import SwiftUI
 
-internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
+internal class GeneralEntry<DA, U, DE, T> : NativeType<DE, DA, T> {
     
     /// The Title of this Entry
-    internal let title : D
+    internal let title : DA
     
     /// The Username connected to this Entry
-    internal let username : D
+    internal let username : DA
     
     /// The Password stored with this Entry
-    internal let password : D
+    internal let password : DA
     
     /// The URL this Entry is connected to
     internal let url : U
     
     /// Some notes storing whatever
     /// the User wants to add to this Entry
-    internal let notes : D
+    internal let notes : DA
     
     internal init(
-        title: D,
-        username: D,
-        password: D,
+        title: DA,
+        username: DA,
+        password: DA,
         url: U,
-        notes: D,
-        iconName : I,
-        documents : [Do],
-        created : De,
-        lastEdited : De
+        notes: DA,
+        iconName : DA,
+        contents : T,
+        created : DE,
+        lastEdited : DE
     ) {
         self.title = title
         self.username = username
@@ -44,7 +44,7 @@ internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
         self.notes = notes
         super.init(
             iconName: iconName,
-            documents: documents,
+            contents: contents,
             created: created,
             lastEdited: lastEdited
         )
@@ -53,7 +53,7 @@ internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Document>, DecryptedDataStructure {
+internal final class Entry : GeneralEntry<String, URL?, Date, TableOfContents>, DecryptedDataStructure {
     
     /// ID to conform to Identifiable
     internal let id: UUID = UUID()
@@ -65,7 +65,7 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
         url: nil,
         notes: "This is a preview Entry, only to use in previews and tests",
         iconName: "folder",
-        documents: [],
+        contents: TableOfContents(contents: []),
         created: Date.now,
         lastEdited: Date.now
     )
@@ -78,12 +78,13 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
         lhs.notes == rhs.notes &&
         lhs.created == rhs.created &&
         lhs.lastEdited == rhs.lastEdited &&
+        lhs.contents == rhs.contents &&
         lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(iconName)
-        hasher.combine(documents)
+        hasher.combine(contents)
         hasher.combine(created)
         hasher.combine(lastEdited)
         hasher.combine(title)
@@ -96,7 +97,7 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encrypted_DB_Document>, EncryptedDataStructure {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTableOfContents>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -105,7 +106,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
         url : Data,
         notes : Data,
         iconName : Data,
-        documents : [Encrypted_DB_Document],
+        contents : EncryptedTableOfContents,
         created : Data,
         lastEdited : Data
     ) {
@@ -116,7 +117,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: url,
             notes: notes,
             iconName: iconName,
-            documents: documents,
+            contents: contents,
             created: created,
             lastEdited: lastEdited
         )
@@ -156,17 +157,13 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: try container.decode(Data.self, forKey: .url),
             notes: try container.decode(Data.self, forKey: .notes),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            contents: try container.decode(TableOfContents.self, forKey: .contents),
+            contents: try container.decode(EncryptedTableOfContents.self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     
     internal init(from coreData : CD_Entry) {
-        var localDocuments : [Encrypted_DB_Document] = []
-        for doc in coreData.documents! {
-            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
-        }
         super.init(
             title: coreData.title!,
             username: coreData.username!,
@@ -174,7 +171,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: coreData.url!,
             notes: coreData.notes!,
             iconName: coreData.iconName!,
-            documents: localDocuments,
+            contents: coreData.tableOfContents!,,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

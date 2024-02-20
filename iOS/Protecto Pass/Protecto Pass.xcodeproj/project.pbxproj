@@ -257,6 +257,8 @@
 		847D93E72B825E0B00A24E8F /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				84F4206829EEA0F1000D7600 /* Folder.swift */,
+				84F4206929EEA0F1000D7600 /* Entry.swift */,
 				84F4206B29EEA0F1000D7600 /* Database.swift */,
 				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
 				84A3ABED2AA057620089521E /* NativeType.swift */,
@@ -405,7 +407,6 @@
 				847D93E72B825E0B00A24E8F /* Database */,
 				849ECBD82A27666600954BC9 /* DB_Creation */,
 				84F4206329EEA0F1000D7600 /* Generated */,
-				84F4206729EEA0F1000D7600 /* Database_Legacy */,
 				84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */,
 			);
 			path = Models;
@@ -416,15 +417,6 @@
 			children = (
 			);
 			path = Generated;
-			sourceTree = "<group>";
-		};
-		84F4206729EEA0F1000D7600 /* Database_Legacy */ = {
-			isa = PBXGroup;
-			children = (
-				84F4206829EEA0F1000D7600 /* Folder.swift */,
-				84F4206929EEA0F1000D7600 /* Entry.swift */,
-			);
-			path = Database_Legacy;
 			sourceTree = "<group>";
 		};
 		84F4206E29EEA0F1000D7600 /* Storage */ = {

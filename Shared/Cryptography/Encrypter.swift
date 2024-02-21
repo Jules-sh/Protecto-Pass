@@ -107,6 +107,7 @@ internal struct Encrypter {
         ).combined!
     }
     
+    /// Encrypts a single Item of a Table of Contents using AES
     private func encryptAES(toc : ToCItem) throws -> EncryptedToCItem {
         let encryptedName : Data = try AES.GCM.seal(
             DataConverter.stringToData(toc.name),

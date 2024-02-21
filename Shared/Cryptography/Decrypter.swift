@@ -88,7 +88,6 @@ internal struct Decrypter {
     }
     
     /// Decrypts AES encrypted Databases
-    /// /// Throws an Error if something went wrong
     private mutating func decryptAES() throws -> Database {
         key = try decryptAESKey()
         var decryptedContents : [ToCItem] = []

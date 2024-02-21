@@ -33,7 +33,7 @@ internal class GeneralEntry<DA, U, DE, T> : NativeType<DE, DA, T> {
         url: U,
         notes: DA,
         iconName : DA,
-        contents : T,
+        contents : [T],
         created : DE,
         lastEdited : DE
     ) {
@@ -53,7 +53,7 @@ internal class GeneralEntry<DA, U, DE, T> : NativeType<DE, DA, T> {
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, Date, TableOfContents>, DecryptedDataStructure {
+internal final class Entry : GeneralEntry<String, URL?, Date, ToCItem>, DecryptedDataStructure {
     
     /// ID to conform to Identifiable
     internal let id: UUID = UUID()
@@ -65,7 +65,7 @@ internal final class Entry : GeneralEntry<String, URL?, Date, TableOfContents>, 
         url: nil,
         notes: "This is a preview Entry, only to use in previews and tests",
         iconName: "folder",
-        contents: TableOfContents(contents: []),
+        contents: [],
         created: Date.now,
         lastEdited: Date.now
     )
@@ -97,7 +97,7 @@ internal final class Entry : GeneralEntry<String, URL?, Date, TableOfContents>, 
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTableOfContents>, EncryptedDataStructure {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedToCItem>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -106,7 +106,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTa
         url : Data,
         notes : Data,
         iconName : Data,
-        contents : EncryptedTableOfContents,
+        contents : [EncryptedToCItem],
         created : Data,
         lastEdited : Data
     ) {
@@ -157,13 +157,17 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTa
             url: try container.decode(Data.self, forKey: .url),
             notes: try container.decode(Data.self, forKey: .notes),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            contents: try container.decode(EncryptedTableOfContents.self, forKey: .contents),
+            contents: try container.decode([EncryptedToCItem].self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     
     internal init(from coreData : CD_Entry) {
+        var localContents : [EncryptedToCItem] = []
+        for toc in coreData.contents! {
+            localContents.append(EncryptedToCItem(from: coreData))
+        }
         super.init(
             title: coreData.title!,
             username: coreData.username!,
@@ -171,7 +175,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTa
             url: coreData.url!,
             notes: coreData.notes!,
             iconName: coreData.iconName!,
-            contents: coreData.tableOfContents!,,
+            contents: localContents,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

@@ -14,15 +14,15 @@ internal enum ContentType : String, RawRepresentable {
     case document
 }
 
-internal class GeneralToCItem<N> {
+internal class GeneralToCItem<N, C> {
     
     internal var name : N
     
-    internal var type : ContentType
+    internal var type : C
     
     internal var id : UUID
     
-    internal init(name: N, type: ContentType, id: UUID) {
+    internal init(name: N, type: C, id: UUID) {
         self.name = name
         self.type = type
         self.id = id
@@ -30,7 +30,7 @@ internal class GeneralToCItem<N> {
 }
 
 
-internal final class ToCItem : GeneralToCItem<String>, DecryptedDataStructure {
+internal final class ToCItem : GeneralToCItem<String, ContentType>, DecryptedDataStructure {
     static func == (lhs: ToCItem, rhs: ToCItem) -> Bool {
         return lhs.name == rhs.name && lhs.type == rhs.type && lhs.id == rhs.id
     }
@@ -42,7 +42,7 @@ internal final class ToCItem : GeneralToCItem<String>, DecryptedDataStructure {
     }
 }
 
-internal final class EncryptedToCItem : GeneralToCItem<Data>, EncryptedDataStructure {
+internal final class EncryptedToCItem : GeneralToCItem<Data, Data>, EncryptedDataStructure {
     enum ToCItemCodingKeys: CodingKey {
         case name
         case type
@@ -52,7 +52,7 @@ internal final class EncryptedToCItem : GeneralToCItem<Data>, EncryptedDataStruc
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: ToCItemCodingKeys.self)
         try container.encode(name, forKey: .name)
-        try container.encode(type.rawValue, forKey: .type)
+        try container.encode(type, forKey: .type)
         try container.encode(id, forKey: .id)
     }
     
@@ -60,8 +60,12 @@ internal final class EncryptedToCItem : GeneralToCItem<Data>, EncryptedDataStruc
         let container = try decoder.container(keyedBy: ToCItemCodingKeys.self)
         self.init(
             name: try container.decode(Data.self, forKey: .name),
-            type: ContentType(rawValue: try container.decode(Data.self, forKey: .type))!,
+            type: try container.decode(Data.self, forKey: .type),
             id: try container.decode(UUID.self, forKey: .id)
         )
+    }
+    
+    internal convenience init(from coreData : CD_ToCItem) {
+        self.init(name: coreData.name!, type: coreData.type!, id: coreData.id!)
     }
 }

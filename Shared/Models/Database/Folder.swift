@@ -11,7 +11,7 @@ import UIKit
 internal class GeneralFolder<DA, DE, T> : ME_DataStructure<DA, DE, T> {}
 
 /// The Folder Object that is used when the App is running
-internal final class Folder : GeneralFolder<String, Date, TableOfContents>, DecryptedDataStructure {
+internal final class Folder : GeneralFolder<String, Date, ToCItem>, DecryptedDataStructure {
     
     /// ID to conform to Decrypted Data Structure
     internal let id: UUID = UUID()
@@ -21,7 +21,7 @@ internal final class Folder : GeneralFolder<String, Date, TableOfContents>, Decr
         name: "Private",
         description: "This is an preview Folder only to use in previews and tests",
         iconName: "folder",
-        contents: TableOfContents(contents: []),
+        contents: [],
         created: Date.now,
         lastEdited: Date.now
     )
@@ -42,13 +42,13 @@ internal final class Folder : GeneralFolder<String, Date, TableOfContents>, Decr
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedTableOfContents>, EncryptedDataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCItem>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
         description: Data,
         iconName : Data,
-        contents: EncryptedTableOfContents,
+        contents: [EncryptedToCItem],
         created : Data,
         lastEdited : Data
     ) {
@@ -87,34 +87,22 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedTableO
             name: try container.decode(Data.self, forKey: .name),
             description: try container.decode(Data.self, forKey: .description),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            contents: try container.decode(EncryptedTableOfContents.self, forKey: .contents),
+            contents: try container.decode([EncryptedToCItem].self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited)
         )
     }
     
     internal convenience init(from coreData : CD_Folder) {
-        var localFolders : [EncryptedFolder] = []
-        for folder in coreData.folders! {
-            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
-        }
-        var localEntries : [EncryptedEntry] = []
-        for entry in coreData.entries! {
-            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
-        }
-        var localImages : [Encrypted_DB_Image] = []
-        for image in coreData.images! {
-            localImages.append(Encrypted_DB_Image(from: image as! CD_Image))
-        }
-        var localDocuments : [Encrypted_DB_Document] = []
-        for doc in coreData.documents! {
-            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
+        var localContents : [EncryptedToCItem] = []
+        for toc in coreData.contents! {
+            localContents.append(EncryptedToCItem(from: toc as! CD_ToCItem))
         }
         self.init(
             name: coreData.name!,
             description: coreData.objectDescription!,
             iconName: coreData.iconName!,
-            contents: coreData.tableOfContents,
+            contents: localContents,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!
         )

@@ -24,9 +24,7 @@
         <attribute name="url" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="username" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
     </entity>
-    <entity name="CD_Folder" representedClassName="CD_Folder" parentEntity="CD_ME_DataStructure" syncable="YES" codeGenerationType="class">
-        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure"/>
-    </entity>
+    <entity name="CD_Folder" representedClassName="CD_Folder" parentEntity="CD_ME_DataStructure" syncable="YES" codeGenerationType="class"/>
     <entity name="CD_Image" representedClassName="CD_Image" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="compressionQuality" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
@@ -41,7 +39,8 @@
     </entity>
     <entity name="CD_ToCItem" representedClassName="CD_ToCItem" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
-        <attribute name="type" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <attribute name="name" optional="YES" attributeType="Binary"/>
+        <attribute name="type" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_NativeType" inverseName="contents" inverseEntity="CD_NativeType"/>
     </entity>
     <entity name="DB_Path" representedClassName="DB_Path" syncable="YES" codeGenerationType="class">

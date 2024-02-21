@@ -91,30 +91,15 @@ internal struct Decrypter {
     /// /// Throws an Error if something went wrong
     private mutating func decryptAES() throws -> Database {
         key = try decryptAESKey()
-        var decryptedFolders : [Folder] = []
-        for folder in db!.folders {
-            decryptedFolders.append(try decryptAES(folder: folder))
-        }
-        var decryptedEntries : [Entry] = []
-        for entry in db!.entries {
-            decryptedEntries.append(try decryptAES(entry: entry))
-        }
-        var decryptedImages : [DB_Image] = []
-        for image in db!.images {
-            decryptedImages.append(try decryptAES(image: image))
-        }
-        var decryptedDocuments : [DB_Document] = []
-        for doc in db!.documents {
-            decryptedDocuments.append(try decryptAES(document: doc))
+        var decryptedContents : [ToCItem] = []
+        for toc in db!.contents {
+            decryptedContents.append(try decryptAES(toc: toc))
         }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             description: db!.description,
-            folders: decryptedFolders,
-            entries: decryptedEntries,
-            images: decryptedImages,
             iconName: db!.iconName,
-            documents: decryptedDocuments,
+            contents: decryptedContents,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -124,6 +109,21 @@ internal struct Decrypter {
             id: db!.id
         )
         return decryptedDatabase
+    }
+    
+    private func decryptAES(toc : EncryptedToCItem) throws -> ToCItem {
+        let decryptedName : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: toc.name),
+            using: key!
+        )
+        let decryptedType : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: toc.type),
+            using: key!
+        )
+        let decryptedid : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: toc.id),
+            using: key!
+        )
     }
     
     /// Decrypts the key to use to decrypt the rest of the database using AES

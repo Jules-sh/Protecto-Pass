@@ -8,13 +8,10 @@
 import Foundation
 import UIKit
 
-internal class GeneralFolder<DA, DE, T> : ME_DataStructure<DA, DE, T> {}
+internal class GeneralFolder<DA, DE, T, I> : ME_DataStructure<DA, DE, T, I> {}
 
 /// The Folder Object that is used when the App is running
-internal final class Folder : GeneralFolder<String, Date, ToCItem>, DecryptedDataStructure {
-    
-    /// ID to conform to Decrypted Data Structure
-    internal let id: UUID = UUID()
+internal final class Folder : GeneralFolder<String, Date, ToCItem, UUID>, DecryptedDataStructure {
     
     /// An static preview folder with sample data to use in Previews and Tests
     internal static let previewFolder : Folder = Folder(
@@ -23,7 +20,8 @@ internal final class Folder : GeneralFolder<String, Date, ToCItem>, DecryptedDat
         iconName: "folder",
         contents: [],
         created: Date.now,
-        lastEdited: Date.now
+        lastEdited: Date.now,
+        id: UUID()
     )
     
     static func == (lhs: Folder, rhs: Folder) -> Bool {
@@ -42,7 +40,7 @@ internal final class Folder : GeneralFolder<String, Date, ToCItem>, DecryptedDat
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCItem>, EncryptedDataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCItem, Data>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
@@ -50,7 +48,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCIte
         iconName : Data,
         contents: [EncryptedToCItem],
         created : Data,
-        lastEdited : Data
+        lastEdited : Data,
+        id: Data
     ) {
         super.init(
             name: name,
@@ -58,7 +57,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCIte
             iconName: iconName,
             contents: contents,
             created: created,
-            lastEdited: lastEdited
+            lastEdited: lastEdited,
+            id: id
         )
     }
     
@@ -69,6 +69,7 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCIte
         case iconName
         case created
         case lastEdited
+        case id
     }
     
     internal func encode(to encoder: Encoder) throws {
@@ -79,6 +80,7 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCIte
         try container.encode(iconName, forKey: .iconName)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
+        try container.encode(id, forKey: .id)
     }
     
     internal  convenience init(from decoder: Decoder) throws {
@@ -89,7 +91,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCIte
             iconName: try container.decode(Data.self, forKey: .iconName),
             contents: try container.decode([EncryptedToCItem].self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
-            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited),
+            id: try container.decode(Data.self, forKey: .id)
         )
     }
     
@@ -104,7 +107,8 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedToCIte
             iconName: coreData.iconName!,
             contents: localContents,
             created: coreData.created!,
-            lastEdited: coreData.lastEdited!
+            lastEdited: coreData.lastEdited!,
+            id: coreData.uuid!
         )
     }
 }

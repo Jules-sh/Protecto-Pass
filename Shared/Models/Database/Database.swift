@@ -12,10 +12,7 @@ import UIKit
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T>, Identifiable {
-    
-    /// ID to conform to identifiable
-    internal let id : UUID
+internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T, UUID>, Identifiable {
     
     /// The Header for this Database
     internal let header : DB_Header
@@ -39,7 +36,6 @@ internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T>, Identi
         allowBiometrics : Bool,
         id: UUID
     ) {
-        self.id = id
         self.header = header
         self.key = key
         self.allowBiometrics = allowBiometrics
@@ -49,7 +45,8 @@ internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, T>, Identi
             iconName: iconName,
             contents: contents,
             created: created,
-            lastEdited : lastEdited
+            lastEdited : lastEdited,
+            id: id
         )
     }
 }
@@ -225,7 +222,7 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedToCItem>
             header: try DB_Header.parseString(string: coreData.header!),
             key: coreData.key!,
             allowBiometrics: coreData.allowBiometrics,
-            id: coreData.id!
+            id: UUID(uuidString: DataConverter.dataToString(coreData.uuid!))!
         )
     }
     

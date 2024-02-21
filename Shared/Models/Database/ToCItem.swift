@@ -14,15 +14,15 @@ internal enum ContentType : String, RawRepresentable {
     case document
 }
 
-internal class GeneralToCItem<N, C> {
+internal class GeneralToCItem<D, C> {
     
-    internal var name : N
+    internal var name : D
     
     internal var type : C
     
-    internal var id : UUID
+    internal var id : D
     
-    internal init(name: N, type: C, id: UUID) {
+    internal init(name: D, type: C, id: D) {
         self.name = name
         self.type = type
         self.id = id
@@ -61,11 +61,11 @@ internal final class EncryptedToCItem : GeneralToCItem<Data, Data>, EncryptedDat
         self.init(
             name: try container.decode(Data.self, forKey: .name),
             type: try container.decode(Data.self, forKey: .type),
-            id: try container.decode(UUID.self, forKey: .id)
+            id: try container.decode(Data.self, forKey: .id)
         )
     }
     
     internal convenience init(from coreData : CD_ToCItem) {
-        self.init(name: coreData.name!, type: coreData.type!, id: coreData.id!)
+        self.init(name: coreData.name!, type: coreData.type!, id: coreData.uuid!)
     }
 }

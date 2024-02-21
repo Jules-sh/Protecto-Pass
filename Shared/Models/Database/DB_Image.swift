@@ -9,32 +9,30 @@ import Foundation
 import UIKit
 
 /// The General super class of the DB Images
-internal class General_DB_Image<I, Q, De> : DatabaseContent<De> {
+internal class General_DB_Image<DA, Q, DE, I> : DatabaseContent<DE, I> {
     
     /// The actual Image or data of it
-    internal let image : I
+    internal let image : DA
     
     /// The compression quality if the Type was
     /// jpeg
     internal let quality : Q
     
     internal init(
-        image : I,
+        image : DA,
         quality : Q,
-        created : De,
-        lastEdited : De
+        created : DE,
+        lastEdited : DE,
+        id : I
     ) {
         self.image = image
         self.quality = quality
-        super.init(created: created, lastEdited: lastEdited)
+        super.init(created: created, lastEdited: lastEdited, id: id)
     }
 }
 
 /// The Decrypted Data Structure for Images stored in this App
-internal final class DB_Image : General_DB_Image<UIImage, Double, Date>, DecryptedDataStructure {
-    
-    /// ID to conform to identifiable protocol
-    internal let id: UUID = UUID()
+internal final class DB_Image : General_DB_Image<UIImage, Double, Date, UUID>, DecryptedDataStructure {
     
     static func == (lhs: DB_Image, rhs: DB_Image) -> Bool {
         return lhs.image == rhs.image && lhs.quality == rhs.quality && lhs.id == rhs.id
@@ -51,24 +49,27 @@ internal final class DB_Image : General_DB_Image<UIImage, Double, Date>, Decrypt
         image: UIImage(systemName: "car")!,
         quality: 0.8,
         created: Date.now,
-        lastEdited: Date.now
+        lastEdited: Date.now,
+        id: UUID()
     )
 }
 
 /// The Encrypted Data Structure being used when the Database is still encrypted.
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data>, EncryptedDataStructure {
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         image: Data,
         quality: Data,
         created : Data,
-        lastEdited : Data
+        lastEdited : Data,
+        id : Data
     ) {
         super.init(
             image: image,
             quality: quality,
             created: created,
-            lastEdited: lastEdited
+            lastEdited: lastEdited,
+            id: id
         )
     }
     
@@ -77,6 +78,7 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data>, En
         case quality
         case created
         case lastEdited
+        case id
     }
     
     internal func encode(to encoder: Encoder) throws {
@@ -85,6 +87,7 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data>, En
         try container.encode(quality, forKey: .quality)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
+        try container.encode(id, forKey: .id)
     }
     
     internal convenience init(from decoder: Decoder) throws {
@@ -93,7 +96,8 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data>, En
             image: try container.decode(Data.self, forKey: .image),
             quality: try container.decode(Data.self, forKey: .quality),
             created: try container.decode(Data.self, forKey: .created),
-            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited),
+            id: try container.decode(Data.self, forKey: .id)
         )
     }
     
@@ -102,7 +106,8 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data>, En
             image: coreData.imageData!,
             quality: coreData.compressionQuality!,
             created: coreData.created!,
-            lastEdited: coreData.lastEdited!
+            lastEdited: coreData.lastEdited!,
+            id: coreData.uuid!
         )
     }
 }

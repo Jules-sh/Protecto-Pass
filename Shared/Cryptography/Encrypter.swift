@@ -77,31 +77,16 @@ internal struct Encrypter {
     /// Encrypts Databases with AES
     /// Throws an Error if something went wrong
     private func encryptAES() throws -> EncryptedDatabase {
-        var encryptedFolders : [EncryptedFolder] = []
-        for folder in db!.folders {
-            encryptedFolders.append(try encryptAES(folder: folder))
-        }
-        var encryptedEntries : [EncryptedEntry] = []
-        for entry in db!.entries {
-            encryptedEntries.append(try encryptAES(entry: entry))
-        }
-        var encryptedImages : [Encrypted_DB_Image] = []
-        for image in db!.images {
-            encryptedImages.append(try encryptAES(image: image))
-        }
-        var encryptedDocuments : [Encrypted_DB_Document] = []
-        for doc in db!.documents {
-            encryptedDocuments.append(try encryptAES(document: doc))
+        var encryptedContents : [EncryptedToCItem] = []
+        for toc in db!.contents {
+            encryptedContents.append(try encryptAES(toc: toc))
         }
         let encryptedKey : Data = try encryptAESKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             description: db!.description,
-            folders: encryptedFolders,
-            entries: encryptedEntries,
-            images: encryptedImages,
             iconName: db!.iconName,
-            documents: encryptedDocuments,
+            contents: encryptedContents,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -120,6 +105,27 @@ internal struct Encrypter {
             },
             using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         ).combined!
+    }
+    
+    private func encryptAES(toc : ToCItem) throws -> EncryptedToCItem {
+        let encryptedName : Data = try AES.GCM.seal(
+            DataConverter.stringToData(toc.name),
+            using: key!
+        ).combined!
+        let encryptedType : Data = try AES.GCM.seal(
+            DataConverter.stringToData(toc.type.rawValue),
+            using: key!
+        ).combined!
+        let encryptedID : Data = try AES.GCM.seal(
+            DataConverter.stringToData(toc.id.uuidString),
+            using: key!
+        ).combined!
+        let encryptedToCItem : EncryptedToCItem = EncryptedToCItem(
+            name: encryptedName,
+            type: encryptedType,
+            id: encryptedID
+        )
+        return encryptedToCItem
     }
     
     /// Encrypts the passed Folder with AES and returns

@@ -14,15 +14,15 @@ internal enum ContentType : String, RawRepresentable {
     case document
 }
 
-internal class GeneralToCItem<D, C> {
+internal class GeneralToCItem<D, C, I> {
     
     internal var name : D
     
     internal var type : C
     
-    internal var id : D
+    internal var id : I
     
-    internal init(name: D, type: C, id: D) {
+    internal init(name: D, type: C, id: I) {
         self.name = name
         self.type = type
         self.id = id
@@ -30,7 +30,7 @@ internal class GeneralToCItem<D, C> {
 }
 
 
-internal final class ToCItem : GeneralToCItem<String, ContentType>, DecryptedDataStructure {
+internal final class ToCItem : GeneralToCItem<String, ContentType, UUID>, DecryptedDataStructure {
     static func == (lhs: ToCItem, rhs: ToCItem) -> Bool {
         return lhs.name == rhs.name && lhs.type == rhs.type && lhs.id == rhs.id
     }
@@ -42,7 +42,7 @@ internal final class ToCItem : GeneralToCItem<String, ContentType>, DecryptedDat
     }
 }
 
-internal final class EncryptedToCItem : GeneralToCItem<Data, Data>, EncryptedDataStructure {
+internal final class EncryptedToCItem : GeneralToCItem<Data, Data, Data>, EncryptedDataStructure {
     enum ToCItemCodingKeys: CodingKey {
         case name
         case type

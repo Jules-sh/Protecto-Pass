@@ -111,21 +111,6 @@ internal struct Decrypter {
         return decryptedDatabase
     }
     
-    private func decryptAES(toc : EncryptedToCItem) throws -> ToCItem {
-        let decryptedName : Data = try AES.GCM.open(
-            try AES.GCM.SealedBox(combined: toc.name),
-            using: key!
-        )
-        let decryptedType : Data = try AES.GCM.open(
-            AES.GCM.SealedBox(combined: toc.type),
-            using: key!
-        )
-        let decryptedid : Data = try AES.GCM.open(
-            try AES.GCM.SealedBox(combined: toc.id),
-            using: key!
-        )
-    }
-    
     /// Decrypts the key to use to decrypt the rest of the database using AES
     private func decryptAESKey() throws -> SymmetricKey {
         let data : Data = try AES.GCM.open(
@@ -133,6 +118,30 @@ internal struct Decrypter {
             using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         )
         return SymmetricKey(data: data)
+    }
+    
+    /// Decrypts a single Item of a Table of Contents using AES
+    private func decryptAES(toc : EncryptedToCItem) throws -> ToCItem {
+        let decryptedName : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: toc.name),
+            using: key!
+        )
+        let decryptedTypeData : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: toc.type),
+            using: key!
+        )
+        let decryptedTypeRaw : String = DataConverter.dataToString(decryptedTypeData)
+        let decryptedidData : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: toc.id),
+            using: key!
+        )
+        let decryptedidString : String = DataConverter.dataToString(decryptedidData)
+        let decryptedToCItem : ToCItem = ToCItem(
+            name: DataConverter.dataToString(decryptedName),
+            type: ContentType(rawValue: decryptedTypeRaw)!,
+            id: UUID(uuidString: decryptedidString)!
+        )
+        return decryptedToCItem
     }
     
     /// Decrypts the passed Folder using AES and returns an decrypted Folder

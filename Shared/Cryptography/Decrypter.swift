@@ -399,21 +399,28 @@ internal struct Decrypter {
             ChaChaPoly.SealedBox(combined: folder.lastEdited),
             using: key!
         )
+        let decryptedIDData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: folder.id),
+            using: key!
+        )
+        let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
         let decryptedFolder : Folder = Folder(
             name: DataConverter.dataToString(decryptedName),
             description: DataConverter.dataToString(decryptedDescription),
             iconName: DataConverter.dataToString(decryptedIconName),
             contents: decryptedContents,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
-            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
+            id: UUID(uuidString: decryptedIDString)!
         )
         return decryptedFolder
     }
     
+    /// Decryptes the passed Entry with ChaChaPoly and returns an Entry
     private func decryptChaChaPoly(entry : EncryptedEntry) throws -> Entry {
-        var decryptedDocuments : [DB_Document] = []
-        for doc in entry.documents {
-            decryptedDocuments.append(try decryptChaChaPoly(document: doc))
+        var decryptedContents : [ToCItem] = []
+        for toc in entry.contents {
+            decryptedContents.append(try decryptChaChaPoly(toc: toc))
         }
         let decryptedTitle : Data = try ChaChaPoly.open(
             try ChaChaPoly.SealedBox(combined: entry.title),
@@ -447,6 +454,11 @@ internal struct Decrypter {
             ChaChaPoly.SealedBox(combined: entry.lastEdited),
             using: key!
         )
+        let decryptedIDData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: entry.id),
+            using: key!
+        )
+        let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
         let decryptedEntry : Entry = Entry(
             title: DataConverter.dataToString(decryptedTitle),
             username: DataConverter.dataToString(decryptedUsername),
@@ -454,9 +466,10 @@ internal struct Decrypter {
             url: URL(string: DataConverter.dataToString(decryptedURL)),
             notes: DataConverter.dataToString(decryptedNotes),
             iconName: DataConverter.dataToString(decryptedIconName),
-            documents: decryptedDocuments,
+            contents: decryptedContents,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
-            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
+            id: UUID(uuidString: decryptedIDString)!
         )
         return decryptedEntry
     }
@@ -480,11 +493,17 @@ internal struct Decrypter {
             ChaChaPoly.SealedBox(combined: image.lastEdited),
             using: key!
         )
+        let decryptedIDData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: image.id),
+            using: key!
+        )
+        let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
         let decryptedImageObj : DB_Image = DB_Image(
             image: UIImage(data: decryptedImageData)!,
             quality: decryptedQuality,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
-            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
+            id: UUID(uuidString: decryptedIDString)!
         )
         return decryptedImageObj
     }
@@ -506,11 +525,17 @@ internal struct Decrypter {
             ChaChaPoly.SealedBox(combined: document.lastEdited),
             using: key!
         )
+        let decryptedIDData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: document.id),
+            using: key!
+        )
+        let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
         let decryptedDocument : DB_Document = DB_Document(
             document: decryptedDocumentData,
             type: DataConverter.dataToString(decryptedType),
             created: try DataConverter.dataToDate(decryptedCreatedDate),
-            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate)
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
+            id: UUID(uuidString: decryptedIDString)!
         )
         return decryptedDocument
     }

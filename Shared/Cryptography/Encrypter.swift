@@ -380,22 +380,27 @@ internal struct Encrypter {
             DataConverter.dateToData(folder.lastEdited),
             using: key!
         ).combined
+        let encryptedID : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(folder.id.uuidString),
+            using: key!
+        ).combined
         let encryptedFolder : EncryptedFolder = EncryptedFolder(
             name: encryptedName,
             description: encryptedDescription,
             iconName: encryptedIconName,
             contents: encryptedContents,
             created: encryptedCreatedDate,
-            lastEdited: encryptedLastEditedDate
+            lastEdited: encryptedLastEditedDate,
+            id: encryptedID
         )
         return encryptedFolder
     }
     
     /// Encrypts the passed Entry with ChaChaPoly and returns an encrypted Entry
     private func encryptChaChaPoly(entry : Entry) throws -> EncryptedEntry {
-        var encryptedDocuments : [Encrypted_DB_Document] = []
-        for doc in db!.documents {
-            encryptedDocuments.append(try encryptChaChaPoly(document: doc))
+        var encryptedContents : [EncryptedToCItem] = []
+        for toc in entry.contents {
+            encryptedContents.append(try encryptChaChaPoly(toc: toc))
         }
         let encryptedTitle : Data = try ChaChaPoly.seal(
             DataConverter.stringToData(entry.title),
@@ -429,6 +434,10 @@ internal struct Encrypter {
             DataConverter.dateToData(entry.lastEdited),
             using: key!
         ).combined
+        let encryptedID : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(entry.id.uuidString),
+            using: key!
+        ).combined
         let encryptedEntry : EncryptedEntry = EncryptedEntry(
             title: encryptedTitle,
             username: encryptedUsername,
@@ -436,9 +445,10 @@ internal struct Encrypter {
             url: encryptedURL,
             notes: encryptedNotes,
             iconName: encryptedIconName,
-            documents: encryptedDocuments,
+            contents: encryptedContents,
             created: encryptedCreatedDate,
-            lastEdited: encryptedLastEditedDate
+            lastEdited: encryptedLastEditedDate,
+            id: encryptedID
         )
         return encryptedEntry
     }
@@ -463,11 +473,16 @@ internal struct Encrypter {
             DataConverter.dateToData(image.lastEdited),
             using: key!
         ).combined
+        let encryptedID : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(image.id.uuidString),
+            using: key!
+        ).combined
         return Encrypted_DB_Image(
             image: encryptedImageData,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
-            lastEdited: encryptedLastEditedDate
+            lastEdited: encryptedLastEditedDate,
+            id: encryptedID
         )
     }
     
@@ -490,11 +505,16 @@ internal struct Encrypter {
             DataConverter.dateToData(document.lastEdited),
             using: key!
         ).combined
+        let encryptedID : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(document.id.uuidString),
+            using: key!
+        ).combined
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
             created: encryptedCreatedDate,
-            lastEdited: encryptedLastEditedDate
+            lastEdited: encryptedLastEditedDate,
+            id: encryptedID
         )
     }
 }

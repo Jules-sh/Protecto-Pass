@@ -13,7 +13,7 @@ internal struct Me_Details: View {
 
     @Environment(\.dismiss) private var dismiss
     
-    internal let me : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
+    internal let me : ME_DataStructure<String, Date, ToCItem, UUID>
     
     var body: some View {
         NavigationStack {

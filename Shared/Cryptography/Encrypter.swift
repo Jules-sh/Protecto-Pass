@@ -384,7 +384,7 @@ internal struct Encrypter {
             DataConverter.stringToData(folder.id.uuidString),
             using: key!
         ).combined
-        let encryptedFolder : EncryptedFolder = EncryptedFolder(
+        return EncryptedFolder(
             name: encryptedName,
             description: encryptedDescription,
             iconName: encryptedIconName,
@@ -393,7 +393,6 @@ internal struct Encrypter {
             lastEdited: encryptedLastEditedDate,
             id: encryptedID
         )
-        return encryptedFolder
     }
     
     /// Encrypts the passed Entry with ChaChaPoly and returns an encrypted Entry

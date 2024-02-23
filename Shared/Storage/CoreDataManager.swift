@@ -15,18 +15,18 @@ internal struct CoreDataManager : DatabaseCache {
     
     internal static func accessCache(id: UUID) throws -> CD_Database {
         if databaseExists(id: id) {
-            return allDatabases.first(where: { $0.id == id})!
+            return allDatabases.first(where: { $0.uuid == id})!
         } else {
             throw DatabaseDoesNotExistError()
         }
     }
     
     static func databaseExists(id : UUID) -> Bool {
-        return allDatabases.contains(where: { $0.id == id })
+        return allDatabases.contains(where: { $0.uuid == id })
     }
     
     static func update(id: UUID, with new: CD_Database) -> Void {
-        allDatabases.removeAll(where: { $0.id == id })
+        allDatabases.removeAll(where: { $0.uuid == id })
         allDatabases.append(new)
     }
     

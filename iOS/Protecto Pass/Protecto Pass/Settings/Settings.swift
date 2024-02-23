@@ -133,7 +133,7 @@ internal struct SettingsHelper {
     }
     
     /// Checks if the "Delete Data" Switch in the iCloud Subview of the Settings
-    /// App has been toggled
+    /// App has been toggled and resets it if necessary
     private static func checkiCloudReset() -> Bool {
         if UserDefaults.standard.bool(forKey: Settings.deleteiCloudData.rawValue) {
             UserDefaults.standard.set(false, forKey: Settings.deleteiCloudData.rawValue)

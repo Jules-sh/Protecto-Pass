@@ -36,7 +36,7 @@ internal struct ME_ContentView : View {
     }
     
     /// The Data Structure which is displayed in this View
-    private var dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>?
+    private var dataStructure : ME_DataStructure<String, Date, UUID>?
     
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false

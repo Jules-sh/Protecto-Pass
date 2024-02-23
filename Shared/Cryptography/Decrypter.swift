@@ -94,7 +94,7 @@ internal struct Decrypter {
         for toc in db!.contents {
             decryptedContents.append(try decryptAES(toc: toc))
         }
-        let decryptedDatabase : Database = Database(
+        return Database(
             name: db!.name,
             description: db!.description,
             iconName: db!.iconName,
@@ -107,7 +107,6 @@ internal struct Decrypter {
             allowBiometrics: db!.allowBiometrics,
             id: db!.id
         )
-        return decryptedDatabase
     }
     
     /// Decrypts the key to use to decrypt the rest of the database using AES
@@ -135,20 +134,20 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedidString : String = DataConverter.dataToString(decryptedidData)
-        let decryptedToCItem : ToCItem = ToCItem(
+        var decryptedChildren : [ToCItem] = []
+        for child in toc.children {
+            decryptedChildren.append(try decryptAES(toc: child))
+        }
+        return ToCItem(
             name: DataConverter.dataToString(decryptedName),
             type: ContentType(rawValue: decryptedTypeRaw)!,
-            id: UUID(uuidString: decryptedidString)!
+            id: UUID(uuidString: decryptedidString)!,
+            children: decryptedChildren
         )
-        return decryptedToCItem
     }
     
     /// Decrypts the passed Folder using AES and returns an decrypted Folder
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
-        var decryptedContents : [ToCItem] = []
-        for toc in folder.contents {
-            decryptedContents.append(try decryptAES(toc: toc))
-        }
         let decryptedName : Data = try AES.GCM.open(
             try AES.GCM.SealedBox(combined: folder.name),
             using: key!
@@ -174,24 +173,18 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedidString : String = DataConverter.dataToString(decryptedidData)
-        let decryptedFolder : Folder = Folder(
+        return Folder(
             name: DataConverter.dataToString(decryptedName),
             description: DataConverter.dataToString(decryptedDescription),
             iconName: DataConverter.dataToString(decryptedIconName),
-            contents: decryptedContents,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedidString)!
         )
-        return decryptedFolder
     }
     
     /// Decrypts the passed Entry using AES and returns and decrypted Entry
     private func decryptAES(entry : EncryptedEntry) throws -> Entry {
-        var decryptedContents : [ToCItem] = []
-        for toc in entry.contents {
-            decryptedContents.append(try decryptAES(toc: toc))
-        }
         let decryptedTitle : Data = try AES.GCM.open(
             try AES.GCM.SealedBox(combined: entry.title),
             using: key!
@@ -229,19 +222,17 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedidString : String = DataConverter.dataToString(decryptedidData)
-        let decryptedEntry : Entry = Entry(
+        return Entry(
             title: DataConverter.dataToString(decryptedTitle),
             username: DataConverter.dataToString(decryptedUsername),
             password: DataConverter.dataToString(decryptedPassword),
             url: URL(string: DataConverter.dataToString(decryptedURL)),
             notes: DataConverter.dataToString(decryptedNotes),
             iconName: DataConverter.dataToString(decryptedIconName),
-            contents: decryptedContents,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedidString)!
         )
-        return decryptedEntry
     }
     
     /// Decrypts the passed Image using AES and returns a decrypted Image
@@ -269,14 +260,13 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedidString : String = DataConverter.dataToString(decryptedidData)
-        let decryptedImageObj : DB_Image = DB_Image(
+        return DB_Image(
             image: UIImage(data: decryptedImageData)!,
             quality: decryptedQuality,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedidString)!
         )
-        return decryptedImageObj
     }
     
     /// Decrypts the passed document using AES and returns a decrypted Document
@@ -302,14 +292,13 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedidString : String = DataConverter.dataToString(decryptedidData)
-        let decryptedDocument : DB_Document = DB_Document(
+        return DB_Document(
             document: decryptedDocumentData,
             type: DataConverter.dataToString(decryptedType),
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedidString)!
         )
-        return decryptedDocument
     }
     
     
@@ -364,21 +353,21 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
-        let decryptedToCItem : ToCItem = ToCItem(
+        var decryptedChildren : [ToCItem] = []
+        for child in toc.children {
+            decryptedChildren.append(try decryptChaChaPoly(toc: child))
+        }
+        return ToCItem(
             name: DataConverter.dataToString(decryptedName),
             type: ContentType(rawValue: decryptedTypeString)!,
-            id: UUID(uuidString: decryptedIDString)!
+            id: UUID(uuidString: decryptedIDString)!,
+            children: decryptedChildren
         )
-        return decryptedToCItem
     }
     
     /// Decrypts the passed Folder with ChaChaPoly and returns
     /// an Folder
     private func decryptChaChaPoly(folder : EncryptedFolder) throws -> Folder {
-        var decryptedContents : [ToCItem] = []
-        for toc in folder.contents {
-            decryptedContents.append(try decryptChaChaPoly(toc: toc))
-        }
         let decryptedName : Data = try ChaChaPoly.open(
             ChaChaPoly.SealedBox(combined: folder.name),
             using: key!
@@ -404,24 +393,18 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
-        let decryptedFolder : Folder = Folder(
+        return Folder(
             name: DataConverter.dataToString(decryptedName),
             description: DataConverter.dataToString(decryptedDescription),
             iconName: DataConverter.dataToString(decryptedIconName),
-            contents: decryptedContents,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedIDString)!
         )
-        return decryptedFolder
     }
     
     /// Decryptes the passed Entry with ChaChaPoly and returns an Entry
     private func decryptChaChaPoly(entry : EncryptedEntry) throws -> Entry {
-        var decryptedContents : [ToCItem] = []
-        for toc in entry.contents {
-            decryptedContents.append(try decryptChaChaPoly(toc: toc))
-        }
         let decryptedTitle : Data = try ChaChaPoly.open(
             try ChaChaPoly.SealedBox(combined: entry.title),
             using: key!
@@ -459,19 +442,17 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
-        let decryptedEntry : Entry = Entry(
+        return Entry(
             title: DataConverter.dataToString(decryptedTitle),
             username: DataConverter.dataToString(decryptedUsername),
             password: DataConverter.dataToString(decryptedPassword),
             url: URL(string: DataConverter.dataToString(decryptedURL)),
             notes: DataConverter.dataToString(decryptedNotes),
             iconName: DataConverter.dataToString(decryptedIconName),
-            contents: decryptedContents,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedIDString)!
         )
-        return decryptedEntry
     }
     
     private func decryptChaChaPoly(image : Encrypted_DB_Image) throws -> DB_Image {
@@ -498,14 +479,13 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
-        let decryptedImageObj : DB_Image = DB_Image(
+        return DB_Image(
             image: UIImage(data: decryptedImageData)!,
             quality: decryptedQuality,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedIDString)!
         )
-        return decryptedImageObj
     }
     
     private func decryptChaChaPoly(document : Encrypted_DB_Document) throws -> DB_Document {
@@ -530,13 +510,12 @@ internal struct Decrypter {
             using: key!
         )
         let decryptedIDString : String = DataConverter.dataToString(decryptedIDData)
-        let decryptedDocument : DB_Document = DB_Document(
+        return DB_Document(
             document: decryptedDocumentData,
             type: DataConverter.dataToString(decryptedType),
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: UUID(uuidString: decryptedIDString)!
         )
-        return decryptedDocument
     }
 }

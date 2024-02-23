@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-internal class GeneralEntry<DA, U, DE, T, I> : NativeType<DE, DA, T, I> {
+internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
     
     /// The Title of this Entry
     internal let title : DA
@@ -33,7 +33,6 @@ internal class GeneralEntry<DA, U, DE, T, I> : NativeType<DE, DA, T, I> {
         url: U,
         notes: DA,
         iconName : DA,
-        contents : [T],
         created : DE,
         lastEdited : DE,
         id : I
@@ -45,7 +44,6 @@ internal class GeneralEntry<DA, U, DE, T, I> : NativeType<DE, DA, T, I> {
         self.notes = notes
         super.init(
             iconName: iconName,
-            contents: contents,
             created: created,
             lastEdited: lastEdited,
             id: id
@@ -55,7 +53,7 @@ internal class GeneralEntry<DA, U, DE, T, I> : NativeType<DE, DA, T, I> {
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, Date, ToCItem, UUID>, DecryptedDataStructure {
+internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDataStructure {
     
     internal static let previewEntry : Entry = Entry(
         title: "Password Safe",
@@ -64,7 +62,6 @@ internal final class Entry : GeneralEntry<String, URL?, Date, ToCItem, UUID>, De
         url: nil,
         notes: "This is a preview Entry, only to use in previews and tests",
         iconName: "folder",
-        contents: [],
         created: Date.now,
         lastEdited: Date.now,
         id: UUID()
@@ -78,13 +75,11 @@ internal final class Entry : GeneralEntry<String, URL?, Date, ToCItem, UUID>, De
         lhs.notes == rhs.notes &&
         lhs.created == rhs.created &&
         lhs.lastEdited == rhs.lastEdited &&
-        lhs.contents == rhs.contents &&
         lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(iconName)
-        hasher.combine(contents)
         hasher.combine(created)
         hasher.combine(lastEdited)
         hasher.combine(title)
@@ -97,7 +92,7 @@ internal final class Entry : GeneralEntry<String, URL?, Date, ToCItem, UUID>, De
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedToCItem, Data>, EncryptedDataStructure {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -106,7 +101,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
         url : Data,
         notes : Data,
         iconName : Data,
-        contents : [EncryptedToCItem],
         created : Data,
         lastEdited : Data,
         id : Data
@@ -118,7 +112,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
             url: url,
             notes: notes,
             iconName: iconName,
-            contents: contents,
             created: created,
             lastEdited: lastEdited,
             id: id
@@ -132,7 +125,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
         case url
         case notes
         case iconName
-        case contents
         case created
         case lastEdited
         case id
@@ -146,7 +138,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
         try container.encode(url, forKey: .url)
         try container.encode(notes, forKey: .notes)
         try container.encode(iconName, forKey: .iconName)
-        try container.encode(contents, forKey: .contents)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
         try container.encode(id, forKey: .id)
@@ -161,7 +152,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
             url: try container.decode(Data.self, forKey: .url),
             notes: try container.decode(Data.self, forKey: .notes),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            contents: try container.decode([EncryptedToCItem].self, forKey: .contents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
             id: try container.decode(Data.self, forKey: .id)
@@ -169,10 +159,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
     }
     
     internal init(from coreData : CD_Entry) {
-        var localContents : [EncryptedToCItem] = []
-        for toc in coreData.contents! {
-            localContents.append(EncryptedToCItem(from: toc as! CD_ToCItem))
-        }
         super.init(
             title: coreData.title!,
             username: coreData.username!,
@@ -180,7 +166,6 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedTo
             url: coreData.url!,
             notes: coreData.notes!,
             iconName: coreData.iconName!,
-            contents: localContents,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!,
             id: coreData.uuid!

@@ -31,8 +31,7 @@ internal struct Me_Details: View {
                     }
                 }
                 Section("Content") {
-                    Text("Contains \(me.folders.count) Folders")
-                    Text("Contains \(me.entries.count) Entries")
+                    // TODO: Add Content Information
                 }
                 Section("Timeline") {
                     ListTile(name: "Created", date: me.created)

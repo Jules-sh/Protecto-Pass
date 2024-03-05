@@ -63,6 +63,8 @@ internal struct ME_ContentView : View {
     /// The Photos selected to add to the Password Safe
     @State private var photosSelected : [PhotosPickerItem] = []
     
+    @State private var selectedDB_Images : [DB_Image] = []
+    
     /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
     
@@ -254,12 +256,23 @@ internal struct ME_ContentView : View {
                 for photo in photosSelected {
                     do {
                         let image : UIImage = try await photo.loadTransferable(type: DBSoleImage.self)!.image
-                        db.images.append(
+                        let uuid : UUID = UUID()
+                        selectedDB_Images.append(
                             DB_Image(
                                 image: image,
                                 quality: 0.5,
                                 created: Date.now,
-                                lastEdited: Date.now
+                                lastEdited: Date.now,
+                                id: uuid
+                            )
+                        )
+                        db.contents.append(
+                            ToCItem(
+                                // TODO: change itemIdentifier
+                                name: photo.itemIdentifier!,
+                                type: .image,
+                                id: uuid,
+                                children: []
                             )
                         )
                     } catch {

@@ -24,7 +24,8 @@ internal class GeneralDatabase<K, T> : ME_DataStructure<String, Date, UUID>, Ide
     /// Whether or not biometrics are allow to decrypt and unlock this Database
     internal let allowBiometrics : Bool
     
-    internal let contents : [T]
+    /// Contains all the content of this Database
+    internal var contents : [T]
     
     internal init(
         name : String,

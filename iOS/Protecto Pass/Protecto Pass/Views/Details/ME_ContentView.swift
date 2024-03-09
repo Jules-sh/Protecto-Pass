@@ -26,8 +26,6 @@ internal struct ME_ContentView : View {
     internal init(id : UUID) {
         self.id = id
         dataStructure = nil
-        // Environment Object can't be used in init
-        // https://www.hackingwithswift.com/forums/swiftui/environmentobject-usage-in-init-of-a-view/5795
     }
     
     /// The Data Structure which is displayed in this View
@@ -290,7 +288,11 @@ internal struct ME_ContentView : View {
         } message: {
             Text("An Error arised saving the Database")
         }
-        .onAppear { loadStructure() }
+        .onAppear {
+            // Environment Object can't be used in init, so method is called on appear of view
+            // https://www.hackingwithswift.com/forums/swiftui/environmentobject-usage-in-init-of-a-view/5795
+            loadStructure()
+        }
     }
     
     /// Loads the structure needed

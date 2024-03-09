@@ -8,7 +8,7 @@
 import Foundation
 
 /// Generalised Document class
-internal class GeneralDocument<T, De> : DatabaseContent<De> {
+internal class GeneralDocument<T, De, I> : DatabaseContent<De, I> {
     
     /// Document Data read from this Document
     internal let document : Data
@@ -20,20 +20,18 @@ internal class GeneralDocument<T, De> : DatabaseContent<De> {
         document: Data,
         type: T,
         created : De,
-        lastEdited : De
+        lastEdited : De,
+        id : I
     ) {
         self.document = document
         self.type = type
-        super.init(created: created, lastEdited: lastEdited)
+        super.init(created: created, lastEdited: lastEdited, id: id)
     }
 }
 
 
 /// Decrypted Document to use in the decrypted Database
-internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataStructure {
-    
-    /// ID to conform to Identifiable
-    internal let id: UUID = UUID()
+internal final class DB_Document : GeneralDocument<String, Date, UUID>, DecryptedDataStructure {
     
     internal static func == (lhs: DB_Document, rhs: DB_Document) -> Bool {
         return lhs.document == rhs.document && lhs.type == rhs.type && lhs.id == rhs.id
@@ -47,19 +45,21 @@ internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataS
 }
 
 /// Encrypted Document type storing the encrypted values
-internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, EncryptedDataStructure {
+internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         document: Data,
         type: Data,
         created : Data,
-        lastEdited : Data
+        lastEdited : Data,
+        id : Data
     ) {
         super.init(
             document: document,
             type: type,
             created: created,
-            lastEdited: lastEdited
+            lastEdited: lastEdited,
+            id: id
         )
     }
     
@@ -68,6 +68,7 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, Encryp
         case type
         case created
         case lastEdited
+        case id
     }
     
     internal func encode(to encoder: Encoder) throws {
@@ -76,6 +77,7 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, Encryp
         try container.encode(type, forKey: .type)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
+        try container.encode(id, forKey: .id)
     }
     
     internal convenience init(from decoder: Decoder) throws {
@@ -84,7 +86,8 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, Encryp
             document: try container.decode(Data.self, forKey: .document),
             type: try container.decode(Data.self, forKey: .type),
             created: try container.decode(Data.self, forKey: .created),
-            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited),
+            id: try container.decode(Data.self, forKey: .id)
         )
     }
     
@@ -93,7 +96,8 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, Encryp
             document: coreData.documentData!,
             type: coreData.type!,
             created: coreData.created!,
-            lastEdited: coreData.lastEdited!
+            lastEdited: coreData.lastEdited!,
+            id: coreData.uuid!
         )
     }
 }

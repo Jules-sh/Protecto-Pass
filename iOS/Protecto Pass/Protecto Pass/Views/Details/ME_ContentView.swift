@@ -26,17 +26,18 @@ internal struct ME_ContentView : View {
     internal init(id : UUID) {
         self.id = id
         dataStructure = nil
-        if id == db.id {
-            dataStructure = db
-        } else {
-            for folder in db.folders {
-                checkFolder(folder, id: id)
-            }
-        }
     }
     
     /// The Data Structure which is displayed in this View
-    private var dataStructure : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>?
+    @State private var dataStructure : ME_DataStructure<String, Date, UUID>?
+    
+    private var images : [DB_Image] = []
+    
+    private var documents : [DB_Document] = []
+    
+    private var entries : [Entry] = []
+    
+    private var folders : [Folder] = []
     
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
@@ -55,6 +56,8 @@ internal struct ME_ContentView : View {
     
     /// The Photos selected to add to the Password Safe
     @State private var photosSelected : [PhotosPickerItem] = []
+    
+    @State private var selectedDB_Images : [DB_Image] = []
     
     /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
@@ -104,8 +107,8 @@ internal struct ME_ContentView : View {
                 //                }
                 //            }
                 Section("Images") {
-                    if !dataStructure!.images.isEmpty {
-                        if dataStructure!.images.count <= 9 {
+                    if !images.isEmpty {
+                        if images.count <= 9 {
                             // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
                             //                            ScrollView {
                             //                                LazyVGrid(
@@ -146,7 +149,7 @@ internal struct ME_ContentView : View {
                                 ImageListDetails()
                                     .environmentObject(dataStructure!)
                             } label: {
-                                Label("Show all images (\(dataStructure!.images.count))", systemImage: "photo")
+                                Label("Show all images (\(images.count))", systemImage: "photo")
                             }
                         }
                     } else {
@@ -154,8 +157,8 @@ internal struct ME_ContentView : View {
                     }
                 }
                 //        Section("Documents") {
-                //            if !dataStructure.documents.isEmpty {
-                //                ForEach(dataStructure.documents) {
+                //            if !documents.isEmpty {
+                //                ForEach(documents) {
                 //                    document in
                 //                }
                 //            } else {
@@ -190,7 +193,8 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $imageDetailsPresented) {
             ImageDetails(image: $selectedImage)
         }
-        .navigationTitle(dataStructure is Database ? "Home" : dataStructure!.name)
+        // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
+        .navigationTitle(dataStructure is Database ? "Home" : dataStructure?.name ?? "Loading...")
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
         .toolbar(.automatic, for: .navigationBar)
@@ -247,12 +251,23 @@ internal struct ME_ContentView : View {
                 for photo in photosSelected {
                     do {
                         let image : UIImage = try await photo.loadTransferable(type: DBSoleImage.self)!.image
-                        db.images.append(
+                        let uuid : UUID = UUID()
+                        selectedDB_Images.append(
                             DB_Image(
                                 image: image,
                                 quality: 0.5,
                                 created: Date.now,
-                                lastEdited: Date.now
+                                lastEdited: Date.now,
+                                id: uuid
+                            )
+                        )
+                        db.contents.append(
+                            ToCItem(
+                                // TODO: change itemIdentifier
+                                name: photo.itemIdentifier!,
+                                type: .image,
+                                id: uuid,
+                                children: []
                             )
                         )
                     } catch {
@@ -273,20 +288,21 @@ internal struct ME_ContentView : View {
         } message: {
             Text("An Error arised saving the Database")
         }
+        .onAppear {
+            // Environment Object can't be used in init, so method is called on appear of view
+            // https://www.hackingwithswift.com/forums/swiftui/environmentobject-usage-in-init-of-a-view/5795
+            loadStructure()
+        }
     }
     
-    private mutating func checkFolder(_ folder : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>, id : UUID) -> ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>? {
-        guard folder.id != id else {
-            dataStructure = folder
-            return folder
+    /// Loads the structure needed
+    private func loadStructure() -> Void {
+        if id == db.id {
+            dataStructure = db
+        } else {
+            // Passed Data structure is a folder
+            // TODO: add Code in order to load Folder
         }
-        for f in folder.folders {
-            var result = checkFolder(f, id: id)
-            if (result != nil){
-                return result;
-            }
-        }
-        return nil
     }
 }
 

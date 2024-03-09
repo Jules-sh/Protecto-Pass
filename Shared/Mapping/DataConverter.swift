@@ -9,6 +9,8 @@ import Foundation
 
 internal struct DataConverter {
     
+    // STRING <-> DATA
+    
     /// Converts the passed String to Data (Bytes)
     internal static func stringToData(_ string : String) -> Data {
         return string.data(using: .utf8)!
@@ -21,6 +23,9 @@ internal struct DataConverter {
         }
         return String(data: data!, encoding: .utf8)!
     }
+    
+    
+    // STRING <-> DATE
 
     /// Converts a String to a Date
     internal static func stringToDate(_ string : String) throws -> Date {
@@ -31,6 +36,9 @@ internal struct DataConverter {
     internal static func dateToString(_ date : Date) -> String {
         return date.ISO8601Format(.iso8601)
     }
+    
+    
+    // DATA <-> DATE
 
     /// Converts a Date to Data (Bytes)
     internal static func dateToData(_ date : Date) -> Data {
@@ -41,11 +49,17 @@ internal struct DataConverter {
     internal static func dataToDate(_ data : Data) throws -> Date {
         return try stringToDate(dataToString(data))
     }
+    
+    
+    // IMAGE -> DATA
 
     /// Converts an Image to Bytes
     internal static func imageToData(_ image : DB_Image) throws -> Data {
         return image.image.jpegData(compressionQuality: CGFloat(image.quality))!
     }
+    
+    
+    // DATA <-> NUMBER
 
     /// Converts a Double to Bytes
     internal static func doubleToData(_ double : Double) -> Data {
@@ -55,5 +69,17 @@ internal struct DataConverter {
     /// Converts Bytes (Data) to a Double
     internal static func dataToDouble(_ data : Data) -> Double {
         return Double(dataToString(data))!
+    }
+    
+    
+    // UUID <-> DATA
+    // TODO: update Encrypter & Decrypter to use these functions when encrypting and decrypting UUIDs
+    
+    internal static func dataToUUID(_ data : Data) -> UUID {
+        return UUID(uuidString: dataToString(data))!
+    }
+    
+    internal static func uuidToData(_ uuid : UUID) -> Data {
+        return stringToData(uuid.uuidString)
     }
 }

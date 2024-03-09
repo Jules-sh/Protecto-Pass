@@ -39,8 +39,8 @@ internal struct UnlockDB: View {
                     }
                     Divider()
                     Section {
-                        Text("Contains \(folderCountInDB()) Folders")
-                        Text("Contains \(entryCountInDB()) Entries")
+                        Text("Contains ...")
+                        // TODO: add Content Information
                     } header: {
                         Text("Content")
                             .font(.headline)
@@ -74,46 +74,6 @@ internal struct UnlockDB: View {
                 }
             }
         }
-    }
-    
-    
-    /// Returns the count of folders in the complete Database
-    private func folderCountInDB() -> Int {
-        var count : Int = 0
-        count += db.folders.count
-        for folder in db.folders {
-            count += folderCountInFolder(folder)
-        }
-        return count
-    }
-    
-    /// Returns the Count of Folders in the specified Folder
-    private func folderCountInFolder(_ folder : EncryptedFolder) -> Int {
-        var count : Int = 0
-        count += folder.folders.count
-        for innerFolder in folder.folders {
-            count += folderCountInFolder(innerFolder)
-        }
-        return count
-    }
-    
-    /// Returns the Count of Entries in the complete Database
-    private func entryCountInDB() -> Int {
-        var count : Int = 0
-        for folder in db.folders {
-            count += entryCountInFolder(folder)
-        }
-        return count
-    }
-    
-    /// Returns the Number of Entries in the specified Folder
-    private func entryCountInFolder(_ folder : EncryptedFolder) -> Int {
-        var count : Int = 0
-        count += folder.entries.count
-        for innerFolder in folder.folders {
-            count += entryCountInFolder(innerFolder)
-        }
-        return count
     }
     
     /// Try to unlock the Database with the provided password

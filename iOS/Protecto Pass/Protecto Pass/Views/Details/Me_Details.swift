@@ -13,7 +13,7 @@ internal struct Me_Details: View {
 
     @Environment(\.dismiss) private var dismiss
     
-    internal let me : ME_DataStructure<String, Folder, Entry, Date, DB_Document, DB_Image>
+    internal let me : ME_DataStructure<String, Date, UUID>
     
     var body: some View {
         NavigationStack {
@@ -31,8 +31,7 @@ internal struct Me_Details: View {
                     }
                 }
                 Section("Content") {
-                    Text("Contains \(me.folders.count) Folders")
-                    Text("Contains \(me.entries.count) Entries")
+                    // TODO: Add Content Information
                 }
                 Section("Timeline") {
                     ListTile(name: "Created", date: me.created)

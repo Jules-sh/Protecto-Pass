@@ -57,23 +57,24 @@ internal struct EditFolder: View {
                         .lineLimit(3...10)
                 }
                 Group {
-                    Toggle(isOn: $storeInFolder.animation()) {
-                        Label("Store in Folder", systemImage: "folder")
-                    }
-                    if storeInFolder {
-                        Picker("Folder", selection: $folder) {
-                            if (db.folders.isEmpty) {
-                                Text("No folder available")
-                            } else {
-                                ForEach(db.folders) {
-                                    folder in
-                                    Text(folder.name)
-                                }
-                            }
-                        }
-                        .disabled(db.folders.isEmpty)
-                        .pickerStyle(.menu)
-                    }
+                    // TODO: update group content
+//                    Toggle(isOn: $storeInFolder.animation()) {
+//                        Label("Store in Folder", systemImage: "folder")
+//                    }
+//                    if storeInFolder {
+//                        Picker("Folder", selection: $folder) {
+//                            if (db.folders.isEmpty) {
+//                                Text("No folder available")
+//                            } else {
+//                                ForEach(db.folders) {
+//                                    folder in
+//                                    Text(folder.name)
+//                                }
+//                            }
+//                        }
+//                        .disabled(db.folders.isEmpty)
+//                        .pickerStyle(.menu)
+//                    }
                 }
             }
             .alert("Error saving", isPresented: $errStoring) {

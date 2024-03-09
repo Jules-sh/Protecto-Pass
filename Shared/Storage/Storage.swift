@@ -24,9 +24,6 @@ internal struct Storage {
         
         /// Storing this Database in an local encrypted binary File
         case File
-        
-        /// Storing this Database only local in the Keychain.
-        case Keychain
     }
     
     /// Stores the passed Database to the right Storage.
@@ -39,8 +36,6 @@ internal struct Storage {
             try CoreDataManager.storeDatabase(database, context: context!)
         case .File:
             try DatabaseFileManager.storeDatabase(database)
-        case .Keychain:
-            KeychainManager.storeDatabase(database)
         }
     }
     
@@ -53,9 +48,6 @@ internal struct Storage {
         // File System
         let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(with: paths)
         result.append(contentsOf: fileSystem)
-        // Keychain
-        let keychain : [EncryptedDatabase] = KeychainManager.load()
-        result.append(contentsOf: keychain)
         result.sort(by: { $0.lastEdited < $1.lastEdited })
         return result
     }

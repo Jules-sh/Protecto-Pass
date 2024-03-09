@@ -29,7 +29,7 @@ internal struct AddDB: View {
     @State private var errEmptyName : Bool = false
     
     /// The Name of the icon, to represent the database
-    @State private var iconName = "externaldrive"
+    @State private var iconName : String = "externaldrive"
     
     /// When set to true, the icon chooser view is shown
     @State private var iconChooserShown : Bool = false

@@ -8,34 +8,34 @@
 import Foundation
 import SwiftUI
 
-internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
+internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
     
     /// The Title of this Entry
-    internal let title : D
+    internal let title : DA
     
     /// The Username connected to this Entry
-    internal let username : D
+    internal let username : DA
     
     /// The Password stored with this Entry
-    internal let password : D
+    internal let password : DA
     
     /// The URL this Entry is connected to
     internal let url : U
     
     /// Some notes storing whatever
     /// the User wants to add to this Entry
-    internal let notes : D
+    internal let notes : DA
     
     internal init(
-        title: D,
-        username: D,
-        password: D,
+        title: DA,
+        username: DA,
+        password: DA,
         url: U,
-        notes: D,
-        iconName : I,
-        documents : [Do],
-        created : De,
-        lastEdited : De
+        notes: DA,
+        iconName : DA,
+        created : DE,
+        lastEdited : DE,
+        id : I
     ) {
         self.title = title
         self.username = username
@@ -44,19 +44,16 @@ internal class GeneralEntry<D, U, I, De, Do> : NativeType<De, I, Do> {
         self.notes = notes
         super.init(
             iconName: iconName,
-            documents: documents,
             created: created,
-            lastEdited: lastEdited
+            lastEdited: lastEdited,
+            id: id
         )
     }
 }
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Document>, DecryptedDataStructure {
-    
-    /// ID to conform to Identifiable
-    internal let id: UUID = UUID()
+internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDataStructure {
     
     internal static let previewEntry : Entry = Entry(
         title: "Password Safe",
@@ -65,9 +62,9 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
         url: nil,
         notes: "This is a preview Entry, only to use in previews and tests",
         iconName: "folder",
-        documents: [],
         created: Date.now,
-        lastEdited: Date.now
+        lastEdited: Date.now,
+        id: UUID()
     )
     
     static func == (lhs: Entry, rhs: Entry) -> Bool {
@@ -83,7 +80,6 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(iconName)
-        hasher.combine(documents)
         hasher.combine(created)
         hasher.combine(lastEdited)
         hasher.combine(title)
@@ -96,7 +92,7 @@ internal final class Entry : GeneralEntry<String, URL?, String, Date, DB_Documen
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encrypted_DB_Document>, EncryptedDataStructure {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -105,9 +101,9 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
         url : Data,
         notes : Data,
         iconName : Data,
-        documents : [Encrypted_DB_Document],
         created : Data,
-        lastEdited : Data
+        lastEdited : Data,
+        id : Data
     ) {
         super.init(
             title: title,
@@ -116,9 +112,9 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: url,
             notes: notes,
             iconName: iconName,
-            documents: documents,
             created: created,
-            lastEdited: lastEdited
+            lastEdited: lastEdited,
+            id: id
         )
     }
     
@@ -129,9 +125,9 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
         case url
         case notes
         case iconName
-        case documents
         case created
         case lastEdited
+        case id
     }
     
     internal func encode(to encoder: Encoder) throws {
@@ -142,9 +138,9 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
         try container.encode(url, forKey: .url)
         try container.encode(notes, forKey: .notes)
         try container.encode(iconName, forKey: .iconName)
-        try container.encode(documents, forKey: .documents)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
+        try container.encode(id, forKey: .id)
     }
     
     internal convenience init(from decoder: Decoder) throws {
@@ -156,17 +152,13 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: try container.decode(Data.self, forKey: .url),
             notes: try container.decode(Data.self, forKey: .notes),
             iconName: try container.decode(Data.self, forKey: .iconName),
-            documents: try container.decode([Encrypted_DB_Document].self, forKey: .documents),
             created: try container.decode(Data.self, forKey: .created),
-            lastEdited: try container.decode(Data.self, forKey: .lastEdited)
+            lastEdited: try container.decode(Data.self, forKey: .lastEdited),
+            id: try container.decode(Data.self, forKey: .id)
         )
     }
     
     internal init(from coreData : CD_Entry) {
-        var localDocuments : [Encrypted_DB_Document] = []
-        for doc in coreData.documents! {
-            localDocuments.append(Encrypted_DB_Document(from: doc as! CD_Document))
-        }
         super.init(
             title: coreData.title!,
             username: coreData.username!,
@@ -174,9 +166,9 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data, Encry
             url: coreData.url!,
             notes: coreData.notes!,
             iconName: coreData.iconName!,
-            documents: localDocuments,
             created: coreData.created!,
-            lastEdited: coreData.lastEdited!
+            lastEdited: coreData.lastEdited!,
+            id: coreData.uuid!
         )
     }
 }

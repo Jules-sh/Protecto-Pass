@@ -69,9 +69,9 @@ internal struct SettingsHelper {
                 }
             }
             if iCloudSettings {
-                let updatedNow : Data = DataConverter.dateToData(Date.now)
+                let updatedNow : Date = Date.now
                 if let settingsFromiCloud : Preferences = try context.fetch(Preferences.fetchRequest()).first {
-                    if try DataConverter.dataToDate(UserDefaults.standard.data(forKey: Settings.lastUpdated.rawValue)!) < DataConverter.dataToDate(settingsFromiCloud.lastUpdated!) {
+                    if try DataConverter.dataToDate(UserDefaults.standard.data(forKey: Settings.lastUpdated.rawValue)!) < settingsFromiCloud.lastUpdated! {
                         compactMode = settingsFromiCloud.compactMode
                         largeScreen = settingsFromiCloud.largeScreen
                         UserDefaults.standard.set(updatedNow, forKey: Settings.lastUpdated.rawValue)
@@ -133,7 +133,7 @@ internal struct SettingsHelper {
     }
     
     /// Checks if the "Delete Data" Switch in the iCloud Subview of the Settings
-    /// App has been toggled
+    /// App has been toggled and resets it if necessary
     private static func checkiCloudReset() -> Bool {
         if UserDefaults.standard.bool(forKey: Settings.deleteiCloudData.rawValue) {
             UserDefaults.standard.set(false, forKey: Settings.deleteiCloudData.rawValue)

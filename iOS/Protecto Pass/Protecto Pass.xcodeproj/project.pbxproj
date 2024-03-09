@@ -33,7 +33,6 @@
 		84922B392A21F11300CE7945 /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B382A21F11300CE7945 /* SetUpView.swift */; };
 		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
 		8497DF7E2B5BF347003979F9 /* ImageLoadingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8497DF7D2B5BF347003979F9 /* ImageLoadingError.swift */; };
-		8497F7362B7E264700A190FF /* TableOfContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8497F7352B7E264700A190FF /* TableOfContents.swift */; };
 		8497F7382B7E264E00A190FF /* ToCItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8497F7372B7E264E00A190FF /* ToCItem.swift */; };
 		849ECBDA2A27667C00954BC9 /* DB_CreationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */; };
 		849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ECBE12A27708F00954BC9 /* ListTile.swift */; };
@@ -115,7 +114,6 @@
 		84922B382A21F11300CE7945 /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
 		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		8497DF7D2B5BF347003979F9 /* ImageLoadingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingError.swift; sourceTree = "<group>"; };
-		8497F7352B7E264700A190FF /* TableOfContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableOfContents.swift; sourceTree = "<group>"; };
 		8497F7372B7E264E00A190FF /* ToCItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToCItem.swift; sourceTree = "<group>"; };
 		849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_CreationWrapper.swift; sourceTree = "<group>"; };
 		849ECBE12A27708F00954BC9 /* ListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTile.swift; sourceTree = "<group>"; };
@@ -254,6 +252,23 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		847D93E72B825E0B00A24E8F /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				84F4206829EEA0F1000D7600 /* Folder.swift */,
+				84F4206929EEA0F1000D7600 /* Entry.swift */,
+				84F4206B29EEA0F1000D7600 /* Database.swift */,
+				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
+				84A3ABED2AA057620089521E /* NativeType.swift */,
+				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
+				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
+				8497F7372B7E264E00A190FF /* ToCItem.swift */,
+				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
+				84A3ABEB2AA055DA0089521E /* DB_Document.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		84922B342A21E16F00CE7945 /* Mapping */ = {
 			isa = PBXGroup;
 			children = (
@@ -386,9 +401,9 @@
 		84F4206229EEA0F1000D7600 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				847D93E72B825E0B00A24E8F /* Database */,
 				849ECBD82A27666600954BC9 /* DB_Creation */,
 				84F4206329EEA0F1000D7600 /* Generated */,
-				84F4206729EEA0F1000D7600 /* Database */,
 				84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */,
 			);
 			path = Models;
@@ -399,24 +414,6 @@
 			children = (
 			);
 			path = Generated;
-			sourceTree = "<group>";
-		};
-		84F4206729EEA0F1000D7600 /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				84F4206829EEA0F1000D7600 /* Folder.swift */,
-				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
-				84F4206929EEA0F1000D7600 /* Entry.swift */,
-				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
-				84F4206B29EEA0F1000D7600 /* Database.swift */,
-				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
-				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
-				84A3ABEB2AA055DA0089521E /* DB_Document.swift */,
-				84A3ABED2AA057620089521E /* NativeType.swift */,
-				8497F7352B7E264700A190FF /* TableOfContents.swift */,
-				8497F7372B7E264E00A190FF /* ToCItem.swift */,
-			);
-			path = Database;
 			sourceTree = "<group>";
 		};
 		84F4206E29EEA0F1000D7600 /* Storage */ = {
@@ -598,7 +595,6 @@
 				84E4C5122A249E87005D793F /* Cryptography.swift in Sources */,
 				848DE6842AA742CA00AE99EE /* ImageDetails.swift in Sources */,
 				84DB4F942A73C60E00C2DD0E /* EditEntry.swift in Sources */,
-				8497F7362B7E264700A190FF /* TableOfContents.swift in Sources */,
 				84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */,
 				848DE6862AA755BA00AE99EE /* AddDB_Config.swift in Sources */,
 				848480B429EFF09D008EA77C /* AddDB.swift in Sources */,
@@ -718,7 +714,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -775,7 +771,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -790,6 +786,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Protecto Pass/Protecto Pass.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -805,7 +802,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -824,6 +821,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Protecto Pass/Protecto Pass.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -839,7 +837,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -862,7 +860,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jules.Protecto-PassTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -882,7 +880,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jules.Protecto-PassTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

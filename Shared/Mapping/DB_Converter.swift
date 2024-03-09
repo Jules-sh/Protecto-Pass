@@ -47,111 +47,31 @@ internal struct DB_Converter : DatabaseConverterProtocol {
         let cdDB : CD_Database = CD_Database(context: context)
         cdDB.name = DataConverter.stringToData(encrypted.name)
         cdDB.objectDescription = DataConverter.stringToData(encrypted.description)
-        for folder in encrypted.folders {
-            cdDB.addToFolders(FolderConverter.toCD(folder, context: context))
-        }
-        for entry in encrypted.entries {
-            cdDB.addToEntries(EntryConverter.toCD(entry, context: context))
-        }
-        for image in encrypted.images {
-            cdDB.addToImages(ImageConverter.toCD(image, context: context))
+        for toc in encrypted.contents {
+            cdDB.addToContents(ToC_Converter.toCD(toc, context: context))
         }
         cdDB.iconName = DataConverter.stringToData(encrypted.iconName)
-        for doc in encrypted.documents {
-            cdDB.addToDocuments(DocumentConverter.toCD(doc, context: context))
-        }
         cdDB.created = DataConverter.dateToData(encrypted.created)
         cdDB.lastEdited = DataConverter.dateToData(encrypted.lastEdited)
         cdDB.header = encrypted.header.parseHeader()
         cdDB.key = encrypted.key
         cdDB.allowBiometrics = encrypted.allowBiometrics
-        cdDB.id = encrypted.id
+        cdDB.uuid = DataConverter.uuidToData(encrypted.id)
         return cdDB
     }
 }
 
-/// Struct to convert Folders from encrypted to Core Data and backwards
-private struct FolderConverter : DatabaseConverterProtocol {
-    
-    fileprivate static func fromCD(_ coreData: CD_Folder) -> EncryptedFolder {
-        return EncryptedFolder(from: coreData)
-    }
-    
-    fileprivate static func toCD(_ encrypted: EncryptedFolder, context: NSManagedObjectContext) -> CD_Folder {
-        let cdFolder : CD_Folder = CD_Folder(context: context)
-        cdFolder.name = encrypted.name
-        cdFolder.objectDescription = encrypted.description
-        for f in encrypted.folders {
-            cdFolder.addToFolders(toCD(f, context: context))
-        }
-        for e in encrypted.entries {
-            cdFolder.addToEntries(EntryConverter.toCD(e, context: context))
-        }
-        for image in encrypted.images {
-            cdFolder.addToImages(ImageConverter.toCD(image, context: context))
-        }
-        cdFolder.iconName = encrypted.iconName
-        for doc in encrypted.documents {
-            cdFolder.addToDocuments(DocumentConverter.toCD(doc, context: context))
-        }
-        cdFolder.created = encrypted.created
-        cdFolder.lastEdited = encrypted.lastEdited
-        return cdFolder
-    }
-}
 
-/// Struct to convert Entries from encrypted to Core Data and backwards
-private struct EntryConverter : DatabaseConverterProtocol {
-    
-    fileprivate static func fromCD(_ coreData: CD_Entry) -> EncryptedEntry {
-        return EncryptedEntry(from: coreData)
+internal struct ToC_Converter : DatabaseConverterProtocol {
+    static func fromCD(_ coreData: CD_ToCItem) throws -> EncryptedToCItem {
+        return EncryptedToCItem(from: coreData)
     }
     
-    fileprivate static func toCD(_ encrypted: EncryptedEntry, context: NSManagedObjectContext) -> CD_Entry {
-        let cdEntry : CD_Entry = CD_Entry(context: context)
-        cdEntry.title = encrypted.title
-        cdEntry.username = encrypted.username
-        cdEntry.password = encrypted.password
-        cdEntry.url = encrypted.url
-        cdEntry.notes = encrypted.notes
-        cdEntry.iconName = encrypted.iconName
-        for doc in encrypted.documents {
-            cdEntry.addToDocuments(DocumentConverter.toCD(doc, context: context))
-        }
-        cdEntry.created = encrypted.created
-        cdEntry.lastEdited = cdEntry.lastEdited
-        return cdEntry
-    }
-}
-
-/// Struct to convert Images from encrypted to Core Data and backwards
-private struct ImageConverter : DatabaseConverterProtocol {
-    fileprivate static func fromCD(_ coreData: CD_Image) throws -> Encrypted_DB_Image {
-        return Encrypted_DB_Image(from: coreData)
-    }
-
-    fileprivate static func toCD(_ encrypted: Encrypted_DB_Image, context: NSManagedObjectContext) -> CD_Image {
-        let cdImage : CD_Image = CD_Image(context: context)
-        cdImage.imageData = encrypted.image
-        cdImage.compressionQuality = encrypted.quality
-        cdImage.created = encrypted.created
-        cdImage.lastEdited = encrypted.lastEdited
-        return cdImage
-    }
-}
-
-/// Struct to convert Documents from encrypted to Core Data and backwards
-private struct DocumentConverter : DatabaseConverterProtocol {
-    static func fromCD(_ coreData: CD_Document) throws -> Encrypted_DB_Document {
-        return Encrypted_DB_Document(from: coreData)
-    }
-
-    static func toCD(_ encrypted: Encrypted_DB_Document, context: NSManagedObjectContext) -> CD_Document {
-        let cdDoc : CD_Document = CD_Document(context: context)
-        cdDoc.documentData = encrypted.document
-        cdDoc.type = encrypted.type
-        cdDoc.created = encrypted.created
-        cdDoc.lastEdited = encrypted.lastEdited
-        return cdDoc
+    static func toCD(_ encrypted: EncryptedToCItem, context: NSManagedObjectContext) -> CD_ToCItem {
+        let cdToC : CD_ToCItem = CD_ToCItem(context: context)
+        cdToC.name = encrypted.name
+        cdToC.type = encrypted.type
+        cdToC.uuid = encrypted.id
+        return cdToC
     }
 }

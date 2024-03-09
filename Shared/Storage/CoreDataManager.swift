@@ -9,24 +9,24 @@ import Foundation
 import CoreData
 
 /// Struct used to interact with the Core Data Storage
-internal struct CoreDataManager : DatabaseCache {   
+internal struct CoreDataManager : DatabaseCache {
     
     internal static var allDatabases: [CD_Database] = []
     
     internal static func accessCache(id: UUID) throws -> CD_Database {
         if databaseExists(id: id) {
-            return allDatabases.first(where: { $0.id == id})!
+            return allDatabases.first(where: { DataConverter.dataToUUID($0.uuid!) == id })!
         } else {
             throw DatabaseDoesNotExistError()
         }
     }
     
     static func databaseExists(id : UUID) -> Bool {
-        return allDatabases.contains(where: { $0.id == id })
+        return allDatabases.contains(where: { DataConverter.dataToUUID($0.uuid!) == id })
     }
     
     static func update(id: UUID, with new: CD_Database) -> Void {
-        allDatabases.removeAll(where: { $0.id == id })
+        allDatabases.removeAll(where: { DataConverter.dataToUUID($0.uuid!) == id })
         allDatabases.append(new)
     }
     

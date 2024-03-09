@@ -39,6 +39,7 @@ internal struct UnlockDB: View {
                     }
                     Divider()
                     Section {
+                        Text("Contains ...")
                         // TODO: add Content Information
                     } header: {
                         Text("Content")

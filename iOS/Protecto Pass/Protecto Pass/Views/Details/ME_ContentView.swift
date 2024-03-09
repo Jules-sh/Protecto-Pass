@@ -26,16 +26,12 @@ internal struct ME_ContentView : View {
     internal init(id : UUID) {
         self.id = id
         dataStructure = nil
-        if id == db.id {
-            dataStructure = db
-        } else {
-            // Passed Data structure is a folder
-            // TODO: add Code in order to load Folder
-        }
+        // Environment Object can't be used in init
+        // https://www.hackingwithswift.com/forums/swiftui/environmentobject-usage-in-init-of-a-view/5795
     }
     
     /// The Data Structure which is displayed in this View
-    private var dataStructure : ME_DataStructure<String, Date, UUID>?
+    @State private var dataStructure : ME_DataStructure<String, Date, UUID>?
     
     private var images : [DB_Image] = []
     
@@ -199,7 +195,8 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $imageDetailsPresented) {
             ImageDetails(image: $selectedImage)
         }
-        .navigationTitle(dataStructure is Database ? "Home" : dataStructure!.name)
+        // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
+        .navigationTitle(dataStructure is Database ? "Home" : dataStructure?.name ?? "Loading...")
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
         .toolbar(.automatic, for: .navigationBar)
@@ -292,6 +289,17 @@ internal struct ME_ContentView : View {
         .alert("Error saving Database", isPresented: $errSavingPresented) {
         } message: {
             Text("An Error arised saving the Database")
+        }
+        .onAppear { loadStructure() }
+    }
+    
+    /// Loads the structure needed
+    private func loadStructure() -> Void {
+        if id == db.id {
+            dataStructure = db
+        } else {
+            // Passed Data structure is a folder
+            // TODO: add Code in order to load Folder
         }
     }
 }

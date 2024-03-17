@@ -18,17 +18,15 @@
 		842EAC8C29D832680014C8F8 /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */; };
 		842EAC8E29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */; };
 		843312242AA59FC700ADA474 /* IconChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843312232AA59FC700ADA474 /* IconChooser.swift */; };
-		845300282A98B9F300CA4529 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300272A98B9F300CA4529 /* KeychainManager.swift */; };
 		8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300292A98BA9200CA4529 /* CoreDataManager.swift */; };
 		84627AC12AA9CA2000415827 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84627AC02AA9CA2000415827 /* Settings.swift */; };
 		846302332AA99F7600C051E3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 846302322AA99F7600C051E3 /* Settings.bundle */; };
-		846455D02A9BA517003D023C /* DatabaseCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* DatabaseCache.swift */; };
+		846455D02A9BA517003D023C /* Caches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* Caches.swift */; };
 		8467EBB82B5FDFEC003E6479 /* ImageListDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */; };
 		8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474FDA92A93612C007F4215 /* ME_DataStructure.swift */; };
 		8481C7D92A9E282E004EC48E /* DatabaseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481C7D82A9E282E004EC48E /* DatabaseContent.swift */; };
 		848480B429EFF09D008EA77C /* AddDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848480B329EFF09D008EA77C /* AddDB.swift */; };
 		848DE6842AA742CA00AE99EE /* ImageDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DE6832AA742CA00AE99EE /* ImageDetails.swift */; };
-		848DE6862AA755BA00AE99EE /* AddDB_Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DE6852AA755BA00AE99EE /* AddDB_Config.swift */; };
 		84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B352A21E18500CE7945 /* DB_Converter.swift */; };
 		84922B392A21F11300CE7945 /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B382A21F11300CE7945 /* SetUpView.swift */; };
 		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
@@ -98,18 +96,16 @@
 		842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
 		842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		843312232AA59FC700ADA474 /* IconChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconChooser.swift; sourceTree = "<group>"; };
-		845300272A98B9F300CA4529 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		845300292A98BA9200CA4529 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Protecto-Pass-Info.plist"; sourceTree = "<group>"; };
 		84627AC02AA9CA2000415827 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		846302322AA99F7600C051E3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		846455CF2A9BA517003D023C /* DatabaseCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseCache.swift; sourceTree = "<group>"; };
+		846455CF2A9BA517003D023C /* Caches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Caches.swift; sourceTree = "<group>"; };
 		8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListDetails.swift; sourceTree = "<group>"; };
 		8474FDA92A93612C007F4215 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
 		8481C7D82A9E282E004EC48E /* DatabaseContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContent.swift; sourceTree = "<group>"; };
 		848480B329EFF09D008EA77C /* AddDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB.swift; sourceTree = "<group>"; };
 		848DE6832AA742CA00AE99EE /* ImageDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetails.swift; sourceTree = "<group>"; };
-		848DE6852AA755BA00AE99EE /* AddDB_Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Config.swift; sourceTree = "<group>"; };
 		84922B352A21E18500CE7945 /* DB_Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Converter.swift; sourceTree = "<group>"; };
 		84922B382A21F11300CE7945 /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
 		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
@@ -379,7 +375,6 @@
 				848480B329EFF09D008EA77C /* AddDB.swift */,
 				84E4C5162A263FB8005D793F /* AddDB_Password.swift */,
 				84E4C51A2A276107005D793F /* AddDB_Overview.swift */,
-				848DE6852AA755BA00AE99EE /* AddDB_Config.swift */,
 				841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */,
 			);
 			path = AddDB;
@@ -422,9 +417,8 @@
 				84F4206F29EEA0F1000D7600 /* Storage.swift */,
 				84F4207029EEA0F1000D7600 /* Persistence.swift */,
 				84F4207129EEA0F1000D7600 /* DatabaseFileManager.swift */,
-				845300272A98B9F300CA4529 /* KeychainManager.swift */,
 				845300292A98BA9200CA4529 /* CoreDataManager.swift */,
-				846455CF2A9BA517003D023C /* DatabaseCache.swift */,
+				846455CF2A9BA517003D023C /* Caches.swift */,
 				840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */,
 			);
 			path = Storage;
@@ -596,7 +590,6 @@
 				848DE6842AA742CA00AE99EE /* ImageDetails.swift in Sources */,
 				84DB4F942A73C60E00C2DD0E /* EditEntry.swift in Sources */,
 				84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */,
-				848DE6862AA755BA00AE99EE /* AddDB_Config.swift in Sources */,
 				848480B429EFF09D008EA77C /* AddDB.swift in Sources */,
 				84922B392A21F11300CE7945 /* SetUpView.swift in Sources */,
 				8467EBB82B5FDFEC003E6479 /* ImageListDetails.swift in Sources */,
@@ -611,7 +604,6 @@
 				840BF75F2AA4ABA900DF2A3C /* PasswordField.swift in Sources */,
 				84A3ABEC2AA055DA0089521E /* DB_Document.swift in Sources */,
 				849ECBDA2A27667C00954BC9 /* DB_CreationWrapper.swift in Sources */,
-				845300282A98B9F300CA4529 /* KeychainManager.swift in Sources */,
 				84DB4F9A2A766BEF00C2DD0E /* HomeSelector.swift in Sources */,
 				842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */,
 				842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */,
@@ -623,7 +615,7 @@
 				84DB4F902A739D9100C2DD0E /* Me_Details.swift in Sources */,
 				8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */,
 				849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */,
-				846455D02A9BA517003D023C /* DatabaseCache.swift in Sources */,
+				846455D02A9BA517003D023C /* Caches.swift in Sources */,
 				841E86E12AAB222800B03F37 /* AddDB_CompactMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

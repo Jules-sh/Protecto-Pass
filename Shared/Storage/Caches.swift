@@ -2,7 +2,9 @@
 //  DatabaseCache.swift
 //  Protecto Pass
 //
-//  Created by Julian Schumacher on 27.08.23.
+//  Created by Julian Schumacher as DatabaseCache.swift on 27.08.23.
+//
+//  Renamed by Julian Schumacher to Caches.swift on 09.03.24
 //
 
 import Foundation

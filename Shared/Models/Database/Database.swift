@@ -92,7 +92,7 @@ internal final class Database : GeneralDatabase<SymmetricKey, ToCItem>, Decrypte
     /// If successful, returns the encrypted Database.
     /// Otherwise an error is thrown
     internal func encrypt() throws -> EncryptedDatabase {
-        var encrypter : Encrypter = Encrypter.getInstance(for: self)
+        var encrypter : Encrypter = Encrypter.configure(for: self)
         return try encrypter.encrypt(using: password)
     }
     
@@ -233,7 +233,7 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedToCItem>
     /// If successful, returns the decrypted Database.
     /// Otherwise an error is thrown
     internal func decrypt(using password : String) throws -> Database {
-        var decrypter : Decrypter = Decrypter.getInstance(for: self)
+        var decrypter : Decrypter = Decrypter.configure(for: self)
         return try decrypter.decrypt(using: password)
     }
     

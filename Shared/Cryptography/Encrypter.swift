@@ -21,7 +21,7 @@ internal struct Encrypter {
     private static let chaChaPoly : Encrypter = Encrypter(encryption: .ChaChaPoly)
     
     /// Returns the correct Encrypter for the passed database
-    internal static func getInstance(for db : Database) -> Encrypter {
+    internal static func configure(for db : Database, with password : String) -> Encrypter {
         var encrypter : Encrypter
         if db.header.encryption == .AES256 {
             encrypter = aes256
@@ -30,6 +30,8 @@ internal struct Encrypter {
         } else {
             encrypter = Encrypter(encryption: nil)
         }
+        encrypter.password = password + db.header.salt
+        encrypter.key = db.key
         encrypter.db = db
         return encrypter
     }
@@ -61,8 +63,7 @@ internal struct Encrypter {
     /// throws an error.
     /// See Error for more details
     internal mutating func encrypt(using password : String) throws -> EncryptedDatabase {
-        self.password = password + db!.header.salt
-        key = db!.key
+        // TODO: remove method
         if encryption == .AES256 {
             return try encryptAES()
         } else if encryption == .ChaChaPoly {

@@ -41,12 +41,21 @@ internal struct DatabaseFileManager : DatabaseCache {
             throw NonexistentPathError()
         }
         // TODO: require secure coding is false?
-        let archiver : NSKeyedArchiver = NSKeyedArchiver(requiringSecureCoding: false)
+        let archiver : NSKeyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
         archiver.outputFormat = .binary
+        archiver.requiresSecureCoding = true
         // TODO: update and change key
         try archiver.encodeEncodable(db, forKey: "db")
         for obj in currentDatabaseContent {
-            archiver.encodeEncodable(obj, forKey: obj.id.uuidString)
+            let encrypted : EncryptedDataStructure
+            // TODO: encrypt data here
+            switch obj {
+            case is Folder:
+                break
+            default:
+                break
+            }
+            try archiver.encodeEncodable(encrypted, forKey: obj.id.uuidString)
         }
         archiver.finishEncoding()
         try archiver.encodedData.write(to: url, options: [.atomic, .completeFileProtection])
@@ -64,7 +73,7 @@ internal struct DatabaseFileManager : DatabaseCache {
         }
         return databases
     }
-
+    
     
     /* File specific Implementation */
     
@@ -78,6 +87,7 @@ internal struct DatabaseFileManager : DatabaseCache {
     private static func loadDBContentToSandbox(for filePath : URL) throws -> Void {
         let tempDir : URL = fm.temporaryDirectory
         let fileData : Data = try Data(contentsOf: filePath)
+        let j = JSONEncoder()
         let unarchiver : NSKeyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: fileData)
         let encryptedDB : EncryptedDatabase = unarchiver.decodeDecodable(EncryptedDatabase.self, forKey: "db")!
         let db : Database = encryptedDB.decrypt(using: <#T##String#>)

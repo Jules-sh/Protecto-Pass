@@ -32,7 +32,7 @@ internal struct Decrypter {
     private static let chaChaPoly : Decrypter = Decrypter(encryption: .ChaChaPoly)
     
     /// Returns the correct Decrypter for the passed database
-    internal static func getInstance(for db : EncryptedDatabase) -> Decrypter {
+    internal static func configure(for db : EncryptedDatabase, with password : String) -> Decrypter {
         var decrypter : Decrypter
         if db.header.encryption == .AES256 {
             decrypter = aes256
@@ -41,6 +41,8 @@ internal struct Decrypter {
         } else {
             decrypter = Decrypter(encryption: nil)
         }
+        decrypter.password = password + db.header.salt
+        decrypter.userPassword = password
         decrypter.db = db
         return decrypter
     }
@@ -76,8 +78,7 @@ internal struct Decrypter {
     /// throws an error.
     /// See Error for more details
     internal mutating func decrypt(using password : String) throws -> Database {
-        self.password = password + db!.header.salt
-        userPassword = password
+        // TODO: remove method
         if encryption == .AES256 {
             return try decryptAES()
         } else if encryption == .ChaChaPoly {
@@ -86,6 +87,70 @@ internal struct Decrypter {
             throw CryptoStatus.unknownEncryption
         }
     }
+    
+    // START GENERAL DECRYPTION
+    
+    /// Decrypts the passed Table of Contents Item with the cryptography algorithm this Decrypter is configured for.
+    /// Use the `configure` Method to configure a Decrypted
+    internal func decryptToC(_ toc : EncryptedToCItem) throws -> ToCItem {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES(toc: toc)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly(toc: toc)
+        } else {
+            throw DecryptionError.unknownEncryption
+        }
+    }
+    
+    /// Decrypts the passed Folder with the cryptography algorithm this Decrypter is configured for.
+    /// Use the `configure` Method to configure a Decrypted
+    internal func decryptFolder(_ folder : EncryptedFolder) throws -> Folder {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES(folder: folder)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly(folder: folder)
+        } else {
+            throw DecryptionError.unknownEncryption
+        }
+    }
+    
+    /// Decrypts the passed Entry with the cryptography algorithm this Decrypter is configured for.
+    /// Use the `configure` Method to configure a Decrypted
+    internal func decryptEntry(_ entry : EncryptedEntry) throws -> Entry {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES(entry: entry)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly(entry: entry)
+        } else {
+            throw DecryptionError.unknownEncryption
+        }
+    }
+    
+    /// Decrypts the passed Image with the cryptography algorithm this Decrypter is configured for.
+    /// Use the `configure` Method to configure a Decrypted
+    internal func decryptImage(_ image : Encrypted_DB_Image) throws -> DB_Image {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES(image: image)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly(image: image)
+        } else {
+            throw DecryptionError.unknownEncryption
+        }
+    }
+    
+    /// Decrypts the passed Document with the cryptography algorithm this Decrypter is configured for.
+    /// Use the `configure` Method to configure a Decrypted
+    internal func decryptDocument(_ document : Encrypted_DB_Document) throws -> DB_Document {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES(document: document)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly(document: document)
+        } else {
+            throw DecryptionError.unknownEncryption
+        }
+    }
+    
+    // START AES DECRYPTION
     
     /// Decrypts AES encrypted Databases
     private mutating func decryptAES() throws -> Database {

@@ -11,17 +11,6 @@ import CryptoKit
 import Foundation
 import UIKit
 
-/// The possible errors when decrypting a Database
-internal enum DecryptionError : Error {
-    
-    /// There's been an error unlocking the Database
-    case errUnlocking
-    
-    /// The encryption that was used
-    /// for this Database is unknown
-    case unknownEncryption
-}
-
 /// Decrypter to decrypt a Database and all it's components
 internal struct Decrypter {
     
@@ -91,62 +80,62 @@ internal struct Decrypter {
     // START GENERAL DECRYPTION
     
     /// Decrypts the passed Table of Contents Item with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypted
+    /// Use the `configure` Method to configure a Decrypter
     internal func decryptToC(_ toc : EncryptedToCItem) throws -> ToCItem {
         if db!.header.encryption == .AES256 {
             return try decryptAES(toc: toc)
         } else if db!.header.encryption == .ChaChaPoly {
             return try decryptChaChaPoly(toc: toc)
         } else {
-            throw DecryptionError.unknownEncryption
+            throw CryptoStatus.unknownEncryption
         }
     }
     
     /// Decrypts the passed Folder with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypted
+    /// Use the `configure` Method to configure a Decrypter
     internal func decryptFolder(_ folder : EncryptedFolder) throws -> Folder {
         if db!.header.encryption == .AES256 {
             return try decryptAES(folder: folder)
         } else if db!.header.encryption == .ChaChaPoly {
             return try decryptChaChaPoly(folder: folder)
         } else {
-            throw DecryptionError.unknownEncryption
+            throw CryptoStatus.unknownEncryption
         }
     }
     
     /// Decrypts the passed Entry with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypted
+    /// Use the `configure` Method to configure a Decrypter
     internal func decryptEntry(_ entry : EncryptedEntry) throws -> Entry {
         if db!.header.encryption == .AES256 {
             return try decryptAES(entry: entry)
         } else if db!.header.encryption == .ChaChaPoly {
             return try decryptChaChaPoly(entry: entry)
         } else {
-            throw DecryptionError.unknownEncryption
+            throw CryptoStatus.unknownEncryption
         }
     }
     
     /// Decrypts the passed Image with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypted
+    /// Use the `configure` Method to configure a Decrypter
     internal func decryptImage(_ image : Encrypted_DB_Image) throws -> DB_Image {
         if db!.header.encryption == .AES256 {
             return try decryptAES(image: image)
         } else if db!.header.encryption == .ChaChaPoly {
             return try decryptChaChaPoly(image: image)
         } else {
-            throw DecryptionError.unknownEncryption
+            throw CryptoStatus.unknownEncryption
         }
     }
     
     /// Decrypts the passed Document with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypted
+    /// Use the `configure` Method to configure a Decrypter
     internal func decryptDocument(_ document : Encrypted_DB_Document) throws -> DB_Document {
         if db!.header.encryption == .AES256 {
             return try decryptAES(document: document)
         } else if db!.header.encryption == .ChaChaPoly {
             return try decryptChaChaPoly(document: document)
         } else {
-            throw DecryptionError.unknownEncryption
+            throw CryptoStatus.unknownEncryption
         }
     }
     

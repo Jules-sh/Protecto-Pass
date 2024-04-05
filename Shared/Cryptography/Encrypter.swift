@@ -73,6 +73,68 @@ internal struct Encrypter {
         }
     }
     
+    // START GENERAL ENCRYPTION
+    
+    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func decryptToC(_ toc : ToCItem) throws -> EncryptedToCItem {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(toc: toc)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(toc: toc)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func decryptFolder(_ folder : Folder) throws -> EncryptedFolder {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(folder: folder)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(folder: folder)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func decryptEntry(_ entry : Entry) throws -> EncryptedEntry {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(entry: entry)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(entry: entry)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func decryptImage(_ image : DB_Image) throws -> Encrypted_DB_Image {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(image: image)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(image: image)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func decryptDocument(_ document : DB_Document) throws -> Encrypted_DB_Document {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(document: document)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(document: document)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
     // START AES ENCRYPTION
     
     /// Encrypts Databases with AES

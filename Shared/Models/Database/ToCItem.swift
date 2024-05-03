@@ -14,17 +14,17 @@ internal enum ContentType : String, RawRepresentable {
     case document
 }
 
-internal class GeneralToCItem<D, C, I, S> {
+internal class GeneralToCItem<D, S> {
     
     internal var name : D
     
-    internal var type : C
+    internal var type : ContentType
     
-    internal var id : I
+    internal var id : UUID
     
     internal var children : [S]
     
-    internal init(name: D, type: C, id: I, children : [S]) {
+    internal init(name: D, type: ContentType, id: UUID, children : [S]) {
         self.name = name
         self.type = type
         self.id = id
@@ -33,7 +33,7 @@ internal class GeneralToCItem<D, C, I, S> {
 }
 
 
-internal final class ToCItem : GeneralToCItem<String, ContentType, UUID, ToCItem>, DecryptedDataStructure {
+internal final class ToCItem : GeneralToCItem<String, ToCItem>, DecryptedDataStructure {
     
     static func == (lhs: ToCItem, rhs: ToCItem) -> Bool {
         return lhs.name == rhs.name && lhs.type == rhs.type && lhs.id == rhs.id
@@ -47,7 +47,7 @@ internal final class ToCItem : GeneralToCItem<String, ContentType, UUID, ToCItem
     }
 }
 
-internal final class EncryptedToCItem : GeneralToCItem<Data, Data, Data, EncryptedToCItem>, EncryptedDataStructure {
+internal final class EncryptedToCItem : GeneralToCItem<Data, EncryptedToCItem>, EncryptedDataStructure {
     enum ToCItemCodingKeys: CodingKey {
         case name
         case type
@@ -58,7 +58,7 @@ internal final class EncryptedToCItem : GeneralToCItem<Data, Data, Data, Encrypt
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: ToCItemCodingKeys.self)
         try container.encode(name, forKey: .name)
-        try container.encode(type, forKey: .type)
+        try container.encode(type.rawValue, forKey: .type)
         try container.encode(id, forKey: .id)
     }
     
@@ -66,8 +66,8 @@ internal final class EncryptedToCItem : GeneralToCItem<Data, Data, Data, Encrypt
         let container = try decoder.container(keyedBy: ToCItemCodingKeys.self)
         self.init(
             name: try container.decode(Data.self, forKey: .name),
-            type: try container.decode(Data.self, forKey: .type),
-            id: try container.decode(Data.self, forKey: .id),
+            type: ContentType(rawValue: try container.decode(String.self, forKey: .type))!,
+            id: try container.decode(UUID.self, forKey: .id),
             children: try container.decode([EncryptedToCItem].self, forKey: .children)
         )
     }
@@ -79,7 +79,7 @@ internal final class EncryptedToCItem : GeneralToCItem<Data, Data, Data, Encrypt
         }
         self.init(
             name: coreData.name!,
-            type: coreData.type!,
+            type: ContentType(rawValue: coreData.type!)!,
             id: coreData.uuid!,
             children: localContents
         )

@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-internal class GeneralFolder<DA, DE, I> : ME_DataStructure<DA, DE, I> {}
+internal class GeneralFolder<DA, DE> : ME_DataStructure<DA, DE> {}
 
 /// The Folder Object that is used when the App is running
-internal final class Folder : GeneralFolder<String, Date, UUID>, DecryptedDataStructure {
+internal final class Folder : GeneralFolder<String, Date>, DecryptedDataStructure {
     
     /// An static preview folder with sample data to use in Previews and Tests
     internal static let previewFolder : Folder = Folder(
@@ -38,7 +38,7 @@ internal final class Folder : GeneralFolder<String, Date, UUID>, DecryptedDataSt
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, Data, Data>, EncryptedDataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
@@ -46,7 +46,7 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, Data>, Encrypte
         iconName : Data,
         created : Data,
         lastEdited : Data,
-        id: Data
+        id: UUID
     ) {
         super.init(
             name: name,
@@ -85,7 +85,7 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data, Data>, Encrypte
             iconName: try container.decode(Data.self, forKey: .iconName),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
-            id: try container.decode(Data.self, forKey: .id)
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     

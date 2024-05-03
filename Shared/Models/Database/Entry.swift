@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
+internal class GeneralEntry<DA, U, DE> : NativeType<DE, DA> {
     
     /// The Title of this Entry
     internal let title : DA
@@ -35,7 +35,7 @@ internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
         iconName : DA,
         created : DE,
         lastEdited : DE,
-        id : I
+        id : UUID
     ) {
         self.title = title
         self.username = username
@@ -53,7 +53,7 @@ internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDataStructure {
+internal final class Entry : GeneralEntry<String, URL?, Date>, DecryptedDataStructure {
     
     internal static let previewEntry : Entry = Entry(
         title: "Password Safe",
@@ -92,7 +92,7 @@ internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDa
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, EncryptedDataStructure {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -103,7 +103,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
         iconName : Data,
         created : Data,
         lastEdited : Data,
-        id : Data
+        id : UUID
     ) {
         super.init(
             title: title,
@@ -154,7 +154,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
             iconName: try container.decode(Data.self, forKey: .iconName),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
-            id: try container.decode(Data.self, forKey: .id)
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     
@@ -168,7 +168,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
             iconName: coreData.iconName!,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!,
-            id: coreData.uuid!
+            id: DataConverter.dataToUUID(coreData.uuid!)
         )
     }
 }

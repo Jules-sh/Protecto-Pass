@@ -21,7 +21,7 @@ internal struct Encrypter {
     private static let chaChaPoly : Encrypter = Encrypter(encryption: .ChaChaPoly)
     
     /// Returns the correct Encrypter for the passed database
-    internal static func configure(for db : Database, with password : String) -> Encrypter {
+    internal static func configure(for db : Database) -> Encrypter {
         var encrypter : Encrypter
         if db.header.encryption == .AES256 {
             encrypter = aes256
@@ -30,7 +30,7 @@ internal struct Encrypter {
         } else {
             encrypter = Encrypter(encryption: nil)
         }
-        encrypter.password = password + db.header.salt
+        encrypter.password = db.password + db.header.salt
         encrypter.key = db.key
         encrypter.db = db
         return encrypter
@@ -39,6 +39,7 @@ internal struct Encrypter {
     /// The Encryption that is used for this Encrypter
     private let encryption : Cryptography.Encryption?
     
+    //
     /// The Database that should be encrypted.
     /// This is passed with the encrypt Method,
     /// and is used by the private methods
@@ -57,27 +58,15 @@ internal struct Encrypter {
         self.encryption = encryption
     }
     
-    /// Encrypts the Database this Encrypter is configured for,
-    /// using the getInstance method and passing your Database.
-    /// Returns the encrypted Database if it could be encrypted, otherwise
-    /// throws an error.
-    /// See Error for more details
-    internal mutating func encrypt(using password : String) throws -> EncryptedDatabase {
-        // TODO: remove method
-        if encryption == .AES256 {
-            return try encryptAES()
-        } else if encryption == .ChaChaPoly {
-            return try encryptChaChaPoly()
-        } else {
-            throw CryptoStatus.unknownEncryption
-        }
-    }
-    
     // START GENERAL ENCRYPTION
+    
+    internal func encryptDatabase(_ db : Database) throws -> EncryptedDatabase {
+        // TODO: implement function
+    }
     
     /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
-    internal func decryptToC(_ toc : ToCItem) throws -> EncryptedToCItem {
+    internal func encryptToC(_ toc : ToCItem) throws -> EncryptedToCItem {
         if db!.header.encryption == .AES256 {
             return try encryptAES(toc: toc)
         } else if db!.header.encryption == .ChaChaPoly {
@@ -89,7 +78,7 @@ internal struct Encrypter {
     
     /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
-    internal func decryptFolder(_ folder : Folder) throws -> EncryptedFolder {
+    internal func encryptFolder(_ folder : Folder) throws -> EncryptedFolder {
         if db!.header.encryption == .AES256 {
             return try encryptAES(folder: folder)
         } else if db!.header.encryption == .ChaChaPoly {
@@ -101,7 +90,7 @@ internal struct Encrypter {
     
     /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
-    internal func decryptEntry(_ entry : Entry) throws -> EncryptedEntry {
+    internal func encryptEntry(_ entry : Entry) throws -> EncryptedEntry {
         if db!.header.encryption == .AES256 {
             return try encryptAES(entry: entry)
         } else if db!.header.encryption == .ChaChaPoly {
@@ -113,7 +102,7 @@ internal struct Encrypter {
     
     /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
-    internal func decryptImage(_ image : DB_Image) throws -> Encrypted_DB_Image {
+    internal func encryptImage(_ image : DB_Image) throws -> Encrypted_DB_Image {
         if db!.header.encryption == .AES256 {
             return try encryptAES(image: image)
         } else if db!.header.encryption == .ChaChaPoly {
@@ -125,7 +114,7 @@ internal struct Encrypter {
     
     /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
-    internal func decryptDocument(_ document : DB_Document) throws -> Encrypted_DB_Document {
+    internal func encryptDocument(_ document : DB_Document) throws -> Encrypted_DB_Document {
         if db!.header.encryption == .AES256 {
             return try encryptAES(document: document)
         } else if db!.header.encryption == .ChaChaPoly {
@@ -137,6 +126,7 @@ internal struct Encrypter {
     
     // START AES ENCRYPTION
     
+    // TODO: update function
     /// Encrypts Databases with AES
     /// Throws an Error if something went wrong
     private func encryptAES() throws -> EncryptedDatabase {
@@ -175,22 +165,14 @@ internal struct Encrypter {
             DataConverter.stringToData(toc.name),
             using: key!
         ).combined!
-        let encryptedType : Data = try AES.GCM.seal(
-            DataConverter.stringToData(toc.type.rawValue),
-            using: key!
-        ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(toc.id.uuidString),
-            using: key!
-        ).combined!
         var encryptedChildren : [EncryptedToCItem] = []
         for child in toc.children {
             encryptedChildren.append(try encryptAES(toc: child))
         }
         return EncryptedToCItem(
             name: encryptedName,
-            type: encryptedType,
-            id: encryptedID,
+            type: toc.type,
+            id: toc.id,
             children: encryptedChildren
         )
     }
@@ -218,17 +200,13 @@ internal struct Encrypter {
             DataConverter.dateToData(folder.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(folder.id.uuidString),
-            using: key!
-        ).combined!
         return EncryptedFolder(
             name: encryptedName,
             description: encryptedDescription,
             iconName: encryptedIconName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: folder.id
         )
     }
     
@@ -266,10 +244,6 @@ internal struct Encrypter {
             DataConverter.dateToData(entry.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(entry.id.uuidString),
-            using: key!
-        ).combined!
         return EncryptedEntry(
             title: encryptedTitle,
             username: encryptedUsername,
@@ -279,7 +253,7 @@ internal struct Encrypter {
             iconName: encryptedIconName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: entry.id
         )
     }
     
@@ -303,16 +277,12 @@ internal struct Encrypter {
             DataConverter.dateToData(image.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(image.id.uuidString),
-            using: key!
-        ).combined!
         return Encrypted_DB_Image(
             image: encryptedImageData,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: image.id
         )
     }
     
@@ -335,16 +305,12 @@ internal struct Encrypter {
             DataConverter.dateToData(document.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(document.id.uuidString),
-            using: key!
-        ).combined!
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: document.id
         )
     }
     
@@ -390,22 +356,14 @@ internal struct Encrypter {
             DataConverter.stringToData(toc.name),
             using: key!
         ).combined
-        let encryptedType : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(toc.type.rawValue),
-            using: key!
-        ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(toc.id.uuidString),
-            using: key!
-        ).combined
         var encryptedChildren : [EncryptedToCItem] = []
         for child in toc.children {
             encryptedChildren.append(try encryptChaChaPoly(toc: child))
         }
         return EncryptedToCItem(
             name: encryptedName,
-            type: encryptedType,
-            id: encryptedID,
+            type: toc.type,
+            id: toc.id,
             children: encryptedChildren
         )
     }
@@ -434,17 +392,13 @@ internal struct Encrypter {
             DataConverter.dateToData(folder.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(folder.id.uuidString),
-            using: key!
-        ).combined
         return EncryptedFolder(
             name: encryptedName,
             description: encryptedDescription,
             iconName: encryptedIconName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: folder.id
         )
     }
     
@@ -495,7 +449,7 @@ internal struct Encrypter {
             iconName: encryptedIconName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: entry.id
         )
     }
     
@@ -519,16 +473,12 @@ internal struct Encrypter {
             DataConverter.dateToData(image.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(image.id.uuidString),
-            using: key!
-        ).combined
         return Encrypted_DB_Image(
             image: encryptedImageData,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: image.id
         )
     }
     
@@ -551,16 +501,12 @@ internal struct Encrypter {
             DataConverter.dateToData(document.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(document.id.uuidString),
-            using: key!
-        ).combined
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: document.id
         )
     }
 }

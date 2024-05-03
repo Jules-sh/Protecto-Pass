@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		840BF75D2AA498ED00DF2A3C /* NonexistendPathError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */; };
 		840BF75F2AA4ABA900DF2A3C /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840BF75E2AA4ABA900DF2A3C /* PasswordField.swift */; };
+		840EA3692BC47F27007BC214 /* SandboxManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840EA3682BC47F27007BC214 /* SandboxManager.swift */; };
 		841E86E12AAB222800B03F37 /* AddDB_CompactMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */; };
 		842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */; };
 		842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* Welcome.swift */; };
@@ -83,6 +84,7 @@
 /* Begin PBXFileReference section */
 		840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonexistendPathError.swift; sourceTree = "<group>"; };
 		840BF75E2AA4ABA900DF2A3C /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
+		840EA3682BC47F27007BC214 /* SandboxManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandboxManager.swift; sourceTree = "<group>"; };
 		841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_CompactMode.swift; sourceTree = "<group>"; };
 		842EAC6729D832670014C8F8 /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				845300292A98BA9200CA4529 /* CoreDataManager.swift */,
 				846455CF2A9BA517003D023C /* Caches.swift */,
 				840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */,
+				840EA3682BC47F27007BC214 /* SandboxManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -597,6 +600,7 @@
 				8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */,
 				84F8850C2A07F7A000B35956 /* Encrypter.swift in Sources */,
 				84F4207529EEA0F2000D7600 /* Folder.swift in Sources */,
+				840EA3692BC47F27007BC214 /* SandboxManager.swift in Sources */,
 				84ACC7A42A6AB8130033E83A /* AddDB_Navigation.swift in Sources */,
 				84E4C51B2A276107005D793F /* AddDB_Overview.swift in Sources */,
 				84F4207629EEA0F2000D7600 /* Entry.swift in Sources */,

@@ -16,19 +16,12 @@ internal protocol DatabaseCache {
     
     associatedtype Database
     
-    /// The cache itself
-    static var allDatabases : [Database] { get }
-    
     /// Returns the database with the matching id, if it exists in the cache,
     /// otherwise throws an Error
     static func accessCache(id : UUID) throws -> Database
     
-    /// Updates/replaces the database in the cache with the matching id, with the
-    /// new provided Database
-    static func update(id : UUID, with new : Database) -> Void
-    
     /// Returns whether the database exists in this cache or not
-    static func databaseExists(id : UUID) -> Bool
+    static func databaseExists(id : UUID) throws -> Bool
 }
 
 /// Error thrown when the Cache tries to access a Database

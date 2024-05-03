@@ -56,7 +56,7 @@ internal struct DB_Converter : DatabaseConverterProtocol {
         cdDB.header = encrypted.header.parseHeader()
         cdDB.key = encrypted.key
         cdDB.allowBiometrics = encrypted.allowBiometrics
-        cdDB.uuid = DataConverter.uuidToData(encrypted.id)
+        cdDB.uuid = encrypted.id
         return cdDB
     }
 }
@@ -70,7 +70,7 @@ internal struct ToC_Converter : DatabaseConverterProtocol {
     static func toCD(_ encrypted: EncryptedToCItem, context: NSManagedObjectContext) -> CD_ToCItem {
         let cdToC : CD_ToCItem = CD_ToCItem(context: context)
         cdToC.name = encrypted.name
-        cdToC.type = encrypted.type
+        cdToC.type = encrypted.type.rawValue
         cdToC.uuid = encrypted.id
         return cdToC
     }

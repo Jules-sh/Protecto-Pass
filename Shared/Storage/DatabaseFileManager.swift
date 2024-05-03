@@ -15,9 +15,7 @@ import CoreData
 /// this safe to be stored as a file
 internal struct DatabaseFileManager : DatabaseCache {
     
-    internal static var allDatabases: [EncryptedDatabase] = []
-    
-    internal static var currentDatabaseContent : [DatabaseContent<Date, UUID>] = []
+    internal static var paths: [URL] = []
     
     internal static func accessCache(id: UUID) throws -> EncryptedDatabase {
         if databaseExists(id: id) {
@@ -27,42 +25,11 @@ internal struct DatabaseFileManager : DatabaseCache {
         }
     }
     
-    internal static func update(id: UUID, with new: EncryptedDatabase) {
-        allDatabases.removeAll(where: { $0.id == id })
-        allDatabases.append(new)
-    }
-    
     internal static func databaseExists(id: UUID) -> Bool {
         return allDatabases.contains(where: { $0.id == id })
     }
     
-    internal static func storeDatabase(_ db : EncryptedDatabase) throws -> Void {
-        guard let url : URL = db.header.path else {
-            throw NonexistentPathError()
-        }
-        // TODO: require secure coding is false?
-        let archiver : NSKeyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
-        archiver.outputFormat = .binary
-        archiver.requiresSecureCoding = true
-        // TODO: update and change key
-        try archiver.encodeEncodable(db, forKey: "db")
-        for obj in currentDatabaseContent {
-            let encrypted : EncryptedDataStructure
-            // TODO: encrypt data here
-            switch obj {
-            case is Folder:
-                break
-            default:
-                break
-            }
-            try archiver.encodeEncodable(encrypted, forKey: obj.id.uuidString)
-        }
-        archiver.finishEncoding()
-        try archiver.encodedData.write(to: url, options: [.atomic, .completeFileProtection])
-        update(id: db.id, with: db)
-    }
-    
-    internal static func load(with paths : [URL]) throws -> [EncryptedDatabase] {
+    internal static func load(from paths : [URL]) throws -> [EncryptedDatabase] {
         //TODO: Sort for iCloud and not
         var databases : [EncryptedDatabase] = []
         let jsonDecoder : JSONDecoder = JSONDecoder()
@@ -74,22 +41,57 @@ internal struct DatabaseFileManager : DatabaseCache {
         return databases
     }
     
-    
-    /* File specific Implementation */
-    
-    private static let fm : FileManager = FileManager.default
-    
-    internal static func loadDatabaseContent(for filePath : URL) throws -> Void {
+    internal static func storeDatabase(_ db : EncryptedDatabase, newElements : [ DatabaseContent<Data>] = []) throws -> Void {
+        guard let url : URL = db.header.path else {
+            throw NonexistentPathError()
+        }
+        // TODO: requires secure coding?
+        let unarchiver : NSKeyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: NSData(contentsOf: url)!.decompressed(using: .lzfse) as Data)
+        unarchiver.requiresSecureCoding = true
+        unarchiver.decodingFailurePolicy = .raiseException
+        let archiver : NSKeyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
+        archiver.outputFormat = .binary
+        archiver.requiresSecureCoding = true
+        try archiver.encodeEncodable(db, forKey: "db")
         
+        // Copy file
+        
+        // Check if element already exists
+        for element in newElements {
+            if unarchiver.decodeDecodable(element.self, forKey: element.id.uuidString) != nil {
+                archiver.encodeEncodable(element, forKey: element.id)
+            }
+            // Element does not exist => is new element
+            // Add ToC Element to Contents of Database File? Or already done when adding?
+            let encryptedToC : EncryptedToCItem = EncryptedToCItem(name: <#T##Data#>, type: <#T##ContentType#>, id: <#T##UUID#>, children: <#T##[EncryptedToCItem]#>)
+            db.contents.append(<#T##newElement: EncryptedToCItem##EncryptedToCItem#>)
+        }
+        
+        for toc in db.contents {
+            let entity : DatabaseContent<Data>
+            switch toc.type {
+            case .entry:
+                entity = unarchiver.decodeDecodable(EncryptedEntry.self, forKey: toc.id.uuidString)!
+            case .folder:
+                entity = unarchiver.decodeDecodable(EncryptedFolder.self, forKey: toc.id.uuidString)!
+            case .document:
+                entity = unarchiver.decodeDecodable(Encrypted_DB_Document.self, forKey: toc.id.uuidString)!
+            case .image:
+                entity = unarchiver.decodeDecodable(Encrypted_DB_Image.self, forKey: toc.id.uuidString)!
+            default:
+                continue
+            }
+            if let newEntity = newElements.first(where: { $0.id == entity.id }) {
+                entity = newEntity
+            }
+            try archiver.encodeEncodable(entity, forKey: toc.id.uuidString)
+        }
+        archiver.finishEncoding()
+        try (archiver.encodedData as NSData).compressed(using: .lzfse).write(to: url, options: [.atomic, .completeFileProtection])
     }
     
-    /// Loads the content of the specified Database to the App Documents Directory
-    private static func loadDBContentToSandbox(for filePath : URL) throws -> Void {
-        let tempDir : URL = fm.temporaryDirectory
-        let fileData : Data = try Data(contentsOf: filePath)
-        let j = JSONEncoder()
-        let unarchiver : NSKeyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: fileData)
-        let encryptedDB : EncryptedDatabase = unarchiver.decodeDecodable(EncryptedDatabase.self, forKey: "db")!
-        let db : Database = encryptedDB.decrypt(using: <#T##String#>)
+    // TODO: change to either 'id' or 'path'. Path is better, because it actually represents the location of the database, rather than its id which has to be searched
+    internal static func deleteDatabase(_ id : UUID? = nil, at path : URL? = nil) {
+        
     }
 }

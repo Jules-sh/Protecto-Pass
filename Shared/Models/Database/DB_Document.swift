@@ -8,7 +8,7 @@
 import Foundation
 
 /// Generalised Document class
-internal class GeneralDocument<T, De, I> : DatabaseContent<De, I> {
+internal class GeneralDocument<T, De> : DatabaseContent<De> {
     
     /// Document Data read from this Document
     internal let document : Data
@@ -21,7 +21,7 @@ internal class GeneralDocument<T, De, I> : DatabaseContent<De, I> {
         type: T,
         created : De,
         lastEdited : De,
-        id : I
+        id : UUID
     ) {
         self.document = document
         self.type = type
@@ -31,7 +31,7 @@ internal class GeneralDocument<T, De, I> : DatabaseContent<De, I> {
 
 
 /// Decrypted Document to use in the decrypted Database
-internal final class DB_Document : GeneralDocument<String, Date, UUID>, DecryptedDataStructure {
+internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataStructure {
     
     internal static func == (lhs: DB_Document, rhs: DB_Document) -> Bool {
         return lhs.document == rhs.document && lhs.type == rhs.type && lhs.id == rhs.id
@@ -45,14 +45,14 @@ internal final class DB_Document : GeneralDocument<String, Date, UUID>, Decrypte
 }
 
 /// Encrypted Document type storing the encrypted values
-internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, EncryptedDataStructure {
+internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, EncryptedDataStructure {
     
     override internal init(
         document: Data,
         type: Data,
         created : Data,
         lastEdited : Data,
-        id : Data
+        id : UUID
     ) {
         super.init(
             document: document,
@@ -87,7 +87,7 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, 
             type: try container.decode(Data.self, forKey: .type),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
-            id: try container.decode(Data.self, forKey: .id)
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     

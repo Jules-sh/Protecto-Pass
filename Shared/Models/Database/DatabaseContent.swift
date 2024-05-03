@@ -9,7 +9,7 @@ import Foundation
 
 /// The Super class of most Database Content Objects
 /// that are stored within the App
-internal class DatabaseContent<D, I> {
+internal class DatabaseContent<D> {
     
     /// The Date of creation for this Object
     internal let created : D
@@ -18,12 +18,12 @@ internal class DatabaseContent<D, I> {
     /// Object was edited the last time
     internal var lastEdited : D
     
-    internal var id : I
+    internal var id : UUID
     
     internal init(
         created : D,
         lastEdited : D,
-        id : I
+        id : UUID
     ) {
         self.created = created
         self.lastEdited = lastEdited

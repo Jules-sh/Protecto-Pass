@@ -26,18 +26,7 @@ internal struct Storage {
         case File
     }
     
-    /// Stores the passed Database to the right Storage.
-    /// if you want to store something in Core Data, the connected context has to be provided.
-    internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?) throws -> Void {
-        let database : EncryptedDatabase = try db.encrypt()
-        switch db.header.storageType {
-        case .CoreData:
-            assert(context != nil, "To store Core Data Databases, a Context must be provided to the storeDatabase Function")
-            try CoreDataManager.storeDatabase(database, context: context!)
-        case .File:
-            try DatabaseFileManager.storeDatabase(database)
-        }
-    }
+    internal static var currentDB : Database?
     
     /// Loads all the Databases from the different Storage Options
     internal static func load(with context : NSManagedObjectContext, and paths : [URL]) throws -> [EncryptedDatabase] {
@@ -46,12 +35,51 @@ internal struct Storage {
         let coreData : [EncryptedDatabase] = try CoreDataManager.load(with: context)
         result.append(contentsOf: coreData)
         // File System
-        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(with: paths)
+        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(from: paths)
         result.append(contentsOf: fileSystem)
         result.sort(by: { $0.lastEdited < $1.lastEdited })
         return result
     }
-
+    
+    /// Stores the passed Database to the right Storage.
+    /// if you want to store something in Core Data, the connected context has to be provided.
+    internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?, newElements : [DatabaseContent<Date>]) throws -> Void {
+        let encrypter : Encrypter = Encrypter.configure(for: db)
+        let database : EncryptedDatabase = try encrypter.encryptDatabase(db)
+        var encryptedElements : [DatabaseContent<Data>] = []
+        for element in newElements {
+            let encrypted : DatabaseContent<Data>
+            switch element {
+            case is Entry:
+                encrypted = try encrypter.encryptEntry(element as! Entry)
+            case is Folder:
+                encrypted = try encrypter.encryptFolder(element as! Folder)
+            case is DB_Document:
+                encrypted = try encrypter.encryptDocument(element as! DB_Document)
+            case is DB_Image:
+                encrypted = try encrypter.encryptImage(element as! DB_Image)
+            default:
+                continue
+            }
+            encryptedElements.append(encrypted)
+        }
+        switch db.header.storageType {
+        case .CoreData:
+            assert(context != nil, "To store Core Data Databases, a Context must be provided to the storeDatabase Function")
+            try CoreDataManager.storeDatabase(database,
+                                              context: context!,
+                                              newElements: encryptedElements
+            )
+        case .File:
+            try DatabaseFileManager.storeDatabase(database, newElements: encryptedElements)
+        }
+    }
+    
+    /// Stores the currently opened and used Database
+    internal static func storeCurrentDatabase() -> Void {
+        
+    }
+    
     /// Resets all Data of this App and the connected Cloud Container
     internal static func clearAll() -> Void {
         // TODO: implement

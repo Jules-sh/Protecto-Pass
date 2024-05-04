@@ -12,7 +12,7 @@ import UIKit
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<K, T, F, E> : ME_DataStructure<String, Date, F, E>, Identifiable {
+internal class GeneralDatabase<K, F, E> : ME_DataStructure<String, Date, F, E>, Identifiable {
     
     /// The Header for this Database
     internal let header : DB_Header
@@ -54,7 +54,7 @@ internal class GeneralDatabase<K, T, F, E> : ME_DataStructure<String, Date, F, E
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<SymmetricKey, ToCItem, Folder, Entry>, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry>, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -135,7 +135,7 @@ internal final class Database : GeneralDatabase<SymmetricKey, ToCItem, Folder, E
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedToCItem, EncryptedFolder, EncryptedEntry>, EncryptedDataStructure {
+internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, EncryptedEntry>, EncryptedDataStructure {
     
     override internal init(
         name: String,
@@ -216,13 +216,14 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedToCItem,
         for folder in coreData.folders! {
             
         }
-        var localContents : [EncryptedToCItem] = []
-        for toc in coreData.contents! {
-            localContents.append(EncryptedToCItem(from: toc as! CD_ToCItem))
+        var localEntries : [EncryptedEntry] = []
+        for entry in coreData.entries! {
         }
         self.init(
             name: DataConverter.dataToString(coreData.name!),
             description: DataConverter.dataToString(coreData.objectDescription),
+            folders: localFolders,
+            entries: localEntries,
             iconName: DataConverter.dataToString(coreData.iconName!),
             created: try DataConverter.dataToDate(coreData.created!),
             lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23E224" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="AppData" representedClassName="AppData" syncable="YES" codeGenerationType="class">
         <relationship name="paths" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="DB_Path" inverseName="appData" inverseEntity="DB_Path"/>
     </entity>
@@ -32,25 +32,25 @@
         <attribute name="compressionQuality" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
     </entity>
-    <entity name="CD_LoadableRessource" representedClassName="CD_LoadableRessource" syncable="YES" codeGenerationType="class">
+    <entity name="CD_LoadableResource" representedClassName="CD_LoadableResource" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <relationship name="parentDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="documents" inverseEntity="CD_ME_DataStructure"/>
+        <relationship name="parentDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_NativeType" inverseName="documents" inverseEntity="CD_NativeType"/>
         <relationship name="parentImage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="images" inverseEntity="CD_ME_DataStructure"/>
         <relationship name="parentVideo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="videos" inverseEntity="CD_ME_DataStructure"/>
     </entity>
     <entity name="CD_ME_DataStructure" representedClassName="CD_ME_DataStructure" isAbstract="YES" parentEntity="CD_NativeType" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="objectDescription" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_LoadableRessource" inverseName="parentDocument" inverseEntity="CD_LoadableRessource"/>
         <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Entry" inverseName="parent" inverseEntity="CD_Entry"/>
         <relationship name="folders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_Folder" inverseName="parent" inverseEntity="CD_Folder"/>
-        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_LoadableRessource" inverseName="parentImage" inverseEntity="CD_LoadableRessource"/>
-        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_LoadableRessource" inverseName="parentVideo" inverseEntity="CD_LoadableRessource"/>
+        <relationship name="images" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_LoadableResource" inverseName="parentImage" inverseEntity="CD_LoadableResource"/>
+        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_LoadableResource" inverseName="parentVideo" inverseEntity="CD_LoadableResource"/>
     </entity>
     <entity name="CD_NativeType" representedClassName="CD_NativeType" isAbstract="YES" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="iconName" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <relationship name="documents" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_LoadableResource" inverseName="parentDocument" inverseEntity="CD_LoadableResource"/>
     </entity>
     <entity name="CD_Video" representedClassName="CD_Video" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="videoData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>

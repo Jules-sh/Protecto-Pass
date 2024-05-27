@@ -1,5 +1,5 @@
 //
-//  LoadableRessource.swift
+//  LoadableResource.swift
 //  Protecto Pass
 //
 //  Created by Julian Schumacher on 04.05.24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal class GeneralLoadableRessource<N> {
+internal class GeneralLoadableResource<N> {
     
     internal init(id: UUID, name: N, thumbnailData: Data) {
         self.id = id
@@ -22,10 +22,10 @@ internal class GeneralLoadableRessource<N> {
     internal let thumbnailData : Data
 }
 
-internal final class LoadableRessource : GeneralLoadableRessource<String> {
+internal final class LoadableResource : GeneralLoadableResource<String> {
     
 }
 
-internal final class EncryptedLoadableRessource : GeneralLoadableRessource<Data> {
+internal final class EncryptedLoadableResource : GeneralLoadableResource<Data> {
     
 }

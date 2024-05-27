@@ -168,7 +168,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data>, EncryptedD
             iconName: coreData.iconName!,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!,
-            id: DataConverter.dataToUUID(coreData.uuid!)
+            id: coreData.uuid!
         )
     }
 }

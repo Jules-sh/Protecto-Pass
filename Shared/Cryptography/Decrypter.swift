@@ -63,30 +63,6 @@ internal struct Decrypter {
     
     // START GENERAL DECRYPTION
     
-    /// Decrypts the passed Folder with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypter
-    internal func decryptFolder(_ folder : EncryptedFolder) throws -> Folder {
-        if db!.header.encryption == .AES256 {
-            return try decryptAES(folder: folder)
-        } else if db!.header.encryption == .ChaChaPoly {
-            return try decryptChaChaPoly(folder: folder)
-        } else {
-            throw CryptoStatus.unknownEncryption
-        }
-    }
-    
-    /// Decrypts the passed Entry with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypter
-    internal func decryptEntry(_ entry : EncryptedEntry) throws -> Entry {
-        if db!.header.encryption == .AES256 {
-            return try decryptAES(entry: entry)
-        } else if db!.header.encryption == .ChaChaPoly {
-            return try decryptChaChaPoly(entry: entry)
-        } else {
-            throw CryptoStatus.unknownEncryption
-        }
-    }
-    
     /// Decrypts the passed Image with the cryptography algorithm this Decrypter is configured for.
     /// Use the `configure` Method to configure a Decrypter
     internal func decryptImage(_ image : Encrypted_DB_Image) throws -> DB_Image {
@@ -128,10 +104,35 @@ internal struct Decrypter {
     /// Decrypts AES encrypted Databases
     private mutating func decryptAES() throws -> Database {
         key = try decryptAESKey()
+        var decryptedFolders : [Folder] = []
+        for folder in db!.folders {
+            decryptedFolders.append(try decryptAES(folder: folder))
+        }
+        var decryptedEntries : [Entry] = []
+        for entry in db!.entries {
+            decryptedEntries.append(try decryptAES(entry: entry))
+        }
+        var decryptedImages : [LoadableResource] = []
+        for image in db!.images {
+            decryptedImages.append(try decryptAES(lr: image))
+        }
+        var decryptedVideos : [LoadableResource] = []
+        for video in db!.videos {
+            decryptedVideos.append(try decryptAES(lr: video))
+        }
+        var decryptedDocuments : [LoadableResource] = []
+        for doc in db!.documents {
+            decryptedDocuments.append(try decryptAES(lr: doc))
+        }
         return Database(
             name: db!.name,
             description: db!.description,
+            folders: decryptedFolders,
+            entries: decryptedEntries,
+            images: decryptedImages,
+            videos: decryptedVideos,
             iconName: db!.iconName,
+            documents: decryptedDocuments,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -153,6 +154,26 @@ internal struct Decrypter {
     
     /// Decrypts the passed Folder using AES and returns an decrypted Folder
     private func decryptAES(folder : EncryptedFolder) throws -> Folder {
+        var decryptedFolders : [Folder] = []
+        for folder in folder.folders {
+            decryptedFolders.append(try decryptAES(folder: folder))
+        }
+        var decryptedEntries : [Entry] = []
+        for entry in folder.entries {
+            decryptedEntries.append(try decryptAES(entry: entry))
+        }
+        var decryptedImages : [LoadableResource] = []
+        for image in folder.images {
+            decryptedImages.append(try decryptAES(lr: image))
+        }
+        var decryptedVideos : [LoadableResource] = []
+        for video in folder.videos {
+            decryptedVideos.append(try decryptAES(lr: video))
+        }
+        var decryptedDocuments : [LoadableResource] = []
+        for doc in folder.documents {
+            decryptedDocuments.append(try decryptAES(lr: doc))
+        }
         let decryptedName : Data = try AES.GCM.open(
             try AES.GCM.SealedBox(combined: folder.name),
             using: key!
@@ -176,7 +197,12 @@ internal struct Decrypter {
         return Folder(
             name: DataConverter.dataToString(decryptedName),
             description: DataConverter.dataToString(decryptedDescription),
+            folders: decryptedFolders,
+            entries: decryptedEntries,
+            images: decryptedImages,
+            videos: decryptedVideos,
             iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: folder.id
@@ -185,6 +211,10 @@ internal struct Decrypter {
     
     /// Decrypts the passed Entry using AES and returns and decrypted Entry
     private func decryptAES(entry : EncryptedEntry) throws -> Entry {
+        var decryptedDocuments : [LoadableResource] = []
+        for doc in entry.documents {
+            decryptedDocuments.append(try decryptAES(lr: doc))
+        }
         let decryptedTitle : Data = try AES.GCM.open(
             try AES.GCM.SealedBox(combined: entry.title),
             using: key!
@@ -224,6 +254,7 @@ internal struct Decrypter {
             url: URL(string: DataConverter.dataToString(decryptedURL)),
             notes: DataConverter.dataToString(decryptedNotes),
             iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: entry.id
@@ -308,6 +339,23 @@ internal struct Decrypter {
         )
     }
     
+    /// Decrypts the passed Loadable Resource using AES and returns a decrypted Loadable Resource
+    private func decryptAES(lr : EncryptedLoadableResource) throws -> LoadableResource {
+        let decryptedNameData : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: lr.name),
+            using: key!
+        )
+        let decryptedThumbnailData : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: lr.thumbnailData),
+            using: key!
+        )
+        return LoadableResource(
+            id: lr.id,
+            name: DataConverter.dataToString(decryptedNameData),
+            thumbnailData: decryptedThumbnailData
+        )
+    }
+    
     
     // START ChaChaPoly DECRYPTION
     
@@ -315,10 +363,35 @@ internal struct Decrypter {
     /// Throws an Error if something went wrong
     private mutating func decryptChaChaPoly() throws -> Database {
         key = try decryptChaChaPolyKey()
+        var decryptedFolders : [Folder] = []
+        for folder in db!.folders {
+            decryptedFolders.append(try decryptChaChaPoly(folder: folder))
+        }
+        var decryptedEntries : [Entry] = []
+        for entry in db!.entries {
+            decryptedEntries.append(try decryptChaChaPoly(entry: entry))
+        }
+        var decryptedImages : [LoadableResource] = []
+        for image in db!.images {
+            decryptedImages.append(try decryptChaChaPoly(lr: image))
+        }
+        var decryptedVideos : [LoadableResource] = []
+        for video in db!.videos {
+            decryptedVideos.append(try decryptChaChaPoly(lr: video))
+        }
+        var decryptedDocuments : [LoadableResource] = []
+        for doc in db!.documents {
+            decryptedDocuments.append(try decryptChaChaPoly(lr: doc))
+        }
         let decryptedDatabase : Database = Database(
             name: db!.name,
             description: db!.description,
+            folders: decryptedFolders,
+            entries: decryptedEntries,
+            images: decryptedImages,
+            videos: decryptedVideos,
             iconName: db!.iconName,
+            documents: decryptedDocuments,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -342,6 +415,26 @@ internal struct Decrypter {
     /// Decrypts the passed Folder with ChaChaPoly and returns
     /// an Folder
     private func decryptChaChaPoly(folder : EncryptedFolder) throws -> Folder {
+        var decryptedFolders : [Folder] = []
+        for folder in folder.folders {
+            decryptedFolders.append(try decryptChaChaPoly(folder: folder))
+        }
+        var decryptedEntries : [Entry] = []
+        for entry in folder.entries {
+            decryptedEntries.append(try decryptChaChaPoly(entry: entry))
+        }
+        var decryptedImages : [LoadableResource] = []
+        for image in folder.images {
+            decryptedImages.append(try decryptChaChaPoly(lr: image))
+        }
+        var decryptedVideos : [LoadableResource] = []
+        for video in folder.videos {
+            decryptedVideos.append(try decryptChaChaPoly(lr: video))
+        }
+        var decryptedDocuments : [LoadableResource] = []
+        for doc in folder.documents {
+            decryptedDocuments.append(try decryptChaChaPoly(lr: doc))
+        }
         let decryptedName : Data = try ChaChaPoly.open(
             ChaChaPoly.SealedBox(combined: folder.name),
             using: key!
@@ -365,7 +458,12 @@ internal struct Decrypter {
         return Folder(
             name: DataConverter.dataToString(decryptedName),
             description: DataConverter.dataToString(decryptedDescription),
+            folders: decryptedFolders,
+            entries: decryptedEntries,
+            images: decryptedImages,
+            videos: decryptedVideos,
             iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: folder.id
@@ -374,6 +472,10 @@ internal struct Decrypter {
     
     /// Decryptes the passed Entry with ChaChaPoly and returns an Entry
     private func decryptChaChaPoly(entry : EncryptedEntry) throws -> Entry {
+        var decryptedDocuments : [LoadableResource] = []
+        for doc in entry.documents {
+            decryptedDocuments.append(try decryptChaChaPoly(lr: doc))
+        }
         let decryptedTitle : Data = try ChaChaPoly.open(
             try ChaChaPoly.SealedBox(combined: entry.title),
             using: key!
@@ -413,6 +515,7 @@ internal struct Decrypter {
             url: URL(string: DataConverter.dataToString(decryptedURL)),
             notes: DataConverter.dataToString(decryptedNotes),
             iconName: DataConverter.dataToString(decryptedIconName),
+            documents: decryptedDocuments,
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: entry.id
@@ -492,6 +595,23 @@ internal struct Decrypter {
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: document.id
+        )
+    }
+    
+    /// Decrypts the passed Loadable Resource using ChaChaPoly and returns a decrypted Loadable Resource
+    private func decryptChaChaPoly(lr : EncryptedLoadableResource) throws -> LoadableResource {
+        let decryptedNameData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: lr.name),
+            using: key!
+        )
+        let decryptedThumbnailData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: lr.thumbnailData),
+            using: key!
+        )
+        return LoadableResource(
+            id: lr.id,
+            name: DataConverter.dataToString(decryptedNameData),
+            thumbnailData: decryptedThumbnailData
         )
     }
 }

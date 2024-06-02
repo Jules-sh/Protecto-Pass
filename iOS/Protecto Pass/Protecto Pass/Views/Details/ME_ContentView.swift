@@ -29,7 +29,7 @@ internal struct ME_ContentView : View {
     }
     
     /// The Data Structure which is displayed in this View
-    @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource, LoadableResource, LoadableResource>?
+    @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>?
     
     private var images : [DB_Image] = []
     

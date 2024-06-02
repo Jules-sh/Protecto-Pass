@@ -64,19 +64,7 @@ internal struct Encrypter {
         // TODO: implement function
     }
     
-    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
-    /// Use the `configure` Method to configure a Encrypter
-    internal func encryptToC(_ toc : ToCItem) throws -> EncryptedToCItem {
-        if db!.header.encryption == .AES256 {
-            return try encryptAES(toc: toc)
-        } else if db!.header.encryption == .ChaChaPoly {
-            return try encryptChaChaPoly(toc: toc)
-        } else {
-            throw CryptoStatus.unknownEncryption
-        }
-    }
-    
-    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Encrypts the passed Folder  with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
     internal func encryptFolder(_ folder : Folder) throws -> EncryptedFolder {
         if db!.header.encryption == .AES256 {
@@ -88,7 +76,7 @@ internal struct Encrypter {
         }
     }
     
-    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Encrypts the passed Entry with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
     internal func encryptEntry(_ entry : Entry) throws -> EncryptedEntry {
         if db!.header.encryption == .AES256 {
@@ -100,7 +88,7 @@ internal struct Encrypter {
         }
     }
     
-    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Encrypts the passed Image with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
     internal func encryptImage(_ image : DB_Image) throws -> Encrypted_DB_Image {
         if db!.header.encryption == .AES256 {
@@ -112,7 +100,19 @@ internal struct Encrypter {
         }
     }
     
-    /// Encrypts the passed Table of Contents Item with the cryptography algorithm this Encrypter is configured for.
+    /// Encrypts the passed Video with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func encryptVideo(_ video : DB_Video) throws -> Encrypted_DB_Video {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(video: video)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(video: video)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    /// Encrypts the passed Document with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
     internal func encryptDocument(_ document : DB_Document) throws -> Encrypted_DB_Document {
         if db!.header.encryption == .AES256 {
@@ -130,16 +130,11 @@ internal struct Encrypter {
     /// Encrypts Databases with AES
     /// Throws an Error if something went wrong
     private func encryptAES() throws -> EncryptedDatabase {
-        var encryptedContents : [EncryptedToCItem] = []
-        for toc in db!.contents {
-            encryptedContents.append(try encryptAES(toc: toc))
-        }
         let encryptedKey : Data = try encryptAESKey()
         return EncryptedDatabase(
             name: db!.name,
             description: db!.description,
             iconName: db!.iconName,
-            contents: encryptedContents,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -157,24 +152,6 @@ internal struct Encrypter {
             },
             using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         ).combined!
-    }
-    
-    /// Encrypts a single Item of a Table of Contents using AES
-    private func encryptAES(toc : ToCItem) throws -> EncryptedToCItem {
-        let encryptedName : Data = try AES.GCM.seal(
-            DataConverter.stringToData(toc.name),
-            using: key!
-        ).combined!
-        var encryptedChildren : [EncryptedToCItem] = []
-        for child in toc.children {
-            encryptedChildren.append(try encryptAES(toc: child))
-        }
-        return EncryptedToCItem(
-            name: encryptedName,
-            type: toc.type,
-            id: toc.id,
-            children: encryptedChildren
-        )
     }
     
     /// Encrypts the passed Folder with AES and returns
@@ -286,6 +263,29 @@ internal struct Encrypter {
         )
     }
     
+    /// Encrypts the passed Video with AES and returns
+    /// an encrypted Image
+    private func encryptAES(video : DB_Video) throws -> Encrypted_DB_Video {
+        let encryptedVideoData : Data = try AES.GCM.seal(
+            video.video,
+            using: key!
+        ).combined!
+        let encryptedCreatedDate : Data = try AES.GCM.seal(
+            DataConverter.dateToData(video.created),
+            using: key!
+        ).combined!
+        let encryptedLastEditedDate : Data = try AES.GCM.seal(
+            DataConverter.dateToData(video.lastEdited),
+            using: key!
+        ).combined!
+        return Encrypted_DB_Video(
+            video: encryptedVideoData,
+            created: encryptedCreatedDate,
+            lastEdited: encryptedLastEditedDate,
+            id: video.id
+        )
+    }
+    
     /// Encrypts the passed Document with AES and returns
     /// an encrypted Document
     private func encryptAES(document : DB_Document) throws -> Encrypted_DB_Document {
@@ -320,16 +320,11 @@ internal struct Encrypter {
     /// Encrypts Databases with ChaChaPoly
     /// Throws an Error if something went wrong
     private func encryptChaChaPoly() throws -> EncryptedDatabase {
-        var encryptedContents : [EncryptedToCItem] = []
-        for toc in db!.contents {
-            encryptedContents.append(try encryptChaChaPoly(toc: toc))
-        }
         let encryptedKey : Data = try encryptChaChaPolyKey()
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             description: db!.description,
             iconName: db!.iconName,
-            contents: encryptedContents,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -348,24 +343,6 @@ internal struct Encrypter {
             },
             using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         ).combined
-    }
-    
-    /// Encrypts the passed ToC Item using ChaChaPoly
-    private func encryptChaChaPoly(toc : ToCItem) throws -> EncryptedToCItem {
-        let encryptedName : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(toc.name),
-            using: key!
-        ).combined
-        var encryptedChildren : [EncryptedToCItem] = []
-        for child in toc.children {
-            encryptedChildren.append(try encryptChaChaPoly(toc: child))
-        }
-        return EncryptedToCItem(
-            name: encryptedName,
-            type: toc.type,
-            id: toc.id,
-            children: encryptedChildren
-        )
     }
     
     
@@ -479,6 +456,29 @@ internal struct Encrypter {
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
             id: image.id
+        )
+    }
+    
+    /// Encrypts the passed Video with ChaChaPoly and returns
+    /// an encrypted Image
+    private func encryptChaChaPoly(video : DB_Video) throws -> Encrypted_DB_Video {
+        let encryptedVideoData : Data = try ChaChaPoly.seal(
+            video.video,
+            using: key!
+        ).combined
+        let encryptedCreatedDate : Data = try ChaChaPoly.seal(
+            DataConverter.dateToData(video.created),
+            using: key!
+        ).combined
+        let encryptedLastEditedDate : Data = try ChaChaPoly.seal(
+            DataConverter.dateToData(video.lastEdited),
+            using: key!
+        ).combined
+        return Encrypted_DB_Video(
+            video: encryptedVideoData,
+            created: encryptedCreatedDate,
+            lastEdited: encryptedLastEditedDate,
+            id: video.id
         )
     }
     

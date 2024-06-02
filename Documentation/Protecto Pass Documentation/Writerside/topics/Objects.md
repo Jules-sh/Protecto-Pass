@@ -23,3 +23,11 @@ Not every resource and part of the Database may be loaded on app start or even w
 lack of RAM or other performance issues.
 To solve this problem a "Load-on-demand" structure is implemented, meaning storage-intensive data and resources such as
 images, documents and videos are only loaded on demand, when the user actually wants to view them.
+
+## Native Types
+
+Native Types are types "made up" to represent Types in the App. Images and Videos aren't native types, even if they have
+their own implementation in the App. This is due to the fact, that videos, images and documents such as their attributes
+etc. are generally defined and aren't app-dependant.
+
+### Entry

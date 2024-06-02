@@ -58,34 +58,32 @@ internal struct DatabaseFileManager : DatabaseCache {
         
         // Check if element already exists
         for element in newElements {
-            if unarchiver.decodeDecodable(element.self, forKey: element.id.uuidString) != nil {
-                archiver.encodeEncodable(element, forKey: element.id)
-            }
+            //if unarchiver.decodeDecodable(element.self, forKey: element.id.uuidString) != nil {
+             //   archiver.encodeEncodable(element, forKey: element.id)
+            //}
             // Element does not exist => is new element
             // Add ToC Element to Contents of Database File? Or already done when adding?
-            let encryptedToC : EncryptedToCItem = EncryptedToCItem(name: <#T##Data#>, type: <#T##ContentType#>, id: <#T##UUID#>, children: <#T##[EncryptedToCItem]#>)
-            db.contents.append(<#T##newElement: EncryptedToCItem##EncryptedToCItem#>)
         }
         
-        for toc in db.contents {
-            let entity : DatabaseContent<Data>
-            switch toc.type {
-            case .entry:
-                entity = unarchiver.decodeDecodable(EncryptedEntry.self, forKey: toc.id.uuidString)!
-            case .folder:
-                entity = unarchiver.decodeDecodable(EncryptedFolder.self, forKey: toc.id.uuidString)!
-            case .document:
-                entity = unarchiver.decodeDecodable(Encrypted_DB_Document.self, forKey: toc.id.uuidString)!
-            case .image:
-                entity = unarchiver.decodeDecodable(Encrypted_DB_Image.self, forKey: toc.id.uuidString)!
-            default:
-                continue
-            }
-            if let newEntity = newElements.first(where: { $0.id == entity.id }) {
-                entity = newEntity
-            }
-            try archiver.encodeEncodable(entity, forKey: toc.id.uuidString)
-        }
+//        for toc in db.contents {
+//            let entity : DatabaseContent<Data>
+//            switch toc.type {
+//            case .entry:
+//                entity = unarchiver.decodeDecodable(EncryptedEntry.self, forKey: toc.id.uuidString)!
+//            case .folder:
+//                entity = unarchiver.decodeDecodable(EncryptedFolder.self, forKey: toc.id.uuidString)!
+//            case .document:
+//                entity = unarchiver.decodeDecodable(Encrypted_DB_Document.self, forKey: toc.id.uuidString)!
+//            case .image:
+//                entity = unarchiver.decodeDecodable(Encrypted_DB_Image.self, forKey: toc.id.uuidString)!
+//            default:
+//                continue
+//            }
+//            if let newEntity = newElements.first(where: { $0.id == entity.id }) {
+//                entity = newEntity
+//            }
+//            try archiver.encodeEncodable(entity, forKey: toc.id.uuidString)
+//        }
         archiver.finishEncoding()
         try (archiver.encodedData as NSData).compressed(using: .lzfse).write(to: url, options: [.atomic, .completeFileProtection])
     }

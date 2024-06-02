@@ -12,7 +12,7 @@ import UIKit
 /// The Top Level class for all databases.
 /// Because the encrypted and decrypted Database have something in common,
 /// this class puts these common things together
-internal class GeneralDatabase<K, F, E> : ME_DataStructure<String, Date, F, E>, Identifiable {
+internal class GeneralDatabase<K, F, E, L> : ME_DataStructure<String, Date, F, E, L>, Identifiable {
     
     /// The Header for this Database
     internal let header : DB_Header
@@ -29,7 +29,10 @@ internal class GeneralDatabase<K, F, E> : ME_DataStructure<String, Date, F, E>, 
         description : String,
         folders : [F],
         entries : [E],
+        images : [L],
+        videos : [L],
         iconName : String,
+        documents : [L],
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -45,7 +48,10 @@ internal class GeneralDatabase<K, F, E> : ME_DataStructure<String, Date, F, E>, 
             description: description,
             folders: folders,
             entries: entries,
+            images: images,
+            videos: videos,
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited : lastEdited,
             id: id
@@ -54,7 +60,7 @@ internal class GeneralDatabase<K, F, E> : ME_DataStructure<String, Date, F, E>, 
 }
 
 /// The Database Object that is used when the App is running
-internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry>, DecryptedDataStructure {
+internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry, LoadableResource>, DecryptedDataStructure {
     
     /// The Password to decrypt this Database with
     internal let password : String
@@ -64,7 +70,10 @@ internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry>, De
         description : String,
         folders : [Folder],
         entries : [Entry],
+        images : [LoadableResource],
+        videos : [LoadableResource],
         iconName : String,
+        documents : [LoadableResource],
         created : Date,
         lastEdited : Date,
         header : DB_Header,
@@ -79,7 +88,10 @@ internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry>, De
             description: description,
             folders: folders,
             entries: entries,
+            images: images,
+            videos: videos,
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited: lastEdited,
             header: header,
@@ -95,7 +107,10 @@ internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry>, De
         description: "This is a Preview Database used in Tests and Previews",
         folders: [],
         entries: [],
+        images: [],
+        videos: [],
         iconName: "externaldrive",
+        documents: [],
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(
@@ -135,14 +150,17 @@ internal final class Database : GeneralDatabase<SymmetricKey, Folder, Entry>, De
 }
 
 /// The object storing an encrypted Database
-internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, EncryptedEntry>, EncryptedDataStructure {
+internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, EncryptedEntry, EncryptedLoadableResource>, EncryptedDataStructure {
     
     override internal init(
         name: String,
         description: String,
         folders: [EncryptedFolder],
         entries: [EncryptedEntry],
+        images : [EncryptedLoadableResource],
+        videos : [EncryptedLoadableResource],
         iconName: String,
+        documents : [EncryptedLoadableResource],
         created : Date,
         lastEdited : Date,
         header: DB_Header,
@@ -155,7 +173,10 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, 
             description: description,
             folders: folders,
             entries: entries,
+            images: images,
+            videos: videos,
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited: lastEdited,
             header: header,
@@ -168,9 +189,12 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, 
     private enum DatabaseCodingKeys: CodingKey {
         case name
         case description
-        case iconName
         case folders
         case entries
+        case images
+        case videos
+        case iconName
+        case documents
         case created
         case lastEdited
         case header
@@ -185,7 +209,10 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, 
         try container.encode(description, forKey: .description)
         try container.encode(folders, forKey: .folders)
         try container.encode(entries, forKey: .entries)
+        try container.encode(images, forKey: .images)
+        try container.encode(videos, forKey: .videos)
         try container.encode(iconName, forKey: .iconName)
+        try container.encode(documents, forKey: .documents)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
         try container.encode(header, forKey: .header)
@@ -201,7 +228,10 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, 
             description: try container.decode(String.self, forKey: .description),
             folders: try container.decode([EncryptedFolder].self, forKey: .folders),
             entries: try container.decode([EncryptedEntry].self, forKey: .entries),
+            images: try container.decode([EncryptedLoadableResource].self, forKey: .images),
+            videos: try container.decode([EncryptedLoadableResource].self, forKey: .videos),
             iconName: try container.decode(String.self, forKey: .iconName),
+            documents: try container.decode([EncryptedLoadableResource].self, forKey: .documents),
             created: try container.decode(Date.self, forKey: .created),
             lastEdited: try container.decode(Date.self, forKey: .lastEdited),
             header: try container.decode(DB_Header.self, forKey: .header),
@@ -214,17 +244,33 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, 
     internal convenience init(from coreData : CD_Database) throws {
         var localFolders : [EncryptedFolder] = []
         for folder in coreData.folders! {
-            
+            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
         }
         var localEntries : [EncryptedEntry] = []
         for entry in coreData.entries! {
+            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
+        }
+        var localDocuments : [EncryptedLoadableResource] = []
+        for document in coreData.documents! {
+            localDocuments.append(EncryptedLoadableResource(from: document as! CD_LoadableResource))
+        }
+        var localImages : [EncryptedLoadableResource] = []
+        for image in coreData.images! {
+            localImages.append(EncryptedLoadableResource(from: image as! CD_LoadableResource))
+        }
+        var localVideos : [EncryptedLoadableResource] = []
+        for video in coreData.videos! {
+            localVideos.append(EncryptedLoadableResource(from: video as! CD_LoadableResource))
         }
         self.init(
             name: DataConverter.dataToString(coreData.name!),
             description: DataConverter.dataToString(coreData.objectDescription),
             folders: localFolders,
             entries: localEntries,
+            images: localImages,
+            videos: localVideos,
             iconName: DataConverter.dataToString(coreData.iconName!),
+            documents: localDocuments,
             created: try DataConverter.dataToDate(coreData.created!),
             lastEdited: try DataConverter.dataToDate(coreData.lastEdited!),
             header: try DB_Header.parseString(string: coreData.header!),
@@ -240,7 +286,10 @@ internal final class EncryptedDatabase : GeneralDatabase<Data, EncryptedFolder, 
         description: "This is an encrypted Preview Database used in Tests and Previews",
         folders: [],
         entries: [],
+        images: [],
+        videos: [],
         iconName: "externaldrive",
+        documents: [],
         created: Date.now,
         lastEdited: Date.now,
         header: DB_Header(

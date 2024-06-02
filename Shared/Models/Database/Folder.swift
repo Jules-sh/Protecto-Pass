@@ -8,16 +8,21 @@
 import Foundation
 import UIKit
 
-internal class GeneralFolder<DA, DE> : ME_DataStructure<DA, DE> {}
+internal class GeneralFolder<DA, DE, F, E, L> : ME_DataStructure<DA, DE, F, E, L> {}
 
 /// The Folder Object that is used when the App is running
-internal final class Folder : GeneralFolder<String, Date>, DecryptedDataStructure {
+internal final class Folder : GeneralFolder<String, Date, Folder, Entry, LoadableResource>, DecryptedDataStructure {
     
     /// An static preview folder with sample data to use in Previews and Tests
     internal static let previewFolder : Folder = Folder(
         name: "Private",
         description: "This is an preview Folder only to use in previews and tests",
+        folders: [],
+        entries: [],
+        images: [],
+        videos: [],
         iconName: "folder",
+        documents: [],
         created: Date.now,
         lastEdited: Date.now,
         id: UUID()
@@ -38,12 +43,17 @@ internal final class Folder : GeneralFolder<String, Date>, DecryptedDataStructur
 }
 
 /// The Object holding an encrypted Folder
-internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataStructure {
+internal final class EncryptedFolder : GeneralFolder<Data, Data, EncryptedFolder, EncryptedEntry, EncryptedLoadableResource>, EncryptedDataStructure {
     
     override internal init(
         name: Data,
         description: Data,
+        folders: [EncryptedFolder],
+        entries : [EncryptedEntry],
+        images: [EncryptedLoadableResource],
+        videos: [EncryptedLoadableResource],
         iconName : Data,
+        documents : [EncryptedLoadableResource],
         created : Data,
         lastEdited : Data,
         id: UUID
@@ -51,7 +61,12 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataS
         super.init(
             name: name,
             description: description,
+            folders: folders,
+            entries: entries,
+            images: images,
+            videos: videos,
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited: lastEdited,
             id: id
@@ -61,7 +76,12 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataS
     private enum FolderCodingKeys: CodingKey {
         case name
         case description
+        case folders
+        case entries
+        case images
+        case videos
         case iconName
+        case documents
         case created
         case lastEdited
         case id
@@ -71,6 +91,10 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataS
         var container = encoder.container(keyedBy: FolderCodingKeys.self)
         try container.encode(name, forKey: .name)
         try container.encode(description, forKey: .description)
+        try container.encode(folders, forKey: .folders)
+        try container.encode(entries, forKey: .entries)
+        try container.encode(images, forKey: .images)
+        try container.encode(videos, forKey: .videos)
         try container.encode(iconName, forKey: .iconName)
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
@@ -82,7 +106,12 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataS
         self.init(
             name: try container.decode(Data.self, forKey: .name),
             description: try container.decode(Data.self, forKey: .description),
+            folders: try container.decode([EncryptedFolder].self, forKey: .folders),
+            entries: try container.decode([EncryptedEntry].self, forKey: .entries),
+            images: try container.decode([EncryptedLoadableResource].self, forKey: .images),
+            videos: try container.decode([EncryptedLoadableResource].self, forKey: .videos),
             iconName: try container.decode(Data.self, forKey: .iconName),
+            documents: try container.decode([EncryptedLoadableResource].self, forKey: .documents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
             id: try container.decode(UUID.self, forKey: .id)
@@ -90,10 +119,35 @@ internal final class EncryptedFolder : GeneralFolder<Data, Data>, EncryptedDataS
     }
     
     internal convenience init(from coreData : CD_Folder) {
+        var localFolders : [EncryptedFolder] = []
+        for folder in coreData.folders! {
+            localFolders.append(EncryptedFolder(from: folder as! CD_Folder))
+        }
+        var localEntries : [EncryptedEntry] = []
+        for entry in coreData.entries! {
+            localEntries.append(EncryptedEntry(from: entry as! CD_Entry))
+        }
+        var localDocuments : [EncryptedLoadableResource] = []
+        for document in coreData.documents! {
+            localDocuments.append(EncryptedLoadableResource(from: document as! CD_LoadableResource))
+        }
+        var localImages : [EncryptedLoadableResource] = []
+        for image in coreData.images! {
+            localImages.append(EncryptedLoadableResource(from: image as! CD_LoadableResource))
+        }
+        var localVideos : [EncryptedLoadableResource] = []
+        for video in coreData.videos! {
+            localVideos.append(EncryptedLoadableResource(from: video as! CD_LoadableResource))
+        }
         self.init(
             name: coreData.name!,
             description: coreData.objectDescription!,
+            folders: localFolders,
+            entries: localEntries,
+            images: localImages,
+            videos: localVideos,
             iconName: coreData.iconName!,
+            documents: localDocuments,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!,
             id: coreData.uuid!

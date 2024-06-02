@@ -63,18 +63,6 @@ internal struct Decrypter {
     
     // START GENERAL DECRYPTION
     
-    /// Decrypts the passed Table of Contents Item with the cryptography algorithm this Decrypter is configured for.
-    /// Use the `configure` Method to configure a Decrypter
-    internal func decryptToC(_ toc : EncryptedToCItem) throws -> ToCItem {
-        if db!.header.encryption == .AES256 {
-            return try decryptAES(toc: toc)
-        } else if db!.header.encryption == .ChaChaPoly {
-            return try decryptChaChaPoly(toc: toc)
-        } else {
-            throw CryptoStatus.unknownEncryption
-        }
-    }
-    
     /// Decrypts the passed Folder with the cryptography algorithm this Decrypter is configured for.
     /// Use the `configure` Method to configure a Decrypter
     internal func decryptFolder(_ folder : EncryptedFolder) throws -> Folder {
@@ -111,6 +99,18 @@ internal struct Decrypter {
         }
     }
     
+    /// Decrypts the passed Video with the cryptography algorithm this Decrypter is configured for.
+    /// Use the `configure` Method to configure a Decrypter
+    internal func decryptVideo(_ video : Encrypted_DB_Video) throws -> DB_Video {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES(video: video)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly(video: video)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
     /// Decrypts the passed Document with the cryptography algorithm this Decrypter is configured for.
     /// Use the `configure` Method to configure a Decrypter
     internal func decryptDocument(_ document : Encrypted_DB_Document) throws -> DB_Document {
@@ -128,15 +128,10 @@ internal struct Decrypter {
     /// Decrypts AES encrypted Databases
     private mutating func decryptAES() throws -> Database {
         key = try decryptAESKey()
-        var decryptedContents : [ToCItem] = []
-        for toc in db!.contents {
-            decryptedContents.append(try decryptAES(toc: toc))
-        }
         return Database(
             name: db!.name,
             description: db!.description,
             iconName: db!.iconName,
-            contents: decryptedContents,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -154,24 +149,6 @@ internal struct Decrypter {
             using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         )
         return SymmetricKey(data: data)
-    }
-    
-    /// Decrypts a single Item of a Table of Contents using AES
-    private func decryptAES(toc : EncryptedToCItem) throws -> ToCItem {
-        let decryptedName : Data = try AES.GCM.open(
-            try AES.GCM.SealedBox(combined: toc.name),
-            using: key!
-        )
-        var decryptedChildren : [ToCItem] = []
-        for child in toc.children {
-            decryptedChildren.append(try decryptAES(toc: child))
-        }
-        return ToCItem(
-            name: DataConverter.dataToString(decryptedName),
-            type:  toc.type,
-            id: toc.id,
-            children: decryptedChildren
-        )
     }
     
     /// Decrypts the passed Folder using AES and returns an decrypted Folder
@@ -282,6 +259,28 @@ internal struct Decrypter {
         )
     }
     
+    /// Decrypts the passed Video using AES and returns a decrypted Image
+    private func decryptAES(video : Encrypted_DB_Video) throws -> DB_Video {
+        let decryptedVideoData : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: video.video),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: video.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try AES.GCM.open(
+            AES.GCM.SealedBox(combined: video.lastEdited),
+            using: key!
+        )
+        return DB_Video(
+            video: decryptedVideoData,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
+            id: video.id
+        )
+    }
+    
     /// Decrypts the passed document using AES and returns a decrypted Document
     private func decryptAES(document : Encrypted_DB_Document) throws -> DB_Document {
         let decryptedDocumentData : Data = try AES.GCM.open(
@@ -315,16 +314,11 @@ internal struct Decrypter {
     /// Decrypts ChaChaPoly Encrypted Databases
     /// Throws an Error if something went wrong
     private mutating func decryptChaChaPoly() throws -> Database {
-        var decryptedContents : [ToCItem] = []
-        for toc in db!.contents {
-            decryptedContents.append(try decryptChaChaPoly(toc: toc))
-        }
         key = try decryptChaChaPolyKey()
         let decryptedDatabase : Database = Database(
             name: db!.name,
             description: db!.description,
             iconName: db!.iconName,
-            contents: decryptedContents,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -343,24 +337,6 @@ internal struct Decrypter {
             using: SymmetricKey(data: Cryptography.sha256HashBytes(password!))
         )
         return SymmetricKey(data: data)
-    }
-    
-    /// Decrypts the passed ToC Item using ChaChaPoly
-    private func decryptChaChaPoly(toc : EncryptedToCItem) throws -> ToCItem {
-        let decryptedName : Data = try ChaChaPoly.open(
-            ChaChaPoly.SealedBox(combined: toc.name),
-            using: key!
-        )
-        var decryptedChildren : [ToCItem] = []
-        for child in toc.children {
-            decryptedChildren.append(try decryptChaChaPoly(toc: child))
-        }
-        return ToCItem(
-            name: DataConverter.dataToString(decryptedName),
-            type: toc.type,
-            id: toc.id,
-            children: decryptedChildren
-        )
     }
     
     /// Decrypts the passed Folder with ChaChaPoly and returns
@@ -468,6 +444,28 @@ internal struct Decrypter {
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: image.id
+        )
+    }
+    
+    /// Decrypts the passed Video using ChaChaPoly and returns a decrypted Image
+    private func decryptChaChaPoly(video : Encrypted_DB_Video) throws -> DB_Video {
+        let decryptedVideoData : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: video.video),
+            using: key!
+        )
+        let decryptedCreatedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: video.created),
+            using: key!
+        )
+        let decryptedLastEditedDate : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: video.lastEdited),
+            using: key!
+        )
+        return DB_Video(
+            video: decryptedVideoData,
+            created: try DataConverter.dataToDate(decryptedCreatedDate),
+            lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
+            id: video.id
         )
     }
     

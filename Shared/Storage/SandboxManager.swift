@@ -25,20 +25,7 @@ internal struct SandboxManager {
         try fileManager.createDirectory(at: rootDir, withIntermediateDirectories: true)
         for folder in folders {
             // let folderPath : URL = 
-            try fileManager.createDirectory(at: <#T##URL#>, withIntermediateDirectories: <#T##Bool#>)
-        }
-    }
-    
-    private static func createSubs(for folder : EncryptedToCItem, atPath path : URL) -> Void {
-        for child in folder.children {
-            let path : URL = rootDir.appendingPathExtension(content.id.uuidString)
-            if child.type == .folder {
-                try fileManager.createDirectory(at: path, withIntermediateDirectories: true)
-                createSubs(for: child)
-            } else {
-                // TODO: add data
-                fileManager.createFile(atPath: path.absoluteString, contents: Data())
-            }
+            //try fileManager.createDirectory(at: <#T##URL#>, withIntermediateDirectories: <#T##Bool#>)
         }
     }
     

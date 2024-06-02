@@ -50,7 +50,7 @@
     </entity>
     <entity name="CD_NativeType" representedClassName="CD_NativeType" isAbstract="YES" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="iconName" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
-        <relationship name="documents" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_LoadableResource" inverseName="parentDocument" inverseEntity="CD_LoadableResource"/>
+        <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CD_LoadableResource" inverseName="parentDocument" inverseEntity="CD_LoadableResource"/>
     </entity>
     <entity name="CD_Video" representedClassName="CD_Video" parentEntity="CD_DatabaseContent" syncable="YES" codeGenerationType="class">
         <attribute name="videoData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>

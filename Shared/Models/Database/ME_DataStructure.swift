@@ -10,7 +10,7 @@ import Foundation
 /// ME Data Structure is short for Multiple Entity Data Structure,
 /// which is used to store multiple entities in one Object.
 /// Objects which have a folder-like structure or features, inherit from this class
-internal class ME_DataStructure<DA, DE, F, E> : NativeType<DE, DA> {
+internal class ME_DataStructure<DA, DE, F, E, L> : NativeType<DE, DA, L> {
     
     /// The Name of this Data Structure
     @Published internal var name : DA
@@ -27,12 +27,19 @@ internal class ME_DataStructure<DA, DE, F, E> : NativeType<DE, DA> {
     
     @Published internal var entries : [E]
     
+    @Published internal var images : [L]
+    
+    @Published internal var videos : [L]
+    
     internal init(
         name : DA,
         description : DA,
         folders : [F],
         entries : [E],
+        images : [L],
+        videos : [L],
         iconName : DA,
+        documents : [L],
         created : DE,
         lastEdited : DE,
         id : UUID
@@ -41,8 +48,11 @@ internal class ME_DataStructure<DA, DE, F, E> : NativeType<DE, DA> {
         self.description = description
         self.folders = folders
         self.entries = entries
+        self.images = images
+        self.videos = videos
         super.init(
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited: lastEdited,
             id: id

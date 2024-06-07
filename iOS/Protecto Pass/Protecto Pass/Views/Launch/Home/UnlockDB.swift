@@ -79,7 +79,9 @@ internal struct UnlockDB: View {
     /// Try to unlock the Database with the provided password
     private func tryUnlocking() -> Void {
         do {
-            let localDatabase : Database = try db.decrypt(using: password)
+            var decrypter = Decrypter.configure(for: db, with: password)
+            let localDatabase : Database = try decrypter.decrypt()
+            //try (Decrypter.configure(for: db, with: password)).decrypt()
             unlockedDB = localDatabase
             navigationSheet.db = unlockedDB
             navigationSheet.openDatabaseToHome.toggle()

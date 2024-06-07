@@ -63,6 +63,16 @@ internal struct Decrypter {
     
     // START GENERAL DECRYPTION
     
+    internal mutating func decrypt() throws -> Database {
+        if db!.header.encryption == .AES256 {
+            return try decryptAES()
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try decryptChaChaPoly()
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
     /// Decrypts the passed Image with the cryptography algorithm this Decrypter is configured for.
     /// Use the `configure` Method to configure a Decrypter
     internal func decryptImage(_ image : Encrypted_DB_Image) throws -> DB_Image {

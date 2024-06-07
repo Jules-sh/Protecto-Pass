@@ -135,8 +135,12 @@ internal struct AddDB_Overview: View {
         navigationController.db = Database(
             name: creationWrapper.name,
             description: creationWrapper.description,
+            folders: [],
+            entries: [],
+            images: [],
+            videos: [],
             iconName: creationWrapper.iconName,
-            contents: [],
+            documents: [],
             created: Date.now,
             lastEdited: Date.now,
             header: DB_Header(

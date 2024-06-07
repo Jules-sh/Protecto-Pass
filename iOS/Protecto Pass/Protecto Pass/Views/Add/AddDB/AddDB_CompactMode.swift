@@ -224,8 +224,12 @@ internal struct AddDB_CompactMode: View {
         navigationController.db = Database(
             name: name,
             description: description,
+            folders: [],
+            entries: [],
+            images: [],
+            videos: [],
             iconName: iconName,
-            contents: [],
+            documents: [],
             created: Date.now,
             lastEdited: Date.now,
             header: DB_Header(

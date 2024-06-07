@@ -12,8 +12,29 @@ import CoreData
 internal struct CoreDataManager : DatabaseCache {
     
     /// Returns the fetch Request used to get the current Database with the provided ID
-    private static func getFetchRequest(for id : UUID) -> NSFetchRequest<CD_Database> {
+    private static func getFetchRequest(forDatabaseID id : UUID) -> NSFetchRequest<CD_Database> {
         let fetchRequest : NSFetchRequest = CD_Database.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", DataConverter.uuidToData(id) as NSData)
+        return fetchRequest
+    }
+    
+    /// Returns the fetch Request used to get the current Image with the provided ID
+    private static func getFetchRequest(forImageID id : UUID) -> NSFetchRequest<CD_Image> {
+        let fetchRequest : NSFetchRequest = CD_Image.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", DataConverter.uuidToData(id) as NSData)
+        return fetchRequest
+    }
+    
+    /// Returns the fetch Request used to get the current Video with the provided ID
+    private static func getFetchRequest(forVideoID id : UUID) -> NSFetchRequest<CD_Video> {
+        let fetchRequest : NSFetchRequest = CD_Video.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", DataConverter.uuidToData(id) as NSData)
+        return fetchRequest
+    }
+    
+    /// Returns the fetch Request used to get the current Document with the provided ID
+    private static func getFetchRequest(forDocumentID id : UUID) -> NSFetchRequest<CD_Document> {
+        let fetchRequest : NSFetchRequest = CD_Document.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", DataConverter.uuidToData(id) as NSData)
         return fetchRequest
     }
@@ -22,11 +43,11 @@ internal struct CoreDataManager : DatabaseCache {
         guard try databaseExists(id: id) else {
             throw DatabaseDoesNotExistError()
         }
-        return try getFetchRequest(for: id).execute().first!
+        return try getFetchRequest(forDatabaseID: id).execute().first!
     }
     
     internal static func databaseExists(id : UUID) throws -> Bool {
-        return try !getFetchRequest(for: id).execute().isEmpty
+        return try !getFetchRequest(forDatabaseID: id).execute().isEmpty
     }
     
     /// Loads all Databases from the Core Data System
@@ -37,39 +58,53 @@ internal struct CoreDataManager : DatabaseCache {
     }
     
     /// Stores the Database to the Core Data System
-    internal static func storeDatabase(_ db : EncryptedDatabase, context : NSManagedObjectContext, newElements : [DatabaseContent<Data>]) throws -> Void {
-        let oldDB : CD_Database = try accessCache(id: db.id)
-        for toc in oldDB.contents! {
-            toc as! CD_ToCItem
-        }
+    internal static func storeDatabase(_ db : EncryptedDatabase, context : NSManagedObjectContext) throws -> Void {
         if try databaseExists(id: db.id) {
             try deleteDatabase(db.id, with: context)
         }
+        // Store Database including folders and entries, loadable Resource references are stored in this too, the actual resources are stored on adding them to the Database
         let cdDatabase : CD_Database = DB_Converter.toCD(db, context: context)
-        for toc in db.contents {
-            // TODO: store every item related to this Database, already done above, why?
-        }
-        // TODO: call save at the end or after every item? => In the end: no unnessecary IO Operations, every time: maybe less RAM pollution
+        try context.save()
+    }
+    
+    internal static func storeImage(_ image : Encrypted_DB_Image, context : NSManagedObjectContext) throws -> Void {
+        let cdImage : CD_Image = ImageConverter.toCD(image, context: context)
+        try context.save()
+    }
+    
+    internal static func storeVideo(_ video : Encrypted_DB_Video, context : NSManagedObjectContext) throws -> Void {
+        let cdVideo : CD_Video = VideoConterter.toCD(video, context: context)
+        try context.save()
+    }
+    
+    internal static func storeDocument(_ document : Encrypted_DB_Document, context : NSManagedObjectContext) throws -> Void {
+        let cdDocument : CD_Document = DocumentConverter.toCD(document, context: context)
         try context.save()
     }
     
     internal static func deleteDatabase(_ id : UUID, with context : NSManagedObjectContext) throws -> Void {
         let db : CD_Database = try accessCache(id: id)
         let encrypted = try DB_Converter.fromCD(db)
-        for toc in encrypted.contents {
-            switch toc.type {
-                // TODO: make exhaustive switch
-            case .entry:
-                break
-            default:
-                break
-            }
+        context.delete(try accessCache(id: id))
+        for image in encrypted.images {
+            let cdImage = try getFetchRequest(forImageID: image.id).execute().first!
+            context.delete(cdImage)
         }
-        try context.delete(accessCache(id: id))
-        // TODO: delete all items related to this Database
+        for video in encrypted.videos {
+            let cdVideo = try getFetchRequest(forVideoID: video.id).execute().first!
+            context.delete(cdVideo)
+        }
+        for document in encrypted.documents {
+            let cdDocument = try getFetchRequest(forDocumentID: document.id).execute().first!
+            context.delete(cdDocument)
+        }
+        try context.save()
     }
     
-    internal static func clearAll(context : NSManagedObjectContext) -> Void {
-        // TODO: clear
+    internal static func clearAll(context : NSManagedObjectContext) throws -> Void {
+        let allDatabases : [EncryptedDatabase] = try load(with: context)
+        for db in allDatabases {
+            try deleteDatabase(db.id, with: context)
+        }
     }
 }

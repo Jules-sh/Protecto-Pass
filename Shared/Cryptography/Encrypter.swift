@@ -39,7 +39,6 @@ internal struct Encrypter {
     /// The Encryption that is used for this Encrypter
     private let encryption : Cryptography.Encryption?
     
-    //
     /// The Database that should be encrypted.
     /// This is passed with the encrypt Method,
     /// and is used by the private methods
@@ -59,6 +58,17 @@ internal struct Encrypter {
     }
     
     // START GENERAL ENCRYPTION
+    
+    /// Encrypts the Database and returns the encrypted Database containing folders and entries.
+    internal func encrypt() throws -> EncryptedDatabase {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES()
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly()
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
     
     /// Encrypts the passed Image with the cryptography algorithm this Encrypter is configured for.
     /// Use the `configure` Method to configure a Encrypter
@@ -379,7 +389,7 @@ internal struct Encrypter {
         }
         var encryptedVideos : [EncryptedLoadableResource] = []
         for video in db!.videos {
-            encryptedImages.append(try encryptChaChaPoly(lr: video))
+            encryptedVideos.append(try encryptChaChaPoly(lr: video))
         }
         var encryptedDocuments : [EncryptedLoadableResource] = []
         for doc in db!.documents {
@@ -432,7 +442,7 @@ internal struct Encrypter {
         }
         var encryptedVideos : [EncryptedLoadableResource] = []
         for video in folder.videos {
-            encryptedImages.append(try encryptChaChaPoly(lr: video))
+            encryptedVideos.append(try encryptChaChaPoly(lr: video))
         }
         var encryptedDocuments : [EncryptedLoadableResource] = []
         for doc in folder.documents {
@@ -509,10 +519,6 @@ internal struct Encrypter {
         ).combined
         let encryptedLastEditedDate : Data = try ChaChaPoly.seal(
             DataConverter.dateToData(entry.lastEdited),
-            using: key!
-        ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(entry.id.uuidString),
             using: key!
         ).combined
         return EncryptedEntry(

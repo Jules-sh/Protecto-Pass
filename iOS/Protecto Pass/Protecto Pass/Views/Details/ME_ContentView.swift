@@ -261,15 +261,7 @@ internal struct ME_ContentView : View {
                                 id: uuid
                             )
                         )
-                        db.contents.append(
-                            ToCItem(
-                                // TODO: change itemIdentifier
-                                name: photo.itemIdentifier!,
-                                type: .image,
-                                id: uuid,
-                                children: []
-                            )
-                        )
+                        // TODO: store photo
                     } catch {
                         errLoadingImagePresented.toggle()
                     }

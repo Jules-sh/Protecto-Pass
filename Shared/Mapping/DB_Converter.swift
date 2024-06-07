@@ -10,6 +10,8 @@
 import CoreData
 import Foundation
 
+// TODO: add id and uuid to core data when converting
+
 /// Protocol all converters in this File must conform to
 private protocol DatabaseConverterProtocol {
     
@@ -53,6 +55,12 @@ internal struct DB_Converter : DatabaseConverterProtocol {
         for entry in encrypted.entries {
             cdDB.addToEntries(EntryConverter.toCD(entry, context: context))
         }
+        for image in encrypted.images {
+            cdDB.addToImages(LoadableResourceConverter.toCD(image, context: context))
+        }
+        for video in encrypted.videos {
+            cdDB.addToVideos(LoadableResourceConverter.toCD(video, context: context))
+        }
         for document in encrypted.documents {
             cdDB.addToDocuments(LoadableResourceConverter.toCD(document, context: context))
         }
@@ -86,6 +94,12 @@ private struct FolderConverter : DatabaseConverterProtocol {
         }
         for image in encrypted.images {
             cdFolder.addToImages(LoadableResourceConverter.toCD(image, context: context))
+        }
+        for video in encrypted.videos {
+            cdFolder.addToVideos(LoadableResourceConverter.toCD(video, context: context))
+        }
+        for document in encrypted.documents {
+            cdFolder.addToDocuments(LoadableResourceConverter.toCD(document, context: context))
         }
         cdFolder.iconName = encrypted.iconName
         for doc in encrypted.documents {
@@ -123,11 +137,11 @@ private struct EntryConverter : DatabaseConverterProtocol {
 
 /// Struct to convert Images from encrypted to Core Data and backwards
 internal struct ImageConverter : DatabaseConverterProtocol {
-    fileprivate static func fromCD(_ coreData: CD_Image) throws -> Encrypted_DB_Image {
+    internal static func fromCD(_ coreData: CD_Image) throws -> Encrypted_DB_Image {
         return Encrypted_DB_Image(from: coreData)
     }
     
-    fileprivate static func toCD(_ encrypted: Encrypted_DB_Image, context: NSManagedObjectContext) -> CD_Image {
+    internal static func toCD(_ encrypted: Encrypted_DB_Image, context: NSManagedObjectContext) -> CD_Image {
         let cdImage : CD_Image = CD_Image(context: context)
         cdImage.imageData = encrypted.image
         cdImage.compressionQuality = encrypted.quality
@@ -137,13 +151,28 @@ internal struct ImageConverter : DatabaseConverterProtocol {
     }
 }
 
+internal struct VideoConterter : DatabaseConverterProtocol {
+    static func fromCD(_ coreData: CD_Video) throws -> Encrypted_DB_Video {
+        return Encrypted_DB_Video(from: coreData)
+    }
+    
+    static func toCD(_ encrypted: Encrypted_DB_Video, context: NSManagedObjectContext) -> CD_Video {
+        let cdVideo : CD_Video = CD_Video(context: context)
+        cdVideo.videoData = encrypted.video
+        cdVideo.created = encrypted.created
+        cdVideo.lastEdited = encrypted.lastEdited
+        cdVideo.uuid = encrypted.id
+        return cdVideo
+    }
+}
+
 /// Struct to convert Documents from encrypted to Core Data and backwards
 internal struct DocumentConverter : DatabaseConverterProtocol {
-    static func fromCD(_ coreData: CD_Document) throws -> Encrypted_DB_Document {
+    internal static func fromCD(_ coreData: CD_Document) throws -> Encrypted_DB_Document {
         return Encrypted_DB_Document(from: coreData)
     }
     
-    static func toCD(_ encrypted: Encrypted_DB_Document, context: NSManagedObjectContext) -> CD_Document {
+    internal static func toCD(_ encrypted: Encrypted_DB_Document, context: NSManagedObjectContext) -> CD_Document {
         let cdDoc : CD_Document = CD_Document(context: context)
         cdDoc.documentData = encrypted.document
         cdDoc.type = encrypted.type
@@ -154,11 +183,11 @@ internal struct DocumentConverter : DatabaseConverterProtocol {
 }
 
 private struct LoadableResourceConverter : DatabaseConverterProtocol {
-    static func fromCD(_ coreData: CD_LoadableResource) throws -> EncryptedLoadableResource {
+    internal static func fromCD(_ coreData: CD_LoadableResource) throws -> EncryptedLoadableResource {
         return EncryptedLoadableResource(from: coreData)
     }
     
-    static func toCD(_ encrypted: EncryptedLoadableResource, context: NSManagedObjectContext) -> CD_LoadableResource {
+    internal static func toCD(_ encrypted: EncryptedLoadableResource, context: NSManagedObjectContext) -> CD_LoadableResource {
         let cdLR : CD_LoadableResource = CD_LoadableResource(context: context)
         cdLR.id = encrypted.id
         cdLR.name = encrypted.name

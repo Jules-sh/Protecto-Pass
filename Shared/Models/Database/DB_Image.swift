@@ -42,6 +42,8 @@ internal final class DB_Image : General_DB_Image<UIImage, Double, Date>, Decrypt
         hasher.combine(image)
         hasher.combine(quality)
         hasher.combine(id)
+        hasher.combine(created)
+        hasher.combine(lastEdited)
     }
     
     /// The preview Image to use in SwiftUI Previews

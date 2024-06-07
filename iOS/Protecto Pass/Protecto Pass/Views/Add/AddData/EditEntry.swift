@@ -98,9 +98,7 @@ internal struct EditEntry: View {
             .toolbar(.automatic, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        
-                    }
+                    Button("Done") { save() }
                 }
             }
         }
@@ -109,7 +107,25 @@ internal struct EditEntry: View {
     /// Saves the data and dismisses this View
     private func save() -> Void {
         do {
-            try Storage.storeDatabase(db, context: context)
+            try Storage.storeDatabase(
+                db,
+                context: context,
+                newElements: [
+                    Entry(
+                        title: title,
+                        username: username,
+                        password: password,
+                        url: URL(string: url),
+                        notes: notes,
+                        iconName: iconName,
+                        // TODO: add loadable resources
+                        documents: [],
+                        created: Date.now,
+                        lastEdited: Date.now,
+                        id: UUID()
+                    )
+                ]
+            )
             dismiss()
         } catch {
             errStoring.toggle()

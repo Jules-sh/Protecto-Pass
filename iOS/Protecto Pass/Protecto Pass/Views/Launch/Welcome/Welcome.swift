@@ -66,11 +66,11 @@ internal struct Welcome: View {
                             } label: {
                                 Label("Create new one", systemImage: "plus")
                             }
-                            Button {
-                                selectorPresented.toggle()
-                            } label: {
-                                Label("Open from File", systemImage: "doc")
-                            }
+//                            Button {
+//                                selectorPresented.toggle()
+//                            } label: {
+//                                Label("Open from File", systemImage: "doc")
+//                            }
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -103,29 +103,29 @@ internal struct Welcome: View {
             VStack {
                 Group {
                     Text("No Databases found.")
-                    Button("Open from File") {
-                        selectorPresented.toggle()
-                    }
-                    .fileImporter(
-                        isPresented: $selectorPresented,
-                        allowedContentTypes: [.folder],
-                        allowsMultipleSelection: false
-                    ) {
-                        let path : URL = try! $0.get().first!
-                        let jsonDecoder : JSONDecoder = JSONDecoder()
-                        do {
-                            dbFromPath = try jsonDecoder.decode(
-                                EncryptedDatabase.self,
-                                from: try Data(
-                                    contentsOf: path,
-                                    options: [.uncached]
-                                )
-                            )
-                        } catch {
-                            errReadingDatabaseFromPathShown.toggle()
-                        }
-                        dbToUnlock = dbFromPath!
-                    }
+//                    Button("Open from File") {
+//                        selectorPresented.toggle()
+//                    }
+//                    .fileImporter(
+//                        isPresented: $selectorPresented,
+//                        allowedContentTypes: [.folder],
+//                        allowsMultipleSelection: false
+//                    ) {
+//                        let path : URL = try! $0.get().first!
+//                        let jsonDecoder : JSONDecoder = JSONDecoder()
+//                        do {
+//                            dbFromPath = try jsonDecoder.decode(
+//                                EncryptedDatabase.self,
+//                                from: try Data(
+//                                    contentsOf: path,
+//                                    options: [.uncached]
+//                                )
+//                            )
+//                        } catch {
+//                            errReadingDatabaseFromPathShown.toggle()
+//                        }
+//                        dbToUnlock = dbFromPath!
+//                    }
                     .alert("Error Reading DB", isPresented: $errReadingDatabaseFromPathShown) {
                     } message: {
                         Text("There's been an error while reading the Database from the File System.\nPlease try again")

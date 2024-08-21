@@ -33,8 +33,8 @@ internal struct Storage {
         let coreData : [EncryptedDatabase] = try CoreDataManager.load(with: context)
         result.append(contentsOf: coreData)
         // File System
-        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(from: paths)
-        result.append(contentsOf: fileSystem)
+//        let fileSystem : [EncryptedDatabase] = try DatabaseFileManager.load(from: paths)
+//        result.append(contentsOf: fileSystem)
         result.sort(by: { $0.lastEdited < $1.lastEdited })
         return result
     }
@@ -42,8 +42,10 @@ internal struct Storage {
     /// Stores the passed Database to the right Storage.
     /// if you want to store something in Core Data, the connected context has to be provided.
     internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?, newElements : [DatabaseContent<Date>] = []) throws -> Void {
+        var localDocuments : [Encrypted_DB_Document] = []
+        var localImages : [Encrypted_DB_Image] = []
+        var localVideos : [Encrypted_DB_Video] = []
         let encrypter : Encrypter = Encrypter.configure(for: db)
-        let database : EncryptedDatabase = try encrypter.encrypt()
         for element in newElements {
             switch element {
                 case is Entry:
@@ -51,14 +53,34 @@ internal struct Storage {
                 case is Folder:
                     db.folders.append(element as! Folder)
                 case is DB_Document:
-                    try storeDocument(encrypter.encryptDocument(element as! DB_Document), in: db, context: context)
+                    let doc = element as! DB_Document
+                    localDocuments.append(try encrypter.encryptDocument(doc))
+                    db.documents.append(LoadableResource(id: doc.id, name: doc.name, thumbnailData: DataConverter.stringToData("doc")))
+//                    try storeDocument(encrypter.encryptDocument(element as! DB_Document), in: database, context: context)
                 case is DB_Image:
-                    try storeImage(encrypter.encryptImage(element as! DB_Image), in: db, context: context)
+                    let im = element as! DB_Image
+                    localImages.append(try encrypter.encryptImage(im))
+                    db.images.append(LoadableResource(id: im.id, thumbnailData: im.image.jpegData(compressionQuality: 0.1)!))
+//                    try storeImage(encrypter.encryptImage(element as! DB_Image), in: database, context: context)
                 case is DB_Video:
-                    try storeVideo(encrypter.encryptVideo(element as! DB_Video), in: db, context: context)
+                    let vid = element as! DB_Video
+                    localVideos.append(try encrypter.encryptVideo(vid))
+                    // TODO: add thumbnail data
+                    db.videos.append(LoadableResource(id: vid.id, thumbnailData: Data()))
+//                    try storeVideo(encrypter.encryptVideo(element as! DB_Video), in: database, context: context)
                 default:
                     continue
             }
+        }
+        let database : EncryptedDatabase = try encrypter.encrypt()
+        for image in localImages {
+            try storeImage(image, in: database, context: context)
+        }
+        for document in localDocuments {
+            try storeDocument(document, in: database, context: context)
+        }
+        for video in localVideos {
+            try storeVideo(video, in: database, context: context)
         }
         switch db.header.storageType {
             case .CoreData:
@@ -68,40 +90,44 @@ internal struct Storage {
                     context: context!
                 )
             case .File:
-                try DatabaseFileManager.storeDatabase(database)
+                break
+//                try DatabaseFileManager.storeDatabase(database)
         }
     }
     
     /// Stores a document depending on the storage type
-    private static func storeDocument(_ document : Encrypted_DB_Document, in db : Database, context: NSManagedObjectContext?) throws -> Void {
+    private static func storeDocument(_ document : Encrypted_DB_Document, in db : EncryptedDatabase, context: NSManagedObjectContext?) throws -> Void {
         switch db.header.storageType {
             case .CoreData:
                 assert(context != nil, "To store Core Data Document, a Context must be provided to the storeDocument Function")
                 try CoreDataManager.storeDocument(document, context: context!)
             case .File:
-                try DatabaseFileManager.storeDocument(document, in: db)
+                break
+//                try DatabaseFileManager.storeDocument(document, in: db)
         }
     }
     
     /// Stores an image depending on the storage type
-    private static func storeImage(_ image : Encrypted_DB_Image, in db : Database, context: NSManagedObjectContext?) throws -> Void {
+    private static func storeImage(_ image : Encrypted_DB_Image, in db : EncryptedDatabase, context: NSManagedObjectContext?) throws -> Void {
         switch db.header.storageType {
             case .CoreData:
                 assert(context != nil, "To store Core Data Image, a Context must be provided to the storeImage Function")
                 try CoreDataManager.storeImage(image, context: context!)
             case .File:
-                try DatabaseFileManager.storeImage(image, in: db)
+                break
+//                try DatabaseFileManager.storeImage(image, in: db)
         }
     }
     
     /// Stores a video depending on the storage type
-    private static func storeVideo(_ video : Encrypted_DB_Video, in db : Database, context: NSManagedObjectContext?) throws -> Void {
+    private static func storeVideo(_ video : Encrypted_DB_Video, in db : EncryptedDatabase, context: NSManagedObjectContext?) throws -> Void {
         switch db.header.storageType {
             case .CoreData:
                 assert(context != nil, "To store Core Data Video, a Context must be provided to the storeVideo Function")
                 try CoreDataManager.storeVideo(video, context: context!)
             case .File:
-                try DatabaseFileManager.storeVideo(video, in: db)
+                break
+//                try DatabaseFileManager.storeVideo(video, in: db)
         }
     }
     

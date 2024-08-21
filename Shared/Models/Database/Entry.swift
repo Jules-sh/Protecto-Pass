@@ -167,8 +167,8 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedLo
     
     internal init(from coreData : CD_Entry) {
         var localDocuments : [EncryptedLoadableResource] = []
-        for documents in coreData.documents! {
-            
+        for document in coreData.documents! {
+            localDocuments.append(EncryptedLoadableResource(from: document as! CD_LoadableResource))
         }
         super.init(
             title: coreData.title!,

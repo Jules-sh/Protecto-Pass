@@ -129,12 +129,12 @@ internal struct AddDB_CompactMode: View {
                     }
                 }
                 Section {
-                    Picker("Storage", selection: $storage.animation()) {
-                        ForEach(Storage.StorageType.allCases) {
-                            s in
-                            Text(s.rawValue)
-                        }
-                    }
+//                    Picker("Storage", selection: $storage.animation()) {
+//                        ForEach(Storage.StorageType.allCases) {
+//                            s in
+//                            Text(s.rawValue)
+//                        }
+//                    }
                     if storage == .File {
                         Button {
                             selectorPresented.toggle()

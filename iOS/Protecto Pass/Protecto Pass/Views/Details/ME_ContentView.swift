@@ -21,23 +21,22 @@ internal struct ME_ContentView : View {
     /// The Database used to store the complere Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
     
-    private let id : UUID
+    internal init(db : Database) {
+        dataStructure = db
+    }
     
-    internal init(id : UUID) {
-        self.id = id
-        dataStructure = nil
+    internal init(folder : Folder) {
+        dataStructure = folder
     }
     
     /// The Data Structure which is displayed in this View
-    @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>?
+    @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
     private var images : [DB_Image] = []
     
+    private var videos : [DB_Video] = []
+    
     private var documents : [DB_Document] = []
-    
-    private var entries : [Entry] = []
-    
-    private var folders : [Folder] = []
     
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
@@ -73,102 +72,15 @@ internal struct ME_ContentView : View {
         GeometryReader {
             metrics in
             List {
-                //                if largeScreen {
-                //                    Section {
-                //                    } header: {
-                //                        Image(systemName: dataStructure.iconName)
-                //                            .resizable()
-                //                            .scaledToFit()
-                //                            .padding()
-                //                    }
-                //                }
-                //            Section("Entries") {
-                //                if !dataStructure.entries.isEmpty {
-                //                    ForEach(dataStructure.entries) {
-                //                        entry in
-                //                        NavigationLink(entry.title) {
-                //                            EntryDetails(entry: entry)
-                //                        }
-                //                    }
-                //                } else {
-                //                    Text("No Entries found")
-                //                }
-                //            }
-                //            Section("Folder") {
-                //                if !dataStructure.folders.isEmpty {
-                //                    ForEach(dataStructure.folders) {
-                //                        folder in
-                //                        NavigationLink(folder.name) {
-                //                            ME_ContentView(folder)
-                //                        }
-                //                    }
-                //                } else {
-                //                    Text("No Folders found")
-                //                }
-                //            }
-                Section("Images") {
-                    if !images.isEmpty {
-                        if images.count <= 9 {
-                            // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
-                            //                            ScrollView {
-                            //                                LazyVGrid(
-                            //                                    columns: [
-                            //                                        GridItem(
-                            //                                            .fixed(metrics.size.width / 3),
-                            //                                            spacing: 2
-                            //                                        ),
-                            //                                        GridItem(
-                            //                                            .fixed(metrics.size.width / 3),
-                            //                                            spacing: 2
-                            //                                        ),
-                            //                                        GridItem(
-                            //                                            .fixed(metrics.size.width / 3),
-                            //                                            spacing: 2
-                            //                                        ),
-                            //                                    ],
-                            //                                    spacing: 2
-                            //                                ) {
-                            //                                    ForEach(dataStructure.images) {
-                            //                                        image in
-                            //                                        Button {
-                            //                                            selectedImage = image
-                            //                                            imageDetailsPresented.toggle()
-                            //                                        } label: {
-                            //                                            Image(uiImage: image.image)
-                            //                                                .resizable()
-                            //                                                .frame(
-                            //                                                    width: metrics.size.width / 3,
-                            //                                                    height: metrics.size.width / 3
-                            //                                                )
-                            //                                        }
-                            //                                    }
-                            //                                }
-                            //                            }
-                        } else {
-                            NavigationLink {
-                                ImageListDetails()
-                                    .environmentObject(dataStructure!)
-                            } label: {
-                                Label("Show all images (\(images.count))", systemImage: "photo")
-                            }
-                        }
-                    } else {
-                        Text("No Images found")
-                    }
-                }
-                //        Section("Documents") {
-                //            if !documents.isEmpty {
-                //                ForEach(documents) {
-                //                    document in
-                //                }
-                //            } else {
-                //                Text("No Documents found")
-                //            }
-                //        }
+                largeScreenOption()
+                entrySection()
+                folderSection()
+                imageSection(metrics)
+                documentSection()
             }
         }
         .sheet(isPresented: $detailsPresented) {
-            Me_Details(me: dataStructure!)
+            Me_Details(me: dataStructure)
         }
         .sheet(isPresented: $addEntryPresented) {
             EditEntry()
@@ -194,7 +106,7 @@ internal struct ME_ContentView : View {
             ImageDetails(image: $selectedImage)
         }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
-        .navigationTitle(dataStructure is Database ? "Home" : dataStructure?.name ?? "Loading...")
+        .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
         .toolbar(.automatic, for: .navigationBar)
@@ -280,20 +192,118 @@ internal struct ME_ContentView : View {
         } message: {
             Text("An Error arised saving the Database")
         }
-        .onAppear {
-            // Environment Object can't be used in init, so method is called on appear of view
-            // https://www.hackingwithswift.com/forums/swiftui/environmentobject-usage-in-init-of-a-view/5795
-            loadStructure()
+    }
+    
+    @ViewBuilder
+    private func largeScreenOption() -> some View {
+        if largeScreen {
+            Section {
+            } header: {
+                Image(systemName: dataStructure.iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .padding()
+            }
         }
     }
     
-    /// Loads the structure needed
-    private func loadStructure() -> Void {
-        if id == db.id {
-            dataStructure = db
-        } else {
-            // Passed Data structure is a folder
-            // TODO: add Code in order to load Folder
+    @ViewBuilder
+    private func entrySection() -> some View {
+        Section("Entries") {
+            if !dataStructure.entries.isEmpty {
+                ForEach(dataStructure.entries) {
+                    entry in
+                    NavigationLink(entry.title) {
+                        EntryDetails(entry: entry)
+                    }
+                }
+            } else {
+                Text("No Entries found")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func folderSection() -> some View {
+        Section("Folder") {
+            if !dataStructure.folders.isEmpty {
+                ForEach(dataStructure.folders) {
+                    folder in
+                    NavigationLink(folder.name) {
+                        ME_ContentView(folder: folder)
+                            .environmentObject(db)
+                    }
+                }
+            } else {
+                Text("No Folders found")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func imageSection(_ metrics : GeometryProxy) -> some View {
+        Section("Images") {
+            if !images.isEmpty {
+                if images.count <= 9 {
+                    // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
+                    ScrollView {
+                        LazyVGrid(
+                            columns: [
+                                GridItem(
+                                    .fixed(metrics.size.width / 3),
+                                    spacing: 2
+                                ),
+                                GridItem(
+                                    .fixed(metrics.size.width / 3),
+                                    spacing: 2
+                                ),
+                                GridItem(
+                                    .fixed(metrics.size.width / 3),
+                                    spacing: 2
+                                ),
+                            ],
+                            spacing: 2
+                        ) {
+//                            ForEach(dataStructure!.images) {
+//                                image in
+//                                Button {
+//                                    selectedImage = image
+//                                    imageDetailsPresented.toggle()
+//                                } label: {
+//                                    Image(uiImage: image.image)
+//                                        .resizable()
+//                                        .frame(
+//                                            width: metrics.size.width / 3,
+//                                            height: metrics.size.width / 3
+//                                        )
+//                                }
+//                            }
+                        }
+                    }
+                } else {
+                    NavigationLink {
+                        ImageListDetails()
+                            .environmentObject(dataStructure)
+                    } label: {
+                        Label("Show all images (\(images.count))", systemImage: "photo")
+                    }
+                }
+            } else {
+                Text("No Images found")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func documentSection() -> some View {
+        Section("Documents") {
+            if !documents.isEmpty {
+                ForEach(documents) {
+                    document in
+                }
+            } else {
+                Text("No Documents found")
+            }
         }
     }
 }
@@ -320,7 +330,7 @@ internal struct ME_ContentView_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(id: db.id)
+        ME_ContentView(db: db)
             .environmentObject(db)
     }
 }
@@ -330,7 +340,7 @@ internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(id: db.id)
+        ME_ContentView(db: db)
             .environmentObject(db)
             .environment(\.largeScreen, true)
     }

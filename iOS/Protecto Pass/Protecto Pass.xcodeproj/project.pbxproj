@@ -22,7 +22,7 @@
 		8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300292A98BA9200CA4529 /* CoreDataManager.swift */; };
 		84627AC12AA9CA2000415827 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84627AC02AA9CA2000415827 /* Settings.swift */; };
 		846302332AA99F7600C051E3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 846302322AA99F7600C051E3 /* Settings.bundle */; };
-		846455D02A9BA517003D023C /* Caches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* Caches.swift */; };
+		846455D02A9BA517003D023C /* DatabaseDoesNotExistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* DatabaseDoesNotExistError.swift */; };
 		8467EBB82B5FDFEC003E6479 /* ImageListDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */; };
 		84711C642C0C6DBF00B26143 /* DB_Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84711C632C0C6DBF00B26143 /* DB_Video.swift */; };
 		8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474FDA92A93612C007F4215 /* ME_DataStructure.swift */; };
@@ -103,7 +103,7 @@
 		84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Protecto-Pass-Info.plist"; sourceTree = "<group>"; };
 		84627AC02AA9CA2000415827 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		846302322AA99F7600C051E3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		846455CF2A9BA517003D023C /* Caches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Caches.swift; sourceTree = "<group>"; };
+		846455CF2A9BA517003D023C /* DatabaseDoesNotExistError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseDoesNotExistError.swift; sourceTree = "<group>"; };
 		8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListDetails.swift; sourceTree = "<group>"; };
 		84711C632C0C6DBF00B26143 /* DB_Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Video.swift; sourceTree = "<group>"; };
 		8474FDA92A93612C007F4215 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
@@ -423,7 +423,7 @@
 				84F4207029EEA0F1000D7600 /* Persistence.swift */,
 				84F4207129EEA0F1000D7600 /* DatabaseFileManager.swift */,
 				845300292A98BA9200CA4529 /* CoreDataManager.swift */,
-				846455CF2A9BA517003D023C /* Caches.swift */,
+				846455CF2A9BA517003D023C /* DatabaseDoesNotExistError.swift */,
 				840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */,
 				840EA3682BC47F27007BC214 /* SandboxManager.swift */,
 			);
@@ -623,7 +623,7 @@
 				84DB4F902A739D9100C2DD0E /* Me_Details.swift in Sources */,
 				8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */,
 				849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */,
-				846455D02A9BA517003D023C /* Caches.swift in Sources */,
+				846455D02A9BA517003D023C /* DatabaseDoesNotExistError.swift in Sources */,
 				841E86E12AAB222800B03F37 /* AddDB_CompactMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -802,7 +802,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -837,7 +837,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -860,7 +860,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jules.Protecto-PassTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -880,7 +880,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jules.Protecto-PassTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -899,6 +899,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jules.Protecto-PassUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -917,6 +918,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q87UDX5898;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jules.Protecto-PassUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

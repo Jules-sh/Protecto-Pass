@@ -237,7 +237,7 @@ internal struct Encrypter {
             using: key!
         ).combined!
         let encryptedURL = try AES.GCM.seal(
-            DataConverter.stringToData(entry.url!.absoluteString),
+            DataConverter.stringToData(entry.url?.absoluteString ?? ""),
             using: key!
         ).combined!
         let encryptedNotes : Data = try AES.GCM.seal(
@@ -333,6 +333,10 @@ internal struct Encrypter {
             DataConverter.stringToData(document.type),
             using: key!
         ).combined!
+        let encryptedName : Data = try AES.GCM.seal(
+            DataConverter.stringToData(document.name),
+            using: key!
+        ).combined!
         let encryptedCreatedDate : Data = try AES.GCM.seal(
             DataConverter.dateToData(document.created),
             using: key!
@@ -344,6 +348,7 @@ internal struct Encrypter {
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
+            name: encryptedName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
             id: document.id
@@ -354,7 +359,7 @@ internal struct Encrypter {
     /// an encrypted representation of this Loadable Resource Type
     private func encryptAES(lr : LoadableResource) throws -> EncryptedLoadableResource {
         let encryptedName : Data = try AES.GCM.seal(
-            DataConverter.stringToData(lr.name),
+            DataConverter.stringToData(lr.name ?? ""),
             using: key!
         ).combined!
         let encryptedThumbnailData : Data = try AES.GCM.seal(
@@ -598,6 +603,10 @@ internal struct Encrypter {
             DataConverter.stringToData(document.type),
             using: key!
         ).combined
+        let encryptedName : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(document.name),
+            using: key!
+        ).combined
         let encryptedCreatedDate : Data = try ChaChaPoly.seal(
             DataConverter.dateToData(document.created),
             using: key!
@@ -609,6 +618,7 @@ internal struct Encrypter {
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
+            name: encryptedName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
             id: document.id
@@ -619,7 +629,7 @@ internal struct Encrypter {
     /// an encrypted representation of this Loadable Resource Type
     private func encryptChaChaPoly(lr : LoadableResource) throws -> EncryptedLoadableResource {
         let encryptedName : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(lr.name),
+            DataConverter.stringToData(lr.name ?? ""),
             using: key!
         ).combined
         let encryptedThumbnailData : Data = try ChaChaPoly.seal(

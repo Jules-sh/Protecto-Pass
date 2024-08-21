@@ -71,12 +71,12 @@ internal struct AddDB_Overview: View {
                         Text(e.rawValue)
                     }
                 }
-                Picker("Storage", selection: $storage.animation()) {
-                    ForEach(Storage.StorageType.allCases) {
-                        s in
-                        Text(s.rawValue)
-                    }
-                }
+//                Picker("Storage", selection: $storage.animation()) {
+//                    ForEach(Storage.StorageType.allCases) {
+//                        s in
+//                        Text(s.rawValue)
+//                    }
+//                }
                 if storage == .File {
                     Button {
                         selectorPresented.toggle()

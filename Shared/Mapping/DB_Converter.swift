@@ -107,6 +107,7 @@ private struct FolderConverter : DatabaseConverterProtocol {
         }
         cdFolder.created = encrypted.created
         cdFolder.lastEdited = encrypted.lastEdited
+        cdFolder.uuid = encrypted.id
         return cdFolder
     }
 }
@@ -130,7 +131,8 @@ private struct EntryConverter : DatabaseConverterProtocol {
             cdEntry.addToDocuments(LoadableResourceConverter.toCD(doc, context: context))
         }
         cdEntry.created = encrypted.created
-        cdEntry.lastEdited = cdEntry.lastEdited
+        cdEntry.lastEdited = encrypted.lastEdited
+        cdEntry.uuid = encrypted.id
         return cdEntry
     }
 }

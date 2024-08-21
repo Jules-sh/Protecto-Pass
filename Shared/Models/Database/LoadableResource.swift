@@ -9,22 +9,24 @@ import Foundation
 
 internal class GeneralLoadableResource<N> {
     
-    internal init(id: UUID, name: N, thumbnailData: Data) {
+    internal init(id: UUID, name: N?, thumbnailData: Data) {
         self.id = id
         self.name = name
         self.thumbnailData = thumbnailData
     }
     
+    internal convenience init(id: UUID, thumbnailData: Data) {
+        self.init(id: id, name: nil, thumbnailData: thumbnailData)
+    }
+    
     internal let id : UUID
     
-    internal let name : N
+    internal let name : N?
     
     internal let thumbnailData : Data
 }
 
-internal final class LoadableResource : GeneralLoadableResource<String> {
-    
-}
+internal final class LoadableResource : GeneralLoadableResource<String> {}
 
 internal final class EncryptedLoadableResource : GeneralLoadableResource<Data>, EncryptedDataStructure {
     
@@ -41,7 +43,7 @@ internal final class EncryptedLoadableResource : GeneralLoadableResource<Data>, 
         try container.encode(thumbnailData, forKey: .thumbnailData)
     }
     
-    internal override init(id: UUID, name: Data, thumbnailData: Data) {
+    internal override init(id: UUID, name: Data?, thumbnailData: Data) {
         super.init(
             id: id,
             name: name,

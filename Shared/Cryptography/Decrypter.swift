@@ -332,6 +332,10 @@ internal struct Decrypter {
             try AES.GCM.SealedBox(combined: document.type),
             using: key!
         )
+        let decryptedName : Data = try AES.GCM.open(
+            try AES.GCM.SealedBox(combined: document.name),
+            using: key!
+        )
         let decryptedCreatedDate : Data = try AES.GCM.open(
             AES.GCM.SealedBox(combined: document.created),
             using: key!
@@ -343,6 +347,7 @@ internal struct Decrypter {
         return DB_Document(
             document: decryptedDocumentData,
             type: DataConverter.dataToString(decryptedType),
+            name: DataConverter.dataToString(decryptedName),
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: document.id
@@ -352,7 +357,7 @@ internal struct Decrypter {
     /// Decrypts the passed Loadable Resource using AES and returns a decrypted Loadable Resource
     private func decryptAES(lr : EncryptedLoadableResource) throws -> LoadableResource {
         let decryptedNameData : Data = try AES.GCM.open(
-            AES.GCM.SealedBox(combined: lr.name),
+            AES.GCM.SealedBox(combined: lr.name ?? Data()),
             using: key!
         )
         let decryptedThumbnailData : Data = try AES.GCM.open(
@@ -591,6 +596,10 @@ internal struct Decrypter {
             try ChaChaPoly.SealedBox(combined: document.type),
             using: key!
         )
+        let decryptedName : Data = try ChaChaPoly.open(
+            ChaChaPoly.SealedBox(combined: document.name),
+            using: key!
+        )
         let decryptedCreatedDate : Data = try ChaChaPoly.open(
             ChaChaPoly.SealedBox(combined: document.created),
             using: key!
@@ -602,6 +611,7 @@ internal struct Decrypter {
         return DB_Document(
             document: decryptedDocumentData,
             type: DataConverter.dataToString(decryptedType),
+            name : DataConverter.dataToString(decryptedName),
             created: try DataConverter.dataToDate(decryptedCreatedDate),
             lastEdited: try DataConverter.dataToDate(decryptedLastEditedDate),
             id: document.id
@@ -611,7 +621,7 @@ internal struct Decrypter {
     /// Decrypts the passed Loadable Resource using ChaChaPoly and returns a decrypted Loadable Resource
     private func decryptChaChaPoly(lr : EncryptedLoadableResource) throws -> LoadableResource {
         let decryptedNameData : Data = try ChaChaPoly.open(
-            ChaChaPoly.SealedBox(combined: lr.name),
+            ChaChaPoly.SealedBox(combined: lr.name ?? Data()),
             using: key!
         )
         let decryptedThumbnailData : Data = try ChaChaPoly.open(

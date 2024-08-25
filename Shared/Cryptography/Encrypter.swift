@@ -21,7 +21,7 @@ internal struct Encrypter {
     private static let chaChaPoly : Encrypter = Encrypter(encryption: .ChaChaPoly)
     
     /// Returns the correct Encrypter for the passed database
-    internal static func getInstance(for db : Database) -> Encrypter {
+    internal static func configure(for db : Database) -> Encrypter {
         var encrypter : Encrypter
         if db.header.encryption == .AES256 {
             encrypter = aes256
@@ -30,6 +30,8 @@ internal struct Encrypter {
         } else {
             encrypter = Encrypter(encryption: nil)
         }
+        encrypter.password = db.password + db.header.salt
+        encrypter.key = db.key
         encrypter.db = db
         return encrypter
     }
@@ -55,38 +57,90 @@ internal struct Encrypter {
         self.encryption = encryption
     }
     
-    /// Encrypts the Database this Encrypter is configured for,
-    /// using the getInstance method and passing your Database.
-    /// Returns the encrypted Database if it could be encrypted, otherwise
-    /// throws an error.
-    /// See Error for more details
-    internal mutating func encrypt(using password : String) throws -> EncryptedDatabase {
-        self.password = password + db!.header.salt
-        key = db!.key
-        if encryption == .AES256 {
+    // START GENERAL ENCRYPTION
+    
+    /// Encrypts the Database and returns the encrypted Database containing folders and entries.
+    internal func encrypt() throws -> EncryptedDatabase {
+        if db!.header.encryption == .AES256 {
             return try encryptAES()
-        } else if encryption == .ChaChaPoly {
+        } else if db!.header.encryption == .ChaChaPoly {
             return try encryptChaChaPoly()
         } else {
             throw CryptoStatus.unknownEncryption
         }
     }
     
-    // START AES ENCRYPTION
+    /// Encrypts the passed Image with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func encryptImage(_ image : DB_Image) throws -> Encrypted_DB_Image {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(image: image)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(image: image)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
     
+    /// Encrypts the passed Video with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func encryptVideo(_ video : DB_Video) throws -> Encrypted_DB_Video {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(video: video)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(video: video)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    /// Encrypts the passed Document with the cryptography algorithm this Encrypter is configured for.
+    /// Use the `configure` Method to configure a Encrypter
+    internal func encryptDocument(_ document : DB_Document) throws -> Encrypted_DB_Document {
+        if db!.header.encryption == .AES256 {
+            return try encryptAES(document: document)
+        } else if db!.header.encryption == .ChaChaPoly {
+            return try encryptChaChaPoly(document: document)
+        } else {
+            throw CryptoStatus.unknownEncryption
+        }
+    }
+    
+    // START AES ENCRYPTION
+
     /// Encrypts Databases with AES
     /// Throws an Error if something went wrong
     private func encryptAES() throws -> EncryptedDatabase {
-        var encryptedContents : [EncryptedToCItem] = []
-        for toc in db!.contents {
-            encryptedContents.append(try encryptAES(toc: toc))
-        }
         let encryptedKey : Data = try encryptAESKey()
+        var encryptedFolders : [EncryptedFolder] = []
+        for folder in db!.folders {
+            encryptedFolders.append(try encryptAES(folder: folder))
+        }
+        var encryptedEntries : [EncryptedEntry] = []
+        for entry in db!.entries {
+            encryptedEntries.append(try encryptAES(entry: entry))
+        }
+        var encryptedImages : [EncryptedLoadableResource] = []
+        for image in db!.images {
+            encryptedImages.append(try encryptAES(lr: image))
+        }
+        var encryptedVideos : [EncryptedLoadableResource] = []
+        for video in db!.videos {
+            encryptedVideos.append(try encryptAES(lr: video))
+        }
+        var encryptedDocuments : [EncryptedLoadableResource] = []
+        for doc in db!.documents {
+            encryptedDocuments.append(try encryptAES(lr: doc))
+        }
         return EncryptedDatabase(
             name: db!.name,
             description: db!.description,
+            folders: encryptedFolders,
+            entries: encryptedEntries,
+            images: encryptedImages,
+            videos: encryptedVideos,
             iconName: db!.iconName,
-            contents: encryptedContents,
+            documents: encryptedDocuments,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -106,35 +160,29 @@ internal struct Encrypter {
         ).combined!
     }
     
-    /// Encrypts a single Item of a Table of Contents using AES
-    private func encryptAES(toc : ToCItem) throws -> EncryptedToCItem {
-        let encryptedName : Data = try AES.GCM.seal(
-            DataConverter.stringToData(toc.name),
-            using: key!
-        ).combined!
-        let encryptedType : Data = try AES.GCM.seal(
-            DataConverter.stringToData(toc.type.rawValue),
-            using: key!
-        ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(toc.id.uuidString),
-            using: key!
-        ).combined!
-        var encryptedChildren : [EncryptedToCItem] = []
-        for child in toc.children {
-            encryptedChildren.append(try encryptAES(toc: child))
-        }
-        return EncryptedToCItem(
-            name: encryptedName,
-            type: encryptedType,
-            id: encryptedID,
-            children: encryptedChildren
-        )
-    }
-    
     /// Encrypts the passed Folder with AES and returns
     /// an encrypted Folder
     private func encryptAES(folder : Folder) throws -> EncryptedFolder {
+        var encryptedFolders : [EncryptedFolder] = []
+        for folder in folder.folders {
+            encryptedFolders.append(try encryptAES(folder: folder))
+        }
+        var encryptedEntries : [EncryptedEntry] = []
+        for entry in folder.entries {
+            encryptedEntries.append(try encryptAES(entry: entry))
+        }
+        var encryptedImages : [EncryptedLoadableResource] = []
+        for image in folder.images {
+            encryptedImages.append(try encryptAES(lr: image))
+        }
+        var encryptedVideos : [EncryptedLoadableResource] = []
+        for video in db!.videos {
+            encryptedVideos.append(try encryptAES(lr: video))
+        }
+        var encryptedDocuments : [EncryptedLoadableResource] = []
+        for doc in folder.documents {
+            encryptedDocuments.append(try encryptAES(lr: doc))
+        }
         let encryptedName : Data = try AES.GCM.seal(
             DataConverter.stringToData(folder.name),
             using: key!
@@ -155,22 +203,27 @@ internal struct Encrypter {
             DataConverter.dateToData(folder.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(folder.id.uuidString),
-            using: key!
-        ).combined!
         return EncryptedFolder(
             name: encryptedName,
             description: encryptedDescription,
+            folders: encryptedFolders,
+            entries: encryptedEntries,
+            images: encryptedImages,
+            videos: encryptedVideos,
             iconName: encryptedIconName,
+            documents: encryptedDocuments,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: folder.id
         )
     }
     
     /// Encrypts the passed Entry with AES and returns an encrypted Entry
     private func encryptAES(entry : Entry) throws -> EncryptedEntry {
+        var encryptedDocuments : [EncryptedLoadableResource] = []
+        for doc in entry.documents {
+            encryptedDocuments.append(try encryptAES(lr: doc))
+        }
         let encryptedTitle : Data = try AES.GCM.seal(
             DataConverter.stringToData(entry.title),
             using: key!
@@ -184,7 +237,7 @@ internal struct Encrypter {
             using: key!
         ).combined!
         let encryptedURL = try AES.GCM.seal(
-            DataConverter.stringToData(entry.url!.absoluteString),
+            DataConverter.stringToData(entry.url?.absoluteString ?? ""),
             using: key!
         ).combined!
         let encryptedNotes : Data = try AES.GCM.seal(
@@ -203,10 +256,6 @@ internal struct Encrypter {
             DataConverter.dateToData(entry.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(entry.id.uuidString),
-            using: key!
-        ).combined!
         return EncryptedEntry(
             title: encryptedTitle,
             username: encryptedUsername,
@@ -214,9 +263,10 @@ internal struct Encrypter {
             url: encryptedURL,
             notes: encryptedNotes,
             iconName: encryptedIconName,
+            documents: encryptedDocuments,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: entry.id
         )
     }
     
@@ -240,16 +290,35 @@ internal struct Encrypter {
             DataConverter.dateToData(image.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(image.id.uuidString),
-            using: key!
-        ).combined!
         return Encrypted_DB_Image(
             image: encryptedImageData,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: image.id
+        )
+    }
+    
+    /// Encrypts the passed Video with AES and returns
+    /// an encrypted Image
+    private func encryptAES(video : DB_Video) throws -> Encrypted_DB_Video {
+        let encryptedVideoData : Data = try AES.GCM.seal(
+            video.video,
+            using: key!
+        ).combined!
+        let encryptedCreatedDate : Data = try AES.GCM.seal(
+            DataConverter.dateToData(video.created),
+            using: key!
+        ).combined!
+        let encryptedLastEditedDate : Data = try AES.GCM.seal(
+            DataConverter.dateToData(video.lastEdited),
+            using: key!
+        ).combined!
+        return Encrypted_DB_Video(
+            video: encryptedVideoData,
+            created: encryptedCreatedDate,
+            lastEdited: encryptedLastEditedDate,
+            id: video.id
         )
     }
     
@@ -264,6 +333,10 @@ internal struct Encrypter {
             DataConverter.stringToData(document.type),
             using: key!
         ).combined!
+        let encryptedName : Data = try AES.GCM.seal(
+            DataConverter.stringToData(document.name),
+            using: key!
+        ).combined!
         let encryptedCreatedDate : Data = try AES.GCM.seal(
             DataConverter.dateToData(document.created),
             using: key!
@@ -272,16 +345,31 @@ internal struct Encrypter {
             DataConverter.dateToData(document.lastEdited),
             using: key!
         ).combined!
-        let encryptedID : Data = try AES.GCM.seal(
-            DataConverter.stringToData(document.id.uuidString),
-            using: key!
-        ).combined!
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
+            name: encryptedName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: document.id
+        )
+    }
+    
+    /// Encrypts the passed Loadable Resource with AES and returns
+    /// an encrypted representation of this Loadable Resource Type
+    private func encryptAES(lr : LoadableResource) throws -> EncryptedLoadableResource {
+        let encryptedName : Data = try AES.GCM.seal(
+            DataConverter.stringToData(lr.name ?? ""),
+            using: key!
+        ).combined!
+        let encryptedThumbnailData : Data = try AES.GCM.seal(
+            lr.thumbnailData,
+            using: key!
+        ).combined!
+        return EncryptedLoadableResource(
+            id: lr.id,
+            name: encryptedName,
+            thumbnailData: encryptedThumbnailData
         )
     }
     
@@ -291,16 +379,36 @@ internal struct Encrypter {
     /// Encrypts Databases with ChaChaPoly
     /// Throws an Error if something went wrong
     private func encryptChaChaPoly() throws -> EncryptedDatabase {
-        var encryptedContents : [EncryptedToCItem] = []
-        for toc in db!.contents {
-            encryptedContents.append(try encryptChaChaPoly(toc: toc))
-        }
         let encryptedKey : Data = try encryptChaChaPolyKey()
+        var encryptedFolders : [EncryptedFolder] = []
+        for folder in db!.folders {
+            encryptedFolders.append(try encryptChaChaPoly(folder: folder))
+        }
+        var encryptedEntries : [EncryptedEntry] = []
+        for entry in db!.entries {
+            encryptedEntries.append(try encryptChaChaPoly(entry: entry))
+        }
+        var encryptedImages : [EncryptedLoadableResource] = []
+        for image in db!.images {
+            encryptedImages.append(try encryptChaChaPoly(lr: image))
+        }
+        var encryptedVideos : [EncryptedLoadableResource] = []
+        for video in db!.videos {
+            encryptedVideos.append(try encryptChaChaPoly(lr: video))
+        }
+        var encryptedDocuments : [EncryptedLoadableResource] = []
+        for doc in db!.documents {
+            encryptedDocuments.append(try encryptChaChaPoly(lr: doc))
+        }
         let encryptedDatabase : EncryptedDatabase = EncryptedDatabase(
             name: db!.name,
             description: db!.description,
+            folders: encryptedFolders,
+            entries: encryptedEntries,
+            images: encryptedImages,
+            videos: encryptedVideos,
             iconName: db!.iconName,
-            contents: encryptedContents,
+            documents: encryptedDocuments,
             created: db!.created,
             lastEdited: db!.lastEdited,
             header: db!.header,
@@ -321,36 +429,30 @@ internal struct Encrypter {
         ).combined
     }
     
-    /// Encrypts the passed ToC Item using ChaChaPoly
-    private func encryptChaChaPoly(toc : ToCItem) throws -> EncryptedToCItem {
-        let encryptedName : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(toc.name),
-            using: key!
-        ).combined
-        let encryptedType : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(toc.type.rawValue),
-            using: key!
-        ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(toc.id.uuidString),
-            using: key!
-        ).combined
-        var encryptedChildren : [EncryptedToCItem] = []
-        for child in toc.children {
-            encryptedChildren.append(try encryptChaChaPoly(toc: child))
-        }
-        return EncryptedToCItem(
-            name: encryptedName,
-            type: encryptedType,
-            id: encryptedID,
-            children: encryptedChildren
-        )
-    }
-    
     
     /// Encryptes the passed Folder with ChaChaPoly and returns
     /// an encrypted Folder
     private func encryptChaChaPoly(folder : Folder) throws -> EncryptedFolder {
+        var encryptedFolders : [EncryptedFolder] = []
+        for folder in folder.folders {
+            encryptedFolders.append(try encryptChaChaPoly(folder: folder))
+        }
+        var encryptedEntries : [EncryptedEntry] = []
+        for entry in folder.entries {
+            encryptedEntries.append(try encryptChaChaPoly(entry: entry))
+        }
+        var encryptedImages : [EncryptedLoadableResource] = []
+        for image in folder.images {
+            encryptedImages.append(try encryptChaChaPoly(lr: image))
+        }
+        var encryptedVideos : [EncryptedLoadableResource] = []
+        for video in folder.videos {
+            encryptedVideos.append(try encryptChaChaPoly(lr: video))
+        }
+        var encryptedDocuments : [EncryptedLoadableResource] = []
+        for doc in folder.documents {
+            encryptedDocuments.append(try encryptChaChaPoly(lr: doc))
+        }
         let encryptedName : Data = try ChaChaPoly.seal(
             DataConverter.stringToData(folder.name),
             using: key!
@@ -371,22 +473,27 @@ internal struct Encrypter {
             DataConverter.dateToData(folder.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(folder.id.uuidString),
-            using: key!
-        ).combined
         return EncryptedFolder(
             name: encryptedName,
             description: encryptedDescription,
+            folders: encryptedFolders,
+            entries: encryptedEntries,
+            images: encryptedImages,
+            videos: encryptedVideos,
             iconName: encryptedIconName,
+            documents: encryptedDocuments,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: folder.id
         )
     }
     
     /// Encrypts the passed Entry with ChaChaPoly and returns an encrypted Entry
     private func encryptChaChaPoly(entry : Entry) throws -> EncryptedEntry {
+        var encryptedDocuments : [EncryptedLoadableResource] = []
+        for doc in entry.documents {
+            encryptedDocuments.append(try encryptChaChaPoly(lr: doc))
+        }
         let encryptedTitle : Data = try ChaChaPoly.seal(
             DataConverter.stringToData(entry.title),
             using: key!
@@ -419,10 +526,6 @@ internal struct Encrypter {
             DataConverter.dateToData(entry.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(entry.id.uuidString),
-            using: key!
-        ).combined
         return EncryptedEntry(
             title: encryptedTitle,
             username: encryptedUsername,
@@ -430,9 +533,10 @@ internal struct Encrypter {
             url: encryptedURL,
             notes: encryptedNotes,
             iconName: encryptedIconName,
+            documents: encryptedDocuments,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: entry.id
         )
     }
     
@@ -456,16 +560,35 @@ internal struct Encrypter {
             DataConverter.dateToData(image.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(image.id.uuidString),
-            using: key!
-        ).combined
         return Encrypted_DB_Image(
             image: encryptedImageData,
             quality: encryptedQuality,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: image.id
+        )
+    }
+    
+    /// Encrypts the passed Video with ChaChaPoly and returns
+    /// an encrypted Image
+    private func encryptChaChaPoly(video : DB_Video) throws -> Encrypted_DB_Video {
+        let encryptedVideoData : Data = try ChaChaPoly.seal(
+            video.video,
+            using: key!
+        ).combined
+        let encryptedCreatedDate : Data = try ChaChaPoly.seal(
+            DataConverter.dateToData(video.created),
+            using: key!
+        ).combined
+        let encryptedLastEditedDate : Data = try ChaChaPoly.seal(
+            DataConverter.dateToData(video.lastEdited),
+            using: key!
+        ).combined
+        return Encrypted_DB_Video(
+            video: encryptedVideoData,
+            created: encryptedCreatedDate,
+            lastEdited: encryptedLastEditedDate,
+            id: video.id
         )
     }
     
@@ -480,6 +603,10 @@ internal struct Encrypter {
             DataConverter.stringToData(document.type),
             using: key!
         ).combined
+        let encryptedName : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(document.name),
+            using: key!
+        ).combined
         let encryptedCreatedDate : Data = try ChaChaPoly.seal(
             DataConverter.dateToData(document.created),
             using: key!
@@ -488,16 +615,31 @@ internal struct Encrypter {
             DataConverter.dateToData(document.lastEdited),
             using: key!
         ).combined
-        let encryptedID : Data = try ChaChaPoly.seal(
-            DataConverter.stringToData(document.id.uuidString),
-            using: key!
-        ).combined
         return Encrypted_DB_Document(
             document: encryptedDocument,
             type: encryptedType,
+            name: encryptedName,
             created: encryptedCreatedDate,
             lastEdited: encryptedLastEditedDate,
-            id: encryptedID
+            id: document.id
+        )
+    }
+    
+    /// Encrypts the passed Loadable Resource with ChaChaPoly and returns
+    /// an encrypted representation of this Loadable Resource Type
+    private func encryptChaChaPoly(lr : LoadableResource) throws -> EncryptedLoadableResource {
+        let encryptedName : Data = try ChaChaPoly.seal(
+            DataConverter.stringToData(lr.name ?? ""),
+            using: key!
+        ).combined
+        let encryptedThumbnailData : Data = try ChaChaPoly.seal(
+            lr.thumbnailData,
+            using: key!
+        ).combined
+        return EncryptedLoadableResource(
+            id: lr.id,
+            name: encryptedName,
+            thumbnailData: encryptedThumbnailData
         )
     }
 }

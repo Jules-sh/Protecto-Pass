@@ -10,6 +10,8 @@ import SwiftUI
 @main
 internal struct Protecto_PassApp: App {
     
+    @Environment(\.scenePhase) private var scenePhase
+    
     /// The Persistence Controller used in this App to store Data
     private let persistenceController : PersistenceController = PersistenceController.shared
 
@@ -47,6 +49,12 @@ internal struct Protecto_PassApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.largeScreen, largeScreen)
                 .environment(\.compactMode, compactMode)
+                .onChange(of: scenePhase) {
+                    old, new in
+                    if new == .background {
+                        Storage.storeCurrentDatabase()
+                    }
+                }
         }
     }
 }

@@ -31,6 +31,10 @@ internal struct EditFolder: View {
     
     @State private var errStoring : Bool = false
     
+    @State private var iconName : String = "folder"
+    
+    @State private var iconChooserShown : Bool = false
+    
     internal init(
         folder : Folder? = nil
     ) {
@@ -40,12 +44,20 @@ internal struct EditFolder: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(systemName: "folder")
-                    .renderingMode(.original)
-                    .symbolRenderingMode(.hierarchical)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(.horizontal, 75)
+                Button {
+                    iconChooserShown.toggle()
+                } label: {
+                    Image(systemName: iconName)
+                        .renderingMode(.original)
+                        .symbolRenderingMode(.hierarchical)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 75)
+                        .foregroundStyle(.foreground)
+                }
+                .sheet(isPresented: $iconChooserShown) {
+                    IconChooser(iconName: $iconName, type: .folder)
+                }
                 Group {
                     TextField("Name", text: $name)
                         .textInputAutocapitalization(.words)
@@ -58,23 +70,23 @@ internal struct EditFolder: View {
                 }
                 Group {
                     // TODO: update group content
-//                    Toggle(isOn: $storeInFolder.animation()) {
-//                        Label("Store in Folder", systemImage: "folder")
-//                    }
-//                    if storeInFolder {
-//                        Picker("Folder", selection: $folder) {
-//                            if (db.folders.isEmpty) {
-//                                Text("No folder available")
-//                            } else {
-//                                ForEach(db.folders) {
-//                                    folder in
-//                                    Text(folder.name)
-//                                }
-//                            }
-//                        }
-//                        .disabled(db.folders.isEmpty)
-//                        .pickerStyle(.menu)
-//                    }
+                    Toggle(isOn: $storeInFolder.animation()) {
+                        Label("Store in Folder", systemImage: "folder")
+                    }
+                    if storeInFolder {
+                        Picker("Folder", selection: $folder) {
+                            if (db.folders.isEmpty) {
+                                Text("No folder available")
+                            } else {
+                                ForEach(db.folders) {
+                                    folder in
+                                    Text(folder.name)
+                                }
+                            }
+                        }
+                        .disabled(db.folders.isEmpty)
+                        .pickerStyle(.menu)
+                    }
                 }
             }
             .alert("Error saving", isPresented: $errStoring) {
@@ -101,7 +113,25 @@ internal struct EditFolder: View {
     /// Saves the Data and dismisses this View
     private func save() -> Void {
         do {
-            try Storage.storeDatabase(db, context: context)
+            try Storage.storeDatabase(
+                db,
+                context: context,
+                newElements: [
+                    Folder(
+                        name: name,
+                        description: description,
+                        folders: [],
+                        entries: [],
+                        images: [],
+                        videos: [],
+                        iconName: iconName,
+                        documents: [],
+                        created: Date.now,
+                        lastEdited: Date.now,
+                        id: UUID()
+                    )
+                ]
+            )
             dismiss()
         } catch {
             errStoring.toggle()

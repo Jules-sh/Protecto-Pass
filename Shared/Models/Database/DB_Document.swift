@@ -8,7 +8,7 @@
 import Foundation
 
 /// Generalised Document class
-internal class GeneralDocument<T, De, I> : DatabaseContent<De, I> {
+internal class GeneralDocument<T, De> : DatabaseContent<De> {
     
     /// Document Data read from this Document
     internal let document : Data
@@ -16,47 +16,54 @@ internal class GeneralDocument<T, De, I> : DatabaseContent<De, I> {
     /// The Type or extension of this Document
     internal let type : T
     
+    internal let name : T
+    
     internal init(
         document: Data,
         type: T,
+        name : T,
         created : De,
         lastEdited : De,
-        id : I
+        id : UUID
     ) {
         self.document = document
         self.type = type
+        self.name = name
         super.init(created: created, lastEdited: lastEdited, id: id)
     }
 }
 
 
 /// Decrypted Document to use in the decrypted Database
-internal final class DB_Document : GeneralDocument<String, Date, UUID>, DecryptedDataStructure {
+internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataStructure {
     
     internal static func == (lhs: DB_Document, rhs: DB_Document) -> Bool {
-        return lhs.document == rhs.document && lhs.type == rhs.type && lhs.id == rhs.id
+        return lhs.document == rhs.document && lhs.type == rhs.type && lhs.id == rhs.id && rhs.name == lhs.name
     }
     
     internal func hash(into hasher: inout Hasher) {
         hasher.combine(document)
         hasher.combine(type)
         hasher.combine(id)
+        hasher.combine(name)
     }
 }
 
 /// Encrypted Document type storing the encrypted values
-internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, EncryptedDataStructure {
+internal final class Encrypted_DB_Document : GeneralDocument<Data, Data>, EncryptedDataStructure {
     
     override internal init(
         document: Data,
         type: Data,
+        name: Data,
         created : Data,
         lastEdited : Data,
-        id : Data
+        id : UUID
     ) {
         super.init(
             document: document,
             type: type,
+            name: name,
             created: created,
             lastEdited: lastEdited,
             id: id
@@ -66,6 +73,7 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, 
     private enum DB_DocumentCodingKeys: CodingKey {
         case document
         case type
+        case name
         case created
         case lastEdited
         case id
@@ -78,6 +86,7 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, 
         try container.encode(created, forKey: .created)
         try container.encode(lastEdited, forKey: .lastEdited)
         try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
     }
     
     internal convenience init(from decoder: Decoder) throws {
@@ -85,9 +94,10 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, 
         self.init(
             document: try container.decode(Data.self, forKey: .document),
             type: try container.decode(Data.self, forKey: .type),
+            name: try container.decode(Data.self, forKey: .name),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
-            id: try container.decode(Data.self, forKey: .id)
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     
@@ -95,6 +105,7 @@ internal final class Encrypted_DB_Document : GeneralDocument<Data, Data, Data>, 
         self.init(
             document: coreData.documentData!,
             type: coreData.type!,
+            name: coreData.name!,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!,
             id: coreData.uuid!

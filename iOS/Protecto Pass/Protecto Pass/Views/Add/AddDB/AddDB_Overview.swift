@@ -71,12 +71,12 @@ internal struct AddDB_Overview: View {
                         Text(e.rawValue)
                     }
                 }
-                Picker("Storage", selection: $storage.animation()) {
-                    ForEach(Storage.StorageType.allCases) {
-                        s in
-                        Text(s.rawValue)
-                    }
-                }
+//                Picker("Storage", selection: $storage.animation()) {
+//                    ForEach(Storage.StorageType.allCases) {
+//                        s in
+//                        Text(s.rawValue)
+//                    }
+//                }
                 if storage == .File {
                     Button {
                         selectorPresented.toggle()
@@ -135,8 +135,12 @@ internal struct AddDB_Overview: View {
         navigationController.db = Database(
             name: creationWrapper.name,
             description: creationWrapper.description,
+            folders: [],
+            entries: [],
+            images: [],
+            videos: [],
             iconName: creationWrapper.iconName,
-            contents: [],
+            documents: [],
             created: Date.now,
             lastEdited: Date.now,
             header: DB_Header(

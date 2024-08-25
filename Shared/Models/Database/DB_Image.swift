@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 /// The General super class of the DB Images
-internal class General_DB_Image<DA, Q, DE, I> : DatabaseContent<DE, I> {
+internal class General_DB_Image<DA, Q, DE> : DatabaseContent<DE> {
     
     /// The actual Image or data of it
     internal let image : DA
@@ -23,7 +23,7 @@ internal class General_DB_Image<DA, Q, DE, I> : DatabaseContent<DE, I> {
         quality : Q,
         created : DE,
         lastEdited : DE,
-        id : I
+        id : UUID
     ) {
         self.image = image
         self.quality = quality
@@ -32,7 +32,7 @@ internal class General_DB_Image<DA, Q, DE, I> : DatabaseContent<DE, I> {
 }
 
 /// The Decrypted Data Structure for Images stored in this App
-internal final class DB_Image : General_DB_Image<UIImage, Double, Date, UUID>, DecryptedDataStructure {
+internal final class DB_Image : General_DB_Image<UIImage, Double, Date>, DecryptedDataStructure {
     
     static func == (lhs: DB_Image, rhs: DB_Image) -> Bool {
         return lhs.image == rhs.image && lhs.quality == rhs.quality && lhs.id == rhs.id
@@ -42,6 +42,8 @@ internal final class DB_Image : General_DB_Image<UIImage, Double, Date, UUID>, D
         hasher.combine(image)
         hasher.combine(quality)
         hasher.combine(id)
+        hasher.combine(created)
+        hasher.combine(lastEdited)
     }
     
     /// The preview Image to use in SwiftUI Previews
@@ -55,14 +57,14 @@ internal final class DB_Image : General_DB_Image<UIImage, Double, Date, UUID>, D
 }
 
 /// The Encrypted Data Structure being used when the Database is still encrypted.
-internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Data>, EncryptedDataStructure {
+internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data>, EncryptedDataStructure {
     
     override internal init(
         image: Data,
         quality: Data,
         created : Data,
         lastEdited : Data,
-        id : Data
+        id : UUID
     ) {
         super.init(
             image: image,
@@ -97,7 +99,7 @@ internal final class Encrypted_DB_Image : General_DB_Image<Data, Data, Data, Dat
             quality: try container.decode(Data.self, forKey: .quality),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
-            id: try container.decode(Data.self, forKey: .id)
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     

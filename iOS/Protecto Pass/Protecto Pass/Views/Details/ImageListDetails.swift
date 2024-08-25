@@ -12,7 +12,7 @@ internal struct ImageListDetails: View {
     /// The full database needed to store it
     @EnvironmentObject private var db : Database
     
-    let images : [Int] = []
+    internal let images : [DB_Image]
     
     var body: some View {
         NavigationStack {
@@ -35,20 +35,33 @@ internal struct ImageListDetails: View {
                     ],
                     spacing: 2
                 ) {
-//                    ForEach(images) {
-//                        image in
-//                        Button {
-////                            selectedImage = image
-////                            imageDetailsPresented.toggle()
-//                        } label: {
-//                            Image(uiImage: image.image)
-//                                .resizable()
-//                                .frame(
-//                                    width: metrics.size.width / 3,
-//                                    height: metrics.size.width / 3
-//                                )
-//                        }
-//                    }
+                    ForEach(images) {
+                        image in
+                        Button {
+//                            selectedImage = image
+//                            imageDetailsPresented.toggle()
+                        } label: {
+                            Image(uiImage: image.image)
+                                .resizable()
+                                .frame(
+                                    width: metrics.size.width / 3,
+                                    height: metrics.size.width / 3
+                                )
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Images & Videos")
+            .navigationBarTitleDisplayMode(.automatic)
+            .toolbarRole(.automatic)
+            .toolbar(.automatic, for: .automatic)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
             }
         }
@@ -63,7 +76,7 @@ internal struct ImageListDetails_Previews: PreviewProvider {
     @StateObject static private var db : Database = Database.previewDB
     
     static var previews: some View {
-        ImageListDetails()
+        ImageListDetails(images: [])
             .environmentObject(db)
     }
 }

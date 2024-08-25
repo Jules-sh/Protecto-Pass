@@ -21,23 +21,18 @@ internal struct ME_ContentView : View {
     /// The Database used to store the complere Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
     
-    private let id : UUID
-    
-    internal init(id : UUID) {
-        self.id = id
-        dataStructure = nil
+    internal init(_ dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>) {
+        self.dataStructure = dataStructure
     }
     
     /// The Data Structure which is displayed in this View
-    @State private var dataStructure : ME_DataStructure<String, Date, UUID>?
+    @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
-    private var images : [DB_Image] = []
+    @State private var images : [DB_Image] = []
     
-    private var documents : [DB_Document] = []
+    @State private var videos : [DB_Video] = []
     
-    private var entries : [Entry] = []
-    
-    private var folders : [Folder] = []
+    @State private var documents : [DB_Document] = []
     
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
@@ -54,124 +49,63 @@ internal struct ME_ContentView : View {
     /// Whether or not the sheet to add a document is presented
     @State private var addDocPresented : Bool = false
     
-    /// The Photos selected to add to the Password Safe
-    @State private var photosSelected : [PhotosPickerItem] = []
+    /// The Photos and videos selected to add to the Password Safe
+    @State private var audioVisualItemsSelected : [PhotosPickerItem] = []
     
     @State private var selectedDB_Images : [DB_Image] = []
     
+    @State private var selectedDB_Videos : [DB_Video] = []
+    
     /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
+    
+    /// Set to true in order to present an alert displaying an error while loading the video
+    @State private var errLoadingVideoPresented : Bool = false
     
     /// Presents an alert stating an error has appeared in saving the database when set to true
     @State private var errSavingPresented : Bool = false
     
     @State private var imageDetailsPresented : Bool = false
     
+    @State private var imageListDetailsShown : Bool = false
+    
     @State private var selectedImage : DB_Image?
+    
+    private func loadRessources() -> Void {
+        var imageIDs : [UUID] = []
+        var videoIDs : [UUID] = []
+        var documentIDs : [UUID] = []
+        dataStructure.images.forEach({ imageIDs.append($0.id) })
+        dataStructure.videos.forEach({ videoIDs.append($0.id) })
+        dataStructure.documents.forEach({ documentIDs.append($0.id) })
+        do {
+            images = try Storage.loadImages(db, ids: imageIDs, context: context)
+            videos = try Storage.loadVideos(db, ids: videoIDs, context: context)
+            documents = try Storage.loadDocuments(db, ids: documentIDs, context: context)
+        } catch {
+            // TODO: handle error
+        }
+    }
     
     var body: some View {
         GeometryReader {
             metrics in
             List {
-                //                if largeScreen {
-                //                    Section {
-                //                    } header: {
-                //                        Image(systemName: dataStructure.iconName)
-                //                            .resizable()
-                //                            .scaledToFit()
-                //                            .padding()
-                //                    }
-                //                }
-                //            Section("Entries") {
-                //                if !dataStructure.entries.isEmpty {
-                //                    ForEach(dataStructure.entries) {
-                //                        entry in
-                //                        NavigationLink(entry.title) {
-                //                            EntryDetails(entry: entry)
-                //                        }
-                //                    }
-                //                } else {
-                //                    Text("No Entries found")
-                //                }
-                //            }
-                //            Section("Folder") {
-                //                if !dataStructure.folders.isEmpty {
-                //                    ForEach(dataStructure.folders) {
-                //                        folder in
-                //                        NavigationLink(folder.name) {
-                //                            ME_ContentView(folder)
-                //                        }
-                //                    }
-                //                } else {
-                //                    Text("No Folders found")
-                //                }
-                //            }
-                Section("Images") {
-                    if !images.isEmpty {
-                        if images.count <= 9 {
-                            // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
-                            //                            ScrollView {
-                            //                                LazyVGrid(
-                            //                                    columns: [
-                            //                                        GridItem(
-                            //                                            .fixed(metrics.size.width / 3),
-                            //                                            spacing: 2
-                            //                                        ),
-                            //                                        GridItem(
-                            //                                            .fixed(metrics.size.width / 3),
-                            //                                            spacing: 2
-                            //                                        ),
-                            //                                        GridItem(
-                            //                                            .fixed(metrics.size.width / 3),
-                            //                                            spacing: 2
-                            //                                        ),
-                            //                                    ],
-                            //                                    spacing: 2
-                            //                                ) {
-                            //                                    ForEach(dataStructure.images) {
-                            //                                        image in
-                            //                                        Button {
-                            //                                            selectedImage = image
-                            //                                            imageDetailsPresented.toggle()
-                            //                                        } label: {
-                            //                                            Image(uiImage: image.image)
-                            //                                                .resizable()
-                            //                                                .frame(
-                            //                                                    width: metrics.size.width / 3,
-                            //                                                    height: metrics.size.width / 3
-                            //                                                )
-                            //                                        }
-                            //                                    }
-                            //                                }
-                            //                            }
-                        } else {
-                            NavigationLink {
-                                ImageListDetails()
-                                    .environmentObject(dataStructure!)
-                            } label: {
-                                Label("Show all images (\(images.count))", systemImage: "photo")
-                            }
-                        }
-                    } else {
-                        Text("No Images found")
-                    }
-                }
-                //        Section("Documents") {
-                //            if !documents.isEmpty {
-                //                ForEach(documents) {
-                //                    document in
-                //                }
-                //            } else {
-                //                Text("No Documents found")
-                //            }
-                //        }
+                largeScreenOption()
+                entrySection()
+                folderSection()
+                imageSection(metrics)
+                documentSection()
             }
         }
+        .onAppear {
+            loadRessources()
+        }
         .sheet(isPresented: $detailsPresented) {
-            Me_Details(me: dataStructure!)
+            Me_Details(me: dataStructure)
         }
         .sheet(isPresented: $addEntryPresented) {
-            EditEntry()
+            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
                 .environmentObject(db)
         }
         .sheet(isPresented: $addFolderPresented) {
@@ -180,10 +114,10 @@ internal struct ME_ContentView : View {
         }
         .photosPicker(
             isPresented: $addImagePresented,
-            selection: $photosSelected,
-            maxSelectionCount: 1000,
+            selection: $audioVisualItemsSelected,
+            maxSelectionCount: 100,
             selectionBehavior: .continuousAndOrdered,
-            matching: .images,
+            matching: .any(of: [.images, .videos]),
             preferredItemEncoding: .automatic
         )
         .sheet(isPresented: $addDocPresented) {
@@ -193,8 +127,11 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $imageDetailsPresented) {
             ImageDetails(image: $selectedImage)
         }
+        .sheet(isPresented: $imageListDetailsShown) {
+            ImageListDetails(images: images)
+        }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
-        .navigationTitle(dataStructure is Database ? "Home" : dataStructure?.name ?? "Loading...")
+        .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
         .navigationBarTitleDisplayMode(.automatic)
         .toolbarRole(.navigationStack)
         .toolbar(.automatic, for: .navigationBar)
@@ -203,6 +140,7 @@ internal struct ME_ContentView : View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         // TODO: add closing Database Code
+                        navigationController.db = nil
                         withAnimation {
                             navigationController.openDatabaseToHome.toggle()
                         }
@@ -226,7 +164,7 @@ internal struct ME_ContentView : View {
                     Button {
                         addImagePresented.toggle()
                     } label: {
-                        Label("Add Images", systemImage: "photo")
+                        Label("Add Images & Videos", systemImage: "photo")
                     }
                     Button {
                         addDocPresented.toggle()
@@ -248,60 +186,190 @@ internal struct ME_ContentView : View {
             // Guard to not call this code when opening the Picker
             guard !addImagePresented else { return }
             Task {
-                for photo in photosSelected {
-                    do {
-                        let image : UIImage = try await photo.loadTransferable(type: DBSoleImage.self)!.image
-                        let uuid : UUID = UUID()
-                        selectedDB_Images.append(
-                            DB_Image(
-                                image: image,
-                                quality: 0.5,
-                                created: Date.now,
-                                lastEdited: Date.now,
-                                id: uuid
+                for item in audioVisualItemsSelected {
+                    if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .audiovisualContent ) }) {
+                        do {
+                            let video = try await item.loadTransferable(type: DBSoleVideo.self)!.videoData
+                            selectedDB_Videos.append(
+                                DB_Video(
+                                    video: video,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
                             )
-                        )
-                        db.contents.append(
-                            ToCItem(
-                                // TODO: change itemIdentifier
-                                name: photo.itemIdentifier!,
-                                type: .image,
-                                id: uuid,
-                                children: []
+                        } catch {
+                            errLoadingVideoPresented.toggle()
+                        }
+                    } else if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .image) }) {
+                        do {
+                            let image : UIImage = try await item.loadTransferable(type: DBSoleImage.self)!.image
+                            selectedDB_Images.append(
+                                DB_Image(
+                                    image: image,
+                                    quality: 0.5,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
                             )
-                        )
-                    } catch {
-                        errLoadingImagePresented.toggle()
+                        } catch {
+                            errLoadingImagePresented.toggle()
+                        }
+                    } else {
+                        
                     }
                 }
                 do {
-                    try Storage.storeDatabase(db, context: context)
+                    var newElements : [DatabaseContent<Date>] = []
+                    newElements.append(contentsOf: selectedDB_Images)
+                    newElements.append(contentsOf: selectedDB_Videos)
+                    try Storage.storeDatabase(
+                        db,
+                        context: context,
+                        newElements: newElements
+                    )
+                    images.append(contentsOf: selectedDB_Images)
+                    videos.append(contentsOf: selectedDB_Videos)
                 } catch {
                     errSavingPresented.toggle()
                 }
+                // Clear photosSelected to not add a Photo twice when new photos are added via picker
+                audioVisualItemsSelected = []
+                selectedDB_Images = []
+                selectedDB_Videos = []
             }
-            // Clear photosSelected to not add a Photo twice when new photos are added via picker
-            photosSelected = []
         }
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
+        .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
         .alert("Error saving Database", isPresented: $errSavingPresented) {
         } message: {
             Text("An Error arised saving the Database")
         }
-        .onAppear {
-            // Environment Object can't be used in init, so method is called on appear of view
-            // https://www.hackingwithswift.com/forums/swiftui/environmentobject-usage-in-init-of-a-view/5795
-            loadStructure()
+    }
+    
+    @ViewBuilder
+    private func largeScreenOption() -> some View {
+        if largeScreen {
+            Section {
+            } header: {
+                Image(systemName: dataStructure.iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .padding()
+            }
         }
     }
     
-    /// Loads the structure needed
-    private func loadStructure() -> Void {
-        if id == db.id {
-            dataStructure = db
-        } else {
-            // Passed Data structure is a folder
-            // TODO: add Code in order to load Folder
+    @ViewBuilder
+    private func entrySection() -> some View {
+        Section("Entries") {
+            if !dataStructure.entries.isEmpty {
+                ForEach(dataStructure.entries) {
+                    entry in
+                    NavigationLink {
+                        EntryDetails(entry: entry)
+                    } label: {
+                        Label(entry.title, systemImage: entry.iconName)
+                    }
+                    .foregroundStyle(.primary)
+                }
+            } else {
+                Text("No Entries found")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func folderSection() -> some View {
+        Section("Folder") {
+            if !dataStructure.folders.isEmpty {
+                ForEach(dataStructure.folders) {
+                    folder in
+                    NavigationLink {
+                        ME_ContentView(folder)
+                            .environmentObject(db)
+                    } label: {
+                        Label(folder.name, systemImage: folder.iconName)
+                    }
+                    .foregroundStyle(.primary)
+                }
+            } else {
+                Text("No Folders found")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func imageSection(_ metrics : GeometryProxy) -> some View {
+        Section("Images") {
+            if !images.isEmpty {
+                if images.count <= 9 {
+                    // TODO: maybe change ScrollView. Currently ScrollView and GroupBox have the effect wanted
+                    ScrollView {
+                        LazyVGrid(
+                            columns: [
+                                GridItem(
+                                    .fixed(metrics.size.width / 3),
+                                    spacing: 2
+                                ),
+                                GridItem(
+                                    .fixed(metrics.size.width / 3),
+                                    spacing: 2
+                                ),
+                                GridItem(
+                                    .fixed(metrics.size.width / 3),
+                                    spacing: 2
+                                ),
+                            ],
+                            spacing: 2
+                        ) {
+                            ForEach(images) {
+                                image in
+                                Button {
+                                    selectedImage = image
+                                    imageDetailsPresented.toggle()
+                                } label: {
+                                    Image(uiImage: image.image)
+                                        .resizable()
+                                        .frame(
+                                            width: metrics.size.width / 3,
+                                            height: metrics.size.width / 3
+                                        )
+                                }
+                            }
+                        }
+                    }
+                } else {
+//                    NavigationLink {
+//                        ImageListDetails(images: images)
+//                            .environmentObject(dataStructure)
+//                    } label: {
+//                        Label("Show all images (\(images.count))", systemImage: "photo")
+//                    }
+                    Button {
+                        imageListDetailsShown.toggle()
+                    } label: {
+                        Label("Show all images (\(images.count))", systemImage: "photo")
+                    }
+                    .foregroundStyle(.primary)
+                }
+            } else {
+                Text("No Images found")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func documentSection() -> some View {
+        Section("Documents") {
+            if !documents.isEmpty {
+                ForEach(documents) {
+                    document in
+                }
+            } else {
+                Text("No Documents found")
+            }
         }
     }
 }
@@ -323,12 +391,26 @@ private struct DBSoleImage : Transferable {
     }
 }
 
+/// The Struct representing the loaded image in this View
+private struct DBSoleVideo : Transferable {
+    
+    /// The Image when loading has completed
+    fileprivate let videoData : Data
+    
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(importedContentType: .movie) {
+            data in
+            return DBSoleVideo(videoData: data)
+        }
+    }
+}
+
 internal struct ME_ContentView_Previews: PreviewProvider {
     
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(id: db.id)
+        ME_ContentView(db)
             .environmentObject(db)
     }
 }
@@ -338,7 +420,7 @@ internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(id: db.id)
+        ME_ContentView(db)
             .environmentObject(db)
             .environment(\.largeScreen, true)
     }

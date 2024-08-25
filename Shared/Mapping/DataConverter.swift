@@ -73,8 +73,8 @@ internal struct DataConverter {
     
     
     // UUID <-> DATA
-    // TODO: update Encrypter & Decrypter to use these functions when encrypting and decrypting UUIDs
     
+    // TODO: is this function needed?
     internal static func dataToUUID(_ data : Data) -> UUID {
         return UUID(uuidString: dataToString(data))!
     }

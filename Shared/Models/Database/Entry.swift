@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
+internal class GeneralEntry<DA, U, DE, DO> : NativeType<DE, DA, DO> {
     
     /// The Title of this Entry
     internal let title : DA
@@ -33,9 +33,10 @@ internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
         url: U,
         notes: DA,
         iconName : DA,
+        documents : [DO],
         created : DE,
         lastEdited : DE,
-        id : I
+        id : UUID
     ) {
         self.title = title
         self.username = username
@@ -44,6 +45,7 @@ internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
         self.notes = notes
         super.init(
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited: lastEdited,
             id: id
@@ -53,7 +55,7 @@ internal class GeneralEntry<DA, U, DE, I> : NativeType<DE, DA, I> {
 
 /// The Struct representing an Entry
 /// while this App is running
-internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDataStructure {
+internal final class Entry : GeneralEntry<String, URL?, Date, LoadableResource>, DecryptedDataStructure {
     
     internal static let previewEntry : Entry = Entry(
         title: "Password Safe",
@@ -62,6 +64,7 @@ internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDa
         url: nil,
         notes: "This is a preview Entry, only to use in previews and tests",
         iconName: "folder",
+        documents: [],
         created: Date.now,
         lastEdited: Date.now,
         id: UUID()
@@ -92,7 +95,7 @@ internal final class Entry : GeneralEntry<String, URL?, Date, UUID>, DecryptedDa
 
 /// The Encrypted Entry storing all the
 /// Data of an Entry secure and encrypted
-internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, EncryptedDataStructure {
+internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, EncryptedLoadableResource>, EncryptedDataStructure {
     
     override internal init(
         title : Data,
@@ -101,9 +104,10 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
         url : Data,
         notes : Data,
         iconName : Data,
+        documents : [EncryptedLoadableResource],
         created : Data,
         lastEdited : Data,
-        id : Data
+        id : UUID
     ) {
         super.init(
             title: title,
@@ -112,6 +116,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
             url: url,
             notes: notes,
             iconName: iconName,
+            documents: documents,
             created: created,
             lastEdited: lastEdited,
             id: id
@@ -125,6 +130,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
         case url
         case notes
         case iconName
+        case documents
         case created
         case lastEdited
         case id
@@ -152,13 +158,18 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
             url: try container.decode(Data.self, forKey: .url),
             notes: try container.decode(Data.self, forKey: .notes),
             iconName: try container.decode(Data.self, forKey: .iconName),
+            documents: try container.decode([EncryptedLoadableResource].self, forKey: .documents),
             created: try container.decode(Data.self, forKey: .created),
             lastEdited: try container.decode(Data.self, forKey: .lastEdited),
-            id: try container.decode(Data.self, forKey: .id)
+            id: try container.decode(UUID.self, forKey: .id)
         )
     }
     
     internal init(from coreData : CD_Entry) {
+        var localDocuments : [EncryptedLoadableResource] = []
+        for document in coreData.documents! {
+            localDocuments.append(EncryptedLoadableResource(from: document as! CD_LoadableResource))
+        }
         super.init(
             title: coreData.title!,
             username: coreData.username!,
@@ -166,6 +177,7 @@ internal final class EncryptedEntry : GeneralEntry<Data, Data, Data, Data>, Encr
             url: coreData.url!,
             notes: coreData.notes!,
             iconName: coreData.iconName!,
+            documents: localDocuments,
             created: coreData.created!,
             lastEdited: coreData.lastEdited!,
             id: coreData.uuid!

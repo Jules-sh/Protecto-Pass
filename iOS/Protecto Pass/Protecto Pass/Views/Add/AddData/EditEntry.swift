@@ -30,7 +30,7 @@ internal struct EditEntry: View {
     /// This typically is a Name, not a link
     @State private var username : String = ""
     
-    /// The Passwort stored in this Entry.
+    /// The Password stored in this Entry.
     /// This is the most important part
     @State private var password : String = ""
     
@@ -48,6 +48,20 @@ internal struct EditEntry: View {
     
     /// Whether or not the icon Chooser is shown
     @State private var iconChooserShown : Bool = false
+    
+    internal init(entry : Entry, folder : Folder? = nil) {
+        self.title = entry.title
+        self.username = entry.username
+        self.password = entry.password
+        self.url = entry.url?.absoluteString ?? ""
+        self.notes = entry.notes
+        self.iconName = entry.iconName
+        self.folder = folder
+    }
+    
+    internal init(folder : Folder? = nil) {
+        self.folder = folder
+    }
     
     var body: some View {
         NavigationStack {
@@ -98,9 +112,7 @@ internal struct EditEntry: View {
             .toolbar(.automatic, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        
-                    }
+                    Button("Done") { save() }
                 }
             }
         }
@@ -109,7 +121,25 @@ internal struct EditEntry: View {
     /// Saves the data and dismisses this View
     private func save() -> Void {
         do {
-            try Storage.storeDatabase(db, context: context)
+            try Storage.storeDatabase(
+                db,
+                context: context,
+                newElements: [
+                    Entry(
+                        title: title,
+                        username: username,
+                        password: password,
+                        url: URL(string: url),
+                        notes: notes,
+                        iconName: iconName,
+                        // TODO: add loadable resources
+                        documents: [],
+                        created: Date.now,
+                        lastEdited: Date.now,
+                        id: UUID()
+                    )
+                ]
+            )
             dismiss()
         } catch {
             errStoring.toggle()

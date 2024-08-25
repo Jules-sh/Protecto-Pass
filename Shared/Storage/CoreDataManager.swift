@@ -57,10 +57,10 @@ internal struct CoreDataManager {
         return encryptedDatabases
     }
     
-    internal static func loadImages(_ db : Database, with context : NSManagedObjectContext) throws -> [DB_Image] {
+    internal static func loadImages(_ db : Database, ids: [UUID], with context : NSManagedObjectContext) throws -> [DB_Image] {
         var results : [DB_Image] = []
-        for image in db.images {
-            let cdImage = try context.fetch(getFetchRequest(forImageID: image.id)).first!
+        for imageID in ids {
+            let cdImage = try context.fetch(getFetchRequest(forImageID: imageID)).first!
             let im = try ImageConverter.fromCD(cdImage)
             let decryptedImage = try Decrypter.decryptImage(im, in: db)
             results.append(decryptedImage)
@@ -68,10 +68,10 @@ internal struct CoreDataManager {
         return results
     }
     
-    internal static func loadVideos(_ db : Database, with context : NSManagedObjectContext) throws -> [DB_Video] {
+    internal static func loadVideos(_ db : Database, ids: [UUID], with context : NSManagedObjectContext) throws -> [DB_Video] {
         var results : [DB_Video] = []
-        for v in db.videos {
-            let cdVideo = try context.fetch(getFetchRequest(forVideoID: v.id)).first!
+        for vID in ids {
+            let cdVideo = try context.fetch(getFetchRequest(forVideoID: vID)).first!
             let vid = try VideoConterter.fromCD(cdVideo)
             let decryptedVideo = try Decrypter.decryptVideo(vid, in: db)
             results.append(decryptedVideo)
@@ -79,10 +79,10 @@ internal struct CoreDataManager {
         return results
     }
     
-    internal static func loadDocuments(_ db : Database, with context : NSManagedObjectContext) throws -> [DB_Document] {
+    internal static func loadDocuments(_ db : Database, ids: [UUID], with context : NSManagedObjectContext) throws -> [DB_Document] {
         var results : [DB_Document] = []
-        for d in db.documents {
-            let cdDocument = try context.fetch(getFetchRequest(forDocumentID: d.id)).first!
+        for dID in ids {
+            let cdDocument = try context.fetch(getFetchRequest(forDocumentID: dID)).first!
             let doc = try DocumentConverter.fromCD(cdDocument)
             let decryptedDocument = try Decrypter.decryptDocument(doc, in: db)
             results.append(decryptedDocument)

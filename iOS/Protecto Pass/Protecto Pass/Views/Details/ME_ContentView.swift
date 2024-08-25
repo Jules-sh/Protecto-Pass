@@ -21,12 +21,8 @@ internal struct ME_ContentView : View {
     /// The Database used to store the complere Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
     
-    internal init(db : Database) {
-        dataStructure = db
-    }
-    
-    internal init(folder : Folder) {
-        dataStructure = folder
+    internal init(_ dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>) {
+        self.dataStructure = dataStructure
     }
     
     /// The Data Structure which is displayed in this View
@@ -71,13 +67,21 @@ internal struct ME_ContentView : View {
     
     @State private var imageDetailsPresented : Bool = false
     
+    @State private var imageListDetailsShown : Bool = false
+    
     @State private var selectedImage : DB_Image?
     
     private func loadRessources() -> Void {
+        var imageIDs : [UUID] = []
+        var videoIDs : [UUID] = []
+        var documentIDs : [UUID] = []
+        dataStructure.images.forEach({ imageIDs.append($0.id) })
+        dataStructure.videos.forEach({ videoIDs.append($0.id) })
+        dataStructure.documents.forEach({ documentIDs.append($0.id) })
         do {
-            images = try Storage.loadImages(db, context: context)
-            videos = try Storage.loadVideos(db, context: context)
-            documents = try Storage.loadDocuments(db, context: context)
+            images = try Storage.loadImages(db, ids: imageIDs, context: context)
+            videos = try Storage.loadVideos(db, ids: videoIDs, context: context)
+            documents = try Storage.loadDocuments(db, ids: documentIDs, context: context)
         } catch {
             // TODO: handle error
         }
@@ -122,6 +126,9 @@ internal struct ME_ContentView : View {
         }
         .sheet(isPresented: $imageDetailsPresented) {
             ImageDetails(image: $selectedImage)
+        }
+        .sheet(isPresented: $imageListDetailsShown) {
+            ImageListDetails(images: images)
         }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
@@ -280,7 +287,7 @@ internal struct ME_ContentView : View {
                 ForEach(dataStructure.folders) {
                     folder in
                     NavigationLink {
-                        ME_ContentView(folder: folder)
+                        ME_ContentView(folder)
                             .environmentObject(db)
                     } label: {
                         Label(folder.name, systemImage: folder.iconName)
@@ -298,7 +305,7 @@ internal struct ME_ContentView : View {
         Section("Images") {
             if !images.isEmpty {
                 if images.count <= 9 {
-                    // TODO: maybe change ScrollView. Currently ScrollView and GroupBox havve the effect wanted
+                    // TODO: maybe change ScrollView. Currently ScrollView and GroupBox have the effect wanted
                     ScrollView {
                         LazyVGrid(
                             columns: [
@@ -334,12 +341,18 @@ internal struct ME_ContentView : View {
                         }
                     }
                 } else {
-                    NavigationLink {
-                        ImageListDetails()
-                            .environmentObject(dataStructure)
+//                    NavigationLink {
+//                        ImageListDetails(images: images)
+//                            .environmentObject(dataStructure)
+//                    } label: {
+//                        Label("Show all images (\(images.count))", systemImage: "photo")
+//                    }
+                    Button {
+                        imageListDetailsShown.toggle()
                     } label: {
                         Label("Show all images (\(images.count))", systemImage: "photo")
                     }
+                    .foregroundStyle(.primary)
                 }
             } else {
                 Text("No Images found")
@@ -397,7 +410,7 @@ internal struct ME_ContentView_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(db: db)
+        ME_ContentView(db)
             .environmentObject(db)
     }
 }
@@ -407,7 +420,7 @@ internal struct ME_ContentViewLargeScreen_Previews: PreviewProvider {
     @StateObject private static var db : Database = Database.previewDB
     
     static var previews: some View {
-        ME_ContentView(db: db)
+        ME_ContentView(db)
             .environmentObject(db)
             .environment(\.largeScreen, true)
     }

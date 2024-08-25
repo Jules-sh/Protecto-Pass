@@ -39,31 +39,31 @@ internal struct Storage {
         return result
     }
     
-    internal static func loadImages(_ db : Database, context : NSManagedObjectContext?) throws -> [DB_Image] {
+    internal static func loadImages(_ db : Database, ids: [UUID], context : NSManagedObjectContext?) throws -> [DB_Image] {
         switch db.header.storageType {
             case .CoreData:
                 assert(context != nil, "To load Core Data Images, a Context must be provided to the loadImages Function")
-                return try CoreDataManager.loadImages(db, with: context!)
+                return try CoreDataManager.loadImages(db, ids: ids, with: context!)
             case .File:
                 return []
         }
     }
     
-    internal static func loadVideos(_ db : Database, context : NSManagedObjectContext?) throws -> [DB_Video] {
+    internal static func loadVideos(_ db : Database, ids: [UUID], context : NSManagedObjectContext?) throws -> [DB_Video] {
         switch db.header.storageType {
             case .CoreData:
                 assert(context != nil, "To load Core Data Images, a Context must be provided to the loadVideos Function")
-                return try CoreDataManager.loadVideos(db, with: context!)
+                return try CoreDataManager.loadVideos(db, ids: ids, with: context!)
             case .File:
                 return []
         }
     }
     
-    internal static func loadDocuments(_ db : Database, context : NSManagedObjectContext?) throws -> [DB_Document] {
+    internal static func loadDocuments(_ db : Database, ids: [UUID], context : NSManagedObjectContext?) throws -> [DB_Document] {
         switch db.header.storageType {
             case .CoreData:
                 assert(context != nil, "To load Core Data Images, a Context must be provided to the loadDocuments Function")
-                return try CoreDataManager.loadDocuments(db, with: context!)
+                return try CoreDataManager.loadDocuments(db, ids: ids, with: context!)
             case .File:
                 return []
         }

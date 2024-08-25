@@ -57,10 +57,43 @@ internal struct CoreDataManager {
         return encryptedDatabases
     }
     
+    internal static func loadImages(_ db : Database, with context : NSManagedObjectContext) throws -> [DB_Image] {
+        var results : [DB_Image] = []
+        for image in db.images {
+            let cdImage = try context.fetch(getFetchRequest(forImageID: image.id)).first!
+            let im = try ImageConverter.fromCD(cdImage)
+            let decryptedImage = try Decrypter.decryptImage(im, in: db)
+            results.append(decryptedImage)
+        }
+        return results
+    }
+    
+    internal static func loadVideos(_ db : Database, with context : NSManagedObjectContext) throws -> [DB_Video] {
+        var results : [DB_Video] = []
+        for v in db.videos {
+            let cdVideo = try context.fetch(getFetchRequest(forVideoID: v.id)).first!
+            let vid = try VideoConterter.fromCD(cdVideo)
+            let decryptedVideo = try Decrypter.decryptVideo(vid, in: db)
+            results.append(decryptedVideo)
+        }
+        return results
+    }
+    
+    internal static func loadDocuments(_ db : Database, with context : NSManagedObjectContext) throws -> [DB_Document] {
+        var results : [DB_Document] = []
+        for d in db.documents {
+            let cdDocument = try context.fetch(getFetchRequest(forDocumentID: d.id)).first!
+            let doc = try DocumentConverter.fromCD(cdDocument)
+            let decryptedDocument = try Decrypter.decryptDocument(doc, in: db)
+            results.append(decryptedDocument)
+        }
+        return results
+    }
+    
     /// Stores the Database to the Core Data System
     internal static func storeDatabase(_ db : EncryptedDatabase, context : NSManagedObjectContext) throws -> Void {
         if try databaseExists(id: db.id, context: context) {
-            try deleteDatabase(db.id, with: context)
+            try deleteDatabaseMeta(db.id, with: context)
         }
         // Store Database including folders and entries, loadable Resource references are stored in this too, the actual resources are stored on adding them to the Database
         let _ = DB_Converter.toCD(db, context: context)
@@ -82,23 +115,42 @@ internal struct CoreDataManager {
         try context.save()
     }
     
+    /// Only deletes the Database Meta or Base data, letting images, documents and videos remain
+    internal static func deleteDatabaseMeta(_ id : UUID, with context : NSManagedObjectContext) throws -> Void {
+        let db : CD_Database = try accessCache(id: id, context: context)
+        let _ = try DB_Converter.fromCD(db)
+        context.delete(try accessCache(id: id, context: context))
+    }
+    
     internal static func deleteDatabase(_ id : UUID, with context : NSManagedObjectContext) throws -> Void {
         let db : CD_Database = try accessCache(id: id, context: context)
         let encrypted = try DB_Converter.fromCD(db)
         context.delete(try accessCache(id: id, context: context))
         for image in encrypted.images {
-            let cdImage = try getFetchRequest(forImageID: image.id).execute().first!
-            context.delete(cdImage)
+            try deleteImage(image, context: context)
         }
         for video in encrypted.videos {
-            let cdVideo = try getFetchRequest(forVideoID: video.id).execute().first!
-            context.delete(cdVideo)
+            try deleteVideo(video, context: context)
         }
         for document in encrypted.documents {
-            let cdDocument = try getFetchRequest(forDocumentID: document.id).execute().first!
-            context.delete(cdDocument)
+            try deleteDocument(document, context: context)
         }
         try context.save()
+    }
+    
+    internal static func deleteImage(_ image : EncryptedLoadableResource, context : NSManagedObjectContext) throws -> Void {
+        let cdImage = try getFetchRequest(forImageID: image.id).execute().first!
+        context.delete(cdImage)
+    }
+    
+    internal static func deleteVideo(_ video : EncryptedLoadableResource, context : NSManagedObjectContext) throws -> Void {
+        let cdVideo = try getFetchRequest(forVideoID: video.id).execute().first!
+        context.delete(cdVideo)
+    }
+    
+    internal static func deleteDocument(_ document : EncryptedLoadableResource, context : NSManagedObjectContext) throws -> Void {
+        let cdDocument = try getFetchRequest(forDocumentID: document.id).execute().first!
+        context.delete(cdDocument)
     }
     
     internal static func clearAll(context : NSManagedObjectContext) throws -> Void {

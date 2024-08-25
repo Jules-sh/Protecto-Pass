@@ -149,6 +149,7 @@ internal struct ImageConverter : DatabaseConverterProtocol {
         cdImage.compressionQuality = encrypted.quality
         cdImage.created = encrypted.created
         cdImage.lastEdited = encrypted.lastEdited
+        cdImage.uuid = encrypted.id
         return cdImage
     }
 }
@@ -180,6 +181,7 @@ internal struct DocumentConverter : DatabaseConverterProtocol {
         cdDoc.type = encrypted.type
         cdDoc.created = encrypted.created
         cdDoc.lastEdited = encrypted.lastEdited
+        cdDoc.uuid = encrypted.id
         return cdDoc
     }
 }

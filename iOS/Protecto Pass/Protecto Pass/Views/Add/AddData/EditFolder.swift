@@ -31,7 +31,9 @@ internal struct EditFolder: View {
     
     @State private var errStoring : Bool = false
     
-    @State private var iconName : String = ""
+    @State private var iconName : String = "folder"
+    
+    @State private var iconChooserShown : Bool = false
     
     internal init(
         folder : Folder? = nil
@@ -42,12 +44,20 @@ internal struct EditFolder: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(systemName: "folder")
-                    .renderingMode(.original)
-                    .symbolRenderingMode(.hierarchical)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(.horizontal, 75)
+                Button {
+                    iconChooserShown.toggle()
+                } label: {
+                    Image(systemName: iconName)
+                        .renderingMode(.original)
+                        .symbolRenderingMode(.hierarchical)
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.horizontal, 75)
+                        .foregroundStyle(.foreground)
+                }
+                .sheet(isPresented: $iconChooserShown) {
+                    IconChooser(iconName: $iconName, type: .folder)
+                }
                 Group {
                     TextField("Name", text: $name)
                         .textInputAutocapitalization(.words)

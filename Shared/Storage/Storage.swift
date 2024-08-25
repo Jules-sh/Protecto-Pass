@@ -39,6 +39,36 @@ internal struct Storage {
         return result
     }
     
+    internal static func loadImages(_ db : Database, context : NSManagedObjectContext?) throws -> [DB_Image] {
+        switch db.header.storageType {
+            case .CoreData:
+                assert(context != nil, "To load Core Data Images, a Context must be provided to the loadImages Function")
+                return try CoreDataManager.loadImages(db, with: context!)
+            case .File:
+                return []
+        }
+    }
+    
+    internal static func loadVideos(_ db : Database, context : NSManagedObjectContext?) throws -> [DB_Video] {
+        switch db.header.storageType {
+            case .CoreData:
+                assert(context != nil, "To load Core Data Images, a Context must be provided to the loadVideos Function")
+                return try CoreDataManager.loadVideos(db, with: context!)
+            case .File:
+                return []
+        }
+    }
+    
+    internal static func loadDocuments(_ db : Database, context : NSManagedObjectContext?) throws -> [DB_Document] {
+        switch db.header.storageType {
+            case .CoreData:
+                assert(context != nil, "To load Core Data Images, a Context must be provided to the loadDocuments Function")
+                return try CoreDataManager.loadDocuments(db, with: context!)
+            case .File:
+                return []
+        }
+    }
+    
     /// Stores the passed Database to the right Storage.
     /// if you want to store something in Core Data, the connected context has to be provided.
     internal static func storeDatabase(_ db : Database, context : NSManagedObjectContext?, newElements : [DatabaseContent<Date>] = []) throws -> Void {
@@ -56,18 +86,15 @@ internal struct Storage {
                     let doc = element as! DB_Document
                     localDocuments.append(try encrypter.encryptDocument(doc))
                     db.documents.append(LoadableResource(id: doc.id, name: doc.name, thumbnailData: DataConverter.stringToData("doc")))
-//                    try storeDocument(encrypter.encryptDocument(element as! DB_Document), in: database, context: context)
                 case is DB_Image:
                     let im = element as! DB_Image
                     localImages.append(try encrypter.encryptImage(im))
                     db.images.append(LoadableResource(id: im.id, thumbnailData: im.image.jpegData(compressionQuality: 0.1)!))
-//                    try storeImage(encrypter.encryptImage(element as! DB_Image), in: database, context: context)
                 case is DB_Video:
                     let vid = element as! DB_Video
                     localVideos.append(try encrypter.encryptVideo(vid))
                     // TODO: add thumbnail data
                     db.videos.append(LoadableResource(id: vid.id, thumbnailData: Data()))
-//                    try storeVideo(encrypter.encryptVideo(element as! DB_Video), in: database, context: context)
                 default:
                     continue
             }

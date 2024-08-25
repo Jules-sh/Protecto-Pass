@@ -32,11 +32,11 @@ internal struct ME_ContentView : View {
     /// The Data Structure which is displayed in this View
     @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
-    private var images : [DB_Image] = []
+    @State private var images : [DB_Image] = []
     
-    private var videos : [DB_Video] = []
+    @State private var videos : [DB_Video] = []
     
-    private var documents : [DB_Document] = []
+    @State private var documents : [DB_Document] = []
     
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
@@ -53,13 +53,18 @@ internal struct ME_ContentView : View {
     /// Whether or not the sheet to add a document is presented
     @State private var addDocPresented : Bool = false
     
-    /// The Photos selected to add to the Password Safe
-    @State private var photosSelected : [PhotosPickerItem] = []
+    /// The Photos and videos selected to add to the Password Safe
+    @State private var audioVisualItemsSelected : [PhotosPickerItem] = []
     
     @State private var selectedDB_Images : [DB_Image] = []
     
+    @State private var selectedDB_Videos : [DB_Video] = []
+    
     /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
+    
+    /// Set to true in order to present an alert displaying an error while loading the video
+    @State private var errLoadingVideoPresented : Bool = false
     
     /// Presents an alert stating an error has appeared in saving the database when set to true
     @State private var errSavingPresented : Bool = false
@@ -67,6 +72,16 @@ internal struct ME_ContentView : View {
     @State private var imageDetailsPresented : Bool = false
     
     @State private var selectedImage : DB_Image?
+    
+    private func loadRessources() -> Void {
+        do {
+            images = try Storage.loadImages(db, context: context)
+            videos = try Storage.loadVideos(db, context: context)
+            documents = try Storage.loadDocuments(db, context: context)
+        } catch {
+            // TODO: handle error
+        }
+    }
     
     var body: some View {
         GeometryReader {
@@ -79,11 +94,14 @@ internal struct ME_ContentView : View {
                 documentSection()
             }
         }
+        .onAppear {
+            loadRessources()
+        }
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
         .sheet(isPresented: $addEntryPresented) {
-            EditEntry()
+            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
                 .environmentObject(db)
         }
         .sheet(isPresented: $addFolderPresented) {
@@ -92,10 +110,10 @@ internal struct ME_ContentView : View {
         }
         .photosPicker(
             isPresented: $addImagePresented,
-            selection: $photosSelected,
-            maxSelectionCount: 1000,
+            selection: $audioVisualItemsSelected,
+            maxSelectionCount: 100,
             selectionBehavior: .continuousAndOrdered,
-            matching: .images,
+            matching: .any(of: [.images, .videos]),
             preferredItemEncoding: .automatic
         )
         .sheet(isPresented: $addDocPresented) {
@@ -115,6 +133,7 @@ internal struct ME_ContentView : View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .cancel) {
                         // TODO: add closing Database Code
+                        navigationController.db = nil
                         withAnimation {
                             navigationController.openDatabaseToHome.toggle()
                         }
@@ -138,7 +157,7 @@ internal struct ME_ContentView : View {
                     Button {
                         addImagePresented.toggle()
                     } label: {
-                        Label("Add Images", systemImage: "photo")
+                        Label("Add Images & Videos", systemImage: "photo")
                     }
                     Button {
                         addDocPresented.toggle()
@@ -160,34 +179,62 @@ internal struct ME_ContentView : View {
             // Guard to not call this code when opening the Picker
             guard !addImagePresented else { return }
             Task {
-                for photo in photosSelected {
-                    do {
-                        let image : UIImage = try await photo.loadTransferable(type: DBSoleImage.self)!.image
-                        let uuid : UUID = UUID()
-                        selectedDB_Images.append(
-                            DB_Image(
-                                image: image,
-                                quality: 0.5,
-                                created: Date.now,
-                                lastEdited: Date.now,
-                                id: uuid
+                for item in audioVisualItemsSelected {
+                    if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .audiovisualContent ) }) {
+                        do {
+                            let video = try await item.loadTransferable(type: DBSoleVideo.self)!.videoData
+                            selectedDB_Videos.append(
+                                DB_Video(
+                                    video: video,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
                             )
-                        )
-                        // TODO: store photo
-                    } catch {
-                        errLoadingImagePresented.toggle()
+                        } catch {
+                            errLoadingVideoPresented.toggle()
+                        }
+                    } else if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .image) }) {
+                        do {
+                            let image : UIImage = try await item.loadTransferable(type: DBSoleImage.self)!.image
+                            selectedDB_Images.append(
+                                DB_Image(
+                                    image: image,
+                                    quality: 0.5,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
+                            )
+                        } catch {
+                            errLoadingImagePresented.toggle()
+                        }
+                    } else {
+                        
                     }
                 }
                 do {
-                    try Storage.storeDatabase(db, context: context)
+                    var newElements : [DatabaseContent<Date>] = []
+                    newElements.append(contentsOf: selectedDB_Images)
+                    newElements.append(contentsOf: selectedDB_Videos)
+                    try Storage.storeDatabase(
+                        db,
+                        context: context,
+                        newElements: newElements
+                    )
+                    images.append(contentsOf: selectedDB_Images)
+                    videos.append(contentsOf: selectedDB_Videos)
                 } catch {
                     errSavingPresented.toggle()
                 }
+                // Clear photosSelected to not add a Photo twice when new photos are added via picker
+                audioVisualItemsSelected = []
+                selectedDB_Images = []
+                selectedDB_Videos = []
             }
-            // Clear photosSelected to not add a Photo twice when new photos are added via picker
-            photosSelected = []
         }
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
+        .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
         .alert("Error saving Database", isPresented: $errSavingPresented) {
         } message: {
             Text("An Error arised saving the Database")
@@ -213,9 +260,12 @@ internal struct ME_ContentView : View {
             if !dataStructure.entries.isEmpty {
                 ForEach(dataStructure.entries) {
                     entry in
-                    NavigationLink(entry.title) {
+                    NavigationLink {
                         EntryDetails(entry: entry)
+                    } label: {
+                        Label(entry.title, systemImage: entry.iconName)
                     }
+                    .foregroundStyle(.primary)
                 }
             } else {
                 Text("No Entries found")
@@ -229,10 +279,13 @@ internal struct ME_ContentView : View {
             if !dataStructure.folders.isEmpty {
                 ForEach(dataStructure.folders) {
                     folder in
-                    NavigationLink(folder.name) {
+                    NavigationLink {
                         ME_ContentView(folder: folder)
                             .environmentObject(db)
+                    } label: {
+                        Label(folder.name, systemImage: folder.iconName)
                     }
+                    .foregroundStyle(.primary)
                 }
             } else {
                 Text("No Folders found")
@@ -264,20 +317,20 @@ internal struct ME_ContentView : View {
                             ],
                             spacing: 2
                         ) {
-//                            ForEach(dataStructure!.images) {
-//                                image in
-//                                Button {
-//                                    selectedImage = image
-//                                    imageDetailsPresented.toggle()
-//                                } label: {
-//                                    Image(uiImage: image.image)
-//                                        .resizable()
-//                                        .frame(
-//                                            width: metrics.size.width / 3,
-//                                            height: metrics.size.width / 3
-//                                        )
-//                                }
-//                            }
+                            ForEach(images) {
+                                image in
+                                Button {
+                                    selectedImage = image
+                                    imageDetailsPresented.toggle()
+                                } label: {
+                                    Image(uiImage: image.image)
+                                        .resizable()
+                                        .frame(
+                                            width: metrics.size.width / 3,
+                                            height: metrics.size.width / 3
+                                        )
+                                }
+                            }
                         }
                     }
                 } else {
@@ -321,6 +374,20 @@ private struct DBSoleImage : Transferable {
                 throw ImageLoadingError()
             }
             return DBSoleImage(image: image)
+        }
+    }
+}
+
+/// The Struct representing the loaded image in this View
+private struct DBSoleVideo : Transferable {
+    
+    /// The Image when loading has completed
+    fileprivate let videoData : Data
+    
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(importedContentType: .movie) {
+            data in
+            return DBSoleVideo(videoData: data)
         }
     }
 }

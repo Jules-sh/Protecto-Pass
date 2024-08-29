@@ -69,6 +69,10 @@ internal struct ME_ContentView : View {
     
     @State private var imageListDetailsShown : Bool = false
     
+    @State private var entryDetailsPresented : Bool = false
+    
+    @State private var selectedEntry : Entry?
+    
     @State private var selectedImage : DB_Image?
     
     // TODO: update
@@ -106,6 +110,9 @@ internal struct ME_ContentView : View {
         }
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
+        }
+        .sheet(isPresented: $entryDetailsPresented) {
+            EntryDetails(entry: $selectedEntry)
         }
         .sheet(isPresented: $addEntryPresented) {
             EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
@@ -229,8 +236,9 @@ internal struct ME_ContentView : View {
             if !dataStructure.entries.isEmpty {
                 ForEach(dataStructure.entries) {
                     entry in
-                    NavigationLink {
-                        EntryDetails(entry: entry)
+                    Button {
+                        selectedEntry = entry
+                        entryDetailsPresented.toggle()
                     } label: {
                         Label(entry.title, systemImage: entry.iconName)
                     }

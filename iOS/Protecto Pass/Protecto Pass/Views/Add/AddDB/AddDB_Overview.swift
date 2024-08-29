@@ -50,15 +50,14 @@ internal struct AddDB_Overview: View {
             Section {
                 ListTile(
                     name: "Password",
-                    data: passwordShown ? creationWrapper.password : fakePassword,
-                    onTap: {
-                        withAnimation {
-                            passwordShown.toggle()
-                        }
-                    },
+                    data: passwordShown ? creationWrapper.password : PasswordGenerator.generateFakePassword(count: creationWrapper.password.count),
                     // Not really needed, still entered to tell the System whats going on
                     textContentType: .password
-                )
+                ) {
+                    withAnimation {
+                        passwordShown.toggle()
+                    }
+                }
             } header: {
                 Text("Password")
             } footer: {
@@ -111,16 +110,6 @@ internal struct AddDB_Overview: View {
                 }
             }
         }
-    }
-    
-    /// Creates a fake Password out of placeholders to display
-    private var fakePassword : String {
-        String(
-            (0 ..< creationWrapper.password.count).map {
-                _ in
-                "•"
-            }
-        )
     }
     
     /// Function executed when the User pressed the Done Button

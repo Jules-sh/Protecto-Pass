@@ -109,4 +109,15 @@ internal struct PasswordGenerator {
     internal static func generateKey() -> SymmetricKey {
         return SymmetricKey(size: .bits256)
     }
+    
+    /// Generates a string containing of only "•" as long as the original password
+    internal static func generateFakePassword(count : Int) -> String {
+        // TODO: is count safe to use?
+        return String(
+            (0 ..< count).map {
+                _ in
+                "•"
+            }
+        )
+    }
 }

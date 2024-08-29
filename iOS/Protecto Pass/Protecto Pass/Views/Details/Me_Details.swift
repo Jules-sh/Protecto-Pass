@@ -15,6 +15,8 @@ internal struct Me_Details: View {
     
     internal let me : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
+    @State private var dbContentCounter : DatabaseContentCounter?
+    
     var body: some View {
         NavigationStack {
             List {
@@ -30,13 +32,29 @@ internal struct Me_Details: View {
                         }
                     }
                 }
-                Section("Content") {
-                    // TODO: Add Content Information
+                Section {
+                    if let counter = dbContentCounter {
+                        let foldersCount = counter.getFoldersCount()
+                        let entriesCount = counter.getEntriesCount()
+                        let documentsCount = counter.getDocumentsCount()
+                        let imagesCount = counter.getImagesCount()
+                        Text("\(foldersCount) \(foldersCount == 1 ? "Folder" : "Folders")")
+                        Text("\(entriesCount) \(entriesCount == 1 ? "Entry" : "Entries")")
+                        Text("\(documentsCount) \(documentsCount == 1 ? "Document" : "Documents")")
+                        Text("\(imagesCount) \(imagesCount == 1 ? "Image" : "Images")")
+                    }
+                } header: {
+                    Text("Content")
+                } footer: {
+                    Text("These information only contain documents added soley as documents. Attachments to entries are not respected in these information.")
                 }
                 Section("Timeline") {
                     ListTile(name: "Created", date: me.created)
                     ListTile(name: "Last edited", date: me.lastEdited)
                 }
+            }
+            .onAppear {
+                dbContentCounter = DatabaseContentCounter(for: me)
             }
             .navigationTitle("Details")
             .navigationBarTitleDisplayMode(.automatic)

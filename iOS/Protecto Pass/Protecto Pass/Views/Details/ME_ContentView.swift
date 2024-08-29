@@ -71,6 +71,9 @@ internal struct ME_ContentView : View {
     
     @State private var selectedImage : DB_Image?
     
+    // TODO: update
+    @State private var imageDeleted : Bool = false
+    
     private func loadRessources() -> Void {
         var imageIDs : [UUID] = []
         var videoIDs : [UUID] = []
@@ -125,10 +128,7 @@ internal struct ME_ContentView : View {
             EditEntry()
         }
         .sheet(isPresented: $imageDetailsPresented) {
-            ImageDetails(image: $selectedImage)
-        }
-        .sheet(isPresented: $imageListDetailsShown) {
-            ImageListDetails(images: images)
+            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
         }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
@@ -183,61 +183,23 @@ internal struct ME_ContentView : View {
             }
         }
         .onChange(of: addImagePresented) {
-            // Guard to not call this code when opening the Picker
-            guard !addImagePresented else { return }
             Task {
-                for item in audioVisualItemsSelected {
-                    if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .audiovisualContent ) }) {
-                        do {
-                            let video = try await item.loadTransferable(type: DBSoleVideo.self)!.videoData
-                            selectedDB_Videos.append(
-                                DB_Video(
-                                    video: video,
-                                    created: Date.now,
-                                    lastEdited: Date.now,
-                                    id: UUID()
-                                )
-                            )
-                        } catch {
-                            errLoadingVideoPresented.toggle()
-                        }
-                    } else if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .image) }) {
-                        do {
-                            let image : UIImage = try await item.loadTransferable(type: DBSoleImage.self)!.image
-                            selectedDB_Images.append(
-                                DB_Image(
-                                    image: image,
-                                    quality: 0.5,
-                                    created: Date.now,
-                                    lastEdited: Date.now,
-                                    id: UUID()
-                                )
-                            )
-                        } catch {
-                            errLoadingImagePresented.toggle()
-                        }
-                    } else {
-                        
-                    }
-                }
                 do {
-                    var newElements : [DatabaseContent<Date>] = []
-                    newElements.append(contentsOf: selectedDB_Images)
-                    newElements.append(contentsOf: selectedDB_Videos)
-                    try Storage.storeDatabase(
-                        db,
-                        context: context,
-                        newElements: newElements
+                    try await PhotoPickerHandler.handlePhotoPickerInput(
+                        items: audioVisualItemsSelected,
+                        pickerPresented: addImagePresented,
+                        images: $images,
+                        videos: $videos,
+                        storeIn: db,
+                        with: context
                     )
-                    images.append(contentsOf: selectedDB_Images)
-                    videos.append(contentsOf: selectedDB_Videos)
-                } catch {
+                } catch is PhotoPickerImageConverterError {
+                    errLoadingImagePresented.toggle()
+                } catch is PhotoPickerVideoConverterError {
+                    errLoadingVideoPresented.toggle()
+                } catch is PhotoPickerResultsSavingError {
                     errSavingPresented.toggle()
                 }
-                // Clear photosSelected to not add a Photo twice when new photos are added via picker
-                audioVisualItemsSelected = []
-                selectedDB_Images = []
-                selectedDB_Videos = []
             }
         }
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
@@ -341,14 +303,9 @@ internal struct ME_ContentView : View {
                         }
                     }
                 } else {
-//                    NavigationLink {
-//                        ImageListDetails(images: images)
-//                            .environmentObject(dataStructure)
-//                    } label: {
-//                        Label("Show all images (\(images.count))", systemImage: "photo")
-//                    }
-                    Button {
-                        imageListDetailsShown.toggle()
+                    NavigationLink {
+                        ImageListDetails(images: $images, videos: $videos)
+                            .environmentObject(db)
                     } label: {
                         Label("Show all images (\(images.count))", systemImage: "photo")
                     }
@@ -374,36 +331,6 @@ internal struct ME_ContentView : View {
     }
 }
 
-/// The Struct representing the loaded image in this View
-private struct DBSoleImage : Transferable {
-    
-    /// The Image when loading has completed
-    fileprivate let image : UIImage
-    
-    static var transferRepresentation: some TransferRepresentation {
-        DataRepresentation(importedContentType: .image) {
-            data in
-            guard let image = UIImage(data: data) else {
-                throw ImageLoadingError()
-            }
-            return DBSoleImage(image: image)
-        }
-    }
-}
-
-/// The Struct representing the loaded image in this View
-private struct DBSoleVideo : Transferable {
-    
-    /// The Image when loading has completed
-    fileprivate let videoData : Data
-    
-    static var transferRepresentation: some TransferRepresentation {
-        DataRepresentation(importedContentType: .movie) {
-            data in
-            return DBSoleVideo(videoData: data)
-        }
-    }
-}
 
 internal struct ME_ContentView_Previews: PreviewProvider {
     

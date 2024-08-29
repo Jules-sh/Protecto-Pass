@@ -16,6 +16,8 @@ internal struct ImageDetails: View {
     /// The Image displayed in this View
     @Binding internal var image : DB_Image?
     
+    @Binding internal var deleted : Bool
+    
     var body: some View {
         NavigationStack {
             Image(uiImage: image!.image)
@@ -31,14 +33,15 @@ internal struct ImageDetails: View {
                     }
                     ToolbarItem(placement: .primaryAction) {
                         Menu {
-                            Button {
-                                
+                            NavigationLink {
+                                ImageInfo(image: image!)
                             } label: {
                                 Label("Info", systemImage: "info.circle")
                             }
                             Divider()
                             Button(role: .destructive) {
-                                
+                                deleted = true
+                                dismiss()
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -55,7 +58,9 @@ internal struct ImageDetails_Previews: PreviewProvider {
     
     @State static private var image : DB_Image? = DB_Image.previewImage
     
+    @State static private var deleted : Bool = false
+    
     static var previews: some View {
-        ImageDetails(image: $image)
+        ImageDetails(image: $image, deleted: $deleted)
     }
 }

@@ -158,12 +158,24 @@ internal struct Storage {
         }
     }
     
-    /// Stores the currently opened and used Database
-    internal static func storeCurrentDatabase() -> Void {
+    internal static func deleteDatabase(_ db : Database, with context : NSManagedObjectContext) throws -> Void {
+        try CoreDataManager.deleteDatabase(db.id, with: context)
+    }
+    
+    internal static func deleteImage(_ image : DB_Image, with context : NSManagedObjectContext) throws -> Void {
+//        try CoreDataManager.deleteImage(image, context: context)
+    }
+    
+    internal static func deleteVideo(_ video : DB_Video, with context : NSManagedObjectContext) throws -> Void {
+//        CoreDataManager.deleteVideo(video, context: context)
+    }
+    
+    internal static func deleteDocument(_ document : DB_Document, with context : NSManagedObjectContext) throws -> Void {
+//        CoreDataManager.deleteDocument(document, context: context)
     }
     
     /// Resets all Data of this App and the connected Cloud Container
-    internal static func clearAll() -> Void {
-        // TODO: implement
+    internal static func clearAll(context: NSManagedObjectContext) throws -> Void {
+        try CoreDataManager.clearAll(context: context)
     }
 }

@@ -58,10 +58,10 @@ internal class GeneralEntry<DA, U, DE, DO> : NativeType<DE, DA, DO> {
 internal final class Entry : GeneralEntry<String, URL?, Date, LoadableResource>, DecryptedDataStructure {
     
     internal static let previewEntry : Entry = Entry(
-        title: "Password Safe",
+        title: "Test Entry",
         username: "user",
         password: "testPassword",
-        url: URL(string: "https://github.com/V3Sofficial/Protecto-Pass"),
+        url: URL(string: "https://github.com/V3Sofficial/Protecto-Pass", encodingInvalidCharacters: false),
         notes: "This is a preview Entry, only to use in previews and tests",
         iconName: "doc",
         documents: [],

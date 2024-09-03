@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import UniformTypeIdentifiers
 
 internal struct ME_ContentView : View {
     
@@ -78,6 +79,14 @@ internal struct ME_ContentView : View {
     // TODO: update
     @State private var imageDeleted : Bool = false
     
+    @State private var errLoadingDocumentPresented : Bool = false
+    
+    @State private var selectedDocument : DB_Document?
+    
+    @State private var textDocumentShown : Bool = false
+    
+    @State private var pdfDocumentShown : Bool = false
+    
     private func loadRessources() -> Void {
         var imageIDs : [UUID] = []
         var videoIDs : [UUID] = []
@@ -104,38 +113,6 @@ internal struct ME_ContentView : View {
                 imageSection(metrics)
                 documentSection()
             }
-        }
-        .onAppear {
-            loadRessources()
-        }
-        .sheet(isPresented: $detailsPresented) {
-            Me_Details(me: dataStructure)
-        }
-        .sheet(isPresented: $entryDetailsPresented) {
-            EntryDetails(entry: $selectedEntry)
-        }
-        .sheet(isPresented: $addEntryPresented) {
-            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
-                .environmentObject(db)
-        }
-        .sheet(isPresented: $addFolderPresented) {
-            EditFolder()
-                .environmentObject(db)
-        }
-        .photosPicker(
-            isPresented: $addImagePresented,
-            selection: $audioVisualItemsSelected,
-            maxSelectionCount: 100,
-            selectionBehavior: .continuousAndOrdered,
-            matching: .any(of: [.images, .videos]),
-            preferredItemEncoding: .automatic
-        )
-        .sheet(isPresented: $addDocPresented) {
-            // TODO: udpate
-            EditEntry()
-        }
-        .sheet(isPresented: $imageDetailsPresented) {
-            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
         }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
@@ -189,6 +166,72 @@ internal struct ME_ContentView : View {
                 }
             }
         }
+        .onAppear {
+            loadRessources()
+        }
+        .sheet(isPresented: $detailsPresented) {
+            Me_Details(me: dataStructure)
+        }
+        .sheet(isPresented: $entryDetailsPresented) {
+            EntryDetails(entry: $selectedEntry)
+        }
+        .sheet(isPresented: $addEntryPresented) {
+            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
+                .environmentObject(db)
+        }
+        .sheet(isPresented: $addFolderPresented) {
+            EditFolder()
+                .environmentObject(db)
+        }
+        .sheet(isPresented: $imageDetailsPresented) {
+            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
+        }
+        .sheet(isPresented: $textDocumentShown) {
+            NavigationStack {
+                Text(DataConverter.dataToString(selectedDocument?.document ?? Data()))
+            }
+        }
+        .photosPicker(
+            isPresented: $addImagePresented,
+            selection: $audioVisualItemsSelected,
+            maxSelectionCount: 100,
+            selectionBehavior: .continuousAndOrdered,
+            matching: .any(of: [.images, .videos]),
+            preferredItemEncoding: .automatic
+        )
+        .fileImporter(
+            isPresented: $addDocPresented,
+            allowedContentTypes: [.item],
+            allowsMultipleSelection: true
+        ) {
+            result in
+            switch result {
+                case .success(let files):
+                    var documents : [DB_Document] = []
+                    for file in files {
+                        guard file.startAccessingSecurityScopedResource() else { return }
+                        do {
+                            let data = try Data(contentsOf: file, options: [.uncached])
+                            documents.append(
+                                DB_Document(
+                                    document: data,
+                                    type: file.pathExtension,
+                                    name: file.lastPathComponent,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
+                            )
+                        } catch {
+                            errLoadingDocumentPresented.toggle()
+                        }
+                        file.stopAccessingSecurityScopedResource()
+                    }
+                    self.documents.append(contentsOf: documents)
+                case .failure:
+                    errLoadingDocumentPresented.toggle()
+            }
+        }
         .onChange(of: addImagePresented) {
             Task {
                 do {
@@ -211,6 +254,7 @@ internal struct ME_ContentView : View {
         }
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
         .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
+        .alert("Error loading Document", isPresented: $errLoadingDocumentPresented) {}
         .alert("Error saving Database", isPresented: $errSavingPresented) {
         } message: {
             Text("An Error arised saving the Database")
@@ -331,6 +375,17 @@ internal struct ME_ContentView : View {
             if !documents.isEmpty {
                 ForEach(documents) {
                     document in
+                    Button {
+                        selectedDocument = document
+                        if document.isText() {
+                            textDocumentShown.toggle()
+                        } else if document.isPDF() {
+                            pdfDocumentShown.toggle()
+                        }
+                    } label: {
+                        Label(document.name, systemImage: "doc")
+                    }
+                    .foregroundStyle(.primary)
                 }
             } else {
                 Text("No Documents found")

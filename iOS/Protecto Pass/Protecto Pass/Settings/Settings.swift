@@ -94,19 +94,19 @@ internal struct SettingsHelper {
     /// Loads all the Data to:
     /// 1. the Settings App
     /// 2. This App (returns a Dictionary of all Settings and their values)
-    internal static func load() -> [Settings : Bool] {
+    internal static func load(context : NSManagedObjectContext) throws -> [Settings : Bool] {
         updateVersion()
-        return loadData()
+        return try loadData(context: context)
     }
     
     /// Load the current Value of the Settings
-    private static func loadData() -> [Settings : Bool] {
+    private static func loadData(context : NSManagedObjectContext) throws -> [Settings : Bool] {
         if checkReset() {
             largeScreen = false
             compactMode = false
             iCloudSettings = true
             iCloudPaths = true
-            reset()
+            try reset(context: context)
         } else {
             largeScreen = UserDefaults.standard.bool(forKey: Settings.largeScreen.rawValue)
             compactMode = UserDefaults.standard.bool(forKey: Settings.compactMode.rawValue)
@@ -144,8 +144,8 @@ internal struct SettingsHelper {
     }
     
     /// Resets the App
-    private static func reset() -> Void {
-        Storage.clearAll()
+    private static func reset(context : NSManagedObjectContext) throws -> Void {
+        try Storage.clearAll(context: context)
     }
     
     /// Update the Version and Build Number of this App in the Settings

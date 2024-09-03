@@ -31,6 +31,7 @@ internal struct ImageListDetails: View {
     
     var body: some View {
         NavigationStack {
+            // TODO: GeometryReader destorys Layout, find workaround
             GeometryReader {
                 metrics in
                 LazyVGrid(
@@ -91,7 +92,12 @@ internal struct ImageListDetails: View {
             .onChange(of: imageDeleted) {
                 let image = images.first(where: { $0.id == selectedImage!.id })
                 images.removeAll(where: { $0 == image })
-                // TODO: delete Image from database
+                do {
+                    try Storage.deleteImage(image!)
+                    db.images.removeAll(where: { $0.id == image!.id })
+                } catch {
+                    // TODO: handle error
+                }
             }
             .sheet(isPresented: $imageDetailsPresented) {
                 ImageDetails(image: $selectedImage, deleted: $imageDeleted)

@@ -79,6 +79,8 @@ internal struct ME_ContentView : View {
     // TODO: update
     @State private var imageDeleted : Bool = false
     
+    @State private var documentDeleted : Bool = false
+    
     @State private var errLoadingDocumentPresented : Bool = false
     
     @State private var selectedDocument : DB_Document?
@@ -172,86 +174,6 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
-        .sheet(isPresented: $entryDetailsPresented) {
-            EntryDetails(entry: $selectedEntry)
-        }
-        .sheet(isPresented: $addEntryPresented) {
-            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
-                .environmentObject(db)
-        }
-        .sheet(isPresented: $addFolderPresented) {
-            EditFolder()
-                .environmentObject(db)
-        }
-        .sheet(isPresented: $imageDetailsPresented) {
-            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
-        }
-        .sheet(isPresented: $textDocumentShown) {
-            NavigationStack {
-                Text(DataConverter.dataToString(selectedDocument?.document ?? Data()))
-            }
-        }
-        .photosPicker(
-            isPresented: $addImagePresented,
-            selection: $audioVisualItemsSelected,
-            maxSelectionCount: 100,
-            selectionBehavior: .continuousAndOrdered,
-            matching: .any(of: [.images, .videos]),
-            preferredItemEncoding: .automatic
-        )
-        .fileImporter(
-            isPresented: $addDocPresented,
-            allowedContentTypes: [.item],
-            allowsMultipleSelection: true
-        ) {
-            result in
-            switch result {
-                case .success(let files):
-                    var documents : [DB_Document] = []
-                    for file in files {
-                        guard file.startAccessingSecurityScopedResource() else { return }
-                        do {
-                            let data = try Data(contentsOf: file, options: [.uncached])
-                            documents.append(
-                                DB_Document(
-                                    document: data,
-                                    type: file.pathExtension,
-                                    name: file.lastPathComponent,
-                                    created: Date.now,
-                                    lastEdited: Date.now,
-                                    id: UUID()
-                                )
-                            )
-                        } catch {
-                            errLoadingDocumentPresented.toggle()
-                        }
-                        file.stopAccessingSecurityScopedResource()
-                    }
-                    self.documents.append(contentsOf: documents)
-                case .failure:
-                    errLoadingDocumentPresented.toggle()
-            }
-        }
-        .onChange(of: addImagePresented) {
-            Task {
-                do {
-                    try await PhotoPickerHandler.handlePhotoPickerInput(
-                        items: audioVisualItemsSelected,
-                        pickerPresented: addImagePresented,
-                        images: $images,
-                        videos: $videos,
-                        storeIn: db,
-                        with: context
-                    )
-                } catch is PhotoPickerImageConverterError {
-                    errLoadingImagePresented.toggle()
-                } catch is PhotoPickerVideoConverterError {
-                    errLoadingVideoPresented.toggle()
-                } catch is PhotoPickerResultsSavingError {
-                    errSavingPresented.toggle()
-                }
-            }
-        }
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
         .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
         .alert("Error loading Document", isPresented: $errLoadingDocumentPresented) {}
@@ -292,6 +214,13 @@ internal struct ME_ContentView : View {
                 Text("No Entries found")
             }
         }
+        .sheet(isPresented: $entryDetailsPresented) {
+            EntryDetails(entry: $selectedEntry)
+        }
+        .sheet(isPresented: $addEntryPresented) {
+            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
+                .environmentObject(db)
+        }
     }
     
     @ViewBuilder
@@ -311,6 +240,10 @@ internal struct ME_ContentView : View {
             } else {
                 Text("No Folders found")
             }
+        }
+        .sheet(isPresented: $addFolderPresented) {
+            EditFolder()
+                .environmentObject(db)
         }
     }
     
@@ -367,6 +300,37 @@ internal struct ME_ContentView : View {
                 Text("No Images found")
             }
         }
+        .sheet(isPresented: $imageDetailsPresented) {
+            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
+        }
+        .photosPicker(
+            isPresented: $addImagePresented,
+            selection: $audioVisualItemsSelected,
+            maxSelectionCount: 100,
+            selectionBehavior: .continuousAndOrdered,
+            matching: .any(of: [.images, .videos]),
+            preferredItemEncoding: .automatic
+        )
+        .onChange(of: addImagePresented) {
+            Task {
+                do {
+                    try await PhotoPickerHandler.handlePhotoPickerInput(
+                        items: audioVisualItemsSelected,
+                        pickerPresented: addImagePresented,
+                        images: $images,
+                        videos: $videos,
+                        storeIn: db,
+                        with: context
+                    )
+                } catch is PhotoPickerImageConverterError {
+                    errLoadingImagePresented.toggle()
+                } catch is PhotoPickerVideoConverterError {
+                    errLoadingVideoPresented.toggle()
+                } catch is PhotoPickerResultsSavingError {
+                    errSavingPresented.toggle()
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -387,8 +351,50 @@ internal struct ME_ContentView : View {
                     }
                     .foregroundStyle(.primary)
                 }
+                .sheet(isPresented: $textDocumentShown) {
+                    NavigationStack {
+                        // TODO: update with Binding
+                        Text(DataConverter.dataToString(selectedDocument?.document ?? Data()))
+                    }
+                }
+                .sheet(isPresented: $pdfDocumentShown) {
+                    PDFDocumentDetails(pdfDocument: $selectedDocument, delete: $documentDeleted)
+                }
             } else {
                 Text("No Documents found")
+            }
+        }
+        .fileImporter(
+            isPresented: $addDocPresented,
+            allowedContentTypes: [.item],
+            allowsMultipleSelection: true
+        ) {
+            result in
+            switch result {
+                case .success(let files):
+                    var documents : [DB_Document] = []
+                    for file in files {
+                        guard file.startAccessingSecurityScopedResource() else { return }
+                        do {
+                            let data = try Data(contentsOf: file, options: [.uncached])
+                            documents.append(
+                                DB_Document(
+                                    document: data,
+                                    type: file.pathExtension,
+                                    name: file.lastPathComponent,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
+                            )
+                        } catch {
+                            errLoadingDocumentPresented.toggle()
+                        }
+                        file.stopAccessingSecurityScopedResource()
+                    }
+                    self.documents.append(contentsOf: documents)
+                case .failure:
+                    errLoadingDocumentPresented.toggle()
             }
         }
     }

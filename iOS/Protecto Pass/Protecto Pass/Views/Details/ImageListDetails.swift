@@ -93,7 +93,7 @@ internal struct ImageListDetails: View {
                 let image = images.first(where: { $0.id == selectedImage!.id })
                 images.removeAll(where: { $0 == image })
                 do {
-                    try Storage.deleteImage(image!)
+                    try Storage.deleteImage(image!, with: context)
                     db.images.removeAll(where: { $0.id == image!.id })
                 } catch {
                     // TODO: handle error

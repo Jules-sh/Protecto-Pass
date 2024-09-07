@@ -20,7 +20,7 @@ internal struct PDFDocumentDetails : View {
         NavigationStack {
             PDFDocumentDetailsView(pdfDocument: pdfDocument)
                 .navigationTitle(pdfDocument!.name)
-                .navigationBarTitleDisplayMode(.automatic)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbarRole(.automatic)
                 .toolbar(.automatic, for: .automatic)
                 .toolbar {
@@ -34,13 +34,13 @@ internal struct PDFDocumentDetails : View {
                     ToolbarItem(placement: .primaryAction) {
                         Menu {
                             Button {
-                                delete = true
+                                
                             } label: {
                                 Label("Information", systemImage: "info.circle")
                             }
                             Divider()
                             Button(role: .destructive) {
-                                
+                                delete = true
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }

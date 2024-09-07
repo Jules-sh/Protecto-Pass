@@ -179,6 +179,7 @@ internal struct DocumentConverter : DatabaseConverterProtocol {
         let cdDoc : CD_Document = CD_Document(context: context)
         cdDoc.documentData = encrypted.document
         cdDoc.type = encrypted.type
+        cdDoc.name = encrypted.name
         cdDoc.created = encrypted.created
         cdDoc.lastEdited = encrypted.lastEdited
         cdDoc.uuid = encrypted.id

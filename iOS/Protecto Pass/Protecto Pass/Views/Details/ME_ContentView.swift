@@ -7,36 +7,50 @@
 
 import SwiftUI
 import PhotosUI
-import UniformTypeIdentifiers
 
 internal struct ME_ContentView : View {
     
-    @Environment(\.managedObjectContext) private var context
+    /* ENVIRONMENT VARIABLES */
     
-    /// Controls the navigation flow, only necessary if this represents a Database
-    @EnvironmentObject private var navigationController : AddDB_Navigation
+    @Environment(\.managedObjectContext) private var context
     
     /// Whether the User activated the large Screen preference or not
     @Environment(\.largeScreen) private var largeScreen : Bool
     
+    // Environment Objects
+    
+    /// Controls the navigation flow, only necessary if this represents a Database
+    @EnvironmentObject private var navigationController : AddDB_Navigation
+    
     /// The Database used to store the complere Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
+    
     
     internal init(_ dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>) {
         self.dataStructure = dataStructure
     }
     
+    
+    
+    /* DATA VARIABLES */
+    
     /// The Data Structure which is displayed in this View
     @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
+    /// All the Images shown and stored in this view
     @State private var images : [DB_Image] = []
     
+    /// All the videos shown and stored in this view
     @State private var videos : [DB_Video] = []
     
+    /// All the documents shown and stored in this view
     @State private var documents : [DB_Document] = []
     
-    /// Whether or not the details sheet is presented
-    @State private var detailsPresented : Bool = false
+    
+    
+    /* SHEET CONTROL VARIABLES */
+    
+    // Adding
     
     /// Whether or not the sheet to add an entry is presented
     @State private var addEntryPresented : Bool = false
@@ -50,12 +64,28 @@ internal struct ME_ContentView : View {
     /// Whether or not the sheet to add a document is presented
     @State private var addDocPresented : Bool = false
     
-    /// The Photos and videos selected to add to the Password Safe
-    @State private var audioVisualItemsSelected : [PhotosPickerItem] = []
+    // Details
     
-    @State private var selectedDB_Images : [DB_Image] = []
+    /// Whether or not the details sheet is presented
+    @State private var detailsPresented : Bool = false
     
-    @State private var selectedDB_Videos : [DB_Video] = []
+    /// Whether or not the details sheet for an image is presented
+    @State private var imageDetailsPresented : Bool = false
+    
+    /// Whether or not the details sheet for an entry is presented
+    @State private var entryDetailsPresented : Bool = false
+    
+    /// Whether or not the sheet displaying a text document is shown
+    @State private var textDocumentShown : Bool = false
+    
+    /// Whether or not the sheet displaying a pdf Document is shown
+    @State private var pdfDocumentShown : Bool = false
+    
+    
+    
+    /* ERROR ALERT CONTROL VARIABLES */
+    
+    // Loading
     
     /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
@@ -63,33 +93,52 @@ internal struct ME_ContentView : View {
     /// Set to true in order to present an alert displaying an error while loading the video
     @State private var errLoadingVideoPresented : Bool = false
     
+    /// Set to true in order to present an alert displaying an error while loading the document
+    @State private var errLoadingDocumentPresented : Bool = false
+    
+    // Saving
+    
     /// Presents an alert stating an error has appeared in saving the database when set to true
     @State private var errSavingPresented : Bool = false
     
-    @State private var imageDetailsPresented : Bool = false
+    // Deleting
     
-    @State private var imageListDetailsShown : Bool = false
+    /// Displays an alert stating, that there's been an error deleting the selected image
+    @State private var errImageDeletionShown : Bool = false
     
-    @State private var entryDetailsPresented : Bool = false
+    /// Displays an alert stating, that there's been an error deleting the selected document
+    @State private var errDocumentDeletionShown : Bool = false
     
+    
+    
+    /* SELECTED DATA VARIABLES */
+    
+    /// The Photos and videos selected to add to the Password Safe
+    @State private var audioVisualItemsSelected : [PhotosPickerItem] = []
+    
+    /// The entry selected to display in the EntryDetails sheet
     @State private var selectedEntry : Entry?
     
+    /// The image selected to display in the sheet
     @State private var selectedImage : DB_Image?
     
-    // TODO: update
-    @State private var imageDeleted : Bool = false
-    
-    @State private var documentDeleted : Bool = false
-    
-    @State private var errLoadingDocumentPresented : Bool = false
-    
+    /// The document selected to display in the according view
     @State private var selectedDocument : DB_Document?
     
-    @State private var textDocumentShown : Bool = false
     
-    @State private var pdfDocumentShown : Bool = false
     
-    private func loadRessources() -> Void {
+    /* DELETION CONTROL VARIABLES */
+    
+    /// Set to true in order to delete the 'selectedImage'
+    @State private var imageDeleted : Bool = false
+    
+    /// Set to true in order to delete the 'selectedDocument'
+    @State private var documentDeleted : Bool = false
+    
+    
+    /// Loads the resources, such as images, videos and documents, and stores them in the
+    /// corresponding arrays
+    private func loadResources() -> Void {
         var imageIDs : [UUID] = []
         var videoIDs : [UUID] = []
         var documentIDs : [UUID] = []
@@ -169,7 +218,7 @@ internal struct ME_ContentView : View {
             }
         }
         .onAppear {
-            loadRessources()
+            loadResources()
         }
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
@@ -183,6 +232,7 @@ internal struct ME_ContentView : View {
         }
     }
     
+    /// Builds the header displayed when using large screen mode
     @ViewBuilder
     private func largeScreenOption() -> some View {
         if largeScreen {
@@ -196,6 +246,7 @@ internal struct ME_ContentView : View {
         }
     }
     
+    /// Builds the section that displays entries in this view
     @ViewBuilder
     private func entrySection() -> some View {
         Section("Entries") {
@@ -223,6 +274,8 @@ internal struct ME_ContentView : View {
         }
     }
     
+    /// Builds the section that displays folders and enables the user
+    /// to navigate to the new folder
     @ViewBuilder
     private func folderSection() -> some View {
         Section("Folder") {
@@ -247,6 +300,8 @@ internal struct ME_ContentView : View {
         }
     }
     
+    /// Builds the section that displays either up to nine images or
+    /// the navigationlink to the ImageListDetails
     @ViewBuilder
     private func imageSection(_ metrics : GeometryProxy) -> some View {
         Section("Images") {
@@ -331,8 +386,21 @@ internal struct ME_ContentView : View {
                 }
             }
         }
+        .onChange(of: imageDeleted) {
+            // Not delete image if imageDeleted just turned to false
+            guard imageDeleted else { return }
+            images.removeAll(where: { $0.id == selectedImage!.id })
+            dataStructure.images.removeAll(where: { $0.id == selectedImage!.id })
+            do {
+                try Storage.deleteImage(selectedImage!, with: context)
+            } catch {
+                errImageDeletionShown.toggle()
+            }
+            imageDeleted = false
+        }
     }
     
+    /// Builds the section displaying a list of documents stored in this data structure
     @ViewBuilder
     private func documentSection() -> some View {
         Section("Documents") {
@@ -353,8 +421,7 @@ internal struct ME_ContentView : View {
                 }
                 .sheet(isPresented: $textDocumentShown) {
                     NavigationStack {
-                        // TODO: update with Binding
-                        Text(DataConverter.dataToString(selectedDocument?.document ?? Data()))
+                        TextDocumentDetails(document: $selectedDocument, delete: $documentDeleted)
                     }
                 }
                 .sheet(isPresented: $pdfDocumentShown) {
@@ -393,9 +460,26 @@ internal struct ME_ContentView : View {
                         file.stopAccessingSecurityScopedResource()
                     }
                     self.documents.append(contentsOf: documents)
+                    do {
+                        try Storage.storeDatabase(db, context: context, newElements: documents)
+                    } catch {
+                        errSavingPresented.toggle()
+                    }
                 case .failure:
                     errLoadingDocumentPresented.toggle()
             }
+        }
+        .onChange(of: documentDeleted) {
+            // Only continue of documentDeleted is set to true, return if set to false
+            guard documentDeleted else { return }
+            documents.removeAll(where: { $0.id == selectedDocument!.id })
+            dataStructure.documents.removeAll(where: { $0.id == selectedDocument!.id })
+            do {
+                try Storage.deleteDocument(selectedDocument!, with: context)
+            } catch {
+                errDocumentDeletionShown.toggle()
+            }
+            documentDeleted = false
         }
     }
 }

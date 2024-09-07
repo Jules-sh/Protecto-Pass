@@ -94,7 +94,8 @@ internal struct ImageListDetails: View {
                 images.removeAll(where: { $0 == image })
                 do {
                     try Storage.deleteImage(image!, with: context)
-                    db.images.removeAll(where: { $0.id == image!.id })
+                    images.removeAll(where: { $0.id == image!.id })
+                    // TODO: remove loadable resource reference
                 } catch {
                     // TODO: handle error
                 }

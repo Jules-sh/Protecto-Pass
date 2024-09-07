@@ -56,6 +56,11 @@ internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataS
     internal func isPDF() -> Bool {
         return type == "pdf"
     }
+    
+    /// Returns true if this document can be viewed directly inside this app
+    internal func canBeViewed() -> Bool {
+        return isText() || isPDF()
+    }
 }
 
 /// Encrypted Document type storing the encrypted values

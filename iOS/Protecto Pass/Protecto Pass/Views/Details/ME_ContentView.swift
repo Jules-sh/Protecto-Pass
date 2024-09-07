@@ -75,11 +75,8 @@ internal struct ME_ContentView : View {
     /// Whether or not the details sheet for an entry is presented
     @State private var entryDetailsPresented : Bool = false
     
-    /// Whether or not the sheet displaying a text document is shown
-    @State private var textDocumentShown : Bool = false
-    
-    /// Whether or not the sheet displaying a pdf Document is shown
-    @State private var pdfDocumentShown : Bool = false
+    /// Whether or not the sheet displaying a Document is shown
+    @State private var documentShown : Bool = false
     
     
     
@@ -409,23 +406,16 @@ internal struct ME_ContentView : View {
                     document in
                     Button {
                         selectedDocument = document
-                        if document.isText() {
-                            textDocumentShown.toggle()
-                        } else if document.isPDF() {
-                            pdfDocumentShown.toggle()
+                        if document.canBeViewed() {
+                            documentShown.toggle()
                         }
                     } label: {
                         Label(document.name, systemImage: "doc")
                     }
                     .foregroundStyle(.primary)
                 }
-                .sheet(isPresented: $textDocumentShown) {
-                    NavigationStack {
-                        TextDocumentDetails(document: $selectedDocument, delete: $documentDeleted)
-                    }
-                }
-                .sheet(isPresented: $pdfDocumentShown) {
-                    PDFDocumentDetails(pdfDocument: $selectedDocument, delete: $documentDeleted)
+                .sheet(isPresented: $documentShown) {
+                    DocumentDetails(document: $selectedDocument, delete: $documentDeleted)
                 }
             } else {
                 Text("No Documents found")

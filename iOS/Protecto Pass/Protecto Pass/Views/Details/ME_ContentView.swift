@@ -10,32 +10,47 @@ import PhotosUI
 
 internal struct ME_ContentView : View {
     
-    @Environment(\.managedObjectContext) private var context
+    /* ENVIRONMENT VARIABLES */
     
-    /// Controls the navigation flow, only necessary if this represents a Database
-    @EnvironmentObject private var navigationController : AddDB_Navigation
+    @Environment(\.managedObjectContext) private var context
     
     /// Whether the User activated the large Screen preference or not
     @Environment(\.largeScreen) private var largeScreen : Bool
     
+    // Environment Objects
+    
+    /// Controls the navigation flow, only necessary if this represents a Database
+    @EnvironmentObject private var navigationController : AddDB_Navigation
+    
     /// The Database used to store the complere Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
+    
     
     internal init(_ dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>) {
         self.dataStructure = dataStructure
     }
     
+    
+    
+    /* DATA VARIABLES */
+    
     /// The Data Structure which is displayed in this View
     @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
+    /// All the Images shown and stored in this view
     @State private var images : [DB_Image] = []
     
+    /// All the videos shown and stored in this view
     @State private var videos : [DB_Video] = []
     
+    /// All the documents shown and stored in this view
     @State private var documents : [DB_Document] = []
     
-    /// Whether or not the details sheet is presented
-    @State private var detailsPresented : Bool = false
+    
+    
+    /* SHEET CONTROL VARIABLES */
+    
+    // Adding
     
     /// Whether or not the sheet to add an entry is presented
     @State private var addEntryPresented : Bool = false
@@ -49,12 +64,25 @@ internal struct ME_ContentView : View {
     /// Whether or not the sheet to add a document is presented
     @State private var addDocPresented : Bool = false
     
-    /// The Photos and videos selected to add to the Password Safe
-    @State private var audioVisualItemsSelected : [PhotosPickerItem] = []
+    // Details
     
-    @State private var selectedDB_Images : [DB_Image] = []
+    /// Whether or not the details sheet is presented
+    @State private var detailsPresented : Bool = false
     
-    @State private var selectedDB_Videos : [DB_Video] = []
+    /// Whether or not the details sheet for an image is presented
+    @State private var imageDetailsPresented : Bool = false
+    
+    /// Whether or not the details sheet for an entry is presented
+    @State private var entryDetailsPresented : Bool = false
+    
+    /// Whether or not the sheet displaying a Document is shown
+    @State private var documentShown : Bool = false
+    
+    
+    
+    /* ERROR ALERT CONTROL VARIABLES */
+    
+    // Loading
     
     /// Set to true in order to present an alert stating the error while loading an image
     @State private var errLoadingImagePresented : Bool = false
@@ -62,16 +90,52 @@ internal struct ME_ContentView : View {
     /// Set to true in order to present an alert displaying an error while loading the video
     @State private var errLoadingVideoPresented : Bool = false
     
+    /// Set to true in order to present an alert displaying an error while loading the document
+    @State private var errLoadingDocumentPresented : Bool = false
+    
+    // Saving
+    
     /// Presents an alert stating an error has appeared in saving the database when set to true
     @State private var errSavingPresented : Bool = false
     
-    @State private var imageDetailsPresented : Bool = false
+    // Deleting
     
-    @State private var imageListDetailsShown : Bool = false
+    /// Displays an alert stating, that there's been an error deleting the selected image
+    @State private var errImageDeletionShown : Bool = false
     
+    /// Displays an alert stating, that there's been an error deleting the selected document
+    @State private var errDocumentDeletionShown : Bool = false
+    
+    
+    
+    /* SELECTED DATA VARIABLES */
+    
+    /// The Photos and videos selected to add to the Password Safe
+    @State private var audioVisualItemsSelected : [PhotosPickerItem] = []
+    
+    /// The entry selected to display in the EntryDetails sheet
+    @State private var selectedEntry : Entry?
+    
+    /// The image selected to display in the sheet
     @State private var selectedImage : DB_Image?
     
-    private func loadRessources() -> Void {
+    /// The document selected to display in the according view
+    @State private var selectedDocument : DB_Document?
+    
+    
+    
+    /* DELETION CONTROL VARIABLES */
+    
+    /// Set to true in order to delete the 'selectedImage'
+    @State private var imageDeleted : Bool = false
+    
+    /// Set to true in order to delete the 'selectedDocument'
+    @State private var documentDeleted : Bool = false
+    
+    
+    /// Loads the resources, such as images, videos and documents, and stores them in the
+    /// corresponding arrays
+    private func loadResources() -> Void {
         var imageIDs : [UUID] = []
         var videoIDs : [UUID] = []
         var documentIDs : [UUID] = []
@@ -97,38 +161,6 @@ internal struct ME_ContentView : View {
                 imageSection(metrics)
                 documentSection()
             }
-        }
-        .onAppear {
-            loadRessources()
-        }
-        .sheet(isPresented: $detailsPresented) {
-            Me_Details(me: dataStructure)
-        }
-        .sheet(isPresented: $addEntryPresented) {
-            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
-                .environmentObject(db)
-        }
-        .sheet(isPresented: $addFolderPresented) {
-            EditFolder()
-                .environmentObject(db)
-        }
-        .photosPicker(
-            isPresented: $addImagePresented,
-            selection: $audioVisualItemsSelected,
-            maxSelectionCount: 100,
-            selectionBehavior: .continuousAndOrdered,
-            matching: .any(of: [.images, .videos]),
-            preferredItemEncoding: .automatic
-        )
-        .sheet(isPresented: $addDocPresented) {
-            // TODO: udpate
-            EditEntry()
-        }
-        .sheet(isPresented: $imageDetailsPresented) {
-            ImageDetails(image: $selectedImage)
-        }
-        .sheet(isPresented: $imageListDetailsShown) {
-            ImageListDetails(images: images)
         }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
         .navigationTitle(dataStructure is Database ? "Home" : dataStructure.name)
@@ -182,72 +214,22 @@ internal struct ME_ContentView : View {
                 }
             }
         }
-        .onChange(of: addImagePresented) {
-            // Guard to not call this code when opening the Picker
-            guard !addImagePresented else { return }
-            Task {
-                for item in audioVisualItemsSelected {
-                    if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .audiovisualContent ) }) {
-                        do {
-                            let video = try await item.loadTransferable(type: DBSoleVideo.self)!.videoData
-                            selectedDB_Videos.append(
-                                DB_Video(
-                                    video: video,
-                                    created: Date.now,
-                                    lastEdited: Date.now,
-                                    id: UUID()
-                                )
-                            )
-                        } catch {
-                            errLoadingVideoPresented.toggle()
-                        }
-                    } else if item.supportedContentTypes.contains(where: { $0.isSubtype(of: .image) }) {
-                        do {
-                            let image : UIImage = try await item.loadTransferable(type: DBSoleImage.self)!.image
-                            selectedDB_Images.append(
-                                DB_Image(
-                                    image: image,
-                                    quality: 0.5,
-                                    created: Date.now,
-                                    lastEdited: Date.now,
-                                    id: UUID()
-                                )
-                            )
-                        } catch {
-                            errLoadingImagePresented.toggle()
-                        }
-                    } else {
-                        
-                    }
-                }
-                do {
-                    var newElements : [DatabaseContent<Date>] = []
-                    newElements.append(contentsOf: selectedDB_Images)
-                    newElements.append(contentsOf: selectedDB_Videos)
-                    try Storage.storeDatabase(
-                        db,
-                        context: context,
-                        newElements: newElements
-                    )
-                    images.append(contentsOf: selectedDB_Images)
-                    videos.append(contentsOf: selectedDB_Videos)
-                } catch {
-                    errSavingPresented.toggle()
-                }
-                // Clear photosSelected to not add a Photo twice when new photos are added via picker
-                audioVisualItemsSelected = []
-                selectedDB_Images = []
-                selectedDB_Videos = []
-            }
+        .onAppear {
+            loadResources()
+        }
+        .sheet(isPresented: $detailsPresented) {
+            Me_Details(me: dataStructure)
         }
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
         .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
+        .alert("Error loading Document", isPresented: $errLoadingDocumentPresented) {}
         .alert("Error saving Database", isPresented: $errSavingPresented) {
         } message: {
             Text("An Error arised saving the Database")
         }
     }
     
+    /// Builds the header displayed when using large screen mode
     @ViewBuilder
     private func largeScreenOption() -> some View {
         if largeScreen {
@@ -261,14 +243,16 @@ internal struct ME_ContentView : View {
         }
     }
     
+    /// Builds the section that displays entries in this view
     @ViewBuilder
     private func entrySection() -> some View {
         Section("Entries") {
             if !dataStructure.entries.isEmpty {
                 ForEach(dataStructure.entries) {
                     entry in
-                    NavigationLink {
-                        EntryDetails(entry: entry)
+                    Button {
+                        selectedEntry = entry
+                        entryDetailsPresented.toggle()
                     } label: {
                         Label(entry.title, systemImage: entry.iconName)
                     }
@@ -278,8 +262,17 @@ internal struct ME_ContentView : View {
                 Text("No Entries found")
             }
         }
+        .sheet(isPresented: $entryDetailsPresented) {
+            EntryDetails(entry: $selectedEntry)
+        }
+        .sheet(isPresented: $addEntryPresented) {
+            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
+                .environmentObject(db)
+        }
     }
     
+    /// Builds the section that displays folders and enables the user
+    /// to navigate to the new folder
     @ViewBuilder
     private func folderSection() -> some View {
         Section("Folder") {
@@ -298,8 +291,14 @@ internal struct ME_ContentView : View {
                 Text("No Folders found")
             }
         }
+        .sheet(isPresented: $addFolderPresented) {
+            EditFolder()
+                .environmentObject(db)
+        }
     }
     
+    /// Builds the section that displays either up to nine images or
+    /// the navigationlink to the ImageListDetails
     @ViewBuilder
     private func imageSection(_ metrics : GeometryProxy) -> some View {
         Section("Images") {
@@ -341,14 +340,9 @@ internal struct ME_ContentView : View {
                         }
                     }
                 } else {
-//                    NavigationLink {
-//                        ImageListDetails(images: images)
-//                            .environmentObject(dataStructure)
-//                    } label: {
-//                        Label("Show all images (\(images.count))", systemImage: "photo")
-//                    }
-                    Button {
-                        imageListDetailsShown.toggle()
+                    NavigationLink {
+                        ImageListDetails(images: $images, videos: $videos)
+                            .environmentObject(db)
                     } label: {
                         Label("Show all images (\(images.count))", systemImage: "photo")
                     }
@@ -358,52 +352,128 @@ internal struct ME_ContentView : View {
                 Text("No Images found")
             }
         }
+        .sheet(isPresented: $imageDetailsPresented) {
+            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
+        }
+        .photosPicker(
+            isPresented: $addImagePresented,
+            selection: $audioVisualItemsSelected,
+            maxSelectionCount: 100,
+            selectionBehavior: .continuousAndOrdered,
+            matching: .any(of: [.images, .videos]),
+            preferredItemEncoding: .automatic
+        )
+        .onChange(of: addImagePresented) {
+            Task {
+                do {
+                    try await PhotoPickerHandler.handlePhotoPickerInput(
+                        items: audioVisualItemsSelected,
+                        pickerPresented: addImagePresented,
+                        images: $images,
+                        videos: $videos,
+                        storeIn: db,
+                        with: context
+                    )
+                } catch is PhotoPickerImageConverterError {
+                    errLoadingImagePresented.toggle()
+                } catch is PhotoPickerVideoConverterError {
+                    errLoadingVideoPresented.toggle()
+                } catch is PhotoPickerResultsSavingError {
+                    errSavingPresented.toggle()
+                }
+            }
+        }
+        .onChange(of: imageDeleted) {
+            // Not delete image if imageDeleted just turned to false
+            guard imageDeleted else { return }
+            images.removeAll(where: { $0.id == selectedImage!.id })
+            dataStructure.images.removeAll(where: { $0.id == selectedImage!.id })
+            do {
+                try Storage.deleteImage(selectedImage!, with: context)
+            } catch {
+                errImageDeletionShown.toggle()
+            }
+            imageDeleted = false
+        }
     }
     
+    /// Builds the section displaying a list of documents stored in this data structure
     @ViewBuilder
     private func documentSection() -> some View {
         Section("Documents") {
             if !documents.isEmpty {
                 ForEach(documents) {
                     document in
+                    Button {
+                        selectedDocument = document
+                        if document.canBeViewed() {
+                            documentShown.toggle()
+                        }
+                    } label: {
+                        Label(document.name, systemImage: "doc")
+                    }
+                    .foregroundStyle(.primary)
+                }
+                .sheet(isPresented: $documentShown) {
+                    DocumentDetails(document: $selectedDocument, delete: $documentDeleted)
                 }
             } else {
                 Text("No Documents found")
             }
         }
-    }
-}
-
-/// The Struct representing the loaded image in this View
-private struct DBSoleImage : Transferable {
-    
-    /// The Image when loading has completed
-    fileprivate let image : UIImage
-    
-    static var transferRepresentation: some TransferRepresentation {
-        DataRepresentation(importedContentType: .image) {
-            data in
-            guard let image = UIImage(data: data) else {
-                throw ImageLoadingError()
+        .fileImporter(
+            isPresented: $addDocPresented,
+            allowedContentTypes: [.item],
+            allowsMultipleSelection: true
+        ) {
+            result in
+            switch result {
+                case .success(let files):
+                    var documents : [DB_Document] = []
+                    for file in files {
+                        guard file.startAccessingSecurityScopedResource() else { return }
+                        do {
+                            let data = try Data(contentsOf: file, options: [.uncached])
+                            documents.append(
+                                DB_Document(
+                                    document: data,
+                                    type: file.pathExtension,
+                                    name: file.lastPathComponent,
+                                    created: Date.now,
+                                    lastEdited: Date.now,
+                                    id: UUID()
+                                )
+                            )
+                        } catch {
+                            errLoadingDocumentPresented.toggle()
+                        }
+                        file.stopAccessingSecurityScopedResource()
+                    }
+                    self.documents.append(contentsOf: documents)
+                    do {
+                        try Storage.storeDatabase(db, context: context, newElements: documents)
+                    } catch {
+                        errSavingPresented.toggle()
+                    }
+                case .failure:
+                    errLoadingDocumentPresented.toggle()
             }
-            return DBSoleImage(image: image)
+        }
+        .onChange(of: documentDeleted) {
+            // Only continue of documentDeleted is set to true, return if set to false
+            guard documentDeleted else { return }
+            documents.removeAll(where: { $0.id == selectedDocument!.id })
+            dataStructure.documents.removeAll(where: { $0.id == selectedDocument!.id })
+            do {
+                try Storage.deleteDocument(selectedDocument!, with: context)
+            } catch {
+                errDocumentDeletionShown.toggle()
+            }
+            documentDeleted = false
         }
     }
 }
 
-/// The Struct representing the loaded image in this View
-private struct DBSoleVideo : Transferable {
-    
-    /// The Image when loading has completed
-    fileprivate let videoData : Data
-    
-    static var transferRepresentation: some TransferRepresentation {
-        DataRepresentation(importedContentType: .movie) {
-            data in
-            return DBSoleVideo(videoData: data)
-        }
-    }
-}
 
 internal struct ME_ContentView_Previews: PreviewProvider {
     

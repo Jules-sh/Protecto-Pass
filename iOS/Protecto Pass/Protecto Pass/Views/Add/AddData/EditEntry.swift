@@ -65,47 +65,70 @@ internal struct EditEntry: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Button {
-                    iconChooserShown.toggle()
-                } label: {
-                    Image(systemName: iconName)
-                        .renderingMode(.original)
-                        .symbolRenderingMode(.hierarchical)
-                        .resizable()
-                        .scaledToFit()
-                        .padding(.horizontal, 75)
-                        .foregroundStyle(.foreground)
+            List {
+                Section("Representation") {
+                    Button {
+                        iconChooserShown.toggle()
+                    } label: {
+                        Label("Icon", systemImage: iconName)
+                    }
+                    .foregroundStyle(.primary)
                 }
                 .sheet(isPresented: $iconChooserShown) {
                     IconChooser(iconName: $iconName, type: .entry)
                 }
-                Group {
+                Section("Information") {
                     TextField("Title", text: $title)
-                        .textInputAutocapitalization(.words)
-                        .padding(.top, 40)
-                    Group {
-                        TextField("Username", text: $username)
-                            .textContentType(.username)
-                        TextField("Password", text: $password)
-                            .textContentType(.password)
-                        TextField("URL", text: $url)
-                            .textContentType(.URL)
-                    }
-                    .textInputAutocapitalization(.never)
-                    TextField("Notes", text: $notes, axis: .vertical)
-                        .lineLimit(5...10)
-                        .textInputAutocapitalization(.sentences)
                 }
-                .textFieldStyle(.roundedBorder)
+                Section("Credentials") {
+                    TextField("Username", text: $username)
+                    TextField("Password", text: $password)
+                }
+                Section("Connection") {
+                    TextField("URL", text: $url)
+                }
             }
+            //            VStack {
+            //                Button {
+            //                    iconChooserShown.toggle()
+            //                } label: {
+            //                    Image(systemName: iconName)
+            //                        .renderingMode(.original)
+            //                        .symbolRenderingMode(.hierarchical)
+            //                        .resizable()
+            //                        .scaledToFit()
+            //                        .padding(.horizontal, 75)
+            //                        .foregroundStyle(.foreground)
+            //                }
+            //                .sheet(isPresented: $iconChooserShown) {
+            //                    IconChooser(iconName: $iconName, type: .entry)
+            //                }
+            //                Group {
+            //                    TextField("Title", text: $title)
+            //                        .textInputAutocapitalization(.words)
+            //                        .padding(.top, 40)
+            //                    Group {
+            //                        TextField("Username", text: $username)
+            //                            .textContentType(.username)
+            //                        TextField("Password", text: $password)
+            //                            .textContentType(.password)
+            //                        TextField("URL", text: $url)
+            //                            .textContentType(.URL)
+            //                    }
+            //                    .textInputAutocapitalization(.never)
+            //                    TextField("Notes", text: $notes, axis: .vertical)
+            //                        .lineLimit(5...10)
+            //                        .textInputAutocapitalization(.sentences)
+            //                }
+            //                .textFieldStyle(.roundedBorder)
+            //            }
             .alert("Error saving", isPresented: $errStoring) {
                 Button("Cancel", role: .cancel) {}
                 Button("Try again") { save() }
             } message: {
                 Text("An Error occurred when trying to save the data.\nPlease try again")
             }
-            .padding(.horizontal, 25)
+            //            .padding(.horizontal, 25)
             .navigationTitle("New Entry")
             .navigationBarTitleDisplayMode(.automatic)
             .toolbarRole(.editor)

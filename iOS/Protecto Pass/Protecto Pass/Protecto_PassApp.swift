@@ -10,14 +10,12 @@ import SwiftUI
 @main
 internal struct Protecto_PassApp: App {
     
-    @Environment(\.scenePhase) private var scenePhase
-    
     /// The Persistence Controller used in this App to store Data
     private let persistenceController : PersistenceController = PersistenceController.shared
-
+    
     /// Indicates whether the "Large Screen" Setting is true or false
     @State private var largeScreen : Bool = false
-
+    
     /// Whether the compact Mode is activated or not
     @State private var compactMode : Bool = false
     
@@ -26,11 +24,16 @@ internal struct Protecto_PassApp: App {
     @State private var errLoadingSettingsShown : Bool = false
     
     internal init() {
-        let settings : [Settings : Bool] = SettingsHelper.load()
+        var settings : [Settings : Bool] = [:]
+        do {
+            settings = try SettingsHelper.load(context: persistenceController.container.viewContext)
+        } catch {
+            errLoadingSettingsShown.toggle()
+        }
         compactMode = settings[.compactMode]!
         largeScreen = settings[.largeScreen]!
     }
-
+    
     var body: some Scene {
         WindowGroup {
             SetUpView()
@@ -49,12 +52,6 @@ internal struct Protecto_PassApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environment(\.largeScreen, largeScreen)
                 .environment(\.compactMode, compactMode)
-                .onChange(of: scenePhase) {
-                    old, new in
-                    if new == .background {
-                        Storage.storeCurrentDatabase()
-                    }
-                }
         }
     }
 }

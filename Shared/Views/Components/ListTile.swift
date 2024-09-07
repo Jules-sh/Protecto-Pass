@@ -14,8 +14,8 @@ internal struct ListTile: View {
     internal init(
         name : String,
         data: String,
-        onTap : @escaping () -> () = {},
-        textContentType : UITextContentType? = nil
+        textContentType : UITextContentType? = nil,
+        onTap : @escaping () -> () = {}
     ) {
         self.name = name
         self.data = data

@@ -25,7 +25,7 @@ internal struct EditFolder: View {
     @State private var description : String = ""
     
     /// The parent folder of this Folder
-    @State private var folder : Folder?
+    @State private var superFolder : Folder?
     
     @State private var storeInFolder : Bool = false
     
@@ -35,46 +35,48 @@ internal struct EditFolder: View {
     
     @State private var iconChooserShown : Bool = false
     
+    @State private var folder : Folder? = nil
+    
     internal init(
+        storeIn superFolder : Folder? = nil,
         folder : Folder? = nil
     ) {
-        storeInFolder = folder != nil
+        storeInFolder = (superFolder != nil)
+        self.superFolder = superFolder
+        if let f = folder {
+            self.folder = f
+            name = f.name
+            description = f.description
+            iconName = f.iconName
+        }
     }
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Button {
-                    iconChooserShown.toggle()
-                } label: {
-                    Image(systemName: iconName)
-                        .renderingMode(.original)
-                        .symbolRenderingMode(.hierarchical)
-                        .resizable()
-                        .scaledToFit()
-                        .padding(.horizontal, 75)
-                        .foregroundStyle(.foreground)
+            List {
+                Section("Representation") {
+                    Button {
+                        iconChooserShown.toggle()
+                    } label: {
+                        Label("Icon", systemImage: iconName)
+                    }
+                    .foregroundStyle(.primary)
                 }
                 .sheet(isPresented: $iconChooserShown) {
                     IconChooser(iconName: $iconName, type: .folder)
                 }
-                Group {
+                Section("Information") {
                     TextField("Name", text: $name)
-                        .textInputAutocapitalization(.words)
-                        .textFieldStyle(.roundedBorder)
-                        .padding(.top, 40)
                     TextField("Description", text: $description, axis: .vertical)
-                        .textInputAutocapitalization(.sentences)
-                        .textFieldStyle(.roundedBorder)
                         .lineLimit(3...10)
                 }
-                Group {
-                    // TODO: update group content
+                Section("Storing") {
                     Toggle(isOn: $storeInFolder.animation()) {
                         Label("Store in Folder", systemImage: "folder")
+                            .foregroundStyle(.primary)
                     }
                     if storeInFolder {
-                        Picker("Folder", selection: $folder) {
+                        Picker("Folder", selection: $superFolder) {
                             if (db.folders.isEmpty) {
                                 Text("No folder available")
                             } else {
@@ -85,17 +87,62 @@ internal struct EditFolder: View {
                             }
                         }
                         .disabled(db.folders.isEmpty)
-                        .pickerStyle(.menu)
                     }
                 }
             }
+            //            VStack {
+            //                Button {
+            //                    iconChooserShown.toggle()
+            //                } label: {
+            //                    Image(systemName: iconName)
+            //                        .renderingMode(.original)
+            //                        .symbolRenderingMode(.hierarchical)
+            //                        .resizable()
+            //                        .scaledToFit()
+            //                        .padding(.horizontal, 75)
+            //                        .foregroundStyle(.foreground)
+            //                }
+            //                .sheet(isPresented: $iconChooserShown) {
+            //                    IconChooser(iconName: $iconName, type: .folder)
+            //                }
+            //                Group {
+            //                    TextField("Name", text: $name)
+            //                        .textInputAutocapitalization(.words)
+            //                        .textFieldStyle(.roundedBorder)
+            //                        .padding(.top, 40)
+            //                    TextField("Description", text: $description, axis: .vertical)
+            //                        .textInputAutocapitalization(.sentences)
+            //                        .textFieldStyle(.roundedBorder)
+            //                        .lineLimit(3...10)
+            //                }
+            //                Group {
+            //                    // TODO: update group content
+            //                    Toggle(isOn: $storeInFolder.animation()) {
+            //                        Label("Store in Folder", systemImage: "folder")
+            //                    }
+            //                    if storeInFolder {
+            //                        Picker("Folder", selection: $folder) {
+            //                            if (db.folders.isEmpty) {
+            //                                Text("No folder available")
+            //                            } else {
+            //                                ForEach(db.folders) {
+            //                                    folder in
+            //                                    Text(folder.name)
+            //                                }
+            //                            }
+            //                        }
+            //                        .disabled(db.folders.isEmpty)
+            //                        .pickerStyle(.menu)
+            //                    }
+            //                }
+            //            }
             .alert("Error saving", isPresented: $errStoring) {
                 Button("Cancel", role: .cancel) {}
                 Button("Try again") { save() }
             } message: {
                 Text("An Error occurred when trying to save the data.\nPlease try again")
             }
-            .padding(.horizontal, 25)
+            //            .padding(.horizontal, 25)
             .navigationTitle("New Folder")
             .navigationBarTitleDisplayMode(.automatic)
             .toolbarRole(.editor)
@@ -120,15 +167,15 @@ internal struct EditFolder: View {
                     Folder(
                         name: name,
                         description: description,
-                        folders: [],
-                        entries: [],
-                        images: [],
-                        videos: [],
+                        folders: folder?.folders ?? [],
+                        entries: folder?.entries ?? [],
+                        images: folder?.images ?? [],
+                        videos: folder?.videos ?? [],
                         iconName: iconName,
-                        documents: [],
-                        created: Date.now,
+                        documents: folder?.documents ?? [],
+                        created: folder?.created ?? Date.now,
                         lastEdited: Date.now,
-                        id: UUID()
+                        id: folder?.id ?? UUID()
                     )
                 ]
             )

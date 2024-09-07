@@ -47,6 +47,20 @@ internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataS
         hasher.combine(id)
         hasher.combine(name)
     }
+    
+    internal func isText() -> Bool {
+        let textfileTypeEnding : [String] = ["txt", "rtf"]
+        return textfileTypeEnding.contains(type)
+    }
+    
+    internal func isPDF() -> Bool {
+        return type == "pdf"
+    }
+    
+    /// Returns true if this document can be viewed directly inside this app
+    internal func canBeViewed() -> Bool {
+        return isText() || isPDF()
+    }
 }
 
 /// Encrypted Document type storing the encrypted values

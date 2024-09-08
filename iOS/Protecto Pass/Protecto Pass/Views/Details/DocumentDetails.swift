@@ -16,48 +16,75 @@ internal struct DocumentDetails: View {
     
     @Binding internal var delete : Bool
     
+    @State private var errLoadingFormat : Bool = false
+    
+    @State private var formattedString : NSAttributedString? = nil
+    
     var body: some View {
         NavigationStack {
-            if document!.isText() {
-                ScrollView {
-                    Text(DataConverter.dataToString(document!.document))
-                }
-                .padding(.horizontal, 25)
-            } else if document!.isPDF() {
-                PDFDocumentDetailsView(pdfDocument: document)
-                    .navigationTitle(document!.name)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbarRole(.automatic)
-                    .toolbar(.automatic, for: .automatic)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button(role: .cancel) {
-                                dismiss()
-                            } label: {
-                                Text("Cancel")
-                            }
-                        }
-                        ToolbarItem(placement: .primaryAction) {
-                            Menu {
-                                Button {
-                                    
-                                } label: {
-                                    Label("Information", systemImage: "info.circle")
-                                }
-                                Divider()
-                                Button(role: .destructive) {
-                                    delete = true
-                                    dismiss()
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            } label: {
-                                Image(systemName: "ellipsis.circle")
-                            }
+            Group {
+                if document!.isText() {
+                    ScrollView {
+                        if let fString = formattedString {
+                            Text(AttributedString(fString))
+                        } else {
+                            Text(DataConverter.dataToString(document!.document))
                         }
                     }
-            } else {
-                
+                    .onAppear {
+                        guard let format = document!.isFormattedText() else { return }
+                        do {
+                            formattedString = try NSAttributedString(
+                                data: document!.document,
+                                options: [.documentType : format],
+                                documentAttributes: nil
+                            )
+                        } catch {
+                            errLoadingFormat.toggle()
+                        }
+                    }
+                    .padding(.horizontal, 25)
+                    .alert("Error loading Format", isPresented: $errLoadingFormat) {
+                        Button("Display plain Text") {
+                            formattedString = nil
+                        }
+                    }
+                } else if document!.isPDF() {
+                    PDFDocumentDetailsView(pdfDocument: document)
+                } else {
+                    Text("This type of document can't be displayed directly in the App")
+                }
+            }
+            .navigationTitle(document!.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarRole(.automatic)
+            .toolbar(.automatic, for: .automatic)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .cancel) {
+                        dismiss()
+                    } label: {
+                        Text("Cancel")
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Menu {
+                        NavigationLink {
+                            DocumentInfo(document: document!)
+                        } label: {
+                            Label("Information", systemImage: "info.circle")
+                        }
+                        Divider()
+                        Button(role: .destructive) {
+                            delete = true
+                            dismiss()
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
             }
         }
     }

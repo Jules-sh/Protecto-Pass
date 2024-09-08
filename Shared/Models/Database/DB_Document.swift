@@ -49,8 +49,16 @@ internal final class DB_Document : GeneralDocument<String, Date>, DecryptedDataS
     }
     
     internal func isText() -> Bool {
-        let textfileTypeEnding : [String] = ["txt", "rtf"]
+        let textfileTypeEnding : [String] = ["txt", "rtf", "md"]
         return textfileTypeEnding.contains(type)
+    }
+    
+    internal func isFormattedText() -> NSAttributedString.DocumentType? {
+        if type == "rtf" {
+            return .rtf
+        } else {
+            return nil
+        }
     }
     
     internal func isPDF() -> Bool {

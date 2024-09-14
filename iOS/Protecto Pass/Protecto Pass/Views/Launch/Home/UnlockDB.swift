@@ -10,10 +10,12 @@ import SwiftUI
 /// The View to unlock a specific Database
 internal struct UnlockDB: View {
     
-    /// The Encrypted Database the User wants to unlock
-    @Binding internal var db : EncryptedDatabase
+    @Environment(\.dismiss) private var dismiss
     
     @EnvironmentObject private var navigationSheet : AddDB_Navigation
+    
+    /// The Encrypted Database the User wants to unlock
+    @Binding internal var db : EncryptedDatabase
     
     /// The unlocked Database
     @State private var unlockedDB : Database? = nil
@@ -122,9 +124,9 @@ internal struct UnlockDB: View {
         do {
             var decrypter = Decrypter.configure(for: db, with: password)
             let localDatabase : Database = try decrypter.decrypt()
-            //try (Decrypter.configure(for: db, with: password)).decrypt()
             unlockedDB = localDatabase
             navigationSheet.db = unlockedDB
+            dismiss()
             navigationSheet.openDatabaseToHome.toggle()
         } catch {
             errDecryptingPresented.toggle()

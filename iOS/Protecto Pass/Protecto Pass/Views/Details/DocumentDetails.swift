@@ -20,6 +20,8 @@ internal struct DocumentDetails: View {
     
     @State private var formattedString : NSAttributedString? = nil
     
+    @State private var markdownString : NSAttributedString? = nil
+    
     var body: some View {
         NavigationStack {
             Group {
@@ -32,13 +34,25 @@ internal struct DocumentDetails: View {
                         }
                     }
                     .onAppear {
-                        guard let format = document!.isFormattedText() else { return }
+                        guard document!.isFormattedText() else { return }
                         do {
-                            formattedString = try NSAttributedString(
-                                data: document!.document,
-                                options: [.documentType : format],
-                                documentAttributes: nil
-                            )
+                            if document!.type == "rtf" {
+                                formattedString = try NSAttributedString(
+                                    data: document!.document,
+                                    options: [.documentType : NSAttributedString.DocumentType.rtf],
+                                    documentAttributes: nil
+                                )
+                            } else if document!.type == "md" {
+                                formattedString = try NSAttributedString(
+                                    markdown: DataConverter.dataToString(document!.document),
+                                    options: .init(
+                                        allowsExtendedAttributes: true,
+                                        interpretedSyntax: .inlineOnlyPreservingWhitespace,
+                                        failurePolicy: .returnPartiallyParsedIfPossible,
+                                        appliesSourcePositionAttributes: false
+                                    )
+                                )
+                            }
                         } catch {
                             errLoadingFormat.toggle()
                         }

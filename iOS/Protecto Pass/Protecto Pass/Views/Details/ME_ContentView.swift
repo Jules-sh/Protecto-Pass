@@ -22,7 +22,7 @@ internal struct ME_ContentView : View {
     /// Controls the navigation flow, only necessary if this represents a Database
     @EnvironmentObject private var navigationController : AddDB_Navigation
     
-    /// The Database used to store the complere Database Object itself when data is added to it
+    /// The Database used to store the complete Database Object itself when data is added to it
     @EnvironmentObject private var db : Database
     
     
@@ -339,6 +339,9 @@ internal struct ME_ContentView : View {
                             }
                         }
                     }
+                    .sheet(isPresented: $imageDetailsPresented) {
+                        ImageDetails(image: $selectedImage, deleted: $imageDeleted)
+                    }
                 } else {
                     NavigationLink {
                         ImageListDetails(images: $images, videos: $videos)
@@ -351,9 +354,6 @@ internal struct ME_ContentView : View {
             } else {
                 Text("No Images found")
             }
-        }
-        .sheet(isPresented: $imageDetailsPresented) {
-            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
         }
         .photosPicker(
             isPresented: $addImagePresented,
@@ -384,7 +384,7 @@ internal struct ME_ContentView : View {
             }
         }
         .onChange(of: imageDeleted) {
-            // Not delete image if imageDeleted just turned to false
+            // Don't delete image if imageDeleted just turned to false
             guard imageDeleted else { return }
             images.removeAll(where: { $0.id == selectedImage!.id })
             dataStructure.images.removeAll(where: { $0.id == selectedImage!.id })
@@ -437,7 +437,7 @@ internal struct ME_ContentView : View {
                             documents.append(
                                 DB_Document(
                                     document: data,
-                                    type: file.pathExtension,
+                                    type: file.pathExtension.lowercased(),
                                     name: file.lastPathComponent,
                                     created: Date.now,
                                     lastEdited: Date.now,

@@ -90,67 +90,27 @@ internal struct EditFolder: View {
                     }
                 }
             }
-            //            VStack {
-            //                Button {
-            //                    iconChooserShown.toggle()
-            //                } label: {
-            //                    Image(systemName: iconName)
-            //                        .renderingMode(.original)
-            //                        .symbolRenderingMode(.hierarchical)
-            //                        .resizable()
-            //                        .scaledToFit()
-            //                        .padding(.horizontal, 75)
-            //                        .foregroundStyle(.foreground)
-            //                }
-            //                .sheet(isPresented: $iconChooserShown) {
-            //                    IconChooser(iconName: $iconName, type: .folder)
-            //                }
-            //                Group {
-            //                    TextField("Name", text: $name)
-            //                        .textInputAutocapitalization(.words)
-            //                        .textFieldStyle(.roundedBorder)
-            //                        .padding(.top, 40)
-            //                    TextField("Description", text: $description, axis: .vertical)
-            //                        .textInputAutocapitalization(.sentences)
-            //                        .textFieldStyle(.roundedBorder)
-            //                        .lineLimit(3...10)
-            //                }
-            //                Group {
-            //                    // TODO: update group content
-            //                    Toggle(isOn: $storeInFolder.animation()) {
-            //                        Label("Store in Folder", systemImage: "folder")
-            //                    }
-            //                    if storeInFolder {
-            //                        Picker("Folder", selection: $folder) {
-            //                            if (db.folders.isEmpty) {
-            //                                Text("No folder available")
-            //                            } else {
-            //                                ForEach(db.folders) {
-            //                                    folder in
-            //                                    Text(folder.name)
-            //                                }
-            //                            }
-            //                        }
-            //                        .disabled(db.folders.isEmpty)
-            //                        .pickerStyle(.menu)
-            //                    }
-            //                }
-            //            }
             .alert("Error saving", isPresented: $errStoring) {
                 Button("Cancel", role: .cancel) {}
                 Button("Try again") { save() }
             } message: {
                 Text("An Error occurred when trying to save the data.\nPlease try again")
             }
-            //            .padding(.horizontal, 25)
             .navigationTitle("New Folder")
             .navigationBarTitleDisplayMode(.automatic)
+            .navigationBarBackButtonHidden()
             .toolbarRole(.editor)
             .toolbar(.automatic, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
                         save()
+                    }
+                    .disabled(name.isEmpty)
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
                     }
                 }
             }

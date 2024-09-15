@@ -7,11 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		840BF75D2AA498ED00DF2A3C /* NonexistendPathError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */; };
-		840BF75F2AA4ABA900DF2A3C /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840BF75E2AA4ABA900DF2A3C /* PasswordField.swift */; };
-		840EA3692BC47F27007BC214 /* SandboxManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840EA3682BC47F27007BC214 /* SandboxManager.swift */; };
+		8417749A2C96DD3700E19CF6 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417746C2C96DD3700E19CF6 /* Cryptography.swift */; };
+		8417749B2C96DD3700E19CF6 /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417746D2C96DD3700E19CF6 /* Decrypter.swift */; };
+		8417749C2C96DD3700E19CF6 /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417746E2C96DD3700E19CF6 /* Encrypter.swift */; };
+		8417749D2C96DD3700E19CF6 /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417746F2C96DD3700E19CF6 /* PasswordGenerator.swift */; };
+		8417749E2C96DD3700E19CF6 /* PhotoPickerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774712C96DD3700E19CF6 /* PhotoPickerErrors.swift */; };
+		8417749F2C96DD3700E19CF6 /* FileImporterErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774732C96DD3700E19CF6 /* FileImporterErrors.swift */; };
+		841774A02C96DD3700E19CF6 /* DatabaseContentCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774752C96DD3700E19CF6 /* DatabaseContentCounter.swift */; };
+		841774A12C96DD3700E19CF6 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774762C96DD3700E19CF6 /* DataConverter.swift */; };
+		841774A22C96DD3700E19CF6 /* DB_Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774772C96DD3700E19CF6 /* DB_Converter.swift */; };
+		841774A32C96DD3700E19CF6 /* FileImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774782C96DD3700E19CF6 /* FileImportHandler.swift */; };
+		841774A42C96DD3700E19CF6 /* PhotoPickerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774792C96DD3700E19CF6 /* PhotoPickerHandler.swift */; };
+		841774A52C96DD3700E19CF6 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417747B2C96DD3700E19CF6 /* Database.swift */; };
+		841774A62C96DD3700E19CF6 /* DatabaseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417747C2C96DD3700E19CF6 /* DatabaseContent.swift */; };
+		841774A72C96DD3700E19CF6 /* DB_Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417747D2C96DD3700E19CF6 /* DB_Document.swift */; };
+		841774A82C96DD3700E19CF6 /* DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417747E2C96DD3700E19CF6 /* DB_Header.swift */; };
+		841774A92C96DD3700E19CF6 /* DB_Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417747F2C96DD3700E19CF6 /* DB_Image.swift */; };
+		841774AA2C96DD3700E19CF6 /* DB_Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774802C96DD3700E19CF6 /* DB_Video.swift */; };
+		841774AB2C96DD3700E19CF6 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774812C96DD3700E19CF6 /* Entry.swift */; };
+		841774AC2C96DD3700E19CF6 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774822C96DD3700E19CF6 /* Folder.swift */; };
+		841774AD2C96DD3700E19CF6 /* LoadableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774832C96DD3700E19CF6 /* LoadableResource.swift */; };
+		841774AE2C96DD3700E19CF6 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774842C96DD3700E19CF6 /* ME_DataStructure.swift */; };
+		841774AF2C96DD3700E19CF6 /* NativeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774852C96DD3700E19CF6 /* NativeType.swift */; };
+		841774B02C96DD3700E19CF6 /* DB_CreationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774872C96DD3700E19CF6 /* DB_CreationWrapper.swift */; };
+		841774B12C96DD3700E19CF6 /* Protecto_Pass.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 841774892C96DD3700E19CF6 /* Protecto_Pass.xcdatamodeld */; };
+		841774B22C96DD3700E19CF6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417748B2C96DD3700E19CF6 /* CoreDataManager.swift */; };
+		841774B32C96DD3700E19CF6 /* DatabaseDoesNotExistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417748C2C96DD3700E19CF6 /* DatabaseDoesNotExistError.swift */; };
+		841774B42C96DD3700E19CF6 /* DatabaseFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417748D2C96DD3700E19CF6 /* DatabaseFileManager.swift */; };
+		841774B52C96DD3700E19CF6 /* NonexistendPathError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417748E2C96DD3700E19CF6 /* NonexistendPathError.swift */; };
+		841774B62C96DD3700E19CF6 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8417748F2C96DD3700E19CF6 /* Persistence.swift */; };
+		841774B72C96DD3700E19CF6 /* SandboxManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774902C96DD3700E19CF6 /* SandboxManager.swift */; };
+		841774B82C96DD3700E19CF6 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774912C96DD3700E19CF6 /* Storage.swift */; };
+		841774B92C96DD3700E19CF6 /* ListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774942C96DD3700E19CF6 /* ListTile.swift */; };
+		841774BA2C96DD3700E19CF6 /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841774952C96DD3700E19CF6 /* PasswordField.swift */; };
 		841E86E12AAB222800B03F37 /* AddDB_CompactMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */; };
-		8428C5512C8083670068F586 /* DatabaseContentCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8428C5502C8083670068F586 /* DatabaseContentCounter.swift */; };
 		842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */; };
 		842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* Welcome.swift */; };
 		842EAC6F29D832680014C8F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 842EAC6E29D832680014C8F8 /* Assets.xcassets */; };
@@ -20,55 +49,28 @@
 		842EAC8C29D832680014C8F8 /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */; };
 		842EAC8E29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */; };
 		843312242AA59FC700ADA474 /* IconChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843312232AA59FC700ADA474 /* IconChooser.swift */; };
-		8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845300292A98BA9200CA4529 /* CoreDataManager.swift */; };
 		84627AC12AA9CA2000415827 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84627AC02AA9CA2000415827 /* Settings.swift */; };
 		846302332AA99F7600C051E3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 846302322AA99F7600C051E3 /* Settings.bundle */; };
-		846455D02A9BA517003D023C /* DatabaseDoesNotExistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846455CF2A9BA517003D023C /* DatabaseDoesNotExistError.swift */; };
 		8467EBB82B5FDFEC003E6479 /* ImageListDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */; };
 		846BF86A2C7DE53500678388 /* ImageInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846BF8692C7DE53500678388 /* ImageInfo.swift */; };
-		84711C642C0C6DBF00B26143 /* DB_Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84711C632C0C6DBF00B26143 /* DB_Video.swift */; };
-		8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474FDA92A93612C007F4215 /* ME_DataStructure.swift */; };
-		8481C7D92A9E282E004EC48E /* DatabaseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481C7D82A9E282E004EC48E /* DatabaseContent.swift */; };
 		848480B429EFF09D008EA77C /* AddDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848480B329EFF09D008EA77C /* AddDB.swift */; };
-		8486ACF62C7CB42F001AB0A1 /* PhotoPickerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8486ACF52C7CB42E001AB0A1 /* PhotoPickerHandler.swift */; };
-		8486ACFE2C7CB6A8001AB0A1 /* PhotoPickerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8486ACFD2C7CB6A8001AB0A1 /* PhotoPickerErrors.swift */; };
 		84889ECF2C8CDA2F0066F7CB /* DocumentDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84889ECE2C8CDA2F0066F7CB /* DocumentDetails.swift */; };
 		84889ED22C8DB84E0066F7CB /* DocumentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84889ED12C8DB84E0066F7CB /* DocumentInfo.swift */; };
 		848DE6842AA742CA00AE99EE /* ImageDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DE6832AA742CA00AE99EE /* ImageDetails.swift */; };
-		84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B352A21E18500CE7945 /* DB_Converter.swift */; };
 		84922B392A21F11300CE7945 /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B382A21F11300CE7945 /* SetUpView.swift */; };
 		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
 		8497DF7E2B5BF347003979F9 /* ImageLoadingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8497DF7D2B5BF347003979F9 /* ImageLoadingError.swift */; };
-		849ECBDA2A27667C00954BC9 /* DB_CreationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */; };
-		849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ECBE12A27708F00954BC9 /* ListTile.swift */; };
-		84A3ABEA2A9F6E7D0089521E /* DB_Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A3ABE92A9F6E7D0089521E /* DB_Image.swift */; };
-		84A3ABEC2AA055DA0089521E /* DB_Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A3ABEB2AA055DA0089521E /* DB_Document.swift */; };
-		84A3ABEE2AA057620089521E /* NativeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A3ABED2AA057620089521E /* NativeType.swift */; };
 		84ACC7A42A6AB8130033E83A /* AddDB_Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ACC7A32A6AB8130033E83A /* AddDB_Navigation.swift */; };
 		84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F8D2A739D6C00C2DD0E /* EntryDetails.swift */; };
 		84DB4F902A739D9100C2DD0E /* Me_Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F8F2A739D9100C2DD0E /* Me_Details.swift */; };
 		84DB4F942A73C60E00C2DD0E /* EditEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F932A73C60E00C2DD0E /* EditEntry.swift */; };
 		84DB4F962A73C61300C2DD0E /* EditFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F952A73C61300C2DD0E /* EditFolder.swift */; };
 		84DB4F9A2A766BEF00C2DD0E /* HomeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB4F992A766BEF00C2DD0E /* HomeSelector.swift */; };
-		84DEDF862BE66ABC006A09A5 /* LoadableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DEDF852BE66ABC006A09A5 /* LoadableResource.swift */; };
-		84E4C5122A249E87005D793F /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5112A249E87005D793F /* Cryptography.swift */; };
-		84E4C5142A25CEA2005D793F /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */; };
 		84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C5162A263FB8005D793F /* AddDB_Password.swift */; };
 		84E4C51B2A276107005D793F /* AddDB_Overview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E4C51A2A276107005D793F /* AddDB_Overview.swift */; };
 		84EDFCFD2A94995B00A50A96 /* ME_ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EDFCFC2A94995B00A50A96 /* ME_ContentView.swift */; };
-		84F4207529EEA0F2000D7600 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206829EEA0F1000D7600 /* Folder.swift */; };
-		84F4207629EEA0F2000D7600 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206929EEA0F1000D7600 /* Entry.swift */; };
-		84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206A29EEA0F1000D7600 /* DB_Header.swift */; };
-		84F4207829EEA0F2000D7600 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206B29EEA0F1000D7600 /* Database.swift */; };
-		84F4207929EEA0F2000D7600 /* Protecto_Pass.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */; };
-		84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4206F29EEA0F1000D7600 /* Storage.swift */; };
-		84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207029EEA0F1000D7600 /* Persistence.swift */; };
-		84F4207C29EEA0F2000D7600 /* DatabaseFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4207129EEA0F1000D7600 /* DatabaseFileManager.swift */; };
 		84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4209A29EEA22A000D7600 /* UnlockDB.swift */; };
 		84F6ABF82AE7DA2A00D0B633 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F6ABF72AE7DA2A00D0B633 /* AppData.swift */; };
-		84F8850C2A07F7A000B35956 /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850B2A07F7A000B35956 /* Encrypter.swift */; };
-		84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8850D2A07F7AC00B35956 /* Decrypter.swift */; };
-		84FFB4CD2A93AD460001FA72 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FFB4CC2A93AD460001FA72 /* DataConverter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,11 +91,40 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonexistendPathError.swift; sourceTree = "<group>"; };
-		840BF75E2AA4ABA900DF2A3C /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
-		840EA3682BC47F27007BC214 /* SandboxManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandboxManager.swift; sourceTree = "<group>"; };
+		8417746C2C96DD3700E19CF6 /* Cryptography.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
+		8417746D2C96DD3700E19CF6 /* Decrypter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		8417746E2C96DD3700E19CF6 /* Encrypter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
+		8417746F2C96DD3700E19CF6 /* PasswordGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
+		841774712C96DD3700E19CF6 /* PhotoPickerErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerErrors.swift; sourceTree = "<group>"; };
+		841774732C96DD3700E19CF6 /* FileImporterErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileImporterErrors.swift; sourceTree = "<group>"; };
+		841774752C96DD3700E19CF6 /* DatabaseContentCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseContentCounter.swift; sourceTree = "<group>"; };
+		841774762C96DD3700E19CF6 /* DataConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
+		841774772C96DD3700E19CF6 /* DB_Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Converter.swift; sourceTree = "<group>"; };
+		841774782C96DD3700E19CF6 /* FileImportHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileImportHandler.swift; sourceTree = "<group>"; };
+		841774792C96DD3700E19CF6 /* PhotoPickerHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPickerHandler.swift; sourceTree = "<group>"; };
+		8417747B2C96DD3700E19CF6 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		8417747C2C96DD3700E19CF6 /* DatabaseContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseContent.swift; sourceTree = "<group>"; };
+		8417747D2C96DD3700E19CF6 /* DB_Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Document.swift; sourceTree = "<group>"; };
+		8417747E2C96DD3700E19CF6 /* DB_Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Header.swift; sourceTree = "<group>"; };
+		8417747F2C96DD3700E19CF6 /* DB_Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Image.swift; sourceTree = "<group>"; };
+		841774802C96DD3700E19CF6 /* DB_Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Video.swift; sourceTree = "<group>"; };
+		841774812C96DD3700E19CF6 /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		841774822C96DD3700E19CF6 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		841774832C96DD3700E19CF6 /* LoadableResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadableResource.swift; sourceTree = "<group>"; };
+		841774842C96DD3700E19CF6 /* ME_DataStructure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
+		841774852C96DD3700E19CF6 /* NativeType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeType.swift; sourceTree = "<group>"; };
+		841774872C96DD3700E19CF6 /* DB_CreationWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_CreationWrapper.swift; sourceTree = "<group>"; };
+		8417748B2C96DD3700E19CF6 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8417748C2C96DD3700E19CF6 /* DatabaseDoesNotExistError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseDoesNotExistError.swift; sourceTree = "<group>"; };
+		8417748D2C96DD3700E19CF6 /* DatabaseFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseFileManager.swift; sourceTree = "<group>"; };
+		8417748E2C96DD3700E19CF6 /* NonexistendPathError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonexistendPathError.swift; sourceTree = "<group>"; };
+		8417748F2C96DD3700E19CF6 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		841774902C96DD3700E19CF6 /* SandboxManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SandboxManager.swift; sourceTree = "<group>"; };
+		841774912C96DD3700E19CF6 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		841774942C96DD3700E19CF6 /* ListTile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTile.swift; sourceTree = "<group>"; };
+		841774952C96DD3700E19CF6 /* PasswordField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
+		841774992C96DD3700E19CF6 /* Protecto_Pass.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Protecto_Pass.xcdatamodel; sourceTree = "<group>"; };
 		841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_CompactMode.swift; sourceTree = "<group>"; };
-		8428C5502C8083670068F586 /* DatabaseContentCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContentCounter.swift; sourceTree = "<group>"; };
 		842EAC6729D832670014C8F8 /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
 		842EAC6C29D832670014C8F8 /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
@@ -106,57 +137,30 @@
 		842EAC8B29D832680014C8F8 /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
 		842EAC8D29D832680014C8F8 /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		843312232AA59FC700ADA474 /* IconChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconChooser.swift; sourceTree = "<group>"; };
-		845300292A98BA9200CA4529 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Protecto-Pass-Info.plist"; sourceTree = "<group>"; };
 		84627AC02AA9CA2000415827 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		846302322AA99F7600C051E3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		846455CF2A9BA517003D023C /* DatabaseDoesNotExistError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseDoesNotExistError.swift; sourceTree = "<group>"; };
 		8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListDetails.swift; sourceTree = "<group>"; };
 		846BF8692C7DE53500678388 /* ImageInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInfo.swift; sourceTree = "<group>"; };
-		84711C632C0C6DBF00B26143 /* DB_Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Video.swift; sourceTree = "<group>"; };
-		8474FDA92A93612C007F4215 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
-		8481C7D82A9E282E004EC48E /* DatabaseContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContent.swift; sourceTree = "<group>"; };
 		848480B329EFF09D008EA77C /* AddDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB.swift; sourceTree = "<group>"; };
-		8486ACF52C7CB42E001AB0A1 /* PhotoPickerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerHandler.swift; sourceTree = "<group>"; };
-		8486ACFD2C7CB6A8001AB0A1 /* PhotoPickerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerErrors.swift; sourceTree = "<group>"; };
 		84889ECE2C8CDA2F0066F7CB /* DocumentDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentDetails.swift; sourceTree = "<group>"; };
 		84889ED12C8DB84E0066F7CB /* DocumentInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentInfo.swift; sourceTree = "<group>"; };
 		848DE6832AA742CA00AE99EE /* ImageDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetails.swift; sourceTree = "<group>"; };
-		84922B352A21E18500CE7945 /* DB_Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Converter.swift; sourceTree = "<group>"; };
 		84922B382A21F11300CE7945 /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
 		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		8497DF7D2B5BF347003979F9 /* ImageLoadingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingError.swift; sourceTree = "<group>"; };
-		849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_CreationWrapper.swift; sourceTree = "<group>"; };
-		849ECBE12A27708F00954BC9 /* ListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTile.swift; sourceTree = "<group>"; };
-		84A3ABE92A9F6E7D0089521E /* DB_Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Image.swift; sourceTree = "<group>"; };
-		84A3ABEB2AA055DA0089521E /* DB_Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Document.swift; sourceTree = "<group>"; };
-		84A3ABED2AA057620089521E /* NativeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeType.swift; sourceTree = "<group>"; };
 		84ACC7A32A6AB8130033E83A /* AddDB_Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddDB_Navigation.swift; path = "Protecto Pass/Navigation/AddDB_Navigation.swift"; sourceTree = SOURCE_ROOT; };
 		84DB4F8D2A739D6C00C2DD0E /* EntryDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryDetails.swift; sourceTree = "<group>"; };
 		84DB4F8F2A739D9100C2DD0E /* Me_Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Me_Details.swift; sourceTree = "<group>"; };
 		84DB4F932A73C60E00C2DD0E /* EditEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEntry.swift; sourceTree = "<group>"; };
 		84DB4F952A73C61300C2DD0E /* EditFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolder.swift; sourceTree = "<group>"; };
 		84DB4F992A766BEF00C2DD0E /* HomeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSelector.swift; sourceTree = "<group>"; };
-		84DEDF852BE66ABC006A09A5 /* LoadableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableResource.swift; sourceTree = "<group>"; };
-		84E4C5112A249E87005D793F /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
-		84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 		84E4C5162A263FB8005D793F /* AddDB_Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Password.swift; sourceTree = "<group>"; };
 		84E4C5182A264D56005D793F /* Protecto Pass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Protecto Pass.entitlements"; sourceTree = "<group>"; };
 		84E4C51A2A276107005D793F /* AddDB_Overview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_Overview.swift; sourceTree = "<group>"; };
 		84EDFCFC2A94995B00A50A96 /* ME_ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_ContentView.swift; sourceTree = "<group>"; };
-		84F4206829EEA0F1000D7600 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
-		84F4206929EEA0F1000D7600 /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
-		84F4206A29EEA0F1000D7600 /* DB_Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Header.swift; sourceTree = "<group>"; };
-		84F4206B29EEA0F1000D7600 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		84F4206D29EEA0F1000D7600 /* Protecto_Pass.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Protecto_Pass.xcdatamodel; sourceTree = "<group>"; };
-		84F4206F29EEA0F1000D7600 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
-		84F4207029EEA0F1000D7600 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		84F4207129EEA0F1000D7600 /* DatabaseFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseFileManager.swift; sourceTree = "<group>"; };
 		84F4209A29EEA22A000D7600 /* UnlockDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockDB.swift; sourceTree = "<group>"; };
 		84F6ABF72AE7DA2A00D0B633 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
-		84F8850B2A07F7A000B35956 /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
-		84F8850D2A07F7AC00B35956 /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
-		84FFB4CC2A93AD460001FA72 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,9 +188,131 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		841774702C96DD3700E19CF6 /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				8417746C2C96DD3700E19CF6 /* Cryptography.swift */,
+				8417746D2C96DD3700E19CF6 /* Decrypter.swift */,
+				8417746E2C96DD3700E19CF6 /* Encrypter.swift */,
+				8417746F2C96DD3700E19CF6 /* PasswordGenerator.swift */,
+			);
+			path = Cryptography;
+			sourceTree = "<group>";
+		};
+		841774722C96DD3700E19CF6 /* PhotoPickerError */ = {
+			isa = PBXGroup;
+			children = (
+				841774712C96DD3700E19CF6 /* PhotoPickerErrors.swift */,
+			);
+			path = PhotoPickerError;
+			sourceTree = "<group>";
+		};
+		841774742C96DD3700E19CF6 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				846A4E312C96FCD6001BCA18 /* FileHandlerError */,
+				841774722C96DD3700E19CF6 /* PhotoPickerError */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		8417747A2C96DD3700E19CF6 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				841774752C96DD3700E19CF6 /* DatabaseContentCounter.swift */,
+				841774762C96DD3700E19CF6 /* DataConverter.swift */,
+				841774772C96DD3700E19CF6 /* DB_Converter.swift */,
+				841774782C96DD3700E19CF6 /* FileImportHandler.swift */,
+				841774792C96DD3700E19CF6 /* PhotoPickerHandler.swift */,
+			);
+			path = Mapping;
+			sourceTree = "<group>";
+		};
+		841774862C96DD3700E19CF6 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				8417747B2C96DD3700E19CF6 /* Database.swift */,
+				8417747C2C96DD3700E19CF6 /* DatabaseContent.swift */,
+				8417747D2C96DD3700E19CF6 /* DB_Document.swift */,
+				8417747E2C96DD3700E19CF6 /* DB_Header.swift */,
+				8417747F2C96DD3700E19CF6 /* DB_Image.swift */,
+				841774802C96DD3700E19CF6 /* DB_Video.swift */,
+				841774812C96DD3700E19CF6 /* Entry.swift */,
+				841774822C96DD3700E19CF6 /* Folder.swift */,
+				841774832C96DD3700E19CF6 /* LoadableResource.swift */,
+				841774842C96DD3700E19CF6 /* ME_DataStructure.swift */,
+				841774852C96DD3700E19CF6 /* NativeType.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		841774882C96DD3700E19CF6 /* DB_Creation */ = {
+			isa = PBXGroup;
+			children = (
+				841774872C96DD3700E19CF6 /* DB_CreationWrapper.swift */,
+			);
+			path = DB_Creation;
+			sourceTree = "<group>";
+		};
+		8417748A2C96DD3700E19CF6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				841774862C96DD3700E19CF6 /* Database */,
+				841774882C96DD3700E19CF6 /* DB_Creation */,
+				841774892C96DD3700E19CF6 /* Protecto_Pass.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		841774922C96DD3700E19CF6 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				8417748B2C96DD3700E19CF6 /* CoreDataManager.swift */,
+				8417748C2C96DD3700E19CF6 /* DatabaseDoesNotExistError.swift */,
+				8417748D2C96DD3700E19CF6 /* DatabaseFileManager.swift */,
+				8417748E2C96DD3700E19CF6 /* NonexistendPathError.swift */,
+				8417748F2C96DD3700E19CF6 /* Persistence.swift */,
+				841774902C96DD3700E19CF6 /* SandboxManager.swift */,
+				841774912C96DD3700E19CF6 /* Storage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		841774962C96DD3700E19CF6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				841774942C96DD3700E19CF6 /* ListTile.swift */,
+				841774952C96DD3700E19CF6 /* PasswordField.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		841774972C96DD3700E19CF6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				841774962C96DD3700E19CF6 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		841774982C96DD3700E19CF6 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				841774702C96DD3700E19CF6 /* Cryptography */,
+				841774742C96DD3700E19CF6 /* Errors */,
+				8417747A2C96DD3700E19CF6 /* Mapping */,
+				8417748A2C96DD3700E19CF6 /* Models */,
+				841774922C96DD3700E19CF6 /* Storage */,
+				841774972C96DD3700E19CF6 /* Views */,
+			);
+			name = Shared;
+			path = ../../Shared;
+			sourceTree = "<group>";
+		};
 		842EAC5E29D832670014C8F8 = {
 			isa = PBXGroup;
 			children = (
+				841774982C96DD3700E19CF6 /* Shared */,
 				842EAC6929D832670014C8F8 /* Protecto Pass */,
 				84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */,
 				842EAC8029D832680014C8F8 /* Protecto PassTests */,
@@ -209,7 +335,6 @@
 			isa = PBXGroup;
 			children = (
 				842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */,
-				84F4206129EEA0F1000D7600 /* Shared */,
 				84C4749C29E446F400543BA0 /* Views */,
 				846E689B2A703EB800BC049A /* Navigation */,
 				84627ABF2AA9C9A200415827 /* Settings */,
@@ -256,46 +381,20 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		846A4E312C96FCD6001BCA18 /* FileHandlerError */ = {
+			isa = PBXGroup;
+			children = (
+				841774732C96DD3700E19CF6 /* FileImporterErrors.swift */,
+			);
+			path = FileHandlerError;
+			sourceTree = "<group>";
+		};
 		846E689B2A703EB800BC049A /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
 				84ACC7A32A6AB8130033E83A /* AddDB_Navigation.swift */,
 			);
 			path = Navigation;
-			sourceTree = "<group>";
-		};
-		847D93E72B825E0B00A24E8F /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				84F4206829EEA0F1000D7600 /* Folder.swift */,
-				84F4206929EEA0F1000D7600 /* Entry.swift */,
-				84F4206B29EEA0F1000D7600 /* Database.swift */,
-				8474FDA92A93612C007F4215 /* ME_DataStructure.swift */,
-				84A3ABED2AA057620089521E /* NativeType.swift */,
-				8481C7D82A9E282E004EC48E /* DatabaseContent.swift */,
-				84F4206A29EEA0F1000D7600 /* DB_Header.swift */,
-				84A3ABE92A9F6E7D0089521E /* DB_Image.swift */,
-				84A3ABEB2AA055DA0089521E /* DB_Document.swift */,
-				84DEDF852BE66ABC006A09A5 /* LoadableResource.swift */,
-				84711C632C0C6DBF00B26143 /* DB_Video.swift */,
-			);
-			path = Database;
-			sourceTree = "<group>";
-		};
-		8486ACF72C7CB563001AB0A1 /* Errors */ = {
-			isa = PBXGroup;
-			children = (
-				8486ACFC2C7CB691001AB0A1 /* PhotoPickerError */,
-			);
-			path = Errors;
-			sourceTree = "<group>";
-		};
-		8486ACFC2C7CB691001AB0A1 /* PhotoPickerError */ = {
-			isa = PBXGroup;
-			children = (
-				8486ACFD2C7CB6A8001AB0A1 /* PhotoPickerErrors.swift */,
-			);
-			path = PhotoPickerError;
 			sourceTree = "<group>";
 		};
 		84889ED02C8DB83F0066F7CB /* Info */ = {
@@ -307,17 +406,6 @@
 			path = Info;
 			sourceTree = "<group>";
 		};
-		84922B342A21E16F00CE7945 /* Mapping */ = {
-			isa = PBXGroup;
-			children = (
-				84922B352A21E18500CE7945 /* DB_Converter.swift */,
-				84FFB4CC2A93AD460001FA72 /* DataConverter.swift */,
-				8486ACF52C7CB42E001AB0A1 /* PhotoPickerHandler.swift */,
-				8428C5502C8083670068F586 /* DatabaseContentCounter.swift */,
-			);
-			path = Mapping;
-			sourceTree = "<group>";
-		};
 		84922B372A21F0FE00CE7945 /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
@@ -325,31 +413,6 @@
 				84922B382A21F11300CE7945 /* SetUpView.swift */,
 			);
 			path = Welcome;
-			sourceTree = "<group>";
-		};
-		849ECBD82A27666600954BC9 /* DB_Creation */ = {
-			isa = PBXGroup;
-			children = (
-				849ECBD92A27667C00954BC9 /* DB_CreationWrapper.swift */,
-			);
-			path = DB_Creation;
-			sourceTree = "<group>";
-		};
-		849ECBDF2A27708100954BC9 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				849ECBE02A27708500954BC9 /* Components */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		849ECBE02A27708500954BC9 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				849ECBE12A27708F00954BC9 /* ListTile.swift */,
-				840BF75E2AA4ABA900DF2A3C /* PasswordField.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		84C4749C29E446F400543BA0 /* Views */ = {
@@ -424,63 +487,6 @@
 				841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */,
 			);
 			path = AddDB;
-			sourceTree = "<group>";
-		};
-		84F4206129EEA0F1000D7600 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				8486ACF72C7CB563001AB0A1 /* Errors */,
-				849ECBDF2A27708100954BC9 /* Views */,
-				84922B342A21E16F00CE7945 /* Mapping */,
-				84F8850A2A07F79500B35956 /* Cryptography */,
-				84F4206229EEA0F1000D7600 /* Models */,
-				84F4206E29EEA0F1000D7600 /* Storage */,
-			);
-			name = Shared;
-			path = ../../../Shared;
-			sourceTree = "<group>";
-		};
-		84F4206229EEA0F1000D7600 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				847D93E72B825E0B00A24E8F /* Database */,
-				849ECBD82A27666600954BC9 /* DB_Creation */,
-				84F4206329EEA0F1000D7600 /* Generated */,
-				84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		84F4206329EEA0F1000D7600 /* Generated */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Generated;
-			sourceTree = "<group>";
-		};
-		84F4206E29EEA0F1000D7600 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				84F4206F29EEA0F1000D7600 /* Storage.swift */,
-				84F4207029EEA0F1000D7600 /* Persistence.swift */,
-				84F4207129EEA0F1000D7600 /* DatabaseFileManager.swift */,
-				845300292A98BA9200CA4529 /* CoreDataManager.swift */,
-				846455CF2A9BA517003D023C /* DatabaseDoesNotExistError.swift */,
-				840BF75C2AA498ED00DF2A3C /* NonexistendPathError.swift */,
-				840EA3682BC47F27007BC214 /* SandboxManager.swift */,
-			);
-			path = Storage;
-			sourceTree = "<group>";
-		};
-		84F8850A2A07F79500B35956 /* Cryptography */ = {
-			isa = PBXGroup;
-			children = (
-				84F8850B2A07F7A000B35956 /* Encrypter.swift */,
-				84F8850D2A07F7AC00B35956 /* Decrypter.swift */,
-				84E4C5112A249E87005D793F /* Cryptography.swift */,
-				84E4C5132A25CEA2005D793F /* PasswordGenerator.swift */,
-			);
-			path = Cryptography;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -617,62 +623,64 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84F8850E2A07F7AC00B35956 /* Decrypter.swift in Sources */,
+				841774AF2C96DD3700E19CF6 /* NativeType.swift in Sources */,
+				841774A82C96DD3700E19CF6 /* DB_Header.swift in Sources */,
 				84F6ABF82AE7DA2A00D0B633 /* AppData.swift in Sources */,
 				84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */,
+				8417749D2C96DD3700E19CF6 /* PasswordGenerator.swift in Sources */,
 				84627AC12AA9CA2000415827 /* Settings.swift in Sources */,
-				84F4207C29EEA0F2000D7600 /* DatabaseFileManager.swift in Sources */,
+				841774B12C96DD3700E19CF6 /* Protecto_Pass.xcdatamodeld in Sources */,
+				841774A72C96DD3700E19CF6 /* DB_Document.swift in Sources */,
+				841774A62C96DD3700E19CF6 /* DatabaseContent.swift in Sources */,
+				841774B62C96DD3700E19CF6 /* Persistence.swift in Sources */,
+				841774A52C96DD3700E19CF6 /* Database.swift in Sources */,
+				841774B92C96DD3700E19CF6 /* ListTile.swift in Sources */,
 				846BF86A2C7DE53500678388 /* ImageInfo.swift in Sources */,
-				84A3ABEE2AA057620089521E /* NativeType.swift in Sources */,
+				841774AA2C96DD3700E19CF6 /* DB_Video.swift in Sources */,
 				84922B3B2A21F15600CE7945 /* Home.swift in Sources */,
+				841774AE2C96DD3700E19CF6 /* ME_DataStructure.swift in Sources */,
+				8417749A2C96DD3700E19CF6 /* Cryptography.swift in Sources */,
+				841774B32C96DD3700E19CF6 /* DatabaseDoesNotExistError.swift in Sources */,
+				841774B72C96DD3700E19CF6 /* SandboxManager.swift in Sources */,
+				841774AD2C96DD3700E19CF6 /* LoadableResource.swift in Sources */,
+				841774A12C96DD3700E19CF6 /* DataConverter.swift in Sources */,
+				841774A02C96DD3700E19CF6 /* DatabaseContentCounter.swift in Sources */,
+				841774B22C96DD3700E19CF6 /* CoreDataManager.swift in Sources */,
+				841774A42C96DD3700E19CF6 /* PhotoPickerHandler.swift in Sources */,
+				841774AC2C96DD3700E19CF6 /* Folder.swift in Sources */,
+				8417749E2C96DD3700E19CF6 /* PhotoPickerErrors.swift in Sources */,
 				84889ED22C8DB84E0066F7CB /* DocumentInfo.swift in Sources */,
-				8481C7D92A9E282E004EC48E /* DatabaseContent.swift in Sources */,
-				84F4207729EEA0F2000D7600 /* DB_Header.swift in Sources */,
-				8486ACF62C7CB42F001AB0A1 /* PhotoPickerHandler.swift in Sources */,
-				840BF75D2AA498ED00DF2A3C /* NonexistendPathError.swift in Sources */,
-				84F4207829EEA0F2000D7600 /* Database.swift in Sources */,
-				8486ACFE2C7CB6A8001AB0A1 /* PhotoPickerErrors.swift in Sources */,
-				84FFB4CD2A93AD460001FA72 /* DataConverter.swift in Sources */,
-				84F4207B29EEA0F2000D7600 /* Persistence.swift in Sources */,
 				8497DF7E2B5BF347003979F9 /* ImageLoadingError.swift in Sources */,
-				84E4C5142A25CEA2005D793F /* PasswordGenerator.swift in Sources */,
 				84EDFCFD2A94995B00A50A96 /* ME_ContentView.swift in Sources */,
-				84E4C5122A249E87005D793F /* Cryptography.swift in Sources */,
 				848DE6842AA742CA00AE99EE /* ImageDetails.swift in Sources */,
+				841774B82C96DD3700E19CF6 /* Storage.swift in Sources */,
+				841774BA2C96DD3700E19CF6 /* PasswordField.swift in Sources */,
+				841774B52C96DD3700E19CF6 /* NonexistendPathError.swift in Sources */,
 				84DB4F942A73C60E00C2DD0E /* EditEntry.swift in Sources */,
-				84922B362A21E18500CE7945 /* DB_Converter.swift in Sources */,
-				8428C5512C8083670068F586 /* DatabaseContentCounter.swift in Sources */,
+				841774A92C96DD3700E19CF6 /* DB_Image.swift in Sources */,
 				848480B429EFF09D008EA77C /* AddDB.swift in Sources */,
+				841774AB2C96DD3700E19CF6 /* Entry.swift in Sources */,
 				84922B392A21F11300CE7945 /* SetUpView.swift in Sources */,
 				84889ECF2C8CDA2F0066F7CB /* DocumentDetails.swift in Sources */,
+				8417749C2C96DD3700E19CF6 /* Encrypter.swift in Sources */,
 				8467EBB82B5FDFEC003E6479 /* ImageListDetails.swift in Sources */,
-				84F4207929EEA0F2000D7600 /* Protecto_Pass.xcdatamodeld in Sources */,
-				8474FDAA2A93612C007F4215 /* ME_DataStructure.swift in Sources */,
-				84F8850C2A07F7A000B35956 /* Encrypter.swift in Sources */,
-				84F4207529EEA0F2000D7600 /* Folder.swift in Sources */,
-				840EA3692BC47F27007BC214 /* SandboxManager.swift in Sources */,
+				841774A22C96DD3700E19CF6 /* DB_Converter.swift in Sources */,
 				84ACC7A42A6AB8130033E83A /* AddDB_Navigation.swift in Sources */,
 				84E4C51B2A276107005D793F /* AddDB_Overview.swift in Sources */,
-				84F4207629EEA0F2000D7600 /* Entry.swift in Sources */,
 				843312242AA59FC700ADA474 /* IconChooser.swift in Sources */,
-				840BF75F2AA4ABA900DF2A3C /* PasswordField.swift in Sources */,
-				84A3ABEC2AA055DA0089521E /* DB_Document.swift in Sources */,
-				84DEDF862BE66ABC006A09A5 /* LoadableResource.swift in Sources */,
-				849ECBDA2A27667C00954BC9 /* DB_CreationWrapper.swift in Sources */,
 				84DB4F9A2A766BEF00C2DD0E /* HomeSelector.swift in Sources */,
 				842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */,
 				842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */,
-				84F4207A29EEA0F2000D7600 /* Storage.swift in Sources */,
 				84DB4F962A73C61300C2DD0E /* EditFolder.swift in Sources */,
-				84A3ABEA2A9F6E7D0089521E /* DB_Image.swift in Sources */,
+				8417749F2C96DD3700E19CF6 /* FileImporterErrors.swift in Sources */,
+				841774B42C96DD3700E19CF6 /* DatabaseFileManager.swift in Sources */,
 				84E4C5172A263FB8005D793F /* AddDB_Password.swift in Sources */,
-				84711C642C0C6DBF00B26143 /* DB_Video.swift in Sources */,
 				84F4209B29EEA22A000D7600 /* UnlockDB.swift in Sources */,
 				84DB4F902A739D9100C2DD0E /* Me_Details.swift in Sources */,
-				8453002A2A98BA9200CA4529 /* CoreDataManager.swift in Sources */,
-				849ECBE22A27708F00954BC9 /* ListTile.swift in Sources */,
-				846455D02A9BA517003D023C /* DatabaseDoesNotExistError.swift in Sources */,
 				841E86E12AAB222800B03F37 /* AddDB_CompactMode.swift in Sources */,
+				841774A32C96DD3700E19CF6 /* FileImportHandler.swift in Sources */,
+				841774B02C96DD3700E19CF6 /* DB_CreationWrapper.swift in Sources */,
+				8417749B2C96DD3700E19CF6 /* Decrypter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,13 +1027,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		84F4206C29EEA0F1000D7600 /* Protecto_Pass.xcdatamodeld */ = {
+		841774892C96DD3700E19CF6 /* Protecto_Pass.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				84F4206D29EEA0F1000D7600 /* Protecto_Pass.xcdatamodel */,
+				841774992C96DD3700E19CF6 /* Protecto_Pass.xcdatamodel */,
 			);
-			currentVersion = 84F4206D29EEA0F1000D7600 /* Protecto_Pass.xcdatamodel */;
-			path = Protecto_Pass.xcdatamodeld;
+			currentVersion = 841774992C96DD3700E19CF6 /* Protecto_Pass.xcdatamodel */;
+			name = Protecto_Pass.xcdatamodeld;
+			path = "/Users/jules/Library/Mobile Documents/com~apple~CloudDocs/Second Brain/Arbeit/Business/Development/Xcode/Protecto-Pass/Shared/Models/Protecto_Pass.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

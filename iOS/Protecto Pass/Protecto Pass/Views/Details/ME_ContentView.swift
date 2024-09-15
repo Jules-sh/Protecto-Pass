@@ -220,6 +220,22 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
+        .sheet(isPresented: $addEntryPresented) {
+            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
+                .environmentObject(db)
+        }
+        .sheet(isPresented: $addFolderPresented) {
+            EditFolder()
+                .environmentObject(db)
+        }
+        .photosPicker(
+            isPresented: $addImagePresented,
+            selection: $audioVisualItemsSelected,
+            maxSelectionCount: 100,
+            selectionBehavior: .continuousAndOrdered,
+            matching: .any(of: [.images, .videos]),
+            preferredItemEncoding: .automatic
+        )
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
         .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
         .alert("Error loading Document", isPresented: $errLoadingDocumentPresented) {}
@@ -258,16 +274,12 @@ internal struct ME_ContentView : View {
                     }
                     .foregroundStyle(.primary)
                 }
+                .sheet(isPresented: $entryDetailsPresented) {
+                    EntryDetails(entry: $selectedEntry)
+                }
             } else {
                 Text("No Entries found")
             }
-        }
-        .sheet(isPresented: $entryDetailsPresented) {
-            EntryDetails(entry: $selectedEntry)
-        }
-        .sheet(isPresented: $addEntryPresented) {
-            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
-                .environmentObject(db)
         }
     }
     
@@ -290,10 +302,6 @@ internal struct ME_ContentView : View {
             } else {
                 Text("No Folders found")
             }
-        }
-        .sheet(isPresented: $addFolderPresented) {
-            EditFolder()
-                .environmentObject(db)
         }
     }
     
@@ -339,6 +347,9 @@ internal struct ME_ContentView : View {
                             }
                         }
                     }
+                    // https://stackoverflow.com/questions/67180982/swiftui-presentation-attempt-to-present-view-on-which-is-already-present
+                    // https://stackoverflow.com/a/78309451
+                    // Do not present sheet on Section
                     .sheet(isPresented: $imageDetailsPresented) {
                         ImageDetails(image: $selectedImage, deleted: $imageDeleted)
                     }
@@ -355,14 +366,6 @@ internal struct ME_ContentView : View {
                 Text("No Images found")
             }
         }
-        .photosPicker(
-            isPresented: $addImagePresented,
-            selection: $audioVisualItemsSelected,
-            maxSelectionCount: 100,
-            selectionBehavior: .continuousAndOrdered,
-            matching: .any(of: [.images, .videos]),
-            preferredItemEncoding: .automatic
-        )
         .onChange(of: addImagePresented) {
             Task {
                 do {
@@ -424,41 +427,25 @@ internal struct ME_ContentView : View {
         .fileImporter(
             isPresented: $addDocPresented,
             allowedContentTypes: [.item],
-            allowsMultipleSelection: true
-        ) {
-            result in
-            switch result {
-                case .success(let files):
-                    var documents : [DB_Document] = []
-                    for file in files {
-                        guard file.startAccessingSecurityScopedResource() else { return }
-                        do {
-                            let data = try Data(contentsOf: file, options: [.uncached])
-                            documents.append(
-                                DB_Document(
-                                    document: data,
-                                    type: file.pathExtension.lowercased(),
-                                    name: file.lastPathComponent,
-                                    created: Date.now,
-                                    lastEdited: Date.now,
-                                    id: UUID()
-                                )
-                            )
-                        } catch {
-                            errLoadingDocumentPresented.toggle()
-                        }
-                        file.stopAccessingSecurityScopedResource()
-                    }
-                    self.documents.append(contentsOf: documents)
+            allowsMultipleSelection: true,
+            onCompletion: {
+                result in
+                Task {
                     do {
-                        try Storage.storeDatabase(db, context: context, newElements: documents)
-                    } catch {
+                        try FileImportHandler.handleDocumentPickerInput(
+                            result: result,
+                            documents: $documents,
+                            storeIn: db,
+                            context: context
+                        )
+                    } catch is DocumentLoadingError {
+                        errLoadingDocumentPresented.toggle()
+                    } catch is DocumentSavingError {
                         errSavingPresented.toggle()
                     }
-                case .failure:
-                    errLoadingDocumentPresented.toggle()
+                }
             }
-        }
+        )
         .onChange(of: documentDeleted) {
             // Only continue of documentDeleted is set to true, return if set to false
             guard documentDeleted else { return }

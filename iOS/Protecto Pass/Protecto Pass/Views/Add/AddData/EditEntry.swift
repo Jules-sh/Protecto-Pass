@@ -40,6 +40,8 @@ internal struct EditEntry: View {
     /// Some Notes to this Entry
     @State private var notes : String = ""
     
+    @State private var documents : [DB_Document] = []
+    
     /// Whether or not an error has appeared storing the Database
     @State private var errStoring : Bool = false
     
@@ -48,6 +50,8 @@ internal struct EditEntry: View {
     
     /// Whether or not the icon Chooser is shown
     @State private var iconChooserShown : Bool = false
+    
+    @State private var filePickerPresented : Bool = false
     
     internal init(entry : Entry, folder : Folder? = nil) {
         self.title = entry.title
@@ -87,55 +91,68 @@ internal struct EditEntry: View {
                 Section("Connection") {
                     TextField("URL", text: $url)
                 }
+                Section("Documents") {
+                    if documents.isEmpty {
+                        Text("No documents added yet")
+                            .foregroundStyle(.gray)
+                    } else {
+                        ForEach(documents) {
+                            document in
+                            Text(document.name)
+                        }
+                    }
+                    Button {
+                        filePickerPresented.toggle()
+                    } label: {
+                        Label("Add Document", systemImage: "plus")
+                    }
+                }
+                .foregroundStyle(.primary)
+                .fileImporter(
+                    isPresented: $filePickerPresented,
+                    allowedContentTypes: [.item],
+                    allowsMultipleSelection: true,
+                    onCompletion: {
+                        result in
+                        Task {
+                            do {
+                                try FileImportHandler.handleDocumentPickerInput(
+                                    result: result,
+                                    documents: $documents,
+                                    storeIn: db,
+                                    context: context
+                                )
+                            } catch is DocumentLoadingError {
+                                
+                            } catch is DocumentSavingError {
+                                
+                            }
+                        }
+                    }
+                )
             }
-            //            VStack {
-            //                Button {
-            //                    iconChooserShown.toggle()
-            //                } label: {
-            //                    Image(systemName: iconName)
-            //                        .renderingMode(.original)
-            //                        .symbolRenderingMode(.hierarchical)
-            //                        .resizable()
-            //                        .scaledToFit()
-            //                        .padding(.horizontal, 75)
-            //                        .foregroundStyle(.foreground)
-            //                }
-            //                .sheet(isPresented: $iconChooserShown) {
-            //                    IconChooser(iconName: $iconName, type: .entry)
-            //                }
-            //                Group {
-            //                    TextField("Title", text: $title)
-            //                        .textInputAutocapitalization(.words)
-            //                        .padding(.top, 40)
-            //                    Group {
-            //                        TextField("Username", text: $username)
-            //                            .textContentType(.username)
-            //                        TextField("Password", text: $password)
-            //                            .textContentType(.password)
-            //                        TextField("URL", text: $url)
-            //                            .textContentType(.URL)
-            //                    }
-            //                    .textInputAutocapitalization(.never)
-            //                    TextField("Notes", text: $notes, axis: .vertical)
-            //                        .lineLimit(5...10)
-            //                        .textInputAutocapitalization(.sentences)
-            //                }
-            //                .textFieldStyle(.roundedBorder)
-            //            }
             .alert("Error saving", isPresented: $errStoring) {
                 Button("Cancel", role: .cancel) {}
                 Button("Try again") { save() }
             } message: {
                 Text("An Error occurred when trying to save the data.\nPlease try again")
             }
-            //            .padding(.horizontal, 25)
             .navigationTitle("New Entry")
             .navigationBarTitleDisplayMode(.automatic)
+            .navigationBarBackButtonHidden()
             .toolbarRole(.editor)
             .toolbar(.automatic, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { save() }
+                    Button("Done") {
+                        save()
+                    }
+                    .disabled(title.isEmpty || username.isEmpty || password.isEmpty)
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
                 }
             }
         }
@@ -143,25 +160,37 @@ internal struct EditEntry: View {
     
     /// Saves the data and dismisses this View
     private func save() -> Void {
+        var localDocuments : [LoadableResource] = []
+        for doc in documents {
+            localDocuments.append(
+                LoadableResource(
+                    id: doc.id,
+                    name: doc.name,
+                    thumbnailData: DataConverter.stringToData("doc")
+                )
+            )
+        }
+        var newElements : [DatabaseContent<Date>] = []
+        newElements.append(contentsOf: documents)
+        newElements.append(
+            Entry(
+                title: title,
+                username: username,
+                password: password,
+                url: URL(string: url),
+                notes: notes,
+                iconName: iconName,
+                documents: localDocuments,
+                created: Date.now,
+                lastEdited: Date.now,
+                id: UUID()
+            )
+        )
         do {
             try Storage.storeDatabase(
                 db,
                 context: context,
-                newElements: [
-                    Entry(
-                        title: title,
-                        username: username,
-                        password: password,
-                        url: URL(string: url),
-                        notes: notes,
-                        iconName: iconName,
-                        // TODO: add loadable resources
-                        documents: [],
-                        created: Date.now,
-                        lastEdited: Date.now,
-                        id: UUID()
-                    )
-                ]
+                newElements: newElements
             )
             dismiss()
         } catch {

@@ -145,7 +145,7 @@ internal struct AddDB_Overview: View {
             id: UUID()
         )
         do {
-            try Storage.storeDatabase(navigationController.db!, context: viewContext)
+            try Storage.storeDatabase(navigationController.db!, context: viewContext, superID: navigationController.db!.id)
             navigationController.navigationSheetShown.toggle()
             navigationController.openDatabaseToHome.toggle()
         } catch {

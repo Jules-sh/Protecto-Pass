@@ -18,7 +18,8 @@ internal struct PhotoPickerHandler {
         images : Binding<[DB_Image]>,
         videos : Binding<[DB_Video]>,
         storeIn db : Database,
-        with context : NSManagedObjectContext
+        with context : NSManagedObjectContext,
+        onSuperID superID : UUID
     ) async throws -> Void {
         // Guard to not call this code when opening the Picker
         guard !pickerPresented else { return }
@@ -65,7 +66,8 @@ internal struct PhotoPickerHandler {
             try Storage.storeDatabase(
                 db,
                 context: context,
-                newElements: newElements
+                newElements: newElements,
+                superID: superID
             )
             images.wrappedValue.append(contentsOf: selectedDB_Images)
             videos.wrappedValue.append(contentsOf: selectedDB_Videos)

@@ -29,6 +29,8 @@ internal struct ImageListDetails: View {
     
     @State private var imageDeleted : Bool = false
     
+    internal let superID : UUID
+    
     var body: some View {
         NavigationStack {
             // TODO: GeometryReader destorys Layout, find workaround
@@ -84,7 +86,8 @@ internal struct ImageListDetails: View {
                             images: $images,
                             videos: $videos,
                             storeIn: db,
-                            with: context
+                            with: context,
+                            onSuperID: superID
                         )
                     }
                 }
@@ -130,7 +133,7 @@ internal struct ImageListDetails_Previews: PreviewProvider {
     @StateObject static private var db : Database = Database.previewDB
     
     static var previews: some View {
-        ImageListDetails(images: $images, videos: $videos)
+        ImageListDetails(images: $images, videos: $videos, superID: db.id)
             .environmentObject(db)
     }
 }

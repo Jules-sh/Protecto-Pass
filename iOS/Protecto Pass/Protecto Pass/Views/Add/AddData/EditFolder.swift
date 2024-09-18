@@ -25,7 +25,7 @@ internal struct EditFolder: View {
     @State private var description : String = ""
     
     /// The parent folder of this Folder
-    @State private var superFolder : Folder?
+    @State private var superID : UUID
     
     @State private var storeInFolder : Bool = false
     
@@ -38,11 +38,10 @@ internal struct EditFolder: View {
     @State private var folder : Folder? = nil
     
     internal init(
-        storeIn superFolder : Folder? = nil,
+        storeIn superID : UUID,
         folder : Folder? = nil
     ) {
-        storeInFolder = (superFolder != nil)
-        self.superFolder = superFolder
+        self.superID = superID
         if let f = folder {
             self.folder = f
             name = f.name
@@ -74,19 +73,6 @@ internal struct EditFolder: View {
                     Toggle(isOn: $storeInFolder.animation()) {
                         Label("Store in Folder", systemImage: "folder")
                             .foregroundStyle(.primary)
-                    }
-                    if storeInFolder {
-                        Picker("Folder", selection: $superFolder) {
-                            if (db.folders.isEmpty) {
-                                Text("No folder available")
-                            } else {
-                                ForEach(db.folders) {
-                                    folder in
-                                    Text(folder.name)
-                                }
-                            }
-                        }
-                        .disabled(db.folders.isEmpty)
                     }
                 }
             }
@@ -137,7 +123,8 @@ internal struct EditFolder: View {
                         lastEdited: Date.now,
                         id: folder?.id ?? UUID()
                     )
-                ]
+                ],
+                superID: superID
             )
             dismiss()
         } catch {
@@ -151,7 +138,7 @@ internal struct EditFolder_Previews: PreviewProvider {
     @StateObject private static var database : Database = Database.previewDB
     
     static var previews: some View {
-        EditFolder()
+        EditFolder(storeIn: database.id)
             .environmentObject(database)
     }
 }

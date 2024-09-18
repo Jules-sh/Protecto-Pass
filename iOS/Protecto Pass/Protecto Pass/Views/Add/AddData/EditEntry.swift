@@ -20,8 +20,8 @@ internal struct EditEntry: View {
     /// The Database to store this Object in
     @EnvironmentObject private var db : Database
     
-    /// The parent folder of this Entry if there is
-    @State internal var folder : Folder?
+    /// The Folder or Database to store this Entry in
+    @State internal var superID : UUID
     
     /// The Title of this entry
     @State private var title : String = ""
@@ -53,18 +53,18 @@ internal struct EditEntry: View {
     
     @State private var filePickerPresented : Bool = false
     
-    internal init(entry : Entry, folder : Folder? = nil) {
+    internal init(entry : Entry, superID: UUID) {
         self.title = entry.title
         self.username = entry.username
         self.password = entry.password
         self.url = entry.url?.absoluteString ?? ""
         self.notes = entry.notes
         self.iconName = entry.iconName
-        self.folder = folder
+        self.superID = superID
     }
     
-    internal init(folder : Folder? = nil) {
-        self.folder = folder
+    internal init(superID: UUID) {
+        self.superID = superID
     }
     
     var body: some View {
@@ -120,7 +120,8 @@ internal struct EditEntry: View {
                                     result: result,
                                     documents: $documents,
                                     storeIn: db,
-                                    context: context
+                                    context: context,
+                                    onSuperID: superID
                                 )
                             } catch is DocumentLoadingError {
                                 
@@ -190,7 +191,8 @@ internal struct EditEntry: View {
             try Storage.storeDatabase(
                 db,
                 context: context,
-                newElements: newElements
+                newElements: newElements,
+                superID: superID
             )
             dismiss()
         } catch {
@@ -204,7 +206,7 @@ internal struct EditEntry_Previews: PreviewProvider {
     @StateObject private static var database : Database = Database.previewDB
     
     static var previews: some View {
-        EditEntry()
+        EditEntry(superID: database.id)
             .environmentObject(database)
         
     }

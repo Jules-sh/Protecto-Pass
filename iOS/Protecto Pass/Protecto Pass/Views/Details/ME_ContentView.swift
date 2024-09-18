@@ -217,15 +217,29 @@ internal struct ME_ContentView : View {
         .onAppear {
             loadResources()
         }
+        // Detail sheets
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
+        .sheet(isPresented: $entryDetailsPresented) {
+            EntryDetails(entry: $selectedEntry)
+        }
+        // https://stackoverflow.com/questions/67180982/swiftui-presentation-attempt-to-present-view-on-which-is-already-present
+        // https://stackoverflow.com/a/78309451
+        // Do not present sheet on Section
+        .sheet(isPresented: $imageDetailsPresented) {
+            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
+        }
+        .sheet(isPresented: $documentShown) {
+            DocumentDetails(document: $selectedDocument, delete: $documentDeleted)
+        }
+        // Edit sheets
         .sheet(isPresented: $addEntryPresented) {
-            EditEntry(folder: dataStructure is Folder ? dataStructure as? Folder : nil)
+            EditEntry(superID: dataStructure.id)
                 .environmentObject(db)
         }
         .sheet(isPresented: $addFolderPresented) {
-            EditFolder()
+            EditFolder(storeIn: dataStructure.id)
                 .environmentObject(db)
         }
         .photosPicker(
@@ -235,6 +249,29 @@ internal struct ME_ContentView : View {
             selectionBehavior: .continuousAndOrdered,
             matching: .any(of: [.images, .videos]),
             preferredItemEncoding: .automatic
+        )
+        .fileImporter(
+            isPresented: $addDocPresented,
+            allowedContentTypes: [.item],
+            allowsMultipleSelection: true,
+            onCompletion: {
+                result in
+                Task {
+                    do {
+                        try FileImportHandler.handleDocumentPickerInput(
+                            result: result,
+                            documents: $documents,
+                            storeIn: db,
+                            context: context,
+                            onSuperID: dataStructure.id
+                        )
+                    } catch is DocumentLoadingError {
+                        errLoadingDocumentPresented.toggle()
+                    } catch is DocumentSavingError {
+                        errSavingPresented.toggle()
+                    }
+                }
+            }
         )
         .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
         .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
@@ -273,9 +310,6 @@ internal struct ME_ContentView : View {
                         Label(entry.title, systemImage: entry.iconName)
                     }
                     .foregroundStyle(.primary)
-                }
-                .sheet(isPresented: $entryDetailsPresented) {
-                    EntryDetails(entry: $selectedEntry)
                 }
             } else {
                 Text("No Entries found")
@@ -347,15 +381,9 @@ internal struct ME_ContentView : View {
                             }
                         }
                     }
-                    // https://stackoverflow.com/questions/67180982/swiftui-presentation-attempt-to-present-view-on-which-is-already-present
-                    // https://stackoverflow.com/a/78309451
-                    // Do not present sheet on Section
-                    .sheet(isPresented: $imageDetailsPresented) {
-                        ImageDetails(image: $selectedImage, deleted: $imageDeleted)
-                    }
                 } else {
                     NavigationLink {
-                        ImageListDetails(images: $images, videos: $videos)
+                        ImageListDetails(images: $images, videos: $videos, superID: dataStructure.id)
                             .environmentObject(db)
                     } label: {
                         Label("Show all images (\(images.count))", systemImage: "photo")
@@ -375,7 +403,8 @@ internal struct ME_ContentView : View {
                         images: $images,
                         videos: $videos,
                         storeIn: db,
-                        with: context
+                        with: context,
+                        onSuperID: dataStructure.id
                     )
                 } catch is PhotoPickerImageConverterError {
                     errLoadingImagePresented.toggle()
@@ -417,35 +446,10 @@ internal struct ME_ContentView : View {
                     }
                     .foregroundStyle(.primary)
                 }
-                .sheet(isPresented: $documentShown) {
-                    DocumentDetails(document: $selectedDocument, delete: $documentDeleted)
-                }
             } else {
                 Text("No Documents found")
             }
         }
-        .fileImporter(
-            isPresented: $addDocPresented,
-            allowedContentTypes: [.item],
-            allowsMultipleSelection: true,
-            onCompletion: {
-                result in
-                Task {
-                    do {
-                        try FileImportHandler.handleDocumentPickerInput(
-                            result: result,
-                            documents: $documents,
-                            storeIn: db,
-                            context: context
-                        )
-                    } catch is DocumentLoadingError {
-                        errLoadingDocumentPresented.toggle()
-                    } catch is DocumentSavingError {
-                        errSavingPresented.toggle()
-                    }
-                }
-            }
-        )
         .onChange(of: documentDeleted) {
             // Only continue of documentDeleted is set to true, return if set to false
             guard documentDeleted else { return }

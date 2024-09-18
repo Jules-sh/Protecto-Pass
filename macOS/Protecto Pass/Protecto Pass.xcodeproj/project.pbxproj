@@ -15,17 +15,39 @@
 		842EAC0A29D831DB0014C8F8 /* Protecto_PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC0929D831DB0014C8F8 /* Protecto_PassTests.swift */; };
 		842EAC1429D831DB0014C8F8 /* Protecto_PassUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC1329D831DB0014C8F8 /* Protecto_PassUITests.swift */; };
 		842EAC1629D831DB0014C8F8 /* Protecto_PassUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC1529D831DB0014C8F8 /* Protecto_PassUITestsLaunchTests.swift */; };
-		84F4208F29EEA15A000D7600 /* CD_Database+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208129EEA15A000D7600 /* CD_Database+CoreDataClass.swift */; };
-		84F4209029EEA15A000D7600 /* CD_Entry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208229EEA15A000D7600 /* CD_Entry+CoreDataClass.swift */; };
-		84F4209129EEA15A000D7600 /* CD_Folder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208329EEA15A000D7600 /* CD_Folder+CoreDataClass.swift */; };
-		84F4209229EEA15A000D7600 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208529EEA15A000D7600 /* Folder.swift */; };
-		84F4209329EEA15A000D7600 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208629EEA15A000D7600 /* Entry.swift */; };
-		84F4209429EEA15A000D7600 /* DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208729EEA15A000D7600 /* DB_Header.swift */; };
-		84F4209529EEA15A000D7600 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208829EEA15A000D7600 /* Database.swift */; };
-		84F4209629EEA15A000D7600 /* Protecto_Pass.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208929EEA15A000D7600 /* Protecto_Pass.xcdatamodeld */; };
-		84F4209729EEA15A000D7600 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208C29EEA15A000D7600 /* Storage.swift */; };
-		84F4209829EEA15A000D7600 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208D29EEA15A000D7600 /* Persistence.swift */; };
-		84F4209929EEA15A000D7600 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4208E29EEA15A000D7600 /* FileManager.swift */; };
+		843390182C99A7BF00ED4349 /* Encrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FEC2C99A7BF00ED4349 /* Encrypter.swift */; };
+		843390192C99A7BF00ED4349 /* FileImportHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FF72C99A7BF00ED4349 /* FileImportHandler.swift */; };
+		8433901A2C99A7BF00ED4349 /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FED2C99A7BF00ED4349 /* PasswordGenerator.swift */; };
+		8433901B2C99A7BF00ED4349 /* SandboxManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8433900F2C99A7BF00ED4349 /* SandboxManager.swift */; };
+		8433901C2C99A7BF00ED4349 /* ME_DataStructure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390032C99A7BF00ED4349 /* ME_DataStructure.swift */; };
+		8433901D2C99A7BF00ED4349 /* DatabaseFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8433900C2C99A7BF00ED4349 /* DatabaseFileManager.swift */; };
+		8433901E2C99A7BF00ED4349 /* DB_Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FFE2C99A7BF00ED4349 /* DB_Image.swift */; };
+		8433901F2C99A7BF00ED4349 /* Cryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FEA2C99A7BF00ED4349 /* Cryptography.swift */; };
+		843390202C99A7BF00ED4349 /* DataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FF52C99A7BF00ED4349 /* DataConverter.swift */; };
+		843390212C99A7BF00ED4349 /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390132C99A7BF00ED4349 /* PasswordField.swift */; };
+		843390222C99A7BF00ED4349 /* Protecto_Pass.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 843390082C99A7BF00ED4349 /* Protecto_Pass.xcdatamodeld */; };
+		843390232C99A7BF00ED4349 /* DB_Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FFF2C99A7BF00ED4349 /* DB_Video.swift */; };
+		843390242C99A7BF00ED4349 /* DB_Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FFC2C99A7BF00ED4349 /* DB_Document.swift */; };
+		843390252C99A7BF00ED4349 /* ListTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390122C99A7BF00ED4349 /* ListTile.swift */; };
+		843390262C99A7BF00ED4349 /* DB_CreationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390062C99A7BF00ED4349 /* DB_CreationWrapper.swift */; };
+		843390272C99A7BF00ED4349 /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FEB2C99A7BF00ED4349 /* Decrypter.swift */; };
+		843390282C99A7BF00ED4349 /* PhotoPickerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FF12C99A7BF00ED4349 /* PhotoPickerErrors.swift */; };
+		843390292C99A7BF00ED4349 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8433900E2C99A7BF00ED4349 /* Persistence.swift */; };
+		8433902A2C99A7BF00ED4349 /* DB_Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FFD2C99A7BF00ED4349 /* DB_Header.swift */; };
+		8433902B2C99A7BF00ED4349 /* DatabaseContentCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FF42C99A7BF00ED4349 /* DatabaseContentCounter.swift */; };
+		8433902C2C99A7BF00ED4349 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FFA2C99A7BF00ED4349 /* Database.swift */; };
+		8433902D2C99A7BF00ED4349 /* DB_Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FF62C99A7BF00ED4349 /* DB_Converter.swift */; };
+		8433902E2C99A7BF00ED4349 /* NativeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390042C99A7BF00ED4349 /* NativeType.swift */; };
+		8433902F2C99A7BF00ED4349 /* LoadableResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390022C99A7BF00ED4349 /* LoadableResource.swift */; };
+		843390302C99A7BF00ED4349 /* NonexistendPathError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8433900D2C99A7BF00ED4349 /* NonexistendPathError.swift */; };
+		843390312C99A7BF00ED4349 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390012C99A7BF00ED4349 /* Folder.swift */; };
+		843390322C99A7BF00ED4349 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8433900A2C99A7BF00ED4349 /* CoreDataManager.swift */; };
+		843390332C99A7BF00ED4349 /* PhotoPickerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FF82C99A7BF00ED4349 /* PhotoPickerHandler.swift */; };
+		843390342C99A7BF00ED4349 /* DatabaseContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FFB2C99A7BF00ED4349 /* DatabaseContent.swift */; };
+		843390352C99A7BF00ED4349 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390002C99A7BF00ED4349 /* Entry.swift */; };
+		843390362C99A7BF00ED4349 /* FileImporterErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84338FEF2C99A7BF00ED4349 /* FileImporterErrors.swift */; };
+		843390372C99A7BF00ED4349 /* DatabaseDoesNotExistError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8433900B2C99A7BF00ED4349 /* DatabaseDoesNotExistError.swift */; };
+		843390382C99A7BF00ED4349 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843390102C99A7BF00ED4349 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,17 +80,39 @@
 		842EAC0F29D831DB0014C8F8 /* Protecto PassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Protecto PassUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC1329D831DB0014C8F8 /* Protecto_PassUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITests.swift; sourceTree = "<group>"; };
 		842EAC1529D831DB0014C8F8 /* Protecto_PassUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		84F4208129EEA15A000D7600 /* CD_Database+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Database+CoreDataClass.swift"; sourceTree = "<group>"; };
-		84F4208229EEA15A000D7600 /* CD_Entry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Entry+CoreDataClass.swift"; sourceTree = "<group>"; };
-		84F4208329EEA15A000D7600 /* CD_Folder+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CD_Folder+CoreDataClass.swift"; sourceTree = "<group>"; };
-		84F4208529EEA15A000D7600 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
-		84F4208629EEA15A000D7600 /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
-		84F4208729EEA15A000D7600 /* DB_Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DB_Header.swift; sourceTree = "<group>"; };
-		84F4208829EEA15A000D7600 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		84F4208A29EEA15A000D7600 /* Protecto_Pass.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Protecto_Pass.xcdatamodel; sourceTree = "<group>"; };
-		84F4208C29EEA15A000D7600 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
-		84F4208D29EEA15A000D7600 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		84F4208E29EEA15A000D7600 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		84338FEA2C99A7BF00ED4349 /* Cryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cryptography.swift; sourceTree = "<group>"; };
+		84338FEB2C99A7BF00ED4349 /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		84338FEC2C99A7BF00ED4349 /* Encrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encrypter.swift; sourceTree = "<group>"; };
+		84338FED2C99A7BF00ED4349 /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
+		84338FEF2C99A7BF00ED4349 /* FileImporterErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImporterErrors.swift; sourceTree = "<group>"; };
+		84338FF12C99A7BF00ED4349 /* PhotoPickerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerErrors.swift; sourceTree = "<group>"; };
+		84338FF42C99A7BF00ED4349 /* DatabaseContentCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContentCounter.swift; sourceTree = "<group>"; };
+		84338FF52C99A7BF00ED4349 /* DataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConverter.swift; sourceTree = "<group>"; };
+		84338FF62C99A7BF00ED4349 /* DB_Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Converter.swift; sourceTree = "<group>"; };
+		84338FF72C99A7BF00ED4349 /* FileImportHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImportHandler.swift; sourceTree = "<group>"; };
+		84338FF82C99A7BF00ED4349 /* PhotoPickerHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerHandler.swift; sourceTree = "<group>"; };
+		84338FFA2C99A7BF00ED4349 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		84338FFB2C99A7BF00ED4349 /* DatabaseContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseContent.swift; sourceTree = "<group>"; };
+		84338FFC2C99A7BF00ED4349 /* DB_Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Document.swift; sourceTree = "<group>"; };
+		84338FFD2C99A7BF00ED4349 /* DB_Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Header.swift; sourceTree = "<group>"; };
+		84338FFE2C99A7BF00ED4349 /* DB_Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Image.swift; sourceTree = "<group>"; };
+		84338FFF2C99A7BF00ED4349 /* DB_Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Video.swift; sourceTree = "<group>"; };
+		843390002C99A7BF00ED4349 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		843390012C99A7BF00ED4349 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		843390022C99A7BF00ED4349 /* LoadableResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableResource.swift; sourceTree = "<group>"; };
+		843390032C99A7BF00ED4349 /* ME_DataStructure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_DataStructure.swift; sourceTree = "<group>"; };
+		843390042C99A7BF00ED4349 /* NativeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeType.swift; sourceTree = "<group>"; };
+		843390062C99A7BF00ED4349 /* DB_CreationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_CreationWrapper.swift; sourceTree = "<group>"; };
+		8433900A2C99A7BF00ED4349 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		8433900B2C99A7BF00ED4349 /* DatabaseDoesNotExistError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseDoesNotExistError.swift; sourceTree = "<group>"; };
+		8433900C2C99A7BF00ED4349 /* DatabaseFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseFileManager.swift; sourceTree = "<group>"; };
+		8433900D2C99A7BF00ED4349 /* NonexistendPathError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonexistendPathError.swift; sourceTree = "<group>"; };
+		8433900E2C99A7BF00ED4349 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		8433900F2C99A7BF00ED4349 /* SandboxManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandboxManager.swift; sourceTree = "<group>"; };
+		843390102C99A7BF00ED4349 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		843390122C99A7BF00ED4349 /* ListTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTile.swift; sourceTree = "<group>"; };
+		843390132C99A7BF00ED4349 /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
+		843390172C99A7BF00ED4349 /* Protecto_Pass.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Protecto_Pass.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +143,7 @@
 		842EABE629D831DA0014C8F8 = {
 			isa = PBXGroup;
 			children = (
+				843390162C99A7BF00ED4349 /* Shared */,
 				842EABF129D831DA0014C8F8 /* Protecto Pass */,
 				842EAC0829D831DB0014C8F8 /* Protecto PassTests */,
 				842EAC1229D831DB0014C8F8 /* Protecto PassUITests */,
@@ -120,7 +165,6 @@
 			isa = PBXGroup;
 			children = (
 				842EABF229D831DA0014C8F8 /* Protecto_PassApp.swift */,
-				84F4207E29EEA15A000D7600 /* Shared */,
 				84F4207D29EEA134000D7600 /* Views */,
 				842EABF629D831DB0014C8F8 /* Assets.xcassets */,
 				842EAC0029D831DB0014C8F8 /* Protecto_Pass.entitlements */,
@@ -155,63 +199,141 @@
 			path = "Protecto PassUITests";
 			sourceTree = "<group>";
 		};
+		84338FEE2C99A7BF00ED4349 /* Cryptography */ = {
+			isa = PBXGroup;
+			children = (
+				84338FEA2C99A7BF00ED4349 /* Cryptography.swift */,
+				84338FEB2C99A7BF00ED4349 /* Decrypter.swift */,
+				84338FEC2C99A7BF00ED4349 /* Encrypter.swift */,
+				84338FED2C99A7BF00ED4349 /* PasswordGenerator.swift */,
+			);
+			path = Cryptography;
+			sourceTree = "<group>";
+		};
+		84338FF02C99A7BF00ED4349 /* FileHandlerError */ = {
+			isa = PBXGroup;
+			children = (
+				84338FEF2C99A7BF00ED4349 /* FileImporterErrors.swift */,
+			);
+			path = FileHandlerError;
+			sourceTree = "<group>";
+		};
+		84338FF22C99A7BF00ED4349 /* PhotoPickerError */ = {
+			isa = PBXGroup;
+			children = (
+				84338FF12C99A7BF00ED4349 /* PhotoPickerErrors.swift */,
+			);
+			path = PhotoPickerError;
+			sourceTree = "<group>";
+		};
+		84338FF32C99A7BF00ED4349 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				84338FF02C99A7BF00ED4349 /* FileHandlerError */,
+				84338FF22C99A7BF00ED4349 /* PhotoPickerError */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		84338FF92C99A7BF00ED4349 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				84338FF42C99A7BF00ED4349 /* DatabaseContentCounter.swift */,
+				84338FF52C99A7BF00ED4349 /* DataConverter.swift */,
+				84338FF62C99A7BF00ED4349 /* DB_Converter.swift */,
+				84338FF72C99A7BF00ED4349 /* FileImportHandler.swift */,
+				84338FF82C99A7BF00ED4349 /* PhotoPickerHandler.swift */,
+			);
+			path = Mapping;
+			sourceTree = "<group>";
+		};
+		843390052C99A7BF00ED4349 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				84338FFA2C99A7BF00ED4349 /* Database.swift */,
+				84338FFB2C99A7BF00ED4349 /* DatabaseContent.swift */,
+				84338FFC2C99A7BF00ED4349 /* DB_Document.swift */,
+				84338FFD2C99A7BF00ED4349 /* DB_Header.swift */,
+				84338FFE2C99A7BF00ED4349 /* DB_Image.swift */,
+				84338FFF2C99A7BF00ED4349 /* DB_Video.swift */,
+				843390002C99A7BF00ED4349 /* Entry.swift */,
+				843390012C99A7BF00ED4349 /* Folder.swift */,
+				843390022C99A7BF00ED4349 /* LoadableResource.swift */,
+				843390032C99A7BF00ED4349 /* ME_DataStructure.swift */,
+				843390042C99A7BF00ED4349 /* NativeType.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		843390072C99A7BF00ED4349 /* DB_Creation */ = {
+			isa = PBXGroup;
+			children = (
+				843390062C99A7BF00ED4349 /* DB_CreationWrapper.swift */,
+			);
+			path = DB_Creation;
+			sourceTree = "<group>";
+		};
+		843390092C99A7BF00ED4349 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				843390052C99A7BF00ED4349 /* Database */,
+				843390072C99A7BF00ED4349 /* DB_Creation */,
+				843390082C99A7BF00ED4349 /* Protecto_Pass.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		843390112C99A7BF00ED4349 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				8433900A2C99A7BF00ED4349 /* CoreDataManager.swift */,
+				8433900B2C99A7BF00ED4349 /* DatabaseDoesNotExistError.swift */,
+				8433900C2C99A7BF00ED4349 /* DatabaseFileManager.swift */,
+				8433900D2C99A7BF00ED4349 /* NonexistendPathError.swift */,
+				8433900E2C99A7BF00ED4349 /* Persistence.swift */,
+				8433900F2C99A7BF00ED4349 /* SandboxManager.swift */,
+				843390102C99A7BF00ED4349 /* Storage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		843390142C99A7BF00ED4349 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				843390122C99A7BF00ED4349 /* ListTile.swift */,
+				843390132C99A7BF00ED4349 /* PasswordField.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		843390152C99A7BF00ED4349 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				843390142C99A7BF00ED4349 /* Components */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		843390162C99A7BF00ED4349 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				84338FEE2C99A7BF00ED4349 /* Cryptography */,
+				84338FF32C99A7BF00ED4349 /* Errors */,
+				84338FF92C99A7BF00ED4349 /* Mapping */,
+				843390092C99A7BF00ED4349 /* Models */,
+				843390112C99A7BF00ED4349 /* Storage */,
+				843390152C99A7BF00ED4349 /* Views */,
+			);
+			name = Shared;
+			path = "/Users/jules/Library/Mobile Documents/com~apple~CloudDocs/Second Brain/Arbeit/Business/Development/Xcode/Protecto-Pass/Shared";
+			sourceTree = "<absolute>";
+		};
 		84F4207D29EEA134000D7600 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				842EABF429D831DA0014C8F8 /* ContentView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		84F4207E29EEA15A000D7600 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				84F4207F29EEA15A000D7600 /* Models */,
-				84F4208B29EEA15A000D7600 /* Storage */,
-			);
-			name = Shared;
-			path = ../../../Shared;
-			sourceTree = "<group>";
-		};
-		84F4207F29EEA15A000D7600 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				84F4208029EEA15A000D7600 /* Generated */,
-				84F4208429EEA15A000D7600 /* Database */,
-				84F4208929EEA15A000D7600 /* Protecto_Pass.xcdatamodeld */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		84F4208029EEA15A000D7600 /* Generated */ = {
-			isa = PBXGroup;
-			children = (
-				84F4208129EEA15A000D7600 /* CD_Database+CoreDataClass.swift */,
-				84F4208229EEA15A000D7600 /* CD_Entry+CoreDataClass.swift */,
-				84F4208329EEA15A000D7600 /* CD_Folder+CoreDataClass.swift */,
-			);
-			path = Generated;
-			sourceTree = "<group>";
-		};
-		84F4208429EEA15A000D7600 /* Database */ = {
-			isa = PBXGroup;
-			children = (
-				84F4208529EEA15A000D7600 /* Folder.swift */,
-				84F4208629EEA15A000D7600 /* Entry.swift */,
-				84F4208729EEA15A000D7600 /* DB_Header.swift */,
-				84F4208829EEA15A000D7600 /* Database.swift */,
-			);
-			path = Database;
-			sourceTree = "<group>";
-		};
-		84F4208B29EEA15A000D7600 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				84F4208C29EEA15A000D7600 /* Storage.swift */,
-				84F4208D29EEA15A000D7600 /* Persistence.swift */,
-				84F4208E29EEA15A000D7600 /* FileManager.swift */,
-			);
-			path = Storage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,20 +466,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84F4209329EEA15A000D7600 /* Entry.swift in Sources */,
-				84F4209129EEA15A000D7600 /* CD_Folder+CoreDataClass.swift in Sources */,
-				84F4209629EEA15A000D7600 /* Protecto_Pass.xcdatamodeld in Sources */,
-				84F4209929EEA15A000D7600 /* FileManager.swift in Sources */,
 				842EABFF29D831DB0014C8F8 /* Protecto_Pass.xcdatamodeld in Sources */,
-				84F4208F29EEA15A000D7600 /* CD_Database+CoreDataClass.swift in Sources */,
-				84F4209729EEA15A000D7600 /* Storage.swift in Sources */,
 				842EABF529D831DA0014C8F8 /* ContentView.swift in Sources */,
-				84F4209829EEA15A000D7600 /* Persistence.swift in Sources */,
+				843390182C99A7BF00ED4349 /* Encrypter.swift in Sources */,
+				843390192C99A7BF00ED4349 /* FileImportHandler.swift in Sources */,
+				8433901A2C99A7BF00ED4349 /* PasswordGenerator.swift in Sources */,
+				8433901B2C99A7BF00ED4349 /* SandboxManager.swift in Sources */,
+				8433901C2C99A7BF00ED4349 /* ME_DataStructure.swift in Sources */,
+				8433901D2C99A7BF00ED4349 /* DatabaseFileManager.swift in Sources */,
+				8433901E2C99A7BF00ED4349 /* DB_Image.swift in Sources */,
+				8433901F2C99A7BF00ED4349 /* Cryptography.swift in Sources */,
+				843390202C99A7BF00ED4349 /* DataConverter.swift in Sources */,
+				843390212C99A7BF00ED4349 /* PasswordField.swift in Sources */,
+				843390222C99A7BF00ED4349 /* Protecto_Pass.xcdatamodeld in Sources */,
+				843390232C99A7BF00ED4349 /* DB_Video.swift in Sources */,
+				843390242C99A7BF00ED4349 /* DB_Document.swift in Sources */,
+				843390252C99A7BF00ED4349 /* ListTile.swift in Sources */,
+				843390262C99A7BF00ED4349 /* DB_CreationWrapper.swift in Sources */,
+				843390272C99A7BF00ED4349 /* Decrypter.swift in Sources */,
+				843390282C99A7BF00ED4349 /* PhotoPickerErrors.swift in Sources */,
+				843390292C99A7BF00ED4349 /* Persistence.swift in Sources */,
+				8433902A2C99A7BF00ED4349 /* DB_Header.swift in Sources */,
+				8433902B2C99A7BF00ED4349 /* DatabaseContentCounter.swift in Sources */,
+				8433902C2C99A7BF00ED4349 /* Database.swift in Sources */,
+				8433902D2C99A7BF00ED4349 /* DB_Converter.swift in Sources */,
+				8433902E2C99A7BF00ED4349 /* NativeType.swift in Sources */,
+				8433902F2C99A7BF00ED4349 /* LoadableResource.swift in Sources */,
+				843390302C99A7BF00ED4349 /* NonexistendPathError.swift in Sources */,
+				843390312C99A7BF00ED4349 /* Folder.swift in Sources */,
+				843390322C99A7BF00ED4349 /* CoreDataManager.swift in Sources */,
+				843390332C99A7BF00ED4349 /* PhotoPickerHandler.swift in Sources */,
+				843390342C99A7BF00ED4349 /* DatabaseContent.swift in Sources */,
+				843390352C99A7BF00ED4349 /* Entry.swift in Sources */,
+				843390362C99A7BF00ED4349 /* FileImporterErrors.swift in Sources */,
+				843390372C99A7BF00ED4349 /* DatabaseDoesNotExistError.swift in Sources */,
+				843390382C99A7BF00ED4349 /* Storage.swift in Sources */,
 				842EABF329D831DA0014C8F8 /* Protecto_PassApp.swift in Sources */,
-				84F4209029EEA15A000D7600 /* CD_Entry+CoreDataClass.swift in Sources */,
-				84F4209429EEA15A000D7600 /* DB_Header.swift in Sources */,
-				84F4209529EEA15A000D7600 /* Database.swift in Sources */,
-				84F4209229EEA15A000D7600 /* Folder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,12 +829,12 @@
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
-		84F4208929EEA15A000D7600 /* Protecto_Pass.xcdatamodeld */ = {
+		843390082C99A7BF00ED4349 /* Protecto_Pass.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				84F4208A29EEA15A000D7600 /* Protecto_Pass.xcdatamodel */,
+				843390172C99A7BF00ED4349 /* Protecto_Pass.xcdatamodel */,
 			);
-			currentVersion = 84F4208A29EEA15A000D7600 /* Protecto_Pass.xcdatamodel */;
+			currentVersion = 843390172C99A7BF00ED4349 /* Protecto_Pass.xcdatamodel */;
 			path = Protecto_Pass.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

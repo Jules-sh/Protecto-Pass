@@ -11,20 +11,20 @@ import SwiftUI
 internal class GeneralEntry<DA, U, DE, DO> : NativeType<DE, DA, DO> {
     
     /// The Title of this Entry
-    internal let title : DA
+    internal var title : DA
     
     /// The Username connected to this Entry
-    internal let username : DA
+    internal var username : DA
     
     /// The Password stored with this Entry
-    internal let password : DA
+    internal var password : DA
     
     /// The URL this Entry is connected to
-    internal let url : U
+    internal var url : U
     
     /// Some notes storing whatever
     /// the User wants to add to this Entry
-    internal let notes : DA
+    internal var notes : DA
     
     internal init(
         title: DA,

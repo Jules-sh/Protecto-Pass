@@ -18,7 +18,7 @@ internal class DatabaseContent<D> {
     /// Object was edited the last time
     internal var lastEdited : D
     
-    internal var id : UUID
+    internal let id : UUID
     
     internal init(
         created : D,

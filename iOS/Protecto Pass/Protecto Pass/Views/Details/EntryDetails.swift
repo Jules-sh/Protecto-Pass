@@ -100,7 +100,7 @@ internal struct EntryDetails: View {
                         .onChange(of: documentDeleted) {
                             Task {
                                 do {
-                                    try Storage.deleteDocument(selectedDocument!, with: context)
+                                    try Storage.deleteDocument(id: selectedDocument!.id, in: db, with: context)
                                     documents.removeAll(where: { $0.id == selectedDocument!.id })
                                     documentDeleted = false
                                 } catch {

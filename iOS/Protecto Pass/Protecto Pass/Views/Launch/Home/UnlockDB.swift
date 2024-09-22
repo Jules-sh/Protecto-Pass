@@ -126,7 +126,6 @@ internal struct UnlockDB: View {
             let localDatabase : Database = try decrypter.decrypt()
             unlockedDB = localDatabase
             navigationSheet.db = unlockedDB
-            dismiss()
             navigationSheet.openDatabaseToHome.toggle()
         } catch {
             errDecryptingPresented.toggle()

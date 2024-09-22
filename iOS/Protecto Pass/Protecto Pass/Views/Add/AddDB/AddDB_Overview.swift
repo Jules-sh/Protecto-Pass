@@ -146,7 +146,6 @@ internal struct AddDB_Overview: View {
         )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext, superID: navigationController.db!.id)
-            navigationController.navigationSheetShown.toggle()
             navigationController.openDatabaseToHome.toggle()
         } catch {
             errSavingPresented.toggle()

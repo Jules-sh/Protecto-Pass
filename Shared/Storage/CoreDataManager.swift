@@ -125,32 +125,36 @@ internal struct CoreDataManager {
     internal static func deleteDatabase(_ id : UUID, with context : NSManagedObjectContext) throws -> Void {
         let db : CD_Database = try accessCache(id: id, context: context)
         let encrypted = try DB_Converter.fromCD(db)
-        context.delete(try accessCache(id: id, context: context))
+        context.delete(db)
         for image in encrypted.images {
-            try deleteImage(image, context: context)
+            try deleteImage(id: image.id, context: context)
         }
         for video in encrypted.videos {
-            try deleteVideo(video, context: context)
+            try deleteVideo(id: video.id, context: context)
         }
         for document in encrypted.documents {
-            try deleteDocument(document, context: context)
+            try deleteDocument(id: document.id, context: context)
         }
         try context.save()
     }
     
-    internal static func deleteImage(_ image : EncryptedLoadableResource, context : NSManagedObjectContext) throws -> Void {
-        let cdImage = try getFetchRequest(forImageID: image.id).execute().first!
+    internal static func deleteImage(id : UUID, context : NSManagedObjectContext) throws -> Void {
+        let cdImage = try context.fetch(getFetchRequest(forImageID: id)).first!
         context.delete(cdImage)
+        // TODO: store Database
+        try context.save()
     }
     
-    internal static func deleteVideo(_ video : EncryptedLoadableResource, context : NSManagedObjectContext) throws -> Void {
-        let cdVideo = try getFetchRequest(forVideoID: video.id).execute().first!
+    internal static func deleteVideo(id : UUID, context : NSManagedObjectContext) throws -> Void {
+        let cdVideo = try context.fetch(getFetchRequest(forVideoID: id)).first!
         context.delete(cdVideo)
+        try context.save()
     }
     
-    internal static func deleteDocument(_ document : EncryptedLoadableResource, context : NSManagedObjectContext) throws -> Void {
-        let cdDocument = try getFetchRequest(forDocumentID: document.id).execute().first!
+    internal static func deleteDocument(id : UUID, context : NSManagedObjectContext) throws -> Void {
+        let cdDocument = try context.fetch(getFetchRequest(forDocumentID: id)).first!
         context.delete(cdDocument)
+        try context.save()
     }
     
     internal static func clearAll(context : NSManagedObjectContext) throws -> Void {

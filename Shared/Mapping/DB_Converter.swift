@@ -10,8 +10,6 @@
 import CoreData
 import Foundation
 
-// TODO: add id and uuid to core data when converting
-
 /// Protocol all converters in this File must conform to
 private protocol DatabaseConverterProtocol {
     
@@ -194,7 +192,7 @@ private struct LoadableResourceConverter : DatabaseConverterProtocol {
     
     internal static func toCD(_ encrypted: EncryptedLoadableResource, context: NSManagedObjectContext) -> CD_LoadableResource {
         let cdLR : CD_LoadableResource = CD_LoadableResource(context: context)
-        cdLR.id = encrypted.id
+        cdLR.uuid = encrypted.id
         cdLR.name = encrypted.name
         cdLR.thumbnailData = encrypted.thumbnailData
         return cdLR

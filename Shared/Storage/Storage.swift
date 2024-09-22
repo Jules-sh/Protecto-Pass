@@ -202,20 +202,23 @@ internal struct Storage {
         }
     }
     
-    internal static func deleteDatabase(_ db : Database, with context : NSManagedObjectContext) throws -> Void {
-        try CoreDataManager.deleteDatabase(db.id, with: context)
+    internal static func deleteDatabase(id : UUID, with context : NSManagedObjectContext) throws -> Void {
+        try CoreDataManager.deleteDatabase(id, with: context)
     }
     
-    internal static func deleteImage(_ image : DB_Image, with context : NSManagedObjectContext) throws -> Void {
-//        try CoreDataManager.deleteImage(image, context: context)
+    internal static func deleteImage(id : UUID, in db : Database, with context : NSManagedObjectContext) throws -> Void {
+        try CoreDataManager.deleteImage(id: id, context: context)
+        try storeDatabase(db, context: context, superID: db.id)
     }
     
-    internal static func deleteVideo(_ video : DB_Video, with context : NSManagedObjectContext) throws -> Void {
-//        CoreDataManager.deleteVideo(video, context: context)
+    internal static func deleteVideo(id : UUID, in db : Database, with context : NSManagedObjectContext) throws -> Void {
+        try CoreDataManager.deleteVideo(id: id, context: context)
+        try storeDatabase(db, context: context, superID: db.id)
     }
     
-    internal static func deleteDocument(_ document : DB_Document, with context : NSManagedObjectContext) throws -> Void {
-//        CoreDataManager.deleteDocument(document, context: context)
+    internal static func deleteDocument(id : UUID, in db : Database, with context : NSManagedObjectContext) throws -> Void {
+        try CoreDataManager.deleteDocument(id: id, context: context)
+        try storeDatabase(db, context: context, superID: db.id)
     }
     
     /// Resets all Data of this App and the connected Cloud Container

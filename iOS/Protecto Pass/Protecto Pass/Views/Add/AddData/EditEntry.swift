@@ -77,9 +77,9 @@ internal struct EditEntry: View {
                         Label("Icon", systemImage: iconName)
                     }
                     .foregroundStyle(.primary)
-                }
-                .sheet(isPresented: $iconChooserShown) {
-                    IconChooser(iconName: $iconName, type: .entry)
+                    .sheet(isPresented: $iconChooserShown) {
+                        IconChooser(iconName: $iconName, type: .entry)
+                    }
                 }
                 Section("Information") {
                     TextField("Title", text: $title)

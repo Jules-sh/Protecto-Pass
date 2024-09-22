@@ -10,6 +10,9 @@ import SwiftUI
 @main
 internal struct Protecto_PassApp: App {
     
+    /// The Phase the app is in currently
+    @Environment(\.scenePhase) private var scenePhase
+    
     /// The Persistence Controller used in this App to store Data
     private let persistenceController : PersistenceController = PersistenceController.shared
     
@@ -37,6 +40,9 @@ internal struct Protecto_PassApp: App {
     var body: some Scene {
         WindowGroup {
             SetUpView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.largeScreen, largeScreen)
+                .environment(\.compactMode, compactMode)
                 .alert("Error loading Settings", isPresented: $errLoadingSettingsShown) {
                     // No Actions available
                 } message: {
@@ -49,9 +55,18 @@ internal struct Protecto_PassApp: App {
                         errLoadingSettingsShown.toggle()
                     }
                 }
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environment(\.largeScreen, largeScreen)
-                .environment(\.compactMode, compactMode)
+                .onChange(of: scenePhase) {
+                    Task {
+                        do {
+                            // TODO: test and debug
+                            let settings : [Settings : Bool] = try SettingsHelper.load(context: persistenceController.container.viewContext)
+                            largeScreen = settings[.largeScreen]!
+                            compactMode = settings[.compactMode]!
+                        } catch {
+                            errLoadingSettingsShown.toggle()
+                        }
+                    }
+                }
         }
     }
 }

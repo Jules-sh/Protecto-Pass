@@ -16,6 +16,7 @@ internal struct ImageDetails: View {
     /// The Image displayed in this View
     @Binding internal var image : DB_Image?
     
+    /// Binding to show the deletion confirmation dialog
     @Binding internal var deleted : Bool
     
     var body: some View {

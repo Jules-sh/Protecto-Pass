@@ -60,9 +60,9 @@ internal struct EditFolder: View {
                         Label("Icon", systemImage: iconName)
                     }
                     .foregroundStyle(.primary)
-                }
-                .sheet(isPresented: $iconChooserShown) {
-                    IconChooser(iconName: $iconName, type: .folder)
+                    .sheet(isPresented: $iconChooserShown) {
+                        IconChooser(iconName: $iconName, type: .folder)
+                    }
                 }
                 Section("Information") {
                     TextField("Name", text: $name)

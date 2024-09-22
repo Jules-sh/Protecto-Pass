@@ -62,7 +62,7 @@ internal final class EncryptedLoadableResource : GeneralLoadableResource<Data>, 
     
     internal convenience init(from coreData : CD_LoadableResource) {
         self.init(
-            id: coreData.id!,
+            id: coreData.uuid!,
             name: coreData.name!,
             thumbnailData: coreData.thumbnailData!
         )

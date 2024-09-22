@@ -245,7 +245,6 @@ internal struct AddDB_CompactMode: View {
         )
         do {
             try Storage.storeDatabase(navigationController.db!, context: viewContext, superID: navigationController.db!.id)
-            navigationController.navigationSheetShown.toggle()
             navigationController.openDatabaseToHome.toggle()
         } catch {
             errSavingPresented.toggle()

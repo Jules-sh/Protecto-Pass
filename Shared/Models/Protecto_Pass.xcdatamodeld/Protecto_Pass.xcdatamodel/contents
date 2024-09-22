@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23G93" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23231" systemVersion="24A335" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="AppData" representedClassName="AppData" syncable="YES" codeGenerationType="class">
         <relationship name="paths" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="DB_Path" inverseName="appData" inverseEntity="DB_Path"/>
     </entity>
@@ -34,9 +34,9 @@
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
     </entity>
     <entity name="CD_LoadableResource" representedClassName="CD_LoadableResource" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
         <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsCloudEncryption="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" allowsCloudEncryption="YES" usesScalarValueType="NO"/>
         <relationship name="parentDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_NativeType" inverseName="documents" inverseEntity="CD_NativeType"/>
         <relationship name="parentImage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="images" inverseEntity="CD_ME_DataStructure"/>
         <relationship name="parentVideo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CD_ME_DataStructure" inverseName="videos" inverseEntity="CD_ME_DataStructure"/>

@@ -93,6 +93,9 @@ internal struct ME_ContentView : View {
     /// Set to true in order to present an alert displaying an error while loading the document
     @State private var errLoadingDocumentPresented : Bool = false
     
+    /// Displays an alert displaying an error while loading resources
+    @State private var errLoadingResourcesShown : Bool = false
+    
     // Saving
     
     /// Presents an alert stating an error has appeared in saving the database when set to true
@@ -100,11 +103,22 @@ internal struct ME_ContentView : View {
     
     // Deleting
     
-    /// Displays an alert stating, that there's been an error deleting the selected image
-    @State private var errImageDeletionShown : Bool = false
+    /// Setting this to true will result in displaying an error alert which states, there's been an error deleting
+    /// the 'selectedType'
+    @State private var errDeletingShown : Bool = false
     
-    /// Displays an alert stating, that there's been an error deleting the selected document
-    @State private var errDocumentDeletionShown : Bool = false
+    
+    /* DIALOG ALERT CONTROL VARIABLES */
+    
+    @State private var entryDeletionConfirmationShown : Bool = false
+    
+    @State private var folderDeletionConfiramtionShown : Bool = false
+    
+    @State private var imageDeletionConfirmationShown : Bool = false
+    
+    @State private var videoDeletionConfirmationShown : Bool = false
+    
+    @State private var documentDeletionConfirmationShown : Bool = false
     
     
     
@@ -116,21 +130,17 @@ internal struct ME_ContentView : View {
     /// The entry selected to display in the EntryDetails sheet
     @State private var selectedEntry : Entry?
     
+    @State private var selectedFolder : Folder?
+    
     /// The image selected to display in the sheet
     @State private var selectedImage : DB_Image?
+    
+    @State private var selectedVideo : DB_Video?
     
     /// The document selected to display in the according view
     @State private var selectedDocument : DB_Document?
     
-    
-    
-    /* DELETION CONTROL VARIABLES */
-    
-    /// Set to true in order to delete the 'selectedImage'
-    @State private var imageDeleted : Bool = false
-    
-    /// Set to true in order to delete the 'selectedDocument'
-    @State private var documentDeleted : Bool = false
+    @State private var selectedType : SelectedType?
     
     
     /// Loads the resources, such as images, videos and documents, and stores them in the
@@ -147,7 +157,7 @@ internal struct ME_ContentView : View {
             videos = try Storage.loadVideos(db, ids: videoIDs, context: context)
             documents = try Storage.loadDocuments(db, ids: documentIDs, context: context)
         } catch {
-            // TODO: handle error
+            errLoadingResourcesShown.toggle()
         }
     }
     
@@ -156,10 +166,104 @@ internal struct ME_ContentView : View {
             metrics in
             List {
                 largeScreenOption()
+                ME_ContentViewEntrySection(
+                    dataStructure: $dataStructure,
+                    selectedEntry: $selectedEntry,
+                    entryDetailsPresented: $entryDetailsPresented
+                )
                 entrySection()
                 folderSection()
+                    .alert("Delete Folder?", isPresented: $folderDeletionConfiramtionShown) {
+                        Button("Continue", role: .destructive) {
+                            do {
+                                dataStructure.folders.removeAll(where: { $0.id == selectedFolder!.id })
+                                try Storage.storeDatabase(db, context: context, superID: dataStructure.id)
+                            } catch {
+                                dataStructure.entries.append(selectedFolder!)
+                                selectedType = .folder
+                                errDeletingShown = true
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {
+                            folderDeletionConfiramtionShown.toggle()
+                        }
+                    } message: {
+                        Text("This Folder and all it's content will be deleted\nThis action is irreversible")
+                    }
                 imageSection(metrics)
+                    .alert("Error loading Image", isPresented: $errLoadingImagePresented) {
+                    } message: {
+                        Text("There's been an error while trying to load this image")
+                    }
+                    .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {
+                    } message: {
+                        Text("There's been an error while trying to load this video")
+                    }
+                    .alert("Delete Image?", isPresented: $imageDeletionConfirmationShown) {
+                        Button("Continue", role: .destructive) {
+                            let loadableResource : LoadableResource = dataStructure.images.first(where: { $0.id == selectedImage!.id })!
+                            do {
+                                images.removeAll(where: { $0.id == selectedImage!.id })
+                                dataStructure.images.removeAll(where: { $0.id == selectedImage!.id })
+                                try Storage.deleteImage(id: selectedImage!.id, in: db, with: context)
+                            } catch {
+                                images.append(selectedImage!)
+                                dataStructure.images.append(loadableResource)
+                                selectedType = .image
+                                errDeletingShown = true
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {
+                            imageDeletionConfirmationShown.toggle()
+                        }
+                    } message: {
+                        Text("This Image will be deleted\nThis action is irreversible")
+                    }
+                    .alert("Delete Video?", isPresented: $videoDeletionConfirmationShown) {
+                        Button("Continue", role: .destructive) {
+                            let loadableResource : LoadableResource = dataStructure.videos.first(where: { $0.id == selectedVideo!.id })!
+                            do {
+                                videos.removeAll(where: { $0.id == selectedImage!.id })
+                                dataStructure.videos.removeAll(where: { $0.id == selectedImage!.id })
+                                try Storage.deleteVideo(id: selectedVideo!.id, in: db, with: context)
+                            } catch {
+                                videos.append(selectedVideo!)
+                                dataStructure.videos.append(loadableResource)
+                                selectedType = .video
+                                errDeletingShown = true
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {
+                            videoDeletionConfirmationShown.toggle()
+                        }
+                    } message: {
+                        Text("This Video will be deleted\nThis action is irreversible")
+                    }
                 documentSection()
+                    .alert("Error loading Document", isPresented: $errLoadingDocumentPresented) {
+                    } message: {
+                        Text("There's been an error while trying to load this document")
+                    }
+                    .alert("Delete Document?", isPresented: $documentDeletionConfirmationShown) {
+                        Button("Continue", role: .destructive) {
+                            let loadableResource : LoadableResource = dataStructure.documents.first(where: { $0.id == selectedDocument!.id })!
+                            do {
+                                documents.removeAll(where: { $0.id == selectedDocument!.id })
+                                dataStructure.documents.removeAll(where: { $0.id == selectedDocument!.id })
+                                try Storage.deleteDocument(id: selectedDocument!.id, in: db, with: context)
+                            } catch {
+                                documents.append(selectedVideo!)
+                                dataStructure.documents.append(loadableResource)
+                                selectedType = .document
+                                errDeletingShown.toggle()
+                            }
+                        }
+                        Button("Cancel", role: .cancel) {
+                            documentDeletionConfirmationShown.toggle()
+                        }
+                    } message: {
+                        Text("This Document will be deleted\nThis action is irreversible")
+                    }
             }
         }
         // Shows "Home" when the Data Structure is a Database, otherwise shows the title of the data structure. While the data structure is nil, such as while the app is loading, it showns "Loading..."
@@ -209,6 +313,12 @@ internal struct ME_ContentView : View {
                     } label: {
                         Label("Details", systemImage: "info.circle")
                     }
+                    Divider()
+                    Button {
+                        // Activate Edit mode
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -221,17 +331,14 @@ internal struct ME_ContentView : View {
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
         }
-        .sheet(isPresented: $entryDetailsPresented) {
-            EntryDetails(entry: $selectedEntry)
-        }
         // https://stackoverflow.com/questions/67180982/swiftui-presentation-attempt-to-present-view-on-which-is-already-present
         // https://stackoverflow.com/a/78309451
         // Do not present sheet on Section
         .sheet(isPresented: $imageDetailsPresented) {
-            ImageDetails(image: $selectedImage, deleted: $imageDeleted)
+            ImageDetails(image: $selectedImage, deleted: $imageDeletionConfirmationShown)
         }
         .sheet(isPresented: $documentShown) {
-            DocumentDetails(document: $selectedDocument, delete: $documentDeleted)
+            DocumentDetails(document: $selectedDocument, delete: $documentDeletionConfirmationShown)
         }
         // Edit sheets
         .sheet(isPresented: $addEntryPresented) {
@@ -273,13 +380,30 @@ internal struct ME_ContentView : View {
                 }
             }
         )
-        .alert("Error loading Image", isPresented: $errLoadingImagePresented) {}
-        .alert("Error loading Video", isPresented: $errLoadingVideoPresented) {}
-        .alert("Error loading Document", isPresented: $errLoadingDocumentPresented) {}
+        // loading error alerts
         .alert("Error saving Database", isPresented: $errSavingPresented) {
         } message: {
-            Text("An Error arised saving the Database")
+            Text("An Error arised saving the Database to the file system")
         }
+        .alert("Error loading resources", isPresented: $errLoadingResourcesShown) {
+        } message: {
+            Text("There's been an error while trying to load the resources from the file system")
+        }
+        // deletion error alerts
+        .alert("Error deleting \(selectedType?.rawValue ?? "unknown type")", isPresented: $errDeletingShown) {
+            // No actions
+        } message: {
+            Text("An error occured while deleting \(selectedType?.rawValue ?? "unknown type")")
+        }
+    }
+    
+    /// Represents the Type currently selected for i.e. deletion
+    private enum SelectedType : String, RawRepresentable {
+        case entry
+        case folder
+        case image
+        case video
+        case document
     }
     
     /// Builds the header displayed when using large screen mode
@@ -310,6 +434,14 @@ internal struct ME_ContentView : View {
                         Label(entry.title, systemImage: entry.iconName)
                     }
                     .foregroundStyle(.primary)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            selectedEntry = entry
+                            entryDeletionConfirmationShown.toggle()
+                        } label: {
+                            Label("Delete Entry", systemImage: "trash")
+                        }
+                    }
                 }
             } else {
                 Text("No Entries found")
@@ -332,6 +464,14 @@ internal struct ME_ContentView : View {
                         Label(folder.name, systemImage: folder.iconName)
                     }
                     .foregroundStyle(.primary)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            selectedFolder = folder
+                            folderDeletionConfiramtionShown.toggle()
+                        } label: {
+                            Label("Delete Folder", systemImage: "trash")
+                        }
+                    }
                 }
             } else {
                 Text("No Folders found")
@@ -346,8 +486,7 @@ internal struct ME_ContentView : View {
         Section("Images") {
             if !images.isEmpty {
                 if images.count <= 9 {
-                    // TODO: maybe change ScrollView. Currently ScrollView and GroupBox have the effect wanted
-                    ScrollView {
+                    GroupBox {
                         LazyVGrid(
                             columns: [
                                 GridItem(
@@ -377,6 +516,14 @@ internal struct ME_ContentView : View {
                                             width: metrics.size.width / 3,
                                             height: metrics.size.width / 3
                                         )
+                                }
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        selectedImage = image
+                                        imageDeletionConfirmationShown.toggle()
+                                    } label: {
+                                        Label("Delete Image", systemImage: "trash")
+                                    }
                                 }
                             }
                         }
@@ -415,18 +562,6 @@ internal struct ME_ContentView : View {
                 }
             }
         }
-        .onChange(of: imageDeleted) {
-            // Don't delete image if imageDeleted just turned to false
-            guard imageDeleted else { return }
-            images.removeAll(where: { $0.id == selectedImage!.id })
-            dataStructure.images.removeAll(where: { $0.id == selectedImage!.id })
-            do {
-                try Storage.deleteImage(selectedImage!, with: context)
-            } catch {
-                errImageDeletionShown.toggle()
-            }
-            imageDeleted = false
-        }
     }
     
     /// Builds the section displaying a list of documents stored in this data structure
@@ -445,22 +580,18 @@ internal struct ME_ContentView : View {
                         Label(document.name, systemImage: "doc")
                     }
                     .foregroundStyle(.primary)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            selectedDocument = document
+                            documentDeletionConfirmationShown.toggle()
+                        } label: {
+                            Label("Delete Document", systemImage: "trash")
+                        }
+                    }
                 }
             } else {
                 Text("No Documents found")
             }
-        }
-        .onChange(of: documentDeleted) {
-            // Only continue of documentDeleted is set to true, return if set to false
-            guard documentDeleted else { return }
-            documents.removeAll(where: { $0.id == selectedDocument!.id })
-            dataStructure.documents.removeAll(where: { $0.id == selectedDocument!.id })
-            do {
-                try Storage.deleteDocument(selectedDocument!, with: context)
-            } catch {
-                errDocumentDeletionShown.toggle()
-            }
-            documentDeleted = false
         }
     }
 }

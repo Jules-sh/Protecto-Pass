@@ -92,11 +92,12 @@ internal struct ImageListDetails: View {
                     }
                 }
             }
+            // TODO: change to binding(?) and dialog
             .onChange(of: imageDeleted) {
                 let image = images.first(where: { $0.id == selectedImage!.id })
                 images.removeAll(where: { $0 == image })
                 do {
-                    try Storage.deleteImage(image!, with: context)
+                    try Storage.deleteImage(id: image!.id, in: db, with: context)
                     images.removeAll(where: { $0.id == image!.id })
                     // TODO: remove loadable resource reference
                 } catch {

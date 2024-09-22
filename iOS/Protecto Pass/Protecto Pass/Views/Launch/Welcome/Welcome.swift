@@ -18,11 +18,13 @@ internal struct Welcome: View {
     
     @Environment(\.compactMode) private var compactMode
     
+    @Environment(\.managedObjectContext) private var context
+    
     /// The Object to control the navigation of and with the AddDB Sheet
     @EnvironmentObject private var navigationSheet : AddDB_Navigation
     
     /// All the Databases of the App.
-    internal let databases : [EncryptedDatabase]
+    @State internal var databases : [EncryptedDatabase]
     
     /// Whether or not the unlock Database View as a sheet is shown.
     /// This does only apply to Databases already in the VIew.
@@ -39,6 +41,10 @@ internal struct Welcome: View {
     @State private var dbToUnlock : EncryptedDatabase = EncryptedDatabase.previewDB
     
     @State private var errReadingDatabaseFromPathShown : Bool = false
+    
+    @State private var errDeletingDatabaseShown : Bool = false
+    
+    @State private var deleteDatabaseShown : Bool = false
     
     var body: some View {
         NavigationStack {
@@ -66,11 +72,11 @@ internal struct Welcome: View {
                             } label: {
                                 Label("Create new one", systemImage: "plus")
                             }
-//                            Button {
-//                                selectorPresented.toggle()
-//                            } label: {
-//                                Label("Open from File", systemImage: "doc")
-//                            }
+                            //                            Button {
+                            //                                selectorPresented.toggle()
+                            //                            } label: {
+                            //                                Label("Open from File", systemImage: "doc")
+                            //                            }
                         } label: {
                             Image(systemName: "plus")
                         }
@@ -103,33 +109,33 @@ internal struct Welcome: View {
             VStack {
                 Group {
                     Text("No Databases found.")
-//                    Button("Open from File") {
-//                        selectorPresented.toggle()
-//                    }
-//                    .fileImporter(
-//                        isPresented: $selectorPresented,
-//                        allowedContentTypes: [.folder],
-//                        allowsMultipleSelection: false
-//                    ) {
-//                        let path : URL = try! $0.get().first!
-//                        let jsonDecoder : JSONDecoder = JSONDecoder()
-//                        do {
-//                            dbFromPath = try jsonDecoder.decode(
-//                                EncryptedDatabase.self,
-//                                from: try Data(
-//                                    contentsOf: path,
-//                                    options: [.uncached]
-//                                )
-//                            )
-//                        } catch {
-//                            errReadingDatabaseFromPathShown.toggle()
-//                        }
-//                        dbToUnlock = dbFromPath!
-//                    }
-                    .alert("Error Reading DB", isPresented: $errReadingDatabaseFromPathShown) {
-                    } message: {
-                        Text("There's been an error while reading the Database from the File System.\nPlease try again")
-                    }
+                    //                    Button("Open from File") {
+                    //                        selectorPresented.toggle()
+                    //                    }
+                    //                    .fileImporter(
+                    //                        isPresented: $selectorPresented,
+                    //                        allowedContentTypes: [.folder],
+                    //                        allowsMultipleSelection: false
+                    //                    ) {
+                    //                        let path : URL = try! $0.get().first!
+                    //                        let jsonDecoder : JSONDecoder = JSONDecoder()
+                    //                        do {
+                    //                            dbFromPath = try jsonDecoder.decode(
+                    //                                EncryptedDatabase.self,
+                    //                                from: try Data(
+                    //                                    contentsOf: path,
+                    //                                    options: [.uncached]
+                    //                                )
+                    //                            )
+                    //                        } catch {
+                    //                            errReadingDatabaseFromPathShown.toggle()
+                    //                        }
+                    //                        dbToUnlock = dbFromPath!
+                    //                    }
+                        .alert("Error Reading DB", isPresented: $errReadingDatabaseFromPathShown) {
+                        } message: {
+                            Text("There's been an error while reading the Database from the File System.\nPlease try again")
+                        }
                     Button("Create new one") {
                         navigationSheet.navigationSheetShown.toggle()
                     }
@@ -146,6 +152,7 @@ internal struct Welcome: View {
             unlockDBShown.toggle()
         } label: {
             VStack {
+                Image(systemName: db.iconName)
                 Text(db.name)
                     .font(.headline)
                 Text(db.description)
@@ -160,6 +167,33 @@ internal struct Welcome: View {
         .padding(.vertical, 100)
         .background(Color.gray)
         .cornerRadius(15)
+        .alert("Delete Database?", isPresented: $deleteDatabaseShown) {
+            Button("Continue", role: .destructive) {
+                do {
+                    databases.removeAll(where: { $0.id == db.id })
+                    try Storage.deleteDatabase(id: db.id, with: context)
+                } catch {
+                    databases.append(db)
+                    errDeletingDatabaseShown.toggle()
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                deleteDatabaseShown.toggle()
+            }
+        } message: {
+            Text("The Database and all the items in it will be deleted\nThis action is irreversible")
+        }
+        .contextMenu {
+            Button(role: .destructive) {
+                deleteDatabaseShown.toggle()
+            } label: {
+                Label("Delete Database", systemImage: "trash")
+            }
+        }
+        .alert("Error deleting DB", isPresented: $errDeletingDatabaseShown) {
+        } message: {
+            Text("There's been an error while trying to delete the Database from the File System.\nPlease try again")
+        }
     }
 }
 

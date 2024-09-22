@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840283342CA0756200EF5CA2 /* ME_ContentViewEntrySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840283332CA0756200EF5CA2 /* ME_ContentViewEntrySection.swift */; };
 		841E86E12AAB222800B03F37 /* AddDB_CompactMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */; };
 		842EAC6B29D832670014C8F8 /* Protecto_PassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */; };
 		842EAC6D29D832670014C8F8 /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842EAC6C29D832670014C8F8 /* Welcome.swift */; };
@@ -91,6 +92,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		840283332CA0756200EF5CA2 /* ME_ContentViewEntrySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_ContentViewEntrySection.swift; sourceTree = "<group>"; };
 		841E86E02AAB222800B03F37 /* AddDB_CompactMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDB_CompactMode.swift; sourceTree = "<group>"; };
 		842EAC6729D832670014C8F8 /* Protecto Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Protecto Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protecto_PassApp.swift; sourceTree = "<group>"; };
@@ -415,6 +417,15 @@
 			path = Welcome;
 			sourceTree = "<group>";
 		};
+		84B71A722C9DBC6800B16E2A /* ME_ContentView */ = {
+			isa = PBXGroup;
+			children = (
+				84EDFCFC2A94995B00A50A96 /* ME_ContentView.swift */,
+				840283332CA0756200EF5CA2 /* ME_ContentViewEntrySection.swift */,
+			);
+			path = ME_ContentView;
+			sourceTree = "<group>";
+		};
 		84C4749C29E446F400543BA0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -429,9 +440,9 @@
 		84DB4F8C2A739D5E00C2DD0E /* Details */ = {
 			isa = PBXGroup;
 			children = (
+				84B71A722C9DBC6800B16E2A /* ME_ContentView */,
 				84DB4F8D2A739D6C00C2DD0E /* EntryDetails.swift */,
 				84DB4F8F2A739D9100C2DD0E /* Me_Details.swift */,
-				84EDFCFC2A94995B00A50A96 /* ME_ContentView.swift */,
 				848DE6832AA742CA00AE99EE /* ImageDetails.swift */,
 				8467EBB72B5FDFEC003E6479 /* ImageListDetails.swift */,
 				84889ECE2C8CDA2F0066F7CB /* DocumentDetails.swift */,
@@ -633,6 +644,7 @@
 				8433906A2C99A7E800ED4349 /* DatabaseDoesNotExistError.swift in Sources */,
 				8433906B2C99A7E800ED4349 /* Folder.swift in Sources */,
 				8433906C2C99A7E800ED4349 /* Persistence.swift in Sources */,
+				840283342CA0756200EF5CA2 /* ME_ContentViewEntrySection.swift in Sources */,
 				8433906D2C99A7E800ED4349 /* DB_Converter.swift in Sources */,
 				8433906E2C99A7E800ED4349 /* FileImportHandler.swift in Sources */,
 				8433906F2C99A7E800ED4349 /* Encrypter.swift in Sources */,

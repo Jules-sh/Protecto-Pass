@@ -58,6 +58,9 @@
 		84889ECF2C8CDA2F0066F7CB /* DocumentDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84889ECE2C8CDA2F0066F7CB /* DocumentDetails.swift */; };
 		84889ED22C8DB84E0066F7CB /* DocumentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84889ED12C8DB84E0066F7CB /* DocumentInfo.swift */; };
 		848DE6842AA742CA00AE99EE /* ImageDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848DE6832AA742CA00AE99EE /* ImageDetails.swift */; };
+		848EFE052CA3334D006EA4DD /* ME_ContentViewFolderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848EFE042CA3334D006EA4DD /* ME_ContentViewFolderSection.swift */; };
+		848EFE072CA336E9006EA4DD /* ME_ContentViewImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848EFE062CA336E9006EA4DD /* ME_ContentViewImageSection.swift */; };
+		848EFE092CA33A1F006EA4DD /* ME_ContentViewDocumentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848EFE082CA33A1F006EA4DD /* ME_ContentViewDocumentSection.swift */; };
 		84922B392A21F11300CE7945 /* SetUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B382A21F11300CE7945 /* SetUpView.swift */; };
 		84922B3B2A21F15600CE7945 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84922B3A2A21F15600CE7945 /* Home.swift */; };
 		8497DF7E2B5BF347003979F9 /* ImageLoadingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8497DF7D2B5BF347003979F9 /* ImageLoadingError.swift */; };
@@ -148,6 +151,9 @@
 		84889ECE2C8CDA2F0066F7CB /* DocumentDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentDetails.swift; sourceTree = "<group>"; };
 		84889ED12C8DB84E0066F7CB /* DocumentInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentInfo.swift; sourceTree = "<group>"; };
 		848DE6832AA742CA00AE99EE /* ImageDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetails.swift; sourceTree = "<group>"; };
+		848EFE042CA3334D006EA4DD /* ME_ContentViewFolderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_ContentViewFolderSection.swift; sourceTree = "<group>"; };
+		848EFE062CA336E9006EA4DD /* ME_ContentViewImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_ContentViewImageSection.swift; sourceTree = "<group>"; };
+		848EFE082CA33A1F006EA4DD /* ME_ContentViewDocumentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ME_ContentViewDocumentSection.swift; sourceTree = "<group>"; };
 		84922B382A21F11300CE7945 /* SetUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpView.swift; sourceTree = "<group>"; };
 		84922B3A2A21F15600CE7945 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		8497DF7D2B5BF347003979F9 /* ImageLoadingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadingError.swift; sourceTree = "<group>"; };
@@ -193,7 +199,6 @@
 		842EAC5E29D832670014C8F8 = {
 			isa = PBXGroup;
 			children = (
-				843390652C99A7E800ED4349 /* Shared */,
 				842EAC6929D832670014C8F8 /* Protecto Pass */,
 				84627ABE2AA9AA2B00415827 /* Protecto-Pass-Info.plist */,
 				842EAC8029D832680014C8F8 /* Protecto PassTests */,
@@ -215,6 +220,7 @@
 		842EAC6929D832670014C8F8 /* Protecto Pass */ = {
 			isa = PBXGroup;
 			children = (
+				843390652C99A7E800ED4349 /* Shared */,
 				842EAC6A29D832670014C8F8 /* Protecto_PassApp.swift */,
 				84C4749C29E446F400543BA0 /* Views */,
 				846E689B2A703EB800BC049A /* Navigation */,
@@ -422,6 +428,9 @@
 			children = (
 				84EDFCFC2A94995B00A50A96 /* ME_ContentView.swift */,
 				840283332CA0756200EF5CA2 /* ME_ContentViewEntrySection.swift */,
+				848EFE042CA3334D006EA4DD /* ME_ContentViewFolderSection.swift */,
+				848EFE062CA336E9006EA4DD /* ME_ContentViewImageSection.swift */,
+				848EFE082CA33A1F006EA4DD /* ME_ContentViewDocumentSection.swift */,
 			);
 			path = ME_ContentView;
 			sourceTree = "<group>";
@@ -635,11 +644,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				84F6ABF82AE7DA2A00D0B633 /* AppData.swift in Sources */,
+				848EFE092CA33A1F006EA4DD /* ME_ContentViewDocumentSection.swift in Sources */,
 				84DB4F8E2A739D6C00C2DD0E /* EntryDetails.swift in Sources */,
 				84627AC12AA9CA2000415827 /* Settings.swift in Sources */,
 				846BF86A2C7DE53500678388 /* ImageInfo.swift in Sources */,
+				848EFE052CA3334D006EA4DD /* ME_ContentViewFolderSection.swift in Sources */,
 				843390672C99A7E800ED4349 /* CoreDataManager.swift in Sources */,
 				843390682C99A7E800ED4349 /* Database.swift in Sources */,
+				848EFE072CA336E9006EA4DD /* ME_ContentViewImageSection.swift in Sources */,
 				843390692C99A7E800ED4349 /* DataConverter.swift in Sources */,
 				8433906A2C99A7E800ED4349 /* DatabaseDoesNotExistError.swift in Sources */,
 				8433906B2C99A7E800ED4349 /* Folder.swift in Sources */,

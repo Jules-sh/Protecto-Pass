@@ -33,6 +33,11 @@ internal struct ME_ContentView : View {
     /// The Data Structure which is displayed in this View
     @State private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
+    /* SELECTED OBJECT VARIABLES */
+    
+    /// The entry selected to present details to
+    @State private var selectedEntry : Entry?
+    
     
     /* SHEET CONTROL VARIABLES */
     // Adding
@@ -58,6 +63,9 @@ internal struct ME_ContentView : View {
     /// Whether or not the details sheet is presented
     @State private var detailsPresented : Bool = false
     
+    /// Set to true in order to present the details sheet for the `selectedEntry`
+    @State private var entryDetailsPresented : Bool = false
+    
     /* ERROR ALERT CONTROL VARIABLES */
     
     // Saving
@@ -79,7 +87,7 @@ internal struct ME_ContentView : View {
                             .padding()
                     }
                 }
-                ME_ContentViewEntrySection(dataStructure: dataStructure)
+                ME_ContentViewEntrySection(dataStructure: dataStructure, selectedEntry: $selectedEntry, entryDetailsPresented: $entryDetailsPresented)
                     .environmentObject(db)
                 ME_ContentViewFolderSection(dataStructure: dataStructure)
                     .environmentObject(db)
@@ -159,6 +167,9 @@ internal struct ME_ContentView : View {
         // Detail sheets
         .sheet(isPresented: $detailsPresented) {
             Me_Details(me: dataStructure)
+        }
+        .sheet(isPresented: $entryDetailsPresented) {
+            EntryDetails(entry: $selectedEntry)
         }
         // Edit / Add sheets
         .sheet(isPresented: $addEntryPresented) {

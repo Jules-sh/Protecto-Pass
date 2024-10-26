@@ -19,8 +19,10 @@ internal struct HomeSelector: View {
     
     var body: some View {
         if navigationSheet.openDatabaseToHome {
-            Home(db: navigationSheet.db!)
-                .environmentObject(navigationSheet)
+            withAnimation {
+                Home(db: navigationSheet.db!)
+                    .environmentObject(navigationSheet)
+            }
         } else {
             Welcome(databases: databases)
                 .environmentObject(navigationSheet)

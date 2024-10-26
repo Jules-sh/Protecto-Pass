@@ -53,7 +53,7 @@ internal struct Welcome: View {
                     UnlockDB(db: $dbToUnlock)
                         .environmentObject(navigationSheet)
                 }
-                .sheet(isPresented: $navigationSheet.navigationSheetShown) {
+                .sheet(isPresented: $navigationSheet.databaseAddingSheetShown) {
                     if compactMode {
                         AddDB_CompactMode()
                             .environmentObject(navigationSheet)
@@ -68,7 +68,7 @@ internal struct Welcome: View {
                     ToolbarItem(placement: .primaryAction) {
                         Menu {
                             Button {
-                                navigationSheet.navigationSheetShown.toggle()
+                                navigationSheet.databaseAddingSheetShown.toggle()
                             } label: {
                                 Label("Create new one", systemImage: "plus")
                             }
@@ -137,7 +137,7 @@ internal struct Welcome: View {
                             Text("There's been an error while reading the Database from the File System.\nPlease try again")
                         }
                     Button("Create new one") {
-                        navigationSheet.navigationSheetShown.toggle()
+                        navigationSheet.databaseAddingSheetShown.toggle()
                     }
                 }.padding(2.5)
             }

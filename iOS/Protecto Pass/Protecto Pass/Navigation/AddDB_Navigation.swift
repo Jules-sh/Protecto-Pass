@@ -9,7 +9,7 @@ import Foundation
 
 internal final class AddDB_Navigation : ObservableObject {
     /// Whether the Sheet to add / create a new Database is shown or not
-    @Published internal var navigationSheetShown : Bool = false
+    @Published internal var databaseAddingSheetShown : Bool = false
     
     /// When toggled / set to true, this activates the navigation to the
     /// Home Menu when unlocking the Database

@@ -15,14 +15,18 @@ internal struct ME_ContentViewEntrySection: View {
     
     @ObservedObject private var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
     
-    @State private var selectedEntry : Entry?
+    private var selectedEntry : Binding<Entry?>
     
-    @State private var entryDetailsPresented : Bool = false
+    @State private var entryDetailsPresented : Binding<Bool>
     
     internal init(
-        dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>
+        dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource>,
+        selectedEntry : Binding<Entry?>,
+        entryDetailsPresented : Binding<Bool>
     ) {
         self.dataStructure = dataStructure
+        self.selectedEntry = selectedEntry
+        self.entryDetailsPresented = entryDetailsPresented
     }
     
     @State private var entryDeletionConfirmationShown : Bool = false
@@ -35,15 +39,15 @@ internal struct ME_ContentViewEntrySection: View {
                 ForEach(dataStructure.entries) {
                     entry in
                     Button {
-                        selectedEntry = entry
-                        entryDetailsPresented.toggle()
+                        selectedEntry.wrappedValue = entry
+                        entryDetailsPresented.wrappedValue.toggle()
                     } label: {
                         Label(entry.title, systemImage: entry.iconName)
                     }
                     .foregroundStyle(.primary)
                     .contextMenu {
                         Button(role: .destructive) {
-                            selectedEntry = entry
+                            selectedEntry.wrappedValue = entry
                             entryDeletionConfirmationShown.toggle()
                         } label: {
                             Label("Delete Entry", systemImage: "trash")
@@ -52,10 +56,10 @@ internal struct ME_ContentViewEntrySection: View {
                     .alert("Delete Entry?", isPresented: $entryDeletionConfirmationShown) {
                         Button("Continue", role: .destructive) {
                             do {
-                                dataStructure.entries.removeAll(where: { $0.id == selectedEntry!.id })
+                                dataStructure.entries.removeAll(where: { $0.id == selectedEntry.wrappedValue!.id })
                                 try Storage.storeDatabase(db, context: context, superID: dataStructure.id)
                             } catch {
-                                dataStructure.entries.append(selectedEntry!)
+                                dataStructure.entries.append(selectedEntry.wrappedValue!)
                                 errDeletionShown.toggle()
                             }
                         }
@@ -63,15 +67,11 @@ internal struct ME_ContentViewEntrySection: View {
                             entryDeletionConfirmationShown.toggle()
                         }
                     } message: {
-                        Text("This Entry and all it's connected documents will be deleted\nThis action is irreversible")
+                        Text("This Entry and all its connected documents will be deleted\nThis action is irreversible")
                     }
                     .alert("Error deleting Entry", isPresented: $errDeletionShown) {
                     } message: {
                         Text("There's been an error deleting the selected Entry")
-                    }
-                    // TODO: does not work on Button either
-                    .sheet(isPresented: $entryDetailsPresented) {
-                        EntryDetails(entry: $selectedEntry)
                     }
                 }
             } else {
@@ -83,11 +83,13 @@ internal struct ME_ContentViewEntrySection: View {
 
 #Preview {
     
+    @Previewable @State var selectedEntry : Entry?
+    
+    @Previewable @State var detailsPresented : Bool = false
+    
     @Previewable @State var dataStructure : ME_DataStructure<String, Date, Folder, Entry, LoadableResource> = Database.previewDB
     
-    @Previewable @State var addEntryPresented : Bool = false
-    
     List {
-        ME_ContentViewEntrySection(dataStructure: dataStructure)
+        ME_ContentViewEntrySection(dataStructure: dataStructure, selectedEntry: $selectedEntry, entryDetailsPresented: $detailsPresented)
     }
 }
